@@ -57,10 +57,14 @@ async function startServer() {
     });
   }
 
-  // Seed Phase 24 Interactions, Phase 25 Documents & Phase 26 Relationship Twin if needed
-  await seedPhase24Interactions().catch(console.error);
-  await seedPhase25Documents().catch(console.error);
-  await seedRelationshipTwinData().catch(console.error);
+  // Seed Phase 24 Interactions, Phase 25 Documents & Phase 26 Relationship Twin if database is ready
+  try {
+    await seedPhase24Interactions();
+    await seedPhase25Documents();
+    await seedRelationshipTwinData();
+  } catch (err: any) {
+    console.warn(`[Startup Info] Database auto-seed deferred: ${err.message || 'Database not yet reachable'}`);
+  }
 
   const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`COREvia Server running on http://0.0.0.0:${PORT}`);

@@ -10,11 +10,18 @@ declare global {
 // Function to create or retrieve the connection pool.
 export const createPool = () => {
   if (!global._postgresPool) {
+    const connectionString = process.env.DATABASE_URL;
+    const poolConfig = connectionString
+      ? { connectionString }
+      : {
+          host: process.env.SQL_HOST || 'localhost',
+          user: process.env.SQL_USER || 'postgres',
+          password: process.env.SQL_PASSWORD || 'dev_password',
+          database: process.env.SQL_DB_NAME || 'corevia',
+        };
+
     global._postgresPool = new Pool({
-      host: process.env.SQL_HOST,
-      user: process.env.SQL_USER,
-      password: process.env.SQL_PASSWORD,
-      database: process.env.SQL_DB_NAME,
+      ...poolConfig,
       max: 10,
       connectionTimeoutMillis: 15000,
     });
