@@ -13,6 +13,7 @@ import {
   csrfProtection,
 } from './src/middleware/security.ts';
 import { validateEnvironment } from './src/lib/env.ts';
+import { seedAuthUsersAndRoles } from './src/db/seedAuthUsers.ts';
 import { seedPhase24Interactions } from './src/db/seedInteractions.ts';
 import { seedPhase25Documents } from './src/db/seedDocuments.ts';
 import { seedRelationshipTwinData } from './src/db/seedRelationshipTwin.ts';
@@ -60,8 +61,9 @@ async function startServer() {
     });
   }
 
-  // Seed Phase 24 Interactions, Phase 25 Documents & Phase 26 Relationship Twin if database is ready
+  // Seed Enterprise Auth Users, Phase 24 Interactions, Phase 25 Documents & Phase 26 Relationship Twin if database is ready
   try {
+    await seedAuthUsersAndRoles();
     await seedPhase24Interactions();
     await seedPhase25Documents();
     await seedRelationshipTwinData();

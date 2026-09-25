@@ -954,6 +954,14 @@ export async function seedDatabase() {
     console.error('Failed to seed Relationship Digital Twin data:', err);
   }
 
+  // Ensure Enterprise Auth Users with password hashes are seeded
+  try {
+    const { seedAuthUsersAndRoles } = await import('./seedAuthUsers.ts');
+    await seedAuthUsersAndRoles();
+  } catch (err) {
+    console.error('Failed to seed Auth Users & Roles:', err);
+  }
+
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
 
