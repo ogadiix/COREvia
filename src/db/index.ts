@@ -15,8 +15,8 @@ export const createPool = () => {
       ? { connectionString }
       : {
           host: process.env.SQL_HOST || 'localhost',
-          user: process.env.SQL_USER || 'postgres',
-          password: process.env.SQL_PASSWORD || 'dev_password',
+          user: process.env.SQL_USER || process.env.USER || 'postgres',
+          password: process.env.SQL_PASSWORD || '',
           database: process.env.SQL_DB_NAME || 'corevia',
         };
 

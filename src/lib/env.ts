@@ -19,7 +19,7 @@ export function validateEnvironment() {
   }
   
   if (!process.env.GEMINI_API_KEY) {
-     console.warn('WARNING: GEMINI_API_KEY is not set. AI Copilot will not function.');
+     console.info('ℹ️  GEMINI_API_KEY is not set. AI Copilot features will operate in offline mock mode.');
   }
 
   if (isProd && missing.length > 0) {
