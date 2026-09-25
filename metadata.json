@@ -1,0 +1,6 @@
+{
+  "name": "COREvia Core Banking",
+  "description": "Institutional enterprise banking platform with Indian banking regulatory compliance, document intelligence & vault, digital onboarding & KYC/KYB workspace, cKYC verification, customer 360, opportunity radar, and maker-checker governance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

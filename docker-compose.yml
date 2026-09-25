@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: corevia_postgres_dev
+    environment:
+      POSTGRES_DB: corevia_dev
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev_user -d corevia_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # The application is intended to run locally via `npm run dev` 
+  # outside of docker to support rapid hot-module reloading and TSX execution.
+
+volumes:
+  pgdata:
