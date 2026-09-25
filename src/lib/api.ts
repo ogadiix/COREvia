@@ -710,9 +710,10 @@ export const bankingApi = {
     return await request<{
       status: string;
       timestamp: string;
-      applet: { id: string; service: string };
-      apiKeys: { gemini: { configured: boolean; status: string; modelsSupported: string[] }; firebase: { projectId: string; configured: boolean; status: string } };
-      databases: { primary: { name: string; connected: boolean; status: string; databaseName: string; orm: string; activeRecordsVerified: boolean } };
+      service?: string;
+      environment?: string;
+      geminiEngine?: string;
+      database?: { status: string; dialect: string };
     }>('/system/status');
   },
 

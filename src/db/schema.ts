@@ -17,7 +17,7 @@ export const users = pgTable(
   'users',
   {
     id: serial('id').primaryKey(),
-    uid: text('uid').notNull().unique(), // Firebase Auth UID or system user ID
+    uid: text('uid').notNull().unique(), // Unique system user ID
     email: text('email').notNull().unique(),
     name: text('name').notNull(),
     employeeId: text('employee_id').notNull().unique(),
