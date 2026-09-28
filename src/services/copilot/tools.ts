@@ -13,6 +13,7 @@ import { analyticsService } from '../analytics.service.ts';
 import { documentService } from '../document.service.ts';
 import { relationshipTwinService } from '../relationshipTwin.service.ts';
 import { relationshipGraphService } from '../relationshipGraph.service.ts';
+import { decisionTraceService } from '../decisionTrace.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -540,6 +541,50 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         edgeId: { type: Type.STRING, description: 'Unique edge ID from relationship graph' },
       },
       required: ['edgeId'],
+    },
+  },
+  {
+    name: 'getDecisionTrace',
+    description: 'Retrieve explainable Decision Trace for an AI recommendation, CORE score change, alert, or NBA. Explains why a decision was reached, confidence, evidence, and limitations.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        decisionId: { type: Type.STRING, description: 'Decision Trace ID (e.g. DT-20260928-00101) or database ID' },
+      },
+      required: ['decisionId'],
+    },
+  },
+  {
+    name: 'getDecisionEvidence',
+    description: 'Retrieve granular contributing evidence items (facts, metrics, events, signals) supporting a decision trace.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        decisionId: { type: Type.STRING, description: 'Decision Trace ID' },
+      },
+      required: ['decisionId'],
+    },
+  },
+  {
+    name: 'getDecisionSources',
+    description: 'Retrieve source system chain and data freshness timestamps for a decision trace.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        decisionId: { type: Type.STRING, description: 'Decision Trace ID' },
+      },
+      required: ['decisionId'],
+    },
+  },
+  {
+    name: 'getDecisionHistory',
+    description: 'Retrieve chronological decision traces and previous recommendations for a customer.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.STRING, description: 'Customer ID or CIF number' },
+      },
+      required: ['customerId'],
     },
   },
 ];
@@ -2094,6 +2139,87 @@ export async function executeCopilotTool(
 
       return {
         data: evidence,
+        sources,
+      };
+    }
+
+    case 'getDecisionTrace': {
+      const trace = await decisionTraceService.getDecisionTrace(
+        args.decisionId,
+        ctx.user as any,
+        ctx.requestId
+      );
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: trace.decisionId,
+        label: `Decision Trace · ${trace.decisionId} (${trace.recommendationTitle})`,
+        link: `/customers?tab=decisions&traceId=${trace.decisionId}`,
+      });
+
+      return {
+        data: trace,
+        sources,
+      };
+    }
+
+    case 'getDecisionEvidence': {
+      const evidence = await decisionTraceService.getDecisionEvidence(
+        args.decisionId,
+        ctx.user as any,
+        ctx.requestId
+      );
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: args.decisionId,
+        label: `Decision Evidence · ${args.decisionId}`,
+        link: `/customers?tab=decisions&traceId=${args.decisionId}`,
+      });
+
+      return {
+        data: evidence,
+        sources,
+      };
+    }
+
+    case 'getDecisionSources': {
+      const sourceNodes = await decisionTraceService.getDecisionSources(
+        args.decisionId,
+        ctx.user as any,
+        ctx.requestId
+      );
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: args.decisionId,
+        label: `Decision Source Chain · ${args.decisionId}`,
+        link: `/customers?tab=decisions&traceId=${args.decisionId}`,
+      });
+
+      return {
+        data: sourceNodes,
+        sources,
+      };
+    }
+
+    case 'getDecisionHistory': {
+      const customerId = parseInt(String(args.customerId), 10);
+      const history = await decisionTraceService.getDecisionHistory(
+        customerId,
+        ctx.user as any,
+        ctx.requestId
+      );
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: String(customerId),
+        label: `Decision History · Customer #${customerId}`,
+        link: `/customers?tab=decisions`,
+      });
+
+      return {
+        data: history,
         sources,
       };
     }

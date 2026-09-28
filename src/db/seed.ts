@@ -962,6 +962,14 @@ export async function seedDatabase() {
     console.error('Failed to seed Auth Users & Roles:', err);
   }
 
+  // Phase 29 Decision Trace & Explainability Seed
+  try {
+    const { seedDecisionTraces } = await import('./seedDecisionTraces.ts');
+    await seedDecisionTraces();
+  } catch (err) {
+    console.error('Failed to seed Decision Traces:', err);
+  }
+
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
 

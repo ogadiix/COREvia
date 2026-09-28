@@ -24,7 +24,7 @@ Phase 28 introduces a production-grade, governed **Relationship Graph & Network 
                  - Root Entity Resolution
                  - Bounded Traversal (Depth 1-3)
                  - Provenance & Evidence Extraction
-                 - Shortest Path Discovery (Dijkstra)
+                 - Shortest Path Discovery (Bounded Breadth-First Traversal - BFS)
                  - Network Degree & Distribution Analytics
                  - "What Changed" Context Extraction
                                  │

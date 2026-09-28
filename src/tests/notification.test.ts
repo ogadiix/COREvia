@@ -5,7 +5,7 @@ import { db } from '../db';
 import { notifications, userNotificationPreferences, auditLogs, users } from '../db/schema';
 import { eq, and } from 'drizzle-orm';
 
-async function runNotificationTests() {
+export async function runNotificationTests() {
   console.log('--- STARTING NOTIFICATIONS & INTELLIGENT ALERTS TEST SUITE ---');
 
   // Find a test user (e.g., user id 1)
@@ -197,10 +197,12 @@ async function runNotificationTests() {
   console.log(`  Latest log: Action=${recentLogs[0].action}, Actor=${recentLogs[0].actorId}, Metadata=${recentLogs[0].metadata}`);
 
   console.log('\n=== ALL NOTIFICATION & INTELLIGENT ALERT TESTS PASSED SUCCESSFULLY! ===\n');
-  process.exit(0);
 }
 
-runNotificationTests().catch((err) => {
-  console.error('\n❌ TEST FAILURE:', err);
-  process.exit(1);
-});
+// Direct execution when run via tsx
+if (import.meta.url === `file://${process.argv[1]}`) {
+  runNotificationTests().catch((err) => {
+    console.error('\n❌ TEST FAILURE:', err);
+    process.exit(1);
+  });
+}

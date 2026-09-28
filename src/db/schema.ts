@@ -1863,3 +1863,130 @@ export const relationshipEdges = pgTable(
     ),
   })
 );
+
+// ====================================================
+// PHASE 29: AI DECISION TRACE & EXPLAINABILITY PLATFORM
+// ====================================================
+
+export const decisionTraces = pgTable(
+  'decision_traces',
+  {
+    id: serial('id').primaryKey(),
+    decisionId: text('decision_id').notNull().unique(), // e.g. DT-20260928-00142
+    customerId: integer('customer_id').references(() => customers.id, { onDelete: 'set null' }),
+    userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
+    sourceModule: text('source_module').notNull(), // CUSTOMER_360, NEXT_BEST_ACTION, OPPORTUNITY_RADAR, etc.
+    sourceEngine: text('source_engine').notNull(), // CORE_SCORE, RELATIONSHIP_INTELLIGENCE, NEXT_BEST_ACTION, etc.
+    decisionType: text('decision_type').notNull(), // CORE_SCORE_CHANGE, RELATIONSHIP_INSIGHT, etc.
+    decisionStatus: text('decision_status').notNull().default('PENDING'), // PENDING, CONFIRMED, REJECTED, EXECUTED, CANCELLED, EXPIRED
+    recommendationTitle: text('recommendation_title').notNull(),
+    recommendationSummary: text('recommendation_summary').notNull(),
+    recommendationPayload: text('recommendation_payload'), // JSON payload
+    decisionMode: text('decision_mode').notNull().default('DETERMINISTIC'), // DETERMINISTIC, AI_GENERATED, HYBRID, SYSTEM_RULE
+    confidence: text('confidence'), // Legitimate source engine confidence or null
+    confidenceBasis: text('confidence_basis').notNull().default('Rule-based'), // 'Rule-based', 'Deterministic evidence + AI explanation'
+    limitations: text('limitations'), // JSON string array of contextual limitations
+    actionTitle: text('action_title'),
+    actionType: text('action_type'),
+    actionPayload: text('action_payload'),
+    confirmedById: integer('confirmed_by_id').references(() => users.id, { onDelete: 'set null' }),
+    confirmedAt: timestamp('confirmed_at'),
+    executionStatus: text('execution_status'), // PENDING, SUCCESS, FAILED, CANCELLED
+    executedAt: timestamp('executed_at'),
+    outcome: text('outcome'),
+    generatedAt: timestamp('generated_at').defaultNow().notNull(),
+    dataAsOf: timestamp('data_as_of').defaultNow().notNull(),
+    expiresAt: timestamp('expires_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    decisionIdIdx: uniqueIndex('idx_decision_trace_code').on(table.decisionId),
+    decisionCustomerIdx: index('idx_decision_trace_customer').on(table.customerId),
+    decisionEngineIdx: index('idx_decision_trace_engine').on(table.sourceEngine),
+    decisionTypeIdx: index('idx_decision_trace_type').on(table.decisionType),
+    decisionStatusIdx: index('idx_decision_trace_status').on(table.decisionStatus),
+    decisionGeneratedIdx: index('idx_decision_trace_generated').on(table.generatedAt),
+  })
+);
+
+export const decisionTraceEvidence = pgTable(
+  'decision_trace_evidence',
+  {
+    id: serial('id').primaryKey(),
+    decisionTraceId: integer('decision_trace_id')
+      .references(() => decisionTraces.id, { onDelete: 'cascade' })
+      .notNull(),
+    evidenceType: text('evidence_type').notNull(), // CUSTOMER_FACT, SCORE_CHANGE, SERVICE_EVENT, etc.
+    sourceEngine: text('source_engine').notNull(),
+    sourceEntityType: text('source_entity_type').notNull(),
+    sourceEntityId: text('source_entity_id').notNull(),
+    sourceField: text('source_field'),
+    description: text('description').notNull(),
+    observedValue: text('observed_value').notNull(),
+    previousValue: text('previous_value'),
+    changeDirection: text('change_direction'), // INCREASE, DECREASE, STABLE, TRIGGERED, RESOLVED, BREACHED
+    contributionType: text('contribution_type').notNull().default('SUPPORTING'), // PRIMARY, SUPPORTING, CONTEXT, CONSTRAINT, NEGATIVE_SIGNAL
+    contributionWeight: text('contribution_weight'), // Qualitative or numeric only if source provided
+    dataAsOf: timestamp('data_as_of').defaultNow().notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    traceEvidenceTraceIdx: index('idx_trace_evidence_trace_id').on(table.decisionTraceId),
+    traceEvidenceTypeIdx: index('idx_trace_evidence_type').on(table.evidenceType),
+    traceEvidenceEntityIdx: index('idx_trace_evidence_entity').on(table.sourceEntityType, table.sourceEntityId),
+  })
+);
+
+export const decisionTraceSourceNodes = pgTable(
+  'decision_trace_source_nodes',
+  {
+    id: serial('id').primaryKey(),
+    decisionTraceId: integer('decision_trace_id')
+      .references(() => decisionTraces.id, { onDelete: 'cascade' })
+      .notNull(),
+    orderIndex: integer('order_index').notNull().default(0),
+    sourceType: text('source_type').notNull(), // CUSTOMER, ACCOUNT, LOAN, SERVICE_CASE, etc.
+    sourceId: text('source_id').notNull(),
+    sourceEngine: text('source_engine').notNull(),
+    description: text('description').notNull(),
+    sourceTimestamp: timestamp('source_timestamp').defaultNow().notNull(),
+    authorizationScope: text('authorization_scope').notNull().default('BRANCH'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    traceSourceTraceIdx: index('idx_trace_source_trace_id').on(table.decisionTraceId),
+    traceSourceOrderIdx: index('idx_trace_source_order').on(table.decisionTraceId, table.orderIndex),
+  })
+);
+
+export const decisionTracesRelations = relations(decisionTraces, ({ one, many }) => ({
+  customer: one(customers, {
+    fields: [decisionTraces.customerId],
+    references: [customers.id],
+  }),
+  user: one(users, {
+    fields: [decisionTraces.userId],
+    references: [users.id],
+  }),
+  confirmedBy: one(users, {
+    fields: [decisionTraces.confirmedById],
+    references: [users.id],
+  }),
+  evidence: many(decisionTraceEvidence),
+  sourceNodes: many(decisionTraceSourceNodes),
+}));
+
+export const decisionTraceEvidenceRelations = relations(decisionTraceEvidence, ({ one }) => ({
+  trace: one(decisionTraces, {
+    fields: [decisionTraceEvidence.decisionTraceId],
+    references: [decisionTraces.id],
+  }),
+}));
+
+export const decisionTraceSourceNodesRelations = relations(decisionTraceSourceNodes, ({ one }) => ({
+  trace: one(decisionTraces, {
+    fields: [decisionTraceSourceNodes.decisionTraceId],
+    references: [decisionTraces.id],
+  }),
+}));

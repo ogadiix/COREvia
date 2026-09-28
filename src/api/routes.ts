@@ -25,6 +25,7 @@ import { notificationRuleService } from '../services/notificationRule.service.ts
 import { analyticsService } from '../services/analytics.service.ts';
 import { onboardingService } from '../services/onboarding.service.ts';
 import { documentService } from '../services/document.service.ts';
+import { decisionTraceService } from '../services/decisionTrace.service.ts';
 import { formatErrorResponse } from '../lib/errors.ts';
 import { db } from '../db/index.ts';
 import { auditLogs, users } from '../db/schema.ts';
@@ -1342,10 +1343,10 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
     const rawQuery = String(req.query.q || '').trim();
     const query = sanitizeText(rawQuery, 100);
     if (!query) {
-      return res.json({ customers: [], accounts: [], loans: [], products: [], onboarding: [] });
+      return res.json({ customers: [], accounts: [], loans: [], products: [], onboarding: [], decisions: [] });
     }
 
-    const [customerResults, accountResults, loanResults, productResults, onboardingResults] = await Promise.all([
+    const [customerResults, accountResults, loanResults, productResults, onboardingResults, decisionResults] = await Promise.all([
       customerService.listCustomers({
         search: query,
         rmId: req.user?.role === 'RELATIONSHIP_MANAGER' ? req.user.id : undefined,
@@ -1365,6 +1366,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
         { search: query, limit: 5 },
         { id: req.user!.id, name: req.user!.name, role: req.user!.role, requestId: req.requestId }
       ),
+      decisionTraceService.searchDecisionTraces(query, req.user!, req.requestId),
     ]);
 
     // Mask PII in returned search records
@@ -1384,6 +1386,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       loans: loanResults.data,
       products: productResults.slice(0, 5),
       onboarding: onboardingResults.data,
+      decisions: decisionResults,
     });
   } catch (err) {
     const { statusCode, body } = formatErrorResponse(err, req.requestId);
@@ -3133,3 +3136,10 @@ apiRouter.use('/relationship-twin', relationshipTwinRouter);
 // ==========================================
 import { relationshipGraphRouter } from './relationshipGraphRoutes.ts';
 apiRouter.use('/relationship-graph', relationshipGraphRouter);
+
+// ==========================================
+// PHASE 29: AI DECISION TRACE & EXPLAINABILITY
+// ==========================================
+import { decisionTraceRouter } from './decisionTraceRoutes.ts';
+apiRouter.use('/decision-traces', decisionTraceRouter);
+

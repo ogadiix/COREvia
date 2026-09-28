@@ -26,6 +26,7 @@ interface RadarSignalCardProps {
   onConvert: (signal: OpportunityRadarSignal) => void;
   onDismiss: (signal: OpportunityRadarSignal) => void;
   onReview?: (signal: OpportunityRadarSignal) => void;
+  onExplainDecision?: (signal: OpportunityRadarSignal) => void;
   onNavigateToCustomer?: (customerId: number) => void;
   compact?: boolean;
 }
@@ -36,6 +37,7 @@ export const RadarSignalCard: React.FC<RadarSignalCardProps> = ({
   onConvert,
   onDismiss,
   onReview,
+  onExplainDecision,
   onNavigateToCustomer,
   compact = false,
 }) => {
@@ -250,15 +252,28 @@ export const RadarSignalCard: React.FC<RadarSignalCardProps> = ({
 
         {/* Action Controls */}
         <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-100">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onViewEvidence(signal)}
-            className="flex items-center gap-1 text-xs"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Inspect Evidence ({signal.evidence?.length || 0})</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onViewEvidence(signal)}
+              className="flex items-center gap-1 text-xs"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Inspect Evidence ({signal.evidence?.length || 0})</span>
+            </Button>
+            {onExplainDecision && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onExplainDecision(signal)}
+                className="flex items-center gap-1 text-xs border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Decision Trace</span>
+              </Button>
+            )}
+          </div>
 
           {!isConverted && !isDismissed && (
             <div className="flex items-center gap-2">

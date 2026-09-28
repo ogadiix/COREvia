@@ -1159,4 +1159,81 @@ export const bankingApi = {
     const qs = customerId ? `?customerId=${encodeURIComponent(customerId)}` : '';
     return await request<any>(`/relationship-graph/analytics${qs}`);
   },
+
+  // ==========================================
+  // PHASE 29: AI DECISION TRACE & EXPLAINABILITY
+  // ==========================================
+
+  async getDecisionTraces(params: {
+    customerId?: number | string;
+    sourceEngine?: string;
+    decisionType?: string;
+    decisionStatus?: string;
+    limit?: number;
+    offset?: number;
+  } = {}) {
+    const query = new URLSearchParams();
+    if (params.customerId) query.set('customerId', String(params.customerId));
+    if (params.sourceEngine) query.set('sourceEngine', params.sourceEngine);
+    if (params.decisionType) query.set('decisionType', params.decisionType);
+    if (params.decisionStatus) query.set('decisionStatus', params.decisionStatus);
+    if (params.limit) query.set('limit', String(params.limit));
+    if (params.offset) query.set('offset', String(params.offset));
+
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return await request<{ items: any[]; total: number }>(`/decision-traces${qs}`);
+  },
+
+  async getDecisionTrace(id: string | number) {
+    return await request<any>(`/decision-traces/${encodeURIComponent(id)}`);
+  },
+
+  async getDecisionEvidence(id: string | number) {
+    return await request<any[]>(`/decision-traces/${encodeURIComponent(id)}/evidence`);
+  },
+
+  async getDecisionSources(id: string | number) {
+    return await request<any[]>(`/decision-traces/${encodeURIComponent(id)}/sources`);
+  },
+
+  async getDecisionHistory(customerIdOrTraceId: string | number) {
+    return await request<{ customerId: number; total: number; history: any[] }>(
+      `/decision-traces/${encodeURIComponent(customerIdOrTraceId)}/history`
+    );
+  },
+
+  async compareDecisionTraces(id1: string | number, id2: string | number) {
+    return await request<any>(
+      `/decision-traces/${encodeURIComponent(id1)}/compare/${encodeURIComponent(id2)}`
+    );
+  },
+
+  async confirmDecisionAction(id: string | number) {
+    return await request<any>(`/decision-traces/${encodeURIComponent(id)}/confirm`, {
+      method: 'POST',
+    });
+  },
+
+  async rejectDecisionAction(id: string | number, reason?: string) {
+    return await request<any>(`/decision-traces/${encodeURIComponent(id)}/reject`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    });
+  },
+
+  async executeDecisionAction(id: string | number, outcome?: string) {
+    return await request<any>(`/decision-traces/${encodeURIComponent(id)}/execute`, {
+      method: 'POST',
+      body: JSON.stringify({ outcome }),
+    });
+  },
+
+  async getDecisionAnalytics() {
+    return await request<any>(`/decision-traces/analytics`);
+  },
+
+  async searchDecisionTraces(q: string) {
+    return await request<any[]>(`/decision-traces/search?q=${encodeURIComponent(q)}`);
+  },
 };
+

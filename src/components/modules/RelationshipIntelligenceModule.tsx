@@ -23,6 +23,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { bankingApi } from '../../lib/api';
+import { DecisionTracePanel } from '../decision-trace/DecisionTracePanel';
 import { useAuth } from '../../context/AuthContext';
 import {
   CustomerInsight,
@@ -69,6 +70,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
   const [actionType, setActionType] = useState<'ACKNOWLEDGE' | 'RESOLVE' | null>(null);
   const [actionNote, setActionNote] = useState<string>('');
   const [submittingAction, setSubmittingAction] = useState<boolean>(false);
+  const [selectedDecisionId, setSelectedDecisionId] = useState<string | null>(null);
 
   const fetchInsightsAndSummary = async () => {
     setLoading(true);
@@ -614,6 +616,19 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                       size="xs"
                       variant="outline"
                       onClick={() => {
+                        const traceId = ins.customerId === 1 ? 'DT-20260928-00104' : 'DT-20260928-00201';
+                        setSelectedDecisionId(traceId);
+                      }}
+                      className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+                      icon={<ShieldAlert className="w-3.5 h-3.5 text-indigo-600" />}
+                    >
+                      Decision Trace
+                    </Button>
+
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      onClick={() => {
                         setSelectedInsight(ins);
                         setIsEvidenceModalOpen(true);
                       }}
@@ -904,6 +919,13 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
           </div>
         </Modal>
       )}
+
+      {/* Phase 29: AI Decision Trace Panel */}
+      <DecisionTracePanel
+        decisionId={selectedDecisionId}
+        isOpen={Boolean(selectedDecisionId)}
+        onClose={() => setSelectedDecisionId(null)}
+      />
     </div>
   );
 };

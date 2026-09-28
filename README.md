@@ -22,9 +22,26 @@
 
 ## 📌 Overview
 
-**COREvia** is an institutional-grade core banking platform engineered for modern commercial and retail banking institutions. It delivers high-throughput transaction processing, comprehensive Indian banking regulatory compliance (cKYC, RBI norms, CTR/STR monitoring), intelligent document lifecycle processing, dynamic relationship twin modeling, and contextual AI-driven decisioning powered by server-side Gemini 3.8 Flash.
+**COREvia** is an institutional-grade core banking relationship management platform engineered for modern commercial and retail banking institutions. It delivers high-throughput transaction processing, comprehensive Indian banking regulatory workflow patterns (simulated cKYC, RBI compliance frameworks, CTR/STR monitoring), intelligent document lifecycle processing, dynamic relationship twin modeling, and contextual AI-driven decisioning powered by server-side Gemini 3.8 Flash.
+
+> [!NOTE]
+> **Data Environment**: All customer profiles, accounts, loans, KYC records, and relationship graphs in this repository utilize a **synthetic banking dataset**. It does not connect to live banking networks or real customer accounts.
 
 From front-office branch operations and KYC/KYB onboarding to back-office maker-checker approvals, treasury liquidity, lending underwriting, and automated regulatory reporting, COREvia provides a unified, secure, and resilient banking operating system.
+
+---
+
+## ⚖️ Implementation Scope: Real vs. Synthetic
+
+| Real Implemented Architecture | Synthetic & Simulated Scope |
+|---|---|
+| Full-stack TypeScript (React 19 + Express.js 4) | Synthetic customer profiles (e.g. Rahul Sharma, Kalyan Steels) |
+| Relational PostgreSQL 16 schema (58 banking tables via Drizzle ORM) | Simulated banking transaction ledgers & account numbers |
+| Enterprise RBAC & resource-level ownership (IDOR defense) | Simulated cKYC registry & UIDAI/PAN verification APIs |
+| Deterministic graph traversal & bounded BFS shortest-path algorithms | Simulated payment clearing switch (UPI/IMPS/NEFT rails) |
+| Server-side Google Gemini 3.8 Flash Copilot integration with RBAC tools | Synthetic KYC/KYB documents & collateral agreements |
+| Maker-checker dual-control governance & immutable audit logging | Regulatory compliance aligned with RBI norms (simulated sandbox) |
+| AI Decision Trace & Explainability engine with evidence lineage | Governed human-in-the-loop review (Confirm / Reject / Execute) |
 
 ---
 
@@ -32,18 +49,18 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 
 ### 1. 💼 Accounts & Liquidity Management
 - **CASA & Term Deposits**: Comprehensive Current Account, Savings Account, Recurring Deposits, and Fixed Deposits management.
-- **Lien & Hold Management**: Real-time regulatory, judicial, and collateral lien placement and release workflows.
-- **Ledger Balances**: Precise real-time reconciliation with strict isolation between available balance, ledger balance, and frozen funds.
+- **Lien & Hold Management**: Regulatory, judicial, and collateral lien placement and release workflows.
+- **Ledger Balances**: Real-time reconciliation with strict isolation between available balance, ledger balance, and frozen funds.
 
 ### 2. 🪪 Digital Onboarding & KYC/KYB Workspace
-- **cKYC & National Registry Integration**: Automated verification pipelines for PAN, Aadhaar (masked/UIDAI compliant), and GSTIN.
+- **cKYC & Verification Workflow Simulation**: Automated pipelines modeling verification for PAN, Aadhaar (masked/UIDAI compliant format), and GSTIN.
 - **Risk Profiling**: Dynamic Low / Medium / High AML risk tiering calculated at the point of customer onboarding.
 - **Maker-Checker Workflows**: High-value and high-risk customer onboarding actions require dual authorization.
 
 ### 3. 💳 Payments Switch & Multi-Rail Settlement
-- **Multi-Rail Clearing**: Integrated switch simulated for UPI, IMPS, NEFT, RTGS, and Nach.
+- **Multi-Rail Clearing Simulation**: Simulated switch for UPI, IMPS, NEFT, RTGS, and NACH rails.
 - **ISO 20022 Compliant Messaging**: Structured transaction payloads with idempotency keys and end-to-end auditability.
-- **Real-Time Settlement & Reconciliation**: Instant transaction status monitoring with automated exception queues.
+- **Real-Time Settlement & Reconciliation**: Transaction status monitoring with automated exception queues.
 
 ### 4. 📈 Lending & Credit Underwriting
 - **Credit Lifecycle**: Origination, multi-stage credit assessment, collateral valuation, and loan disbursement.
@@ -53,9 +70,9 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 - **OCR & Document Extraction**: Automated document ingestion with AI-assisted verification of financial statements, identity cards, and legal agreements.
 - **Tamper-Evident Storage**: Audit-stamped document records with strict access controls.
 
-### 6. 🌐 Relationship Intelligence & Digital Twin
+### 6. 🌐 Relationship Intelligence & Graph Engine
 - **Customer 360° Profile**: Unified view across deposit accounts, loans, investments, service tickets, and interactions.
-- **Relationship Twin**: Graph-based entity modeling connecting family offices, corporate parent-subsidiary networks, and authorized signatories.
+- **Relationship Graph**: Bounded BFS network intelligence connecting family offices, corporate parent-subsidiary networks, and authorized signatories.
 - **Opportunity Radar & Next Best Action (NBA)**: Predictive analytics pinpointing cross-sell, risk mitigation, and retention interventions.
 
 ### 7. 🛡️ Dual-Control Maker-Checker Governance
@@ -65,6 +82,14 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 ### 8. 🤖 Contextual Gemini Banking Copilot
 - **Secure Server-Side Architecture**: Zero client-side API key leakage; all AI requests are sanitized, rate-limited, and proxied through Node.js.
 - **Financial Semantic Querying**: Real-time portfolio summaries, compliance guideline lookups, credit risk synthesis, and natural language core banking navigation.
+- **Strict Grounding & Explainability Rules**: Governed Copilot tools classifying assertions into FACT, EVIDENCE, INTERPRETATION, RECOMMENDATION, and LIMITATION.
+
+### 9. 🔍 AI Decision Trace & Explainability Platform
+- **Deterministic & Governed Explainability**: Answers *"Why did COREvia recommend, flag, prioritize, or summarize this?"* across CORE Score, Next Best Action, Opportunity Radar, and Signal Center.
+- **Evidence Lineage & Source Chains**: Explicit primary and supporting evidence weighted by contribution, linked to source systems, engine versions, and freshness timestamps.
+- **Human-in-the-Loop Governance**: Confirm, reject (with mandatory reason), or execute recommended actions with immutable audit records.
+- **Side-by-Side Trace Comparison**: Bounded comparative analysis highlighting evidence deltas and metric evolutions across customer decision history.
+- **Zero Information Leakage**: Strict RBAC and portfolio-scoped IDOR prevention ensuring cross-customer isolation.
 
 ---
 
@@ -114,9 +139,9 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 
 ### Prerequisites
 - **Node.js**: v20.x or v22.x LTS
-- **npm** or **bun**
-- **PostgreSQL** instance (local or via Docker)
-- **Google Gemini API Key** (optional for AI Copilot features)
+- **npm**: v10+ (canonical package manager)
+- **PostgreSQL**: v16+ (local or via Docker Compose)
+- **Google Gemini API Key** (optional for server-side AI Copilot features)
 
 ### 1. Clone & Install Dependencies
 ```bash
@@ -192,10 +217,10 @@ docker-compose down
 ---
 
 ## 🔒 Security & Compliance Standards
-
-- **RBI Compliance**: Built aligned with Reserve Bank of India standards for transaction auditing, cKYC requirements, and suspicious activity flagging.
-- **Strict Server-Side AI**: Gemini API keys never reach the client; queries are validated and rate-limited.
-- **Defense in Depth**: Role-Based Access Control (Admin, Maker, Checker, Officer, Auditor), CSRF mitigation, payload caps, and DTO allowlisting.
+ 
+- **Simulated Regulatory Compliance**: Built aligned with Reserve Bank of India (RBI) procedural patterns for transaction auditing, simulated cKYC workflows, CTR/STR monitoring, and maker-checker dual authorization. Default environments run on synthetic data.
+- **Strict Server-Side AI**: Gemini API keys never reach the client; queries are validated, sanitized, rate-limited, and executed server-side.
+- **Defense in Depth**: Role-Based Access Control (Admin, Maker, Checker, Officer, Auditor) with IDOR prevention, CSRF mitigation, payload caps, and DTO allowlisting.
 - **Disaster Recovery**: See [DISASTER_RECOVERY.md](DISASTER_RECOVERY.md) and [OPERATIONS.md](OPERATIONS.md) for production operational runbooks.
 
 ---

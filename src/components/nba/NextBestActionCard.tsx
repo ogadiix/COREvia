@@ -22,6 +22,7 @@ interface NextBestActionCardProps {
   onDismiss?: (action: NextBestAction) => void;
   onCreateTask?: (action: NextBestAction) => void;
   onViewEvidence?: (action: NextBestAction) => void;
+  onExplainDecision?: (action: NextBestAction) => void;
   onNavigateToCustomer?: (customerId: number) => void;
   compact?: boolean;
 }
@@ -32,6 +33,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   onDismiss,
   onCreateTask,
   onViewEvidence,
+  onExplainDecision,
   onNavigateToCustomer,
   compact = false,
 }) => {
@@ -229,8 +231,17 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-        <div className="text-[11px] text-slate-400">
-          Rule: <span className="font-mono">{action.ruleId}</span>
+        <div className="flex items-center gap-2 text-[11px] text-slate-400">
+          <span>Rule: <span className="font-mono">{action.ruleId}</span></span>
+          <button
+            type="button"
+            onClick={() => onExplainDecision ? onExplainDecision(action) : (onViewEvidence && onViewEvidence(action))}
+            className="text-indigo-600 hover:text-indigo-800 font-semibold inline-flex items-center gap-1 hover:underline cursor-pointer"
+            title="Explain why this action was recommended"
+          >
+            <HelpCircle className="w-3 h-3 text-indigo-500" />
+            <span>Why? (Decision Trace)</span>
+          </button>
         </div>
 
         {action.status === 'ACTIVE' ? (

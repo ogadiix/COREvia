@@ -10,6 +10,21 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: corevia
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
@@ -21,10 +36,26 @@ jobs:
         cache: 'npm'
 
     - name: Install Dependencies
-      run: npm install
+      run: npm ci
 
-    - name: TypeScript Compile Check
-      run: npm run lint
+    - name: TypeScript Lint & Typecheck
+      run: |
+        npm run lint
+        npm run typecheck
+
+    - name: Database Migration & Test Seed
+      run: |
+        npm run db:migrate
+        npm run seed
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/corevia
+        SESSION_SECRET: test-session-secret-for-ci-minimum-32-chars-long
+
+    - name: Platform Integration & Security Tests
+      run: npm test
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/corevia
+        SESSION_SECRET: test-session-secret-for-ci-minimum-32-chars-long
 
     - name: Security Audit
       run: npm audit --audit-level=high
@@ -33,3 +64,4 @@ jobs:
       run: npm run build
       env:
         NODE_ENV: production
+

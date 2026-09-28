@@ -5,7 +5,7 @@ import { users, customers, auditLogs } from '../db/schema.ts';
 import { eq, desc } from 'drizzle-orm';
 import { SafeUser } from '../services/auth.service.ts';
 
-async function runRelationshipGraphTests() {
+export async function runRelationshipGraphTests() {
   console.log('===============================================================');
   console.log('--- STARTING PHASE 28 RELATIONSHIP GRAPH TEST SUITE ---');
   console.log('===============================================================\n');
@@ -133,8 +133,8 @@ async function runRelationshipGraphTests() {
   }
   console.log(`✓ Account root successfully resolved: ${accountGraph.root.label} (${accountGraph.root.code})`);
 
-  // TEST 5: Shortest Path Finding
-  console.log('\n[TEST 5] Shortest Relationship Path Finding:');
+  // TEST 5: Shortest Path Finding (Bounded BFS Verification)
+  console.log('\n[TEST 5] Shortest Relationship Path Finding (Bounded BFS):');
   const targetOpp = graphDepth1.nodes.find((n) => n.entityType === 'OPPORTUNITY');
   if (targetOpp) {
     const path = await relationshipGraphService.findRelationshipPath(
@@ -148,23 +148,34 @@ async function runRelationshipGraphTests() {
     if (!path.found || path.pathLength === 0) {
       throw new Error('Path finder failed to discover direct path between Customer and Opportunity');
     }
-    console.log(`✓ Path discovered (${path.pathLength} hops): ${path.explanation}`);
+    // Verify BFS starts with source and ends with destination
+    if (path.nodes[0].entityType !== 'CUSTOMER' || path.nodes[path.nodes.length - 1].id !== targetOpp.id) {
+      throw new Error('BFS shortest path nodes are not ordered properly from source to target');
+    }
+    console.log(`✓ Shortest BFS path discovered (${path.pathLength} hops): ${path.explanation}`);
   } else {
     console.log('ℹ️  Opportunity node not found for path test');
   }
 
-  // TEST 6: Network Analytics Summary
+  // TEST 6: Network Analytics (Customer-Scoped & Portfolio-Scoped)
   console.log('\n[TEST 6] Graph Degree & Distribution Analytics:');
-  const analytics = await relationshipGraphService.getGraphAnalytics(safeAdmin, 1);
-  if (analytics.totalNodes <= 0 || analytics.totalEdges <= 0) {
-    throw new Error('Analytics failed to calculate non-zero node and edge counts');
+  // 6A. Customer-scoped analytics
+  const customerAnalytics = await relationshipGraphService.getGraphAnalytics(safeAdmin, 1);
+  if (customerAnalytics.totalNodes <= 0 || customerAnalytics.totalEdges <= 0) {
+    throw new Error('Customer analytics failed to calculate non-zero node and edge counts');
   }
-  console.log(`✓ Average network degree: ${analytics.averageDegree}`);
-  console.log(`✓ Top connected entity: ${analytics.mostConnectedEntities[0]?.label} (${analytics.mostConnectedEntities[0]?.degree} connections)`);
+  console.log(`✓ Customer analytics: ${customerAnalytics.totalNodes} nodes, avg degree ${customerAnalytics.averageDegree}`);
+  console.log(`✓ Top connected entity: ${customerAnalytics.mostConnectedEntities[0]?.label} (${customerAnalytics.mostConnectedEntities[0]?.degree} connections)`);
+
+  // 6B. Portfolio-scoped analytics (no customerId provided)
+  const portfolioAnalytics = await relationshipGraphService.getGraphAnalytics(safeAdmin);
+  if (portfolioAnalytics.totalNodes <= 0) {
+    throw new Error('Portfolio analytics should aggregate non-zero nodes across authorized portfolio');
+  }
+  console.log(`✓ Portfolio-mode analytics (no implicit customer 1 default): ${portfolioAnalytics.totalNodes} portfolio nodes, ${portfolioAnalytics.totalEdges} edges`);
 
   // TEST 7: RBAC & IDOR Security Defense
   console.log('\n[TEST 7] RBAC Portfolio Boundary Enforcement (IDOR Protection):');
-  // Attempt to access a customer that has an assigned RM different from safeRM
   const otherCustomer = await db
     .select()
     .from(customers)
@@ -209,8 +220,55 @@ async function runRelationshipGraphTests() {
   console.log(`✓ Copilot summary breakdown: "${toolResult.data.summaryBreakdown}"`);
   console.log(`✓ Citations attached: ${toolResult.sources.length} sources`);
 
-  // TEST 9: Audit Trail Verification
-  console.log('\n[TEST 9] Audit Log Creation for Graph Actions:');
+  // TEST 9: Relationship Evidence Retrieval & Security Validation
+  console.log('\n[TEST 9] Relationship Evidence Retrieval & Provenance Verification:');
+  const validEdge = graphDepth1.edges.find((e) => e.relationshipType === 'CUSTOMER_OWNS_ACCOUNT');
+  if (!validEdge) {
+    throw new Error('Expected at least one CUSTOMER_OWNS_ACCOUNT edge for evidence testing');
+  }
+
+  // 9A. Valid Edge Evidence
+  const evidence = await relationshipGraphService.getRelationshipEvidence(validEdge.id, safeAdmin);
+  if (!evidence || !evidence.source || !evidence.target || !evidence.sourceRecord) {
+    throw new Error('Evidence retrieval returned incomplete payload');
+  }
+  if (!evidence.audit.dataSource.includes('COREvia PostgreSQL synthetic dataset')) {
+    throw new Error('Evidence must accurately cite synthetic database origin without false regulatory claims');
+  }
+  console.log(`✓ Valid edge evidence verified: [${evidence.relationshipType}] ${evidence.source.label} → ${evidence.target.label}`);
+  console.log(`✓ Provenance: ${evidence.provenance.explanation} (Attribution: ${evidence.audit.dataSource})`);
+
+  // 9B. Nonexistent Edge (Should return 404)
+  let nonexistentEdgeBlocked = false;
+  try {
+    await relationshipGraphService.getRelationshipEvidence('customer:1->CUSTOMER_OWNS_ACCOUNT->account:99999999', safeAdmin);
+  } catch (err: any) {
+    if (err.statusCode === 404 || err.code === 'EDGE_NOT_FOUND') {
+      nonexistentEdgeBlocked = true;
+    }
+  }
+  if (!nonexistentEdgeBlocked) {
+    throw new Error('Evidence check failed: Nonexistent edge was not rejected with 404');
+  }
+  console.log('✓ Nonexistent edge was correctly rejected with 404 EDGE_NOT_FOUND');
+
+  // 9C. Cross-Customer Unauthorized Edge Access (IDOR Defense)
+  let unauthorizedEvidenceBlocked = false;
+  try {
+    const unassignedRM: SafeUser = { ...safeRM, id: 999999 };
+    await relationshipGraphService.getRelationshipEvidence(validEdge.id, unassignedRM);
+  } catch (err: any) {
+    if (err.statusCode === 403 || err.code === 'FORBIDDEN_SCOPE') {
+      unauthorizedEvidenceBlocked = true;
+    }
+  }
+  if (!unauthorizedEvidenceBlocked) {
+    throw new Error('Evidence IDOR failure: Unassigned officer was able to retrieve customer edge evidence');
+  }
+  console.log('✓ Unauthorized edge evidence access strictly blocked (403 FORBIDDEN_SCOPE)');
+
+  // TEST 10: Audit Trail Verification
+  console.log('\n[TEST 10] Audit Log Creation for Graph Actions:');
   const logs = await db
     .select()
     .from(auditLogs)
@@ -224,13 +282,16 @@ async function runRelationshipGraphTests() {
   console.log(`✓ Audit log verified: [${logs[0].action}] by ${logs[0].actorName} for ${logs[0].resourceId}`);
 
   console.log('\n===============================================================');
-  console.log('🎉 ALL 9 PHASE 28 RELATIONSHIP GRAPH TESTS PASSED SUCCESSFULLY!');
+  console.log('🎉 ALL 10 PHASE 28 RELATIONSHIP GRAPH TESTS PASSED SUCCESSFULLY!');
   console.log('===============================================================\n');
 }
 
-runRelationshipGraphTests()
-  .then(() => process.exit(0))
-  .catch((err) => {
-    console.error('\n❌ TEST SUITE FAILED:', err);
-    process.exit(1);
-  });
+// Direct execution when run via tsx
+if (import.meta.url === `file://${process.argv[1]}`) {
+  runRelationshipGraphTests()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error('\n❌ TEST SUITE FAILED:', err);
+      process.exit(1);
+    });
+}

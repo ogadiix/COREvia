@@ -149,3 +149,47 @@ export interface GraphQueryParams {
   includeOperationalContext?: boolean;
   limit?: number;
 }
+
+export interface GraphEvidenceDTO {
+  edgeId: string;
+  source: {
+    entityType: GraphEntityType;
+    entityId: string | number;
+    code: string;
+    label: string;
+  };
+  target: {
+    entityType: GraphEntityType;
+    entityId: string | number;
+    code: string;
+    label: string;
+  };
+  relationshipType: GraphRelationshipType;
+  relationshipStrength?: 'PRIMARY' | 'HIGH' | 'MEDIUM' | 'OPERATIONAL' | 'STANDARD';
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  sourceRecord: {
+    tableName: string;
+    recordId: string | number;
+    status?: string;
+  };
+  provenance: {
+    provenanceType: GraphProvenanceType;
+    provenanceId?: string | null;
+    explanation: string;
+    evidence?: string | null;
+  };
+  authorization: {
+    authorized: boolean;
+    requestingUser: string;
+    role: string;
+    employeeId: string;
+  };
+  audit: {
+    retrievedAt: string;
+    requestId: string;
+    dataSource: string;
+    regulatoryAuditStatus: string;
+  };
+}

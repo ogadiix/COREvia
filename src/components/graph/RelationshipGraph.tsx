@@ -348,7 +348,7 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           {/* Depth selector */}
           <div className="flex items-center bg-white border border-slate-200 rounded p-0.5 text-[11px]">
             <span className="px-2 text-slate-400 font-medium">Depth:</span>
@@ -857,7 +857,7 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
 
         {/* NODE DETAILS DRAWER (Section 13) */}
         {selectedNode && (
-          <div className="absolute right-0 top-0 bottom-0 w-80 bg-white border-l border-slate-200 shadow-xl z-30 flex flex-col animate-in slide-in-from-right duration-150">
+          <div className="absolute right-0 top-0 bottom-0 w-full sm:w-80 md:w-96 max-w-full bg-white border-l border-slate-200 shadow-xl z-30 flex flex-col animate-in slide-in-from-right duration-150">
             <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="p-1 bg-indigo-100 text-indigo-700 rounded">
@@ -970,7 +970,7 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
 
         {/* EDGE DETAILS DRAWER (Section 14) */}
         {selectedEdge && (
-          <div className="absolute right-0 top-0 bottom-0 w-80 bg-white border-l border-slate-200 shadow-xl z-30 flex flex-col animate-in slide-in-from-right duration-150">
+          <div className="absolute right-0 top-0 bottom-0 w-full sm:w-80 md:w-96 max-w-full bg-white border-l border-slate-200 shadow-xl z-30 flex flex-col animate-in slide-in-from-right duration-150">
             <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="p-1 bg-indigo-100 text-indigo-700 rounded">
@@ -1053,7 +1053,7 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
 
         {/* PATH TRACER DRAWER (Section 17) */}
         {isPathFinderOpen && (
-          <div className="absolute left-3 top-14 w-80 bg-white border border-slate-200 rounded-lg shadow-xl z-30 p-3 space-y-3 text-xs">
+          <div className="absolute left-3 right-3 sm:right-auto top-14 sm:w-80 max-w-sm bg-white border border-slate-200 rounded-lg shadow-xl z-30 p-3 space-y-3 text-xs">
             <div className="flex items-center justify-between pb-2 border-b border-slate-200">
               <div className="flex items-center gap-1.5 font-bold text-slate-800">
                 <Navigation className="w-4 h-4 text-indigo-600" />

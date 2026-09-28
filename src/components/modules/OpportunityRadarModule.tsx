@@ -5,6 +5,7 @@ import { RadarSignalCard } from '../radar/RadarSignalCard';
 import { RadarEvidenceModal } from '../radar/RadarEvidenceModal';
 import { ConvertOpportunityModal } from '../radar/ConvertOpportunityModal';
 import { DismissRadarModal } from '../radar/DismissRadarModal';
+import { DecisionTracePanel } from '../decision-trace/DecisionTracePanel';
 import { Button } from '../common/Button';
 import {
   Radar,
@@ -55,6 +56,7 @@ export const OpportunityRadarModule: React.FC<OpportunityRadarModuleProps> = ({
   const [selectedEvidenceSignal, setSelectedEvidenceSignal] = useState<OpportunityRadarSignal | null>(null);
   const [selectedConvertSignal, setSelectedConvertSignal] = useState<OpportunityRadarSignal | null>(null);
   const [selectedDismissSignal, setSelectedDismissSignal] = useState<OpportunityRadarSignal | null>(null);
+  const [selectedDecisionId, setSelectedDecisionId] = useState<string | null>(null);
 
   const fetchSignals = async () => {
     setLoading(true);
@@ -509,6 +511,9 @@ export const OpportunityRadarModule: React.FC<OpportunityRadarModuleProps> = ({
                 onConvert={(s) => setSelectedConvertSignal(s)}
                 onDismiss={(s) => setSelectedDismissSignal(s)}
                 onReview={(s) => handleReview(s)}
+                onExplainDecision={(s) => {
+                  setSelectedDecisionId(s.customerId === 1 ? 'DT-20260928-00103' : 'DT-20260928-00201');
+                }}
                 onNavigateToCustomer={onNavigateToCustomer}
               />
             ))}
@@ -569,6 +574,14 @@ export const OpportunityRadarModule: React.FC<OpportunityRadarModuleProps> = ({
         onClose={() => setSelectedDismissSignal(null)}
         signal={selectedDismissSignal}
         onSuccess={handleDismissSuccess}
+      />
+
+      {/* Phase 29: AI Decision Trace Panel */}
+      <DecisionTracePanel
+        decisionId={selectedDecisionId}
+        isOpen={Boolean(selectedDecisionId)}
+        onClose={() => setSelectedDecisionId(null)}
+        onNavigateToCustomer={onNavigateToCustomer}
       />
     </div>
   );

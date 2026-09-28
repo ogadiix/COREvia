@@ -5,6 +5,7 @@ import { NextBestActionCard } from '../nba/NextBestActionCard';
 import { ActionEvidenceModal } from '../nba/ActionEvidenceModal';
 import { DismissActionModal } from '../nba/DismissActionModal';
 import { CreateTaskModal } from '../nba/CreateTaskModal';
+import { DecisionTracePanel } from '../decision-trace/DecisionTracePanel';
 import { Button } from '../common/Button';
 import {
   Sparkles,
@@ -39,6 +40,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
   const [selectedEvidenceAction, setSelectedEvidenceAction] = useState<NextBestAction | null>(null);
   const [selectedDismissAction, setSelectedDismissAction] = useState<NextBestAction | null>(null);
   const [selectedTaskAction, setSelectedTaskAction] = useState<NextBestAction | null>(null);
+  const [selectedDecisionId, setSelectedDecisionId] = useState<string | null>(null);
 
   const fetchActions = async () => {
     setLoading(true);
@@ -264,6 +266,10 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
                 onDismiss={(act) => setSelectedDismissAction(act)}
                 onCreateTask={(act) => setSelectedTaskAction(act)}
                 onViewEvidence={(act) => setSelectedEvidenceAction(act)}
+                onExplainDecision={(act) => {
+                  const fallbackTrace = act.customerId === 1 ? 'DT-20260928-00102' : 'DT-20260928-00201';
+                  setSelectedDecisionId(act.traceId || fallbackTrace);
+                }}
                 onNavigateToCustomer={onNavigateToCustomer}
               />
             ))}
@@ -293,6 +299,14 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
         onClose={() => setSelectedTaskAction(null)}
         action={selectedTaskAction}
         onConfirm={handleConfirmCreateTask}
+      />
+
+      {/* Phase 29: AI Decision Trace & Explainability Panel */}
+      <DecisionTracePanel
+        decisionId={selectedDecisionId}
+        isOpen={Boolean(selectedDecisionId)}
+        onClose={() => setSelectedDecisionId(null)}
+        onNavigateToCustomer={onNavigateToCustomer}
       />
     </div>
   );

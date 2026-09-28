@@ -31,8 +31,8 @@ export const CopilotDrawer: React.FC<CopilotDrawerProps> = ({ onNavigate }) => {
       />
 
       {/* Slide-over panel */}
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-xl bg-slate-950 border-l border-slate-800 shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
+      <div className="absolute inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10 w-full sm:w-auto">
+        <div className="w-full sm:w-[500px] md:w-[560px] max-w-full bg-slate-950 border-l border-slate-800 shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
           <CopilotWorkspace
             isDrawer={true}
             onClose={closeDrawer}

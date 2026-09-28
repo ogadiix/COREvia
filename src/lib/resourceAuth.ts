@@ -236,4 +236,29 @@ export const resourceAuth = {
 
     return opp;
   },
+
+  /**
+   * Returns list of authorized customer IDs for an officer.
+   * Returns null if user has portfolio-wide oversight (Administrator, Branch Manager, Analyst)
+   */
+  async getAuthorizedCustomerIds(user: SafeUser): Promise<number[] | null> {
+    if (!user) return [];
+    if (
+      user.role === 'ADMINISTRATOR' ||
+      user.role === 'BRANCH_MANAGER' ||
+      user.role === 'ANALYST'
+    ) {
+      return null; // Unrestricted access
+    }
+
+    if (user.role === 'RELATIONSHIP_MANAGER') {
+      const rows = await db
+        .select({ id: customers.id })
+        .from(customers)
+        .where(eq(customers.assignedRmId, user.id));
+      return rows.map((r) => r.id);
+    }
+
+    return [];
+  },
 };

@@ -18,6 +18,7 @@ import { seedPhase24Interactions } from './src/db/seedInteractions.ts';
 import { seedPhase25Documents } from './src/db/seedDocuments.ts';
 import { seedRelationshipTwinData } from './src/db/seedRelationshipTwin.ts';
 import { seedPhase28RelationshipGraphData } from './src/db/seedRelationshipGraph.ts';
+import { seedDecisionTraces } from './src/db/seedDecisionTraces.ts';
 
 async function startServer() {
   // Validate required configuration before starting
@@ -69,6 +70,7 @@ async function startServer() {
     await seedPhase25Documents();
     await seedRelationshipTwinData();
     await seedPhase28RelationshipGraphData();
+    await seedDecisionTraces();
   } catch (err: any) {
     console.warn(`[Startup Info] Database auto-seed deferred: ${err.message || 'Database not yet reachable'}`);
   }
