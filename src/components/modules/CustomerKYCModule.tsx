@@ -52,8 +52,10 @@ import {
   Bot,
   BellRing,
   Network,
+  GitFork,
 } from 'lucide-react';
 import { useCopilot } from '../../context/CopilotContext';
+import { RelationshipGraph } from '../graph/RelationshipGraph.tsx';
 
 interface CustomerKYCModuleProps {
   customers: CustomerKYC[];
@@ -85,7 +87,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
   const [submitting360Action, setSubmitting360Action] = useState<boolean>(false);
   const [recalculatingCustomerSignals, setRecalculatingCustomerSignals] = useState<boolean>(false);
   const [active360Tab, setActive360Tab] = useState<
-    'KYC' | 'DOCUMENTS' | 'PRODUCTS' | 'ACCOUNTS' | 'LOANS' | 'INTERACTIONS' | 'CASES' | 'OPPORTUNITIES' | 'TASKS' | 'INTELLIGENCE' | 'ACTIONS' | 'RADAR' | 'ALERTS' | 'ONBOARDING' | 'TWIN'
+    'KYC' | 'DOCUMENTS' | 'PRODUCTS' | 'ACCOUNTS' | 'LOANS' | 'INTERACTIONS' | 'CASES' | 'OPPORTUNITIES' | 'TASKS' | 'INTELLIGENCE' | 'ACTIONS' | 'RADAR' | 'ALERTS' | 'ONBOARDING' | 'TWIN' | 'GRAPH'
   >('KYC');
   const [customerOnboarding, setCustomerOnboarding] = useState<{
     activeApplication: any | null;
@@ -847,9 +849,47 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
               onOpenFullTwin={() => setActive360Tab('TWIN')}
             />
 
+            {/* RELATIONSHIP GRAPH COMPACT ENTRY POINT (Phase 28) */}
+            <div className="bg-white border border-slate-200 rounded-lg p-3 flex items-center justify-between shadow-2xs">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-indigo-50 border border-indigo-200 text-indigo-700 rounded-lg">
+                  <GitFork className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-slate-900">Relationship Graph</span>
+                    <span className="text-[10px] bg-indigo-50 text-indigo-700 px-1.5 py-0.2 rounded font-mono font-medium">
+                      Phase 28 Connected Layer
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Governed multi-hop relationship exploration across accounts, loans, products, cases, and corporate groups
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setActive360Tab('GRAPH')}
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-medium transition"
+                >
+                  Explore in 360
+                </button>
+                <button
+                  onClick={() => {
+                    window.location.href = `/relationship-graph?customerId=${activeCustomer.customerCode || activeCustomer.id}`;
+                  }}
+                  className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs font-medium transition flex items-center gap-1 shadow-2xs"
+                >
+                  <span>Open Full Graph</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+
             {/* 360 Navigation Tabs */}
             <div className="flex items-center gap-1 border-b border-slate-200 overflow-x-auto pb-1 text-xs">
               {[
+                { id: 'GRAPH', label: 'Relationship Graph', icon: GitFork },
                 { id: 'TWIN', label: 'Relationship Twin (Live)', icon: Network },
                 { id: 'KYC', label: 'KYC Profile', icon: UserCheck },
                 { id: 'DOCUMENTS', label: 'Documents & Vault', icon: FileText },
@@ -900,7 +940,21 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
               </div>
             ) : (
               <>
-                {/* 0. Relationship Digital Twin Tab */}
+                {/* 0. Relationship Graph Tab (Phase 28) */}
+                {active360Tab === 'GRAPH' && (
+                  <div className="space-y-3">
+                    <RelationshipGraph
+                      initialEntityType="CUSTOMER"
+                      initialEntityId={activeCustomer.id || dossier360?.customer?.id || 1}
+                      compact={false}
+                      onOpenFullGraph={(type, id) => {
+                        window.location.href = `/relationship-graph?entityType=${type}&entityId=${id}`;
+                      }}
+                    />
+                  </div>
+                )}
+
+                {/* 0.1 Relationship Digital Twin Tab */}
                 {active360Tab === 'TWIN' && (
                   <CustomerTwinTab
                     customerId={activeCustomer.id || dossier360?.customer?.id || 1}

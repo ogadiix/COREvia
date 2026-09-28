@@ -136,6 +136,8 @@ export const copilotSecurity = {
     // 2. Customer Scoping checks
     if (args?.customerId) {
       await resourceAuth.authorizeCustomer(user, args.customerId, 'COPILOT_TOOL', requestId);
+    } else if (args?.entityId && args?.entityType === 'CUSTOMER') {
+      await resourceAuth.authorizeCustomer(user, args.entityId, 'COPILOT_TOOL', requestId);
     }
   },
 };

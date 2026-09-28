@@ -17,6 +17,7 @@ import {
   LogOut,
   Menu,
   X,
+  GitFork,
 } from 'lucide-react';
 import { BANK_META, formatINR } from '../../data/mockIndianBankingData';
 import { Button } from '../common/Button';
@@ -269,9 +270,23 @@ export const Header: React.FC<HeaderProps> = ({
                             <div className="font-mono font-bold text-slate-900">
                               {formatINR(parseFloat(acc.availableBalance || '0'))}
                             </div>
-                            <div className="text-[10px] text-emerald-700 font-sans font-medium flex items-center justify-end gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <span>View Account</span>
-                              <ArrowRight className="w-3 h-3" />
+                            <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setShowDropdown(false);
+                                  window.location.href = `/relationship-graph?entityType=ACCOUNT&entityId=${acc.accountNumber}`;
+                                }}
+                                title="View in Relationship Graph"
+                                className="text-[10px] text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium"
+                              >
+                                <GitFork className="w-2.5 h-2.5" />
+                                <span>Graph</span>
+                              </button>
+                              <div className="text-[10px] text-emerald-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span>View Account</span>
+                                <ArrowRight className="w-3 h-3" />
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -313,9 +328,23 @@ export const Header: React.FC<HeaderProps> = ({
                             <div className="font-mono font-bold text-amber-900">
                               {formatINR(parseFloat(loan.outstandingPrincipal || '0'))}
                             </div>
-                            <div className="text-[10px] text-amber-700 font-sans font-medium flex items-center justify-end gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <span>View Facility</span>
-                              <ArrowRight className="w-3 h-3" />
+                            <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setShowDropdown(false);
+                                  window.location.href = `/relationship-graph?entityType=LOAN&entityId=${loan.loanAccountNumber}`;
+                                }}
+                                title="View in Relationship Graph"
+                                className="text-[10px] text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium"
+                              >
+                                <GitFork className="w-2.5 h-2.5" />
+                                <span>Graph</span>
+                              </button>
+                              <div className="text-[10px] text-amber-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span>View Facility</span>
+                                <ArrowRight className="w-3 h-3" />
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -354,9 +383,23 @@ export const Header: React.FC<HeaderProps> = ({
                             <div className="font-mono font-semibold text-slate-800">
                               {cust.totalRelationshipValue ? formatINR(parseFloat(cust.totalRelationshipValue)) : 'TRV Active'}
                             </div>
-                            <div className="text-[10px] text-blue-700 font-sans font-medium flex items-center justify-end gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <span>View 360</span>
-                              <ArrowRight className="w-3 h-3" />
+                            <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setShowDropdown(false);
+                                  window.location.href = `/relationship-graph?customerId=${cust.cifNumber || cust.id}`;
+                                }}
+                                title="View in Relationship Graph"
+                                className="text-[10px] text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium"
+                              >
+                                <GitFork className="w-2.5 h-2.5" />
+                                <span>Graph</span>
+                              </button>
+                              <div className="text-[10px] text-blue-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span>View 360</span>
+                                <ArrowRight className="w-3 h-3" />
+                              </div>
                             </div>
                           </div>
                         </div>

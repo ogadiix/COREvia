@@ -28,6 +28,7 @@ import {
   Plus,
   Bot,
   Zap,
+  GitFork,
 } from 'lucide-react';
 import {
   RelationshipTwinOverview,
@@ -391,6 +392,16 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
           >
             <Bot className="w-3.5 h-3.5" />
             <span>Copilot Advisory</span>
+          </button>
+
+          <button
+            onClick={() => {
+              window.location.href = `/relationship-graph?customerId=${twinData.customer.customerCode || selectedCustomerId}`;
+            }}
+            className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-medium transition flex items-center gap-1.5 shadow-sm"
+          >
+            <GitFork className="w-3.5 h-3.5" />
+            <span>Explore Relationship Graph</span>
           </button>
         </div>
       </div>

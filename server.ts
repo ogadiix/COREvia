@@ -17,6 +17,7 @@ import { seedAuthUsersAndRoles } from './src/db/seedAuthUsers.ts';
 import { seedPhase24Interactions } from './src/db/seedInteractions.ts';
 import { seedPhase25Documents } from './src/db/seedDocuments.ts';
 import { seedRelationshipTwinData } from './src/db/seedRelationshipTwin.ts';
+import { seedPhase28RelationshipGraphData } from './src/db/seedRelationshipGraph.ts';
 
 async function startServer() {
   // Validate required configuration before starting
@@ -61,12 +62,13 @@ async function startServer() {
     });
   }
 
-  // Seed Enterprise Auth Users, Phase 24 Interactions, Phase 25 Documents & Phase 26 Relationship Twin if database is ready
+  // Seed Enterprise Auth Users, Phase 24 Interactions, Phase 25 Documents, Phase 26 Relationship Twin & Phase 28 Relationship Graph if database is ready
   try {
     await seedAuthUsersAndRoles();
     await seedPhase24Interactions();
     await seedPhase25Documents();
     await seedRelationshipTwinData();
+    await seedPhase28RelationshipGraphData();
   } catch (err: any) {
     console.warn(`[Startup Info] Database auto-seed deferred: ${err.message || 'Database not yet reachable'}`);
   }

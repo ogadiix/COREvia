@@ -3128,8 +3128,8 @@ apiRouter.use('/documents', documentRouter);
 import { relationshipTwinRouter } from './relationshipTwinRoutes.ts';
 apiRouter.use('/relationship-twin', relationshipTwinRouter);
 
-
-
-
-
-
+// ==========================================
+// PHASE 28: RELATIONSHIP GRAPH & NETWORK INTELLIGENCE
+// ==========================================
+import { relationshipGraphRouter } from './relationshipGraphRoutes.ts';
+apiRouter.use('/relationship-graph', relationshipGraphRouter);

@@ -24,6 +24,7 @@ import {
   MessageSquare,
   FileText,
   Network,
+  GitFork,
 } from 'lucide-react';
 import { ModuleType } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -163,6 +164,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: <Network className="w-4 h-4 text-violet-400" />,
           shortcut: 'F12',
           requiredPermission: 'intelligence:read',
+        },
+        {
+          id: 'relationship-graph',
+          label: 'Relationship Graph',
+          icon: <GitFork className="w-4 h-4 text-indigo-400" />,
+          shortcut: '',
+          requiredPermission: 'customers:read',
         },
         {
           id: 'copilot',

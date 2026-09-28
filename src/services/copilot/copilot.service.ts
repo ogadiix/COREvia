@@ -307,6 +307,65 @@ export class CopilotService {
       else if (q.includes('ananya')) targetCustomerId = 'CUS-50824';
     }
 
+    // 0. Relationship Graph & Key Relationships Query
+    if (
+      q.includes('relationship') ||
+      q.includes('graph') ||
+      q.includes('connected') ||
+      q.includes('network') ||
+      q.includes('household') ||
+      q.includes('neighbors')
+    ) {
+      const custId = targetCustomerId || 'CUS-10482';
+      executedTools.push('getRelationshipGraph');
+      const graphRes = await executeCopilotTool(
+        'getRelationshipGraph',
+        { entityType: 'CUSTOMER', entityId: custId, depth: 1 },
+        toolCtx
+      );
+
+      sources.push(...graphRes.sources);
+
+      const d = graphRes.data;
+      const root = d.root;
+      const oppCount = d.entityTypeCounts.OPPORTUNITY || 0;
+      const caseCount = d.entityTypeCounts.SERVICE_CASE || 0;
+      const prodCount = d.entityTypeCounts.PRODUCT || 0;
+      const accCount = d.entityTypeCounts.ACCOUNT || 0;
+      const loanCount = d.entityTypeCounts.LOAN || 0;
+      const interactionCount = d.entityTypeCounts.INTERACTION || 0;
+      const householdCount = d.entityTypeCounts.HOUSEHOLD || 0;
+      const bizCount = d.entityTypeCounts.BUSINESS || 0;
+
+      answer = `### Relationship Network Overview: ${root.label} (${root.code})
+
+**${root.label}** is connected to **${prodCount} banking products**, **${accCount} deposit accounts**, **${loanCount} credit facilities**, **${oppCount} active opportunities**, **${caseCount} open service cases**, and **${interactionCount} recent interactions**.
+
+#### Key Connections & Structure:
+- **Household:** ${householdCount > 0 ? 'Linked to registered family trust & household portfolio' : 'Individual portfolio'}
+- **Corporate Entities:** ${bizCount > 0 ? 'Associated with corporate business entities & registered cross-holdings' : 'No corporate linkages'}
+- **Direct Accounts & Facilities:** ${accCount + loanCount} active banking arrangements
+- **Pipeline:** ${oppCount} active commercial deals in negotiation
+- **Service Status:** ${caseCount > 0 ? `${caseCount} active service issues under resolution` : 'No pending service escalations'}
+
+You can explore full interactive network topology and provenance in the **Relationship Graph** workspace.`;
+
+      return {
+        conversation_id: conversationId,
+        answer,
+        sources,
+        suggested_actions: [
+          'Open Relationship Graph',
+          'Show open service cases',
+          'Review Next Best Actions',
+        ],
+        context,
+        model: 'corevia-institutional-engine',
+        timestamp: new Date().toISOString(),
+        tool_calls_executed: executedTools,
+      };
+    }
+
     // 1. Task Creation / Followup Mutation Request
     if (
       (q.includes('create') || q.includes('schedule') || q.includes('assign') || q.includes('set')) &&

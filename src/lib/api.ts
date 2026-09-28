@@ -1106,4 +1106,57 @@ export const bankingApi = {
       body: JSON.stringify({ status }),
     });
   },
+
+  // Phase 28: Relationship Graph & Network Intelligence
+  async getRelationshipGraph(
+    entityType: string,
+    entityId: string | number,
+    params: {
+      depth?: number;
+      limit?: number;
+      nodeTypes?: string[];
+      relationshipTypes?: string[];
+      includeSignals?: boolean;
+      includeOperationalContext?: boolean;
+    } = {}
+  ) {
+    const query = new URLSearchParams();
+    if (params.depth) query.set('depth', String(params.depth));
+    if (params.limit) query.set('limit', String(params.limit));
+    if (params.nodeTypes?.length) query.set('nodeTypes', params.nodeTypes.join(','));
+    if (params.relationshipTypes?.length) query.set('relationshipTypes', params.relationshipTypes.join(','));
+    if (params.includeSignals !== undefined) query.set('includeSignals', String(params.includeSignals));
+    if (params.includeOperationalContext !== undefined) query.set('includeOperationalContext', String(params.includeOperationalContext));
+
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return await request<any>(`/relationship-graph/${encodeURIComponent(entityType)}/${encodeURIComponent(entityId)}${qs}`);
+  },
+
+  async getRelationshipPath(
+    sourceType: string,
+    sourceId: string | number,
+    targetType: string,
+    targetId: string | number
+  ) {
+    return await request<any>(
+      `/relationship-graph/path/${encodeURIComponent(sourceType)}/${encodeURIComponent(sourceId)}/${encodeURIComponent(targetType)}/${encodeURIComponent(targetId)}`
+    );
+  },
+
+  async getRelationshipNeighbors(entityType: string, entityId: string | number) {
+    return await request<any>(
+      `/relationship-graph/neighbors/${encodeURIComponent(entityType)}/${encodeURIComponent(entityId)}`
+    );
+  },
+
+  async getRelationshipEvidence(edgeId: string) {
+    return await request<any>(
+      `/relationship-graph/evidence/${encodeURIComponent(edgeId)}`
+    );
+  },
+
+  async getRelationshipGraphAnalytics(customerId?: string | number) {
+    const qs = customerId ? `?customerId=${encodeURIComponent(customerId)}` : '';
+    return await request<any>(`/relationship-graph/analytics${qs}`);
+  },
 };

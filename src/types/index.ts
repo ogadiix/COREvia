@@ -19,7 +19,8 @@ export type ModuleType =
   | 'copilot'
   | 'interactions'
   | 'documents'
-  | 'relationship-twin';
+  | 'relationship-twin'
+  | 'relationship-graph';
 
 export type AccountType = 'SAVINGS' | 'CURRENT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT' | 'SALARY' | 'PREMIUM_SAVINGS';
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [Phase 28] - Relationship Graph & Network Intelligence
+- **Governed Relationship Exploration Engine**: Implemented production-grade relationship graph over PostgreSQL/Drizzle connecting Customers, Households, Businesses, Accounts, Loans, Products, Opportunities, Service Cases, Interactions, Relationship Reviews, Onboarding, Documents, Tasks, Commitments, Signals, and Digital Twin state.
+- **Relational Graph Schema & Provenance**: Added `relationship_edges` table with unique constraint and indexes for direct/derived relationship mapping, visibility scope, and full regulatory audit evidence/provenance (`DIRECT_RECORD`, `DERIVED_FROM_ACCOUNT_OWNERSHIP`, `DERIVED_FROM_INTERACTION`, `DERIVED_FROM_SIGNAL`, etc.).
+- **Server-Side Security & RBAC Enforcement**: Enforced strict resource-level authorization via `resourceAuth.authorizeCustomer` to prevent horizontal/vertical privilege escalation and IDOR. Traversal depth strictly bounded (clamped to max depth 3, capped at 120 nodes / 200 edges).
+- **Shortest Path & Network Analytics**: Added Dijkstra-based shortest relationship path discovery and degree/entity distribution analytics.
+- **Interactive Institutional Clarity UI**: Built canvas/SVG graph visualizer with zoom/pan, fit-to-view, deterministic layout, accessible list/table alternative, node & edge provenance drawers, and "What Changed" recent activity integration.
+- **Cross-Platform Integration**: Integrated graph entry points and focused views into Customer 360 (`GRAPH` tab), Relationship Digital Twin ("Explore Relationship Graph"), and Global Search.
+- **Copilot Graph Tools**: Registered `getRelationshipGraph`, `getRelationshipNeighbors`, `getRelationshipPath`, and `getRelationshipEvidence` with strict authorization guards and source citation reporting.
+- **Audit Logging**: Comprehensive audit trail for `RELATIONSHIP_GRAPH_VIEWED`, `RELATIONSHIP_GRAPH_EXPANDED`, `RELATIONSHIP_GRAPH_PATH_VIEWED`, `RELATIONSHIP_GRAPH_FILTER_APPLIED`, and `RELATIONSHIP_GRAPH_COPILOT_USED`.
+
 ## [Phase 18] - Production Readiness & Operations
 - Implemented robust environment validation at server startup.
 - Configured graceful shutdown logic for HTTP server and connections.

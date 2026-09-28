@@ -1828,6 +1828,38 @@ export const relationshipActionTraceRelations = relations(relationshipActionTrac
   }),
 }));
 
+// ====================================================
+// PHASE 28: RELATIONSHIP GRAPH & NETWORK INTELLIGENCE
+// ====================================================
 
-
-
+export const relationshipEdges = pgTable(
+  'relationship_edges',
+  {
+    id: serial('id').primaryKey(),
+    sourceEntityType: text('source_entity_type').notNull(), // CUSTOMER, HOUSEHOLD, BUSINESS, ACCOUNT, etc.
+    sourceEntityId: text('source_entity_id').notNull(),
+    targetEntityType: text('target_entity_type').notNull(), // HOUSEHOLD, BUSINESS, CUSTOMER, ACCOUNT, etc.
+    targetEntityId: text('target_entity_id').notNull(),
+    relationshipType: text('relationship_type').notNull(), // CUSTOMER_BELONGS_TO_HOUSEHOLD, CUSTOMER_ASSOCIATED_WITH_BUSINESS, etc.
+    status: text('status').notNull().default('ACTIVE'), // ACTIVE, INACTIVE, DORMANT, PENDING, ARCHIVED
+    provenanceType: text('provenance_type').notNull().default('DIRECT_RECORD'), // DIRECT_RECORD, DERIVED_FROM_ACCOUNT_OWNERSHIP, etc.
+    provenanceId: text('provenance_id'),
+    visibilityScope: text('visibility_scope').notNull().default('BRANCH'), // PUBLIC, BRANCH, CONFIDENTIAL, RESTRICTED
+    metadata: text('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    relEdgeSourceIdx: index('idx_rel_edge_source').on(table.sourceEntityType, table.sourceEntityId),
+    relEdgeTargetIdx: index('idx_rel_edge_target').on(table.targetEntityType, table.targetEntityId),
+    relEdgeTypeIdx: index('idx_rel_edge_type').on(table.relationshipType),
+    relEdgeStatusIdx: index('idx_rel_edge_status').on(table.status),
+    relEdgeUnique: uniqueIndex('idx_rel_edge_unique_pair').on(
+      table.sourceEntityType,
+      table.sourceEntityId,
+      table.targetEntityType,
+      table.targetEntityId,
+      table.relationshipType
+    ),
+  })
+);

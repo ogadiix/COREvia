@@ -12,6 +12,7 @@ import { notificationService } from '../notification.service.ts';
 import { analyticsService } from '../analytics.service.ts';
 import { documentService } from '../document.service.ts';
 import { relationshipTwinService } from '../relationshipTwin.service.ts';
+import { relationshipGraphService } from '../relationshipGraph.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -489,6 +490,56 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         customerId: { type: Type.STRING, description: 'Customer ID or Customer Code (e.g. 1 or CUS-10482)' },
       },
       required: ['customerId'],
+    },
+  },
+  {
+    name: 'getRelationshipGraph',
+    description: 'Retrieve the governed Relationship Graph for a customer or banking entity with connected accounts, loans, products, opportunities, service cases, interactions, and tasks.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        entityType: { type: Type.STRING, description: 'Root entity type: CUSTOMER, ACCOUNT, LOAN, OPPORTUNITY, or SERVICE_CASE (default: CUSTOMER)' },
+        entityId: { type: Type.STRING, description: 'Entity ID or Code (e.g. CUS-10482 or 1)' },
+        depth: { type: Type.INTEGER, description: 'Traversal depth: 1 (direct neighbors), 2 (extended relationships), or 3 (max)' },
+      },
+      required: ['entityId'],
+    },
+  },
+  {
+    name: 'getRelationshipNeighbors',
+    description: 'Retrieve immediate degree-1 banking relationship neighbors for a customer or banking entity.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        entityType: { type: Type.STRING, description: 'Entity type (CUSTOMER, ACCOUNT, LOAN, OPPORTUNITY, SERVICE_CASE)' },
+        entityId: { type: Type.STRING, description: 'Entity ID or Code' },
+      },
+      required: ['entityId'],
+    },
+  },
+  {
+    name: 'getRelationshipPath',
+    description: 'Find the shortest authorized connectivity path between two banking entities (e.g. Customer to Account to Product).',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        sourceType: { type: Type.STRING, description: 'Source entity type (e.g. CUSTOMER)' },
+        sourceId: { type: Type.STRING, description: 'Source entity ID or code' },
+        targetType: { type: Type.STRING, description: 'Target entity type (e.g. PRODUCT or OPPORTUNITY)' },
+        targetId: { type: Type.STRING, description: 'Target entity ID or code' },
+      },
+      required: ['sourceType', 'sourceId', 'targetType', 'targetId'],
+    },
+  },
+  {
+    name: 'getRelationshipEvidence',
+    description: 'Retrieve detailed provenance and regulatory audit evidence explaining why a specific relationship connection exists in the graph.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        edgeId: { type: Type.STRING, description: 'Unique edge ID from relationship graph' },
+      },
+      required: ['edgeId'],
     },
   },
 ];
@@ -1918,6 +1969,131 @@ export async function executeCopilotTool(
 
       return {
         data: twin.beforeYouAct,
+        sources,
+      };
+    }
+
+    case 'getRelationshipGraph': {
+      const eType = String(args.entityType || 'CUSTOMER').toUpperCase();
+      const eId = args.entityId || args.customerId;
+      const depth = Number(args.depth || 1);
+      const graph = await relationshipGraphService.getRelationshipGraph(
+        eType,
+        eId,
+        ctx.user as any,
+        { depth },
+        ctx.requestId
+      );
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: String(graph.root.code || graph.root.entityId),
+        label: `Relationship Graph · ${graph.root.label} (${graph.root.code})`,
+        link: `/relationship-graph?entityType=${graph.root.entityType}&entityId=${graph.root.code || graph.root.entityId}`,
+      });
+
+      for (const node of graph.nodes) {
+        if (node.entityType === 'OPPORTUNITY') {
+          sources.push({
+            type: 'OPPORTUNITY',
+            id: String(node.code),
+            label: `Opportunity · ${node.label} (${node.code})`,
+            link: '/opportunities',
+          });
+        } else if (node.entityType === 'SERVICE_CASE') {
+          sources.push({
+            type: 'CASE',
+            id: String(node.code),
+            label: `Service Case · ${node.label} (${node.code})`,
+            link: '/service-desk',
+          });
+        }
+      }
+
+      return {
+        data: {
+          root: graph.root,
+          nodeCount: graph.meta.nodeCount,
+          edgeCount: graph.meta.edgeCount,
+          depth: graph.meta.depth,
+          entityTypeCounts: graph.meta.entityTypeCounts,
+          relationshipTypeCounts: graph.meta.relationshipTypeCounts,
+          summaryBreakdown: `${graph.root.label} is connected to ${graph.meta.entityTypeCounts.PRODUCT || 0} banking products, ${graph.meta.entityTypeCounts.OPPORTUNITY || 0} active opportunities, ${graph.meta.entityTypeCounts.SERVICE_CASE || 0} open service cases, and ${graph.meta.entityTypeCounts.INTERACTION || 0} interactions.`,
+          connectedNodes: graph.nodes.map((n) => ({
+            id: n.id,
+            entityType: n.entityType,
+            code: n.code,
+            label: n.label,
+            status: n.status,
+            depth: n.depth,
+          })),
+        },
+        sources,
+      };
+    }
+
+    case 'getRelationshipNeighbors': {
+      const eType = String(args.entityType || 'CUSTOMER').toUpperCase();
+      const eId = args.entityId || args.customerId;
+      const neighborsResult = await relationshipGraphService.getRelationshipNeighbors(
+        eType,
+        eId,
+        ctx.user as any,
+        ctx.requestId
+      );
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: String(neighborsResult.root.code || neighborsResult.root.entityId),
+        label: `Relationship Neighbors · ${neighborsResult.root.label}`,
+        link: `/relationship-graph?entityType=${neighborsResult.root.entityType}&entityId=${neighborsResult.root.code}`,
+      });
+
+      return {
+        data: neighborsResult,
+        sources,
+      };
+    }
+
+    case 'getRelationshipPath': {
+      const pathResult = await relationshipGraphService.findRelationshipPath(
+        args.sourceType,
+        args.sourceId,
+        args.targetType,
+        args.targetId,
+        ctx.user as any,
+        ctx.requestId
+      );
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: `${args.sourceType}:${args.sourceId}`,
+        label: `Relationship Path · ${args.sourceType} to ${args.targetType}`,
+        link: `/relationship-graph`,
+      });
+
+      return {
+        data: pathResult,
+        sources,
+      };
+    }
+
+    case 'getRelationshipEvidence': {
+      const evidence = await relationshipGraphService.getRelationshipEvidence(
+        args.edgeId,
+        ctx.user as any,
+        ctx.requestId
+      );
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: args.edgeId,
+        label: `Relationship Provenance Evidence · ${args.edgeId}`,
+        link: `/relationship-graph`,
+      });
+
+      return {
+        data: evidence,
         sources,
       };
     }
