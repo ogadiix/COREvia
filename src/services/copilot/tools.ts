@@ -14,6 +14,7 @@ import { documentService } from '../document.service.ts';
 import { relationshipTwinService } from '../relationshipTwin.service.ts';
 import { relationshipGraphService } from '../relationshipGraph.service.ts';
 import { decisionTraceService } from '../decisionTrace.service.ts';
+import { strategySimulatorService } from '../strategySimulator.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -585,6 +586,93 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         customerId: { type: Type.STRING, description: 'Customer ID or CIF number' },
       },
       required: ['customerId'],
+    },
+  },
+  {
+    name: 'createStrategyScenario',
+    description: 'Create a non-destructive what-if strategy scenario for a customer. Does NOT mutate customer records.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.INTEGER, description: 'Customer database ID' },
+        name: { type: Type.STRING, description: 'Name of the scenario (e.g. Service Recovery Plan)' },
+        description: { type: Type.STRING, description: 'Scenario objective description' },
+        actions: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              actionType: { type: Type.STRING, description: 'Supported action type (SCHEDULE_RELATIONSHIP_REVIEW, RESOLVE_SERVICE_CASE, FOLLOW_UP_OPPORTUNITY, COMPLETE_TASK, COMPLETE_COMMITMENT, LOG_RELATIONSHIP_INTERACTION, INCREASE_ENGAGEMENT_ACTIVITY, ACTIVATE_EXISTING_PRODUCT_OPPORTUNITY)' },
+              targetEntityType: { type: Type.STRING },
+              targetEntityId: { type: Type.STRING },
+              orderIndex: { type: Type.INTEGER },
+            },
+            required: ['actionType'],
+          },
+          description: 'List of what-if actions to simulate',
+        },
+      },
+      required: ['customerId', 'name'],
+    },
+  },
+  {
+    name: 'simulateStrategyScenario',
+    description: 'Run deterministic what-if simulation on customer relationship. Returns before/after metrics and explanations without writing to production tables.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.INTEGER, description: 'Customer database ID' },
+        scenarioId: { type: Type.STRING, description: 'Existing scenario ID or code (optional)' },
+        actions: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              actionType: { type: Type.STRING },
+              targetEntityType: { type: Type.STRING },
+              targetEntityId: { type: Type.STRING },
+              orderIndex: { type: Type.INTEGER },
+            },
+            required: ['actionType'],
+          },
+          description: 'Actions to simulate if running ad-hoc without existing scenario ID',
+        },
+      },
+      required: ['customerId'],
+    },
+  },
+  {
+    name: 'getStrategyScenario',
+    description: 'Retrieve a saved what-if scenario including base snapshot, actions, and simulated outcomes.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        scenarioId: { type: Type.STRING, description: 'Scenario ID or code (e.g. STR-20260928-001)' },
+      },
+      required: ['scenarioId'],
+    },
+  },
+  {
+    name: 'compareStrategyScenario',
+    description: 'Compare two what-if strategy scenarios side-by-side for the same customer to analyze metric advantages.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        baseScenarioId: { type: Type.STRING, description: 'Base scenario ID or code' },
+        targetScenarioId: { type: Type.STRING, description: 'Target scenario ID or code' },
+      },
+      required: ['baseScenarioId', 'targetScenarioId'],
+    },
+  },
+  {
+    name: 'getScenarioTrace',
+    description: 'Retrieve explainable Decision Trace for a strategy simulation scenario.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        scenarioId: { type: Type.STRING, description: 'Scenario ID or code' },
+      },
+      required: ['scenarioId'],
     },
   },
 ];
@@ -2220,6 +2308,131 @@ export async function executeCopilotTool(
 
       return {
         data: history,
+        sources,
+      };
+    }
+
+    case 'createStrategyScenario': {
+      const scenario = await strategySimulatorService.createScenario(
+        {
+          customerId: Number(args.customerId),
+          name: args.name,
+          description: args.description,
+          actions: args.actions || [],
+        },
+        ctx.user as any
+      );
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: scenario.scenarioId,
+        label: `Strategy Scenario · ${scenario.scenarioId} (${scenario.name})`,
+        link: `/strategy-simulator?scenarioId=${scenario.scenarioId}`,
+      });
+
+      return {
+        data: {
+          ...scenario,
+          notice: 'SIMULATION ONLY — Customer production data is unmodified.',
+        },
+        sources,
+      };
+    }
+
+    case 'simulateStrategyScenario': {
+      let simResult;
+      if (args.scenarioId) {
+        const scenario = await strategySimulatorService.simulateExistingScenario(args.scenarioId, ctx.user as any);
+        simResult = {
+          scenarioId: scenario.scenarioId,
+          status: scenario.status,
+          baseSnapshot: scenario.baseSnapshot,
+          resultSnapshot: scenario.resultSnapshot,
+          comparisons: scenario.comparisons,
+          decisionTraceId: scenario.decisionTraceId,
+          isSimulation: true,
+          simulationDisclaimer: 'SIMULATION — NOT PRODUCTION DATA. Deterministic impact based on currently available COREvia relationship data and rules.',
+        };
+      } else {
+        simResult = await strategySimulatorService.simulateScenario(
+          {
+            customerId: Number(args.customerId),
+            actions: args.actions || [],
+            scenarioName: 'Ad-hoc Copilot Simulation',
+          },
+          ctx.user as any
+        );
+      }
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: simResult.scenarioId || 'SIMULATION',
+        label: `Strategy Simulation · ${simResult.scenarioId}`,
+        link: `/strategy-simulator?customerId=${args.customerId}`,
+      });
+
+      return {
+        data: simResult,
+        sources,
+      };
+    }
+
+    case 'getStrategyScenario': {
+      const scenario = await strategySimulatorService.getScenario(args.scenarioId, ctx.user as any);
+      sources.push({
+        type: 'CUSTOMER',
+        id: scenario.scenarioId,
+        label: `Strategy Scenario · ${scenario.scenarioId}`,
+        link: `/strategy-simulator?scenarioId=${scenario.scenarioId}`,
+      });
+      return {
+        data: scenario,
+        sources,
+      };
+    }
+
+    case 'compareStrategyScenario': {
+      const comparison = await strategySimulatorService.compareScenarios(
+        args.baseScenarioId,
+        args.targetScenarioId,
+        ctx.user as any
+      );
+      sources.push({
+        type: 'CUSTOMER',
+        id: `${args.baseScenarioId}_vs_${args.targetScenarioId}`,
+        label: `Scenario Comparison · ${args.baseScenarioId} vs ${args.targetScenarioId}`,
+        link: `/strategy-simulator?compare=${args.baseScenarioId}&with=${args.targetScenarioId}`,
+      });
+      return {
+        data: comparison,
+        sources,
+      };
+    }
+
+    case 'getScenarioTrace': {
+      const scenario = await strategySimulatorService.getScenario(args.scenarioId, ctx.user as any);
+      if (!scenario.decisionTraceId) {
+        return {
+          data: {
+            scenarioId: scenario.scenarioId,
+            message: 'No decision trace has been generated for this scenario yet. Run a simulation first.',
+          },
+          sources,
+        };
+      }
+      const trace = await decisionTraceService.getDecisionTrace(
+        scenario.decisionTraceId,
+        ctx.user as any,
+        ctx.requestId
+      );
+      sources.push({
+        type: 'CUSTOMER',
+        id: trace.decisionId,
+        label: `Scenario Decision Trace · ${trace.decisionId}`,
+        link: `/customers?tab=decisions&traceId=${trace.decisionId}`,
+      });
+      return {
+        data: trace,
         sources,
       };
     }

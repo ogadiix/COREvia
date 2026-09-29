@@ -1235,5 +1235,87 @@ export const bankingApi = {
   async searchDecisionTraces(q: string) {
     return await request<any[]>(`/decision-traces/search?q=${encodeURIComponent(q)}`);
   },
+
+  // ==========================================
+  // PHASE 30: RELATIONSHIP STRATEGY SIMULATOR
+  // ==========================================
+
+  async simulateAdhocStrategy(params: {
+    customerId: number;
+    actions: any[];
+    scenarioName?: string;
+    description?: string;
+  }) {
+    return await request<any>('/strategy-scenarios/simulate-adhoc', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  },
+
+  async createStrategyScenario(params: {
+    customerId: number;
+    name: string;
+    description?: string;
+    actions?: any[];
+    autoSimulate?: boolean;
+  }) {
+    return await request<any>('/strategy-scenarios', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  },
+
+  async getStrategyScenario(id: string | number) {
+    return await request<any>(`/strategy-scenarios/${encodeURIComponent(id)}`);
+  },
+
+  async getCustomerStrategyScenarios(customerId: number) {
+    return await request<any[]>(`/strategy-scenarios/customer/${customerId}`);
+  },
+
+  async simulateStrategyScenario(id: string | number) {
+    return await request<any>(`/strategy-scenarios/${encodeURIComponent(id)}/simulate`, {
+      method: 'POST',
+    });
+  },
+
+  async saveStrategyScenario(id: string | number) {
+    return await request<any>(`/strategy-scenarios/${encodeURIComponent(id)}/save`, {
+      method: 'POST',
+    });
+  },
+
+  async archiveStrategyScenario(id: string | number) {
+    return await request<any>(`/strategy-scenarios/${encodeURIComponent(id)}/archive`, {
+      method: 'POST',
+    });
+  },
+
+  async compareStrategyScenarios(id1: string | number, id2: string | number) {
+    return await request<any>(
+      `/strategy-scenarios/${encodeURIComponent(id1)}/compare/${encodeURIComponent(id2)}`
+    );
+  },
+
+  async applyStrategyScenarioAction(
+    id: string | number,
+    actionIndex: number,
+    confirmationNotes: string,
+    customPayload?: Record<string, any>
+  ) {
+    return await request<any>(`/strategy-scenarios/${encodeURIComponent(id)}/apply-action`, {
+      method: 'POST',
+      body: JSON.stringify({ actionIndex, confirmationNotes, customPayload }),
+    });
+  },
+
+  async getStrategyAnalytics() {
+    return await request<any>('/strategy-scenarios/analytics');
+  },
+
+  async searchStrategyScenarios(q: string) {
+    return await request<any[]>(`/strategy-scenarios/search?q=${encodeURIComponent(q)}`);
+  },
 };
+
 

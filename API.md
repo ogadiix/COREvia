@@ -144,3 +144,64 @@ All requests require an active authenticated session cookie and anti-CSRF token 
   - Body: `{ "rejectionReason": "Customer opted out of FD allocation" }`
 - **Execute**: `POST /api/decision-traces/:id/execute`
   - Body: `{ "executionRef": "TXN-8849102", "notes": "Disbursed via core switch" }`
+
+---
+
+## 2. Strategy Simulator API Specification
+
+### Base URL
+`/api/strategy-scenarios`
+
+### 2.1 List Scenarios
+- **Route**: `GET /api/strategy-scenarios`
+- **Query Params**: `status`, `limit`, `offset`
+- **Response**: Paginated list of strategy scenarios.
+
+### 2.2 Get Simulator Analytics
+- **Route**: `GET /api/strategy-scenarios/analytics`
+- **Response**: Aggregated scenario metrics, simulation counts, most common action frequencies, user activity.
+
+### 2.3 Search Scenarios
+- **Route**: `GET /api/strategy-scenarios/search?q=query`
+- **Response**: Scenarios matching code, title, or customer name.
+
+### 2.4 Customer Scenarios
+- **Route**: `GET /api/strategy-scenarios/customer/:customerId`
+- **Response**: All scenarios created for the designated customer.
+
+### 2.5 Run Ad-Hoc Simulation
+- **Route**: `POST /api/strategy-scenarios/simulate-adhoc`
+- **Body**: `{ "customerId": 1, "actions": [{ "actionType": "RESOLVE_SERVICE_CASE", "orderIndex": 1, "parameters": {} }] }`
+- **Response**: `StrategySimulationResultDTO` with intermediate steps, comparison table, why factors, limitations, and `isSimulation: true`.
+
+### 2.6 Create Scenario
+- **Route**: `POST /api/strategy-scenarios`
+- **Body**: `{ "customerId": 1, "name": "Service Recovery", "description": "...", "actions": [...] }`
+- **Response**: Created `StrategyScenarioDTO`.
+
+### 2.7 Get Scenario (with Staleness Check)
+- **Route**: `GET /api/strategy-scenarios/:id`
+- **Response**: `StrategyScenarioDTO` with `isStale` flag evaluated against customer updated timestamp.
+
+### 2.8 Simulate Existing Scenario
+- **Route**: `POST /api/strategy-scenarios/:id/simulate`
+- **Response**: Updated `StrategyScenarioDTO` with status `SIMULATED` and fresh result snapshot.
+
+### 2.9 Save Scenario
+- **Route**: `POST /api/strategy-scenarios/:id/save`
+- **Response**: Updated `StrategyScenarioDTO` with status `SAVED`.
+
+### 2.10 Archive Scenario
+- **Route**: `POST /api/strategy-scenarios/:id/archive`
+- **Response**: Updated `StrategyScenarioDTO` with status `ARCHIVED`.
+
+### 2.11 Compare Scenarios (Same Customer)
+- **Route**: `GET /api/strategy-scenarios/:id/compare/:otherId`
+- **Response**: Side-by-side metric comparison table, advantages (`BASE`/`TARGET`), common and unique actions. Strictly blocks cross-customer comparison.
+
+### 2.12 Apply Simulated Action to Real Banking
+- **Route**: `POST /api/strategy-scenarios/:id/apply-action`
+- **Body**: `{ "actionIndex": 0, "confirmationNotes": "Confirmed by client during review" }`
+- **Response**: `{ "success": true, "executedAction": "SCHEDULE_RELATIONSHIP_REVIEW", "entityId": "12", "message": "..." }`
+- **Security**: Requires explicit banker notes and logs `STRATEGY_SIMULATION_ACTION_APPLIED`.
+

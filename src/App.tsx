@@ -49,6 +49,7 @@ import { InteractionsModule } from './components/interactions/InteractionsModule
 import { DocumentIntelligenceModule } from './components/documents/DocumentIntelligenceModule';
 import { RelationshipTwinModule } from './components/modules/RelationshipTwinModule';
 import { RelationshipGraphModule } from './components/modules/RelationshipGraphModule';
+import { StrategySimulatorModule } from './components/modules/StrategySimulatorModule';
 import { CopilotDrawer } from './components/copilot/CopilotDrawer';
 import { CopilotProvider, useCopilot } from './context/CopilotContext';
 import { NewTransactionModal } from './components/modals/NewTransactionModal';
@@ -88,6 +89,8 @@ const pathToModule: Record<string, ModuleType> = {
   '/twin': 'relationship-twin',
   '/relationship-graph': 'relationship-graph',
   '/graph': 'relationship-graph',
+  '/strategy-simulator': 'strategy-simulator',
+  '/simulator': 'strategy-simulator',
 };
 
 const moduleToPath: Record<ModuleType, string> = {
@@ -113,6 +116,7 @@ const moduleToPath: Record<ModuleType, string> = {
   documents: '/documents',
   'relationship-twin': '/relationship-twin',
   'relationship-graph': '/relationship-graph',
+  'strategy-simulator': '/strategy-simulator',
 };
 
 function BankingWorkplace() {
@@ -137,6 +141,7 @@ function BankingWorkplace() {
   const canAccessDocuments = canAccessCustomers || hasPermission('customers:read') || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'KYC_ANALYST', 'OPERATIONS', 'SERVICE_AGENT', 'ANALYST', 'COMPLIANCE');
   const canAccessTwin = canAccessIntelligence || hasPermission('intelligence:read') || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
   const canAccessGraph = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
+  const canAccessSimulator = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
 
   // Navigation State initialized from URL path
   const [activeModule, setActiveModule] = useState<ModuleType>(() => {
@@ -1021,6 +1026,19 @@ function BankingWorkplace() {
               ) : (
                 <AccessRestrictedNotice
                   moduleName="Relationship Graph & Network Intelligence"
+                  requiredPermission="customers:read"
+                  requiredRoles={['Relationship Manager', 'Branch Manager', 'Analyst', 'Service Agent']}
+                  onGoBack={() => handleSelectModule('dashboard')}
+                />
+              )
+            )}
+
+            {activeModule === 'strategy-simulator' && (
+              canAccessSimulator ? (
+                <StrategySimulatorModule />
+              ) : (
+                <AccessRestrictedNotice
+                  moduleName="Relationship Strategy Simulator"
                   requiredPermission="customers:read"
                   requiredRoles={['Relationship Manager', 'Branch Manager', 'Analyst', 'Service Agent']}
                   onGoBack={() => handleSelectModule('dashboard')}

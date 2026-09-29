@@ -48,3 +48,20 @@
 - [x] Complete audit event coverage for trace creation, viewing, comparing, confirming, rejecting, and executing.
 - [x] 20/20 Phase 29 automated test cases passing (57/57 total repository tests passing).
 - [x] Responsive layout verified across desktop, tablet, and mobile viewports.
+
+## RELATIONSHIP STRATEGY SIMULATOR & WHAT-IF SANDBOX (PHASE 30)
+- [x] Relational schema migrated for `relationship_scenarios` and `relationship_scenario_actions` with cascading foreign keys and indexes.
+- [x] 100% non-destructive simulation execution verified: live database state for customers, accounts, loans, cases, opportunities, and tasks is completely untouched during simulation.
+- [x] Multi-action sequential evaluation engine with order-index execution, intermediate step snapshots, and explainable delta logging.
+- [x] 9 supported deterministic banking actions (ticket resolution, review scheduling, commitment fulfillment, interaction logging, opportunity follow-up, etc.).
+- [x] Comprehensive Before/After comparison matrix with metric advantage indicators (`IMPROVED`, `DECLINED`, `UNCHANGED`).
+- [x] Governed action bridge allowing bankers to promote simulated actions into real Core Banking tasks/case updates with mandatory confirmation notes.
+- [x] Decision Trace integration automatically logging `STRATEGY_SIMULATION` traces with why factors, constraints, and limitations.
+- [x] Staleness detection flagging saved scenarios when underlying customer records change, with one-click re-simulation.
+- [x] Side-by-side scenario comparison for the same customer with cross-customer isolation blocking.
+- [x] 5 dedicated Copilot tools (`createStrategyScenario`, `simulateStrategyScenario`, `getStrategyScenario`, `compareStrategyScenario`, `getScenarioTrace`) with Rule 10 simulation boundaries.
+- [x] Institutional Clarity UI (`StrategySimulatorModule`, `ScenarioComparisonModal`, `ApplyActionConfirmationModal`) with non-production badges and contextual entry points.
+- [x] Audit trail coverage for `STRATEGY_SCENARIO_CREATED`, `STRATEGY_SCENARIO_SIMULATED`, `STRATEGY_SCENARIO_VIEWED`, `STRATEGY_SCENARIO_SAVED`, `STRATEGY_SCENARIO_ARCHIVED`, `STRATEGY_SCENARIO_COMPARED`, `STRATEGY_SIMULATION_ACTION_APPLIED`.
+- [x] 21/21 Phase 30 automated test cases passing (78/78 total platform tests passing).
+- [x] TypeScript compiler (`tsc --noEmit`) and Vite production bundle (`npm run build`) passing with zero errors.
+

@@ -57,9 +57,11 @@ import {
   Network,
   GitFork,
   GitCompare,
+  Compass,
 } from 'lucide-react';
 import { useCopilot } from '../../context/CopilotContext';
 import { RelationshipGraph } from '../graph/RelationshipGraph.tsx';
+import { StrategySimulatorModule } from './StrategySimulatorModule';
 
 interface CustomerKYCModuleProps {
   customers: CustomerKYC[];
@@ -91,7 +93,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
   const [submitting360Action, setSubmitting360Action] = useState<boolean>(false);
   const [recalculatingCustomerSignals, setRecalculatingCustomerSignals] = useState<boolean>(false);
   const [active360Tab, setActive360Tab] = useState<
-    'KYC' | 'DOCUMENTS' | 'PRODUCTS' | 'ACCOUNTS' | 'LOANS' | 'INTERACTIONS' | 'CASES' | 'OPPORTUNITIES' | 'TASKS' | 'INTELLIGENCE' | 'ACTIONS' | 'RADAR' | 'ALERTS' | 'ONBOARDING' | 'TWIN' | 'GRAPH' | 'DECISIONS'
+    'KYC' | 'DOCUMENTS' | 'PRODUCTS' | 'ACCOUNTS' | 'LOANS' | 'INTERACTIONS' | 'CASES' | 'OPPORTUNITIES' | 'TASKS' | 'INTELLIGENCE' | 'ACTIONS' | 'RADAR' | 'ALERTS' | 'ONBOARDING' | 'TWIN' | 'GRAPH' | 'DECISIONS' | 'SIMULATOR'
   >('KYC');
   const [customerOnboarding, setCustomerOnboarding] = useState<{
     activeApplication: any | null;
@@ -906,6 +908,14 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
                   <span>Open Full Graph</span>
                   <ExternalLink className="w-3 h-3" />
                 </button>
+
+                <button
+                  onClick={() => setActive360Tab('SIMULATOR')}
+                  className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded text-xs font-medium transition flex items-center gap-1 shadow-2xs"
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>Simulate Strategy</span>
+                </button>
               </div>
             </div>
 
@@ -914,6 +924,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
               {[
                 { id: 'GRAPH', label: 'Relationship Graph', icon: GitFork },
                 { id: 'TWIN', label: 'Relationship Twin (Live)', icon: Network },
+                { id: 'SIMULATOR', label: 'Strategy Simulator', icon: Compass },
                 { id: 'KYC', label: 'KYC Profile', icon: UserCheck },
                 {
                   id: 'DECISIONS',
@@ -2201,6 +2212,13 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
                         })}
                       </div>
                     )}
+                  </div>
+                )}
+
+                {/* 15. Strategy Simulator Tab (Phase 30) */}
+                {active360Tab === 'SIMULATOR' && (
+                  <div className="space-y-4 pt-2">
+                    <StrategySimulatorModule initialCustomerId={activeCustomer.id} />
                   </div>
                 )}
               </>

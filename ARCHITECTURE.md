@@ -110,3 +110,33 @@ The platform allows authorized officers to compare two traces for the same custo
   - Deprecated / removed evidence items
   - Confidence shift
   - Status progression
+
+---
+
+## 7. Relationship Strategy Simulator & What-If Sandbox (Phase 30)
+
+### 7.1 Non-Destructive Simulation Architecture
+The Strategy Simulator provides an enterprise-grade sandbox allowing authorized Relationship Managers and Branch Managers to evaluate counterfactual scenarios:
+- **Zero Production Mutation**: In-memory cloning of baseline customer entity state (snapshot captured via `getBaseSnapshot`). No mutations occur to live `customers`, `accounts`, `loans`, `service_cases`, `opportunities`, or `tasks` tables during simulation.
+- **Deterministic Action Pipeline**: Evaluates up to 9 supported banking actions sequentially by `orderIndex`:
+  1. `SCHEDULE_RELATIONSHIP_REVIEW`: +2 CORE Score, sets momentum to accelerating, reduces days since interaction, adds follow-up task.
+  2. `RESOLVE_SERVICE_CASE`: Resolves simulated service case, improves Service Health to EXCELLENT/GOOD, +3 CORE Score.
+  3. `FOLLOW_UP_OPPORTUNITY`: Progresses stalled commercial opportunities, adds +1 CORE Score.
+  4. `COMPLETE_TASK`: Clears operational backlog, resets overdue tasks.
+  5. `COMPLETE_COMMITMENT`: Fulfills promises to clients, +1 CORE Score.
+  6. `LOG_RELATIONSHIP_INTERACTION`: Resets days since interaction to 0, +5 engagement points.
+  7. `INCREASE_ENGAGEMENT_ACTIVITY`: Boosts engagement score (+8), transitions relationship state to ENGAGED.
+  8. `ACTIVATE_EXISTING_PRODUCT_OPPORTUNITY`: Deepens product depth (+1), +2 CORE Score.
+  9. `UPDATE_RELATIONSHIP_REVIEW_STATUS`: Transitions review status to COMPLETED, +1 CORE Score.
+
+### 7.2 Governed Action Application Bridge
+When a banker decides to execute a simulated strategy, the action transitions across a governed human confirmation bridge:
+1. Banker selects simulated action item and provides mandatory confirmation justification notes.
+2. System verifies user RBAC permissions and portfolio-scoped customer ownership.
+3. System routes execution into real transactional Core Banking pipelines (e.g. creating real `tasks` or updating `service_cases`).
+4. Generates immutable audit event `STRATEGY_SIMULATION_ACTION_APPLIED` referencing both the simulation scenario and the resulting real entity ID.
+
+### 7.3 Decision Trace & Staleness Engine
+- **Decision Trace Binding**: Every simulation automatically logs a `STRATEGY_SIMULATION` Decision Trace capturing why factors, constraints, limitations, and simulated evidence deltas.
+- **Staleness Detection**: Saved scenarios track `baseSnapshot.asOf`. When a banker views a saved scenario, the engine checks if `customer.updatedAt > scenario.baseSnapshot.asOf`. If true, the scenario is explicitly labeled stale with a prominent amber alert badge and an instant "Re-run with Current Data" action.
+

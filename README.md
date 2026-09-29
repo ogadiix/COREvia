@@ -91,6 +91,13 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 - **Side-by-Side Trace Comparison**: Bounded comparative analysis highlighting evidence deltas and metric evolutions across customer decision history.
 - **Zero Information Leakage**: Strict RBAC and portfolio-scoped IDOR prevention ensuring cross-customer isolation.
 
+### 10. 🧭 Relationship Strategy Simulator & What-If Sandbox
+- **Non-Destructive What-If Simulation**: Answers *"What would the relationship look like if I changed this strategy?"* without mutating live production customer, account, or case records.
+- **Multi-Action Pipeline & Step Ladder**: Deterministic sequential evaluation of up to 9 supported banking actions (ticket resolution, review scheduling, commitment delivery, interaction logging, opportunity follow-up) with intermediate metric state tracking.
+- **Before / After Comparison Grid**: Full comparative metrics across CORE Score, Relationship Momentum, Service Health, Engagement Score, Product Depth, and Relationship Value with advantage highlighting.
+- **Governed Action Bridge**: Transition simulated actions to real Core Banking execution (CRM tasks, service ticket resolution) requiring explicit human confirmation notes and audit trail (`STRATEGY_SIMULATION_ACTION_APPLIED`).
+- **Explainability & Copilot Tools**: Decision Trace integration (`STRATEGY_SIMULATION`), staleness detection, side-by-side scenario comparison, and 5 dedicated Copilot tools.
+
 ---
 
 ## 🏗️ Architecture

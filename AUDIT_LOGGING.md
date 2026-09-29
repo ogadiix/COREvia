@@ -23,7 +23,23 @@ The AI Decision Trace & Explainability Platform introduces dedicated audit event
 
 ---
 
-## 3. Audit Record Schema
+## 3. Strategy Simulator Audit Events (Phase 30)
+
+The Relationship Strategy Simulator & What-If Sandbox introduces tamper-evident audit logging for all scenario lifecycle stages and actual banking executions:
+
+| Event Type | Trigger Condition | Logged Metadata |
+|---|---|---|
+| `STRATEGY_SCENARIO_CREATED` | Banker creates a new what-if scenario | `scenarioId`, `customerId`, `actionCount`, `createdBy` |
+| `STRATEGY_SCENARIO_SIMULATED` | Simulation engine computes multi-action deltas | `scenarioId`, `customerId`, `coreScoreDelta`, `actionCount`, `decisionTraceId` |
+| `STRATEGY_SCENARIO_VIEWED` | Banker inspects scenario details or comparison grid | `scenarioId`, `customerId`, `actorId` |
+| `STRATEGY_SCENARIO_SAVED` | Scenario transitioned to `SAVED` state | `scenarioId`, `customerId`, `actorId` |
+| `STRATEGY_SCENARIO_ARCHIVED` | Scenario transitioned to `ARCHIVED` state | `scenarioId`, `customerId`, `actorId` |
+| `STRATEGY_SCENARIO_COMPARED` | Banker compares two scenarios for the same customer | `baseScenarioId`, `targetScenarioId`, `customerId` |
+| `STRATEGY_SIMULATION_ACTION_APPLIED` | Banker promotes simulated action to live Core Banking execution | `scenarioId`, `customerId`, `actionType`, `confirmationNotes`, `executedResult` |
+
+---
+
+## 4. Audit Record Schema
 
 Audit logs are stored in the PostgreSQL `audit_logs` table with the following attributes:
 
@@ -40,7 +56,7 @@ Audit logs are stored in the PostgreSQL `audit_logs` table with the following at
 
 ---
 
-## 4. Immutability & Retention Policy
+## 5. Immutability & Retention Policy
 
 1. **No Mutations or Deletions**: Audit logs have no `UPDATE` or `DELETE` endpoints. Database-level permissions prohibit table modifications by application roles.
 2. **PII Masking**: Sensitive identity values (e.g., full PAN, raw Aadhaar, private contact details) are masked or omitted in audit payloads.

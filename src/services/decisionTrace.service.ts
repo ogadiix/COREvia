@@ -128,27 +128,28 @@ export const decisionTraceService = {
       dataAsOf: params.dataAsOf || new Date(),
     };
 
-    const evidenceList = (params.evidence || []).map((e) => ({
-      evidenceType: e.evidenceType,
-      sourceEngine: e.sourceEngine,
-      sourceEntityType: e.sourceEntityType,
-      sourceEntityId: e.sourceEntityId,
+    const evidenceList = (params.evidence || []).map((e: any) => ({
+      evidenceType: e.evidenceType || 'FACT',
+      sourceEngine: e.sourceEngine || params.sourceEngine || 'COREvia Intelligence Engine',
+      sourceEntityType: e.sourceEntityType || 'CUSTOMER',
+      sourceEntityId: String(e.sourceEntityId || params.customerId || 'GLOBAL'),
       sourceField: e.sourceField || null,
-      description: e.description,
-      observedValue: e.observedValue,
-      previousValue: e.previousValue || null,
+      description: e.description || e.title || 'Evidence item',
+      observedValue: String(e.observedValue ?? e.title ?? 'OBSERVED'),
+      previousValue: e.previousValue ? String(e.previousValue) : null,
       changeDirection: e.changeDirection || null,
       contributionType: e.contributionType || 'SUPPORTING',
-      contributionWeight: e.contributionWeight || null,
+      contributionWeight: e.contributionWeight || e.weight || null,
       dataAsOf: e.dataAsOf || new Date(),
     }));
 
-    const sourceNodesList = (params.sourceChain || []).map((s, idx) => ({
+    const rawSources = params.sourceChain || (params as any).sourceNodes || [];
+    const sourceNodesList = rawSources.map((s: any, idx: number) => ({
       orderIndex: s.orderIndex ?? idx,
-      sourceType: s.sourceType,
-      sourceId: s.sourceId,
-      sourceEngine: s.sourceEngine,
-      description: s.description,
+      sourceType: s.sourceType || 'SYSTEM',
+      sourceId: String(s.sourceId || 'NODE'),
+      sourceEngine: s.sourceEngine || params.sourceEngine || 'COREvia Engine',
+      description: s.description || 'Source system node',
       sourceTimestamp: s.sourceTimestamp || new Date(),
       authorizationScope: s.authorizationScope || 'BRANCH',
     }));
@@ -157,8 +158,8 @@ export const decisionTraceService = {
 
     // Audit trace creation
     await auditRepository.createLog({
-      actorId: user ? user.employeeId : 'SYSTEM_INTELLIGENCE_ENGINE',
-      actorName: user ? user.name : 'COREvia Intelligence Engine',
+      actorId: user ? (user.employeeId || String(user.id)) : 'SYSTEM_INTELLIGENCE_ENGINE',
+      actorName: user ? (user.name || 'COREvia Banker') : 'COREvia Intelligence Engine',
       action: 'DECISION_TRACE_CREATED',
       resourceType: 'DECISION_TRACE',
       resourceId: decisionCode,

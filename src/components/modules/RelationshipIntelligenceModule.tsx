@@ -21,6 +21,7 @@ import {
   Info,
   Calendar,
   Sparkles,
+  Compass,
 } from 'lucide-react';
 import { bankingApi } from '../../lib/api';
 import { DecisionTracePanel } from '../decision-trace/DecisionTracePanel';
@@ -635,6 +636,18 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                       icon={<ChevronRight className="w-3.5 h-3.5" />}
                     >
                       Audit Details
+                    </Button>
+
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      onClick={() => {
+                        window.location.href = `/strategy-simulator?customerId=${ins.customerId || 1}`;
+                      }}
+                      className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+                      icon={<Compass className="w-3.5 h-3.5 text-indigo-600" />}
+                    >
+                      Simulate Response
                     </Button>
                   </div>
                 </div>

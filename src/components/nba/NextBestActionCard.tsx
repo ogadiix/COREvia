@@ -14,6 +14,7 @@ import {
   Clock,
   ExternalLink,
   Target,
+  Compass,
 } from 'lucide-react';
 
 interface NextBestActionCardProps {
@@ -241,6 +242,17 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
           >
             <HelpCircle className="w-3 h-3 text-indigo-500" />
             <span>Why? (Decision Trace)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              window.location.href = `/strategy-simulator?customerId=${action.customerId}`;
+            }}
+            className="text-amber-600 hover:text-amber-800 font-semibold inline-flex items-center gap-1 hover:underline cursor-pointer ml-1"
+            title="Simulate impact in Strategy Sandbox"
+          >
+            <Compass className="w-3 h-3 text-amber-500" />
+            <span>Simulate</span>
           </button>
         </div>
 

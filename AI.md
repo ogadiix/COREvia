@@ -41,6 +41,11 @@ In Phase 29, the Copilot received direct explainability inspection tools:
 | `getDecisionEvidence` | `decisionId` (string) | Retrieves structured evidence items categorized into primary and supporting | Logs `DECISION_TRACE_EVIDENCE_VIEWED` |
 | `getDecisionSources` | `decisionId` (string) | Returns data lineage and source systems with freshness timestamps | Logs `DECISION_TRACE_SOURCES_VIEWED` |
 | `getDecisionHistory` | `customerId` (number) | Retrieves chronological list of decision traces for a customer | Enforces portfolio scoping (`resourceAuth.authorizeCustomer`) |
+| `createStrategyScenario` | `customerId`, `name`, `actions` | Creates a counterfactual relationship strategy scenario | Requires customer authorization |
+| `simulateStrategyScenario` | `customerId` or `scenarioId`, `actions` | Runs deterministic multi-action simulation and step ladder | Labels output as SIMULATION ONLY |
+| `getStrategyScenario` | `scenarioId` | Retrieves saved scenario with before/after comparisons and staleness check | Validates ownership |
+| `compareStrategyScenario` | `baseScenarioId`, `targetScenarioId` | Compares two scenarios for the same customer side-by-side | Enforces same-customer boundary |
+| `getScenarioTrace` | `scenarioId` | Retrieves explainability decision trace and why factors for simulation | Scoped to customer portfolio |
 
 ---
 
@@ -64,6 +69,14 @@ When an explanation is requested, the Copilot must visibly classify statements u
 - `[RECOMMENDATION]`: Proposed banking action (e.g., "Propose 91-day auto-sweep fixed deposit").
 - `[LIMITATION]`: Missing parameters or confidence boundaries (e.g., "Customer external tax filing not refreshed since FY25").
 
+### Rule 10: Relationship Strategy Simulation & What-If Boundaries (Phase 30)
+When simulating counterfactual relationship strategies or what-if interventions:
+1. Always label outputs clearly as **SIMULATION — NOT PRODUCTION DATA**.
+2. **Never assert that customer data has been changed or updated** during a simulation. Live database state is 100% immutable during simulation.
+3. **Never predict loan approvals, credit underwriting decisions, churn guarantees, or customer conversions**. Simulations illustrate rule-based indicator deltas only.
+4. State explicit **assumptions and limitations** for every simulated action.
+5. Emphasize that actual banking execution requires human confirmation and authorization via production Core Banking workflows.
+
 ---
 
 ## 4. Hallucination Prevention & Synthetic Data Safeguards
@@ -72,3 +85,4 @@ When an explanation is requested, the Copilot must visibly classify statements u
 2. **Deterministic Fallbacks**: If Gemini is offline, throttled, or returns an error, COREvia gracefully falls back to deterministic decision inspection panels.
 3. **No Fabricated Confidence**: The system forbids inventing confidence metrics when engines do not provide them.
 4. **Synthetic Data Sandbox**: All accounts, PANs, Aadhaar numbers, and company names are synthetic representations adhering to regulatory structures.
+

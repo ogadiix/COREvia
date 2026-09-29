@@ -19,6 +19,7 @@ import {
   TrendingUp,
   RotateCcw,
   Zap,
+  Compass,
 } from 'lucide-react';
 import { bankingApi } from '../../lib/api.ts';
 import { DecisionTraceDTO } from '../../types/decisionTrace.types.ts';
@@ -414,6 +415,21 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                           </div>
                         )}
                       </div>
+
+                      {trace.customerId && (
+                        <div className="pt-2 border-t border-slate-200/80">
+                          <button
+                            onClick={() => {
+                              window.location.href = `/strategy-simulator?customerId=${trace.customerId}`;
+                            }}
+                            className="w-full py-2 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 transition cursor-pointer border border-indigo-200"
+                            title="Open Strategy Simulator for this customer"
+                          >
+                            <Compass className="w-3.5 h-3.5 text-indigo-600" />
+                            <span>Simulate Counterfactual Strategy</span>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

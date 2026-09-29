@@ -9,6 +9,7 @@ import {
   boolean,
   index,
   uniqueIndex,
+  jsonb,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -1990,3 +1991,79 @@ export const decisionTraceSourceNodesRelations = relations(decisionTraceSourceNo
     references: [decisionTraces.id],
   }),
 }));
+
+// ====================================================
+// PHASE 30: RELATIONSHIP STRATEGY SIMULATOR & WHAT-IF SANDBOX
+// ====================================================
+
+export const relationshipScenarios = pgTable(
+  'relationship_scenarios',
+  {
+    id: serial('id').primaryKey(),
+    scenarioId: text('scenario_id').notNull().unique(), // e.g. STR-20260928-001
+    customerId: integer('customer_id')
+      .references(() => customers.id)
+      .notNull(),
+    createdBy: integer('created_by')
+      .references(() => users.id)
+      .notNull(),
+    name: text('name').notNull(),
+    description: text('description'),
+    status: text('status').notNull().default('DRAFT'), // DRAFT, SIMULATED, SAVED, ARCHIVED
+    baseSnapshot: jsonb('base_snapshot').notNull(),
+    resultSnapshot: jsonb('result_snapshot'),
+    comparisonDelta: jsonb('comparison_delta'),
+    decisionTraceId: text('decision_trace_id'),
+    isStale: boolean('is_stale').default(false).notNull(),
+    staleAsOf: timestamp('stale_as_of'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    scenarioCustIdx: index('idx_scenarios_customer_id').on(table.customerId),
+    scenarioCreatedByIdx: index('idx_scenarios_created_by').on(table.createdBy),
+    scenarioStatusIdx: index('idx_scenarios_status').on(table.status),
+    scenarioCodeIdx: index('idx_scenarios_scenario_id').on(table.scenarioId),
+    scenarioCreatedAtIdx: index('idx_scenarios_created_at').on(table.createdAt),
+  })
+);
+
+export const relationshipScenarioActions = pgTable(
+  'relationship_scenario_actions',
+  {
+    id: serial('id').primaryKey(),
+    scenarioId: integer('scenario_id')
+      .references(() => relationshipScenarios.id, { onDelete: 'cascade' })
+      .notNull(),
+    actionType: text('action_type').notNull(),
+    targetEntityType: text('target_entity_type'),
+    targetEntityId: text('target_entity_id'),
+    parameters: jsonb('parameters'),
+    orderIndex: integer('order_index').notNull().default(0),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    scenarioActionScenarioIdx: index('idx_scenario_actions_scenario_id').on(table.scenarioId),
+    scenarioActionOrderIdx: index('idx_scenario_actions_order').on(table.scenarioId, table.orderIndex),
+  })
+);
+
+export const relationshipScenariosRelations = relations(relationshipScenarios, ({ one, many }) => ({
+  customer: one(customers, {
+    fields: [relationshipScenarios.customerId],
+    references: [customers.id],
+  }),
+  creator: one(users, {
+    fields: [relationshipScenarios.createdBy],
+    references: [users.id],
+  }),
+  actions: many(relationshipScenarioActions),
+}));
+
+export const relationshipScenarioActionsRelations = relations(relationshipScenarioActions, ({ one }) => ({
+  scenario: one(relationshipScenarios, {
+    fields: [relationshipScenarioActions.scenarioId],
+    references: [relationshipScenarios.id],
+  }),
+}));
+

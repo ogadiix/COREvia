@@ -25,6 +25,7 @@ import {
   FileText,
   Network,
   GitFork,
+  Compass,
 } from 'lucide-react';
 import { ModuleType } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -169,6 +170,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'relationship-graph',
           label: 'Relationship Graph',
           icon: <GitFork className="w-4 h-4 text-indigo-400" />,
+          shortcut: '',
+          requiredPermission: 'customers:read',
+        },
+        {
+          id: 'strategy-simulator',
+          label: 'Strategy Simulator',
+          icon: <Compass className="w-4 h-4 text-amber-400" />,
           shortcut: '',
           requiredPermission: 'customers:read',
         },

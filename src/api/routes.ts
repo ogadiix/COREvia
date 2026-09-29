@@ -1343,10 +1343,10 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
     const rawQuery = String(req.query.q || '').trim();
     const query = sanitizeText(rawQuery, 100);
     if (!query) {
-      return res.json({ customers: [], accounts: [], loans: [], products: [], onboarding: [], decisions: [] });
+      return res.json({ customers: [], accounts: [], loans: [], products: [], onboarding: [], decisions: [], scenarios: [] });
     }
 
-    const [customerResults, accountResults, loanResults, productResults, onboardingResults, decisionResults] = await Promise.all([
+    const [customerResults, accountResults, loanResults, productResults, onboardingResults, decisionResults, scenarioResults] = await Promise.all([
       customerService.listCustomers({
         search: query,
         rmId: req.user?.role === 'RELATIONSHIP_MANAGER' ? req.user.id : undefined,
@@ -1367,6 +1367,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
         { id: req.user!.id, name: req.user!.name, role: req.user!.role, requestId: req.requestId }
       ),
       decisionTraceService.searchDecisionTraces(query, req.user!, req.requestId),
+      strategySimulatorService.searchScenarios(query, req.user!),
     ]);
 
     // Mask PII in returned search records
@@ -1387,6 +1388,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       products: productResults.slice(0, 5),
       onboarding: onboardingResults.data,
       decisions: decisionResults,
+      scenarios: scenarioResults,
     });
   } catch (err) {
     const { statusCode, body } = formatErrorResponse(err, req.requestId);
@@ -3142,4 +3144,11 @@ apiRouter.use('/relationship-graph', relationshipGraphRouter);
 // ==========================================
 import { decisionTraceRouter } from './decisionTraceRoutes.ts';
 apiRouter.use('/decision-traces', decisionTraceRouter);
+
+// ==========================================
+// PHASE 30: RELATIONSHIP STRATEGY SIMULATOR & WHAT-IF SANDBOX
+// ==========================================
+import { strategySimulatorRouter } from './strategySimulatorRoutes.ts';
+import { strategySimulatorService } from '../services/strategySimulator.service.ts';
+apiRouter.use('/strategy-scenarios', strategySimulatorRouter);
 

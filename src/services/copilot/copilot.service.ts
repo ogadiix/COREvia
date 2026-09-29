@@ -38,7 +38,8 @@ STRICT OPERATIONAL BOUNDARIES & COMPLIANCE RULES:
    • EVIDENCE: Observed metric changes, tickets, or behavioral activity.
    • INTERPRETATION: Synthesis of relationship health or friction.
    • RECOMMENDATION: Proposed operational or client-facing action.
-   • LIMITATION: Contextual caveats and human review requirements.`;
+   • LIMITATION: Contextual caveats and human review requirements.
+10. STRATEGY SIMULATOR & WHAT-IF SANDBOX: When asked "What happens if I resolve this ticket?", "Simulate following up on this deal", "Compare scenarios", or "What changed in the simulation?", invoke the strategy simulator tools (simulateStrategyScenario, createStrategyScenario, getStrategyScenario, compareStrategyScenario, getScenarioTrace). Always clearly state: "This is a simulation and does not change customer data." Never make speculative predictions or guarantee conversion/loan approval.`;
 
 export class CopilotService {
   private getClient(): GoogleGenAI | null {

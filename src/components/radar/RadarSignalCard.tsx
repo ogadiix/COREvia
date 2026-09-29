@@ -18,6 +18,7 @@ import {
   XCircle,
   Clock,
   ExternalLink,
+  Compass,
 } from 'lucide-react';
 
 interface RadarSignalCardProps {
@@ -273,6 +274,18 @@ export const RadarSignalCard: React.FC<RadarSignalCardProps> = ({
                 <span>Decision Trace</span>
               </Button>
             )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                window.location.href = `/strategy-simulator?customerId=${signal.customerId}`;
+              }}
+              className="flex items-center gap-1 text-xs border-amber-200 text-amber-700 hover:bg-amber-50"
+              title="Simulate relationship response in Strategy Sandbox"
+            >
+              <Compass className="w-3.5 h-3.5 text-amber-600" />
+              <span>Simulate Response</span>
+            </Button>
           </div>
 
           {!isConverted && !isDismissed && (

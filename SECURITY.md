@@ -34,6 +34,17 @@ if (baseTrace.customerId !== targetTrace.customerId) {
 ```
 Attempting to cross-compare traces across disparate customers is blocked at the service boundary.
 
+### 2.3 Strategy Simulator Isolation & Production Safeguards (Phase 30)
+1. **Zero Database Mutation During Simulation**: All simulation runs evaluate in-memory state snapshots. Live records in `customers`, `accounts`, `loans`, `service_cases`, `opportunities`, and `tasks` cannot be modified by simulation execution.
+2. **Cross-Customer Scenario Comparison Blocked**:
+```typescript
+if (baseScenario.customerId !== targetScenario.customerId) {
+  throw new BankingError('VALIDATION_ERROR', 'Cross-customer scenario comparison forbidden to prevent information leakage', 400);
+}
+```
+3. **Governed Human Bridge**: Promoting a simulated strategy to actual Core Banking execution requires explicit human justification notes (`confirmationNotes`) and generates an immutable audit record (`STRATEGY_SIMULATION_ACTION_APPLIED`).
+
+
 ---
 
 ## 3. Defense-in-Depth API Safeguards

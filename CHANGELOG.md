@@ -1,5 +1,19 @@
 # Changelog
 
+## [Phase 30] - Relationship Strategy Simulator & What-If Sandbox
+- **Safe & Non-Destructive What-If Simulation**: Implemented an institutional workspace allowing authorized bankers to test counterfactual relationship interventions without mutating production customer or account data.
+- **Relational Scenario Schema**: Added `relationship_scenarios` and `relationship_scenario_actions` tables to PostgreSQL via Drizzle ORM with foreign keys, cascading deletions, and indexes on `scenario_id`, `customer_id`, and `created_by`.
+- **Supported Banking Actions**: Supports 9 deterministic action types (`SCHEDULE_RELATIONSHIP_REVIEW`, `RESOLVE_SERVICE_CASE`, `FOLLOW_UP_OPPORTUNITY`, `COMPLETE_TASK`, `COMPLETE_COMMITMENT`, `LOG_RELATIONSHIP_INTERACTION`, `INCREASE_ENGAGEMENT_ACTIVITY`, `ACTIVATE_EXISTING_PRODUCT_OPPORTUNITY`, `UPDATE_RELATIONSHIP_REVIEW_STATUS`).
+- **Sequential Multi-Action Step Ladder**: Multi-action scenarios evaluate strictly by `orderIndex`, generating intermediate relationship state snapshots and explainable step deltas.
+- **Before / After Comparison Grid**: Full comparative metrics across CORE Score, Relationship Momentum, Service Health, Engagement Score, Product Depth, and Relationship Value with advantage highlighting.
+- **Governed Production Action Bridge**: Simulated actions can be applied to real Core Banking execution (CRM tasks, case updates) through existing transactional pipelines with mandatory human confirmation notes and audit trail.
+- **Decision Trace Binding & Staleness Detection**: Simulations automatically log `STRATEGY_SIMULATION` Decision Traces with explicit why factors, limitations, and source rules. Automatically flags saved scenarios as stale if underlying customer records change.
+- **Side-by-Side Scenario Comparison**: Compares two scenarios for the same customer with metric advantage indicators (`BASE`, `TARGET`, `EQUAL`, `NOT_APPLICABLE`).
+- **Copilot Integration**: Registered 5 dedicated Copilot tools (`createStrategyScenario`, `simulateStrategyScenario`, `getStrategyScenario`, `compareStrategyScenario`, `getScenarioTrace`) with Rule 10 enforcing simulation boundaries and no speculative lending/approval predictions.
+- **Institutional Clarity UI**: Created `StrategySimulatorModule`, `ScenarioComparisonModal`, and `ApplyActionConfirmationModal` with sticky non-production warning badges and contextual navigation from Customer 360, Relationship Twin, Next Best Action, Opportunity Radar, Signal Center, and Decision Trace.
+- **Audit Logging & IDOR Enforcement**: Full audit trail for `STRATEGY_SCENARIO_CREATED`, `STRATEGY_SCENARIO_SIMULATED`, `STRATEGY_SCENARIO_VIEWED`, `STRATEGY_SCENARIO_SAVED`, `STRATEGY_SCENARIO_ARCHIVED`, `STRATEGY_SCENARIO_COMPARED`, `STRATEGY_SIMULATION_ACTION_APPLIED`.
+- **Automated Verification**: Added 21 automated integration tests (including the critical verification that live customer DB state is 100% untouched) bringing total test suite to 78 passing tests.
+
 ## [Phase 29] - AI Decision Trace & Explainability Platform
 - **Governed Decision Trace Engine**: Enterprise-grade decision explanation layer answering *"Why did COREvia recommend, flag, prioritize, or summarize this?"* without duplicating existing intelligence engines.
 - **Relational Domain Model**: Created `decision_traces`, `decision_trace_evidence`, and `decision_trace_source_nodes` tables in PostgreSQL via Drizzle ORM, with indexes on `decision_id`, `customer_id`, `source_engine`, `decision_type`, and `generated_at`.

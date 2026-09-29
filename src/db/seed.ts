@@ -970,6 +970,14 @@ export async function seedDatabase() {
     console.error('Failed to seed Decision Traces:', err);
   }
 
+  // Phase 30 Strategy Simulator Seed
+  try {
+    const { seedStrategyScenarios } = await import('./seedStrategyScenarios.ts');
+    await seedStrategyScenarios();
+  } catch (err) {
+    console.error('Failed to seed Strategy Scenarios:', err);
+  }
+
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
 

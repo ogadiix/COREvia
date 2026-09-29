@@ -20,7 +20,8 @@ export type ModuleType =
   | 'interactions'
   | 'documents'
   | 'relationship-twin'
-  | 'relationship-graph';
+  | 'relationship-graph'
+  | 'strategy-simulator';
 
 export type AccountType = 'SAVINGS' | 'CURRENT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT' | 'SALARY' | 'PREMIUM_SAVINGS';
 
