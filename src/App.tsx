@@ -50,6 +50,7 @@ import { DocumentIntelligenceModule } from './components/documents/DocumentIntel
 import { RelationshipTwinModule } from './components/modules/RelationshipTwinModule';
 import { RelationshipGraphModule } from './components/modules/RelationshipGraphModule';
 import { StrategySimulatorModule } from './components/modules/StrategySimulatorModule';
+import { AgentWorkspaceModule } from './components/modules/AgentWorkspaceModule';
 import { CopilotDrawer } from './components/copilot/CopilotDrawer';
 import { CopilotProvider, useCopilot } from './context/CopilotContext';
 import { NewTransactionModal } from './components/modals/NewTransactionModal';
@@ -91,6 +92,8 @@ const pathToModule: Record<string, ModuleType> = {
   '/graph': 'relationship-graph',
   '/strategy-simulator': 'strategy-simulator',
   '/simulator': 'strategy-simulator',
+  '/agent': 'agent',
+  '/banking-agent': 'agent',
 };
 
 const moduleToPath: Record<ModuleType, string> = {
@@ -117,6 +120,7 @@ const moduleToPath: Record<ModuleType, string> = {
   'relationship-twin': '/relationship-twin',
   'relationship-graph': '/relationship-graph',
   'strategy-simulator': '/strategy-simulator',
+  agent: '/agent',
 };
 
 function BankingWorkplace() {
@@ -142,6 +146,7 @@ function BankingWorkplace() {
   const canAccessTwin = canAccessIntelligence || hasPermission('intelligence:read') || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
   const canAccessGraph = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
   const canAccessSimulator = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
+  const canAccessAgent = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
 
   // Navigation State initialized from URL path
   const [activeModule, setActiveModule] = useState<ModuleType>(() => {
@@ -1039,6 +1044,26 @@ function BankingWorkplace() {
               ) : (
                 <AccessRestrictedNotice
                   moduleName="Relationship Strategy Simulator"
+                  requiredPermission="customers:read"
+                  requiredRoles={['Relationship Manager', 'Branch Manager', 'Analyst', 'Service Agent']}
+                  onGoBack={() => handleSelectModule('dashboard')}
+                />
+              )
+            )}
+
+            {activeModule === 'agent' && (
+              canAccessAgent ? (
+                <AgentWorkspaceModule
+                  onNavigateToCustomer={(_customerId) => {
+                    handleSelectModule('customers');
+                  }}
+                  onNavigateToModule={(mod) => {
+                    handleSelectModule(mod as ModuleType);
+                  }}
+                />
+              ) : (
+                <AccessRestrictedNotice
+                  moduleName="Controlled Banking Agent"
                   requiredPermission="customers:read"
                   requiredRoles={['Relationship Manager', 'Branch Manager', 'Analyst', 'Service Agent']}
                   onGoBack={() => handleSelectModule('dashboard')}

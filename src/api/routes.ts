@@ -3152,3 +3152,9 @@ import { strategySimulatorRouter } from './strategySimulatorRoutes.ts';
 import { strategySimulatorService } from '../services/strategySimulator.service.ts';
 apiRouter.use('/strategy-scenarios', strategySimulatorRouter);
 
+// ==========================================
+// PHASE 31: CONTROLLED BANKING AGENT & GOVERNED MULTI-STEP EXECUTION
+// ==========================================
+import agentRouter from './agentRoutes.ts';
+apiRouter.use('/agent', agentRouter);
+

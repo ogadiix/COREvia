@@ -2067,3 +2067,140 @@ export const relationshipScenarioActionsRelations = relations(relationshipScenar
   }),
 }));
 
+// ====================================================
+// 26. Controlled Banking Agent & Execution Framework (Phase 31)
+// ====================================================
+
+export const agentSessions = pgTable(
+  'agent_sessions',
+  {
+    id: serial('id').primaryKey(),
+    sessionId: text('session_id').notNull().unique(), // SES-20260929-00104
+    userId: integer('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    customerId: integer('customer_id').references(() => customers.id, { onDelete: 'set null' }),
+    contextType: text('context_type').notNull(), // CUSTOMER, ACCOUNT, LOAN, OPPORTUNITY, SERVICE_CASE, etc.
+    contextId: text('context_id'),
+    status: text('status').notNull().default('ACTIVE'), // ACTIVE, AWAITING_APPROVAL, EXECUTING, COMPLETED, PARTIALLY_COMPLETED, CANCELLED, FAILED, EXPIRED
+    startedAt: timestamp('started_at').defaultNow().notNull(),
+    endedAt: timestamp('ended_at'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    sessionUserIdx: index('idx_agent_sessions_user_id').on(table.userId),
+    sessionCustIdx: index('idx_agent_sessions_customer_id').on(table.customerId),
+    sessionStatusIdx: index('idx_agent_sessions_status').on(table.status),
+    sessionCreatedAtIdx: index('idx_agent_sessions_created_at').on(table.createdAt),
+    sessionCodeIdx: uniqueIndex('idx_agent_sessions_session_id').on(table.sessionId),
+  })
+);
+
+export const agentPlans = pgTable(
+  'agent_plans',
+  {
+    id: serial('id').primaryKey(),
+    planId: text('plan_id').notNull().unique(), // PLN-20260929-00104
+    sessionId: integer('session_id')
+      .references(() => agentSessions.id, { onDelete: 'cascade' })
+      .notNull(),
+    customerId: integer('customer_id').references(() => customers.id, { onDelete: 'set null' }),
+    title: text('title').notNull(),
+    objective: text('objective').notNull(),
+    status: text('status').notNull().default('DRAFT'), // DRAFT, AWAITING_APPROVAL, APPROVED, EXECUTING, COMPLETED, PARTIALLY_COMPLETED, REJECTED, CANCELLED, FAILED, EXPIRED
+    planVersion: integer('plan_version').notNull().default(1),
+    decisionTraceId: text('decision_trace_id'),
+    scenarioId: text('scenario_id'),
+    estimatedEffect: text('estimated_effect'),
+    planRationale: text('plan_rationale'),
+    rejectionReason: text('rejection_reason'),
+    expiresAt: timestamp('expires_at'),
+    approvedAt: timestamp('approved_at'),
+    approvedBy: integer('approved_by').references(() => users.id, { onDelete: 'set null' }),
+    completedAt: timestamp('completed_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    planSessionIdx: index('idx_agent_plans_session_id').on(table.sessionId),
+    planCustIdx: index('idx_agent_plans_customer_id').on(table.customerId),
+    planStatusIdx: index('idx_agent_plans_status').on(table.status),
+    planCreatedAtIdx: index('idx_agent_plans_created_at').on(table.createdAt),
+    planCodeIdx: uniqueIndex('idx_agent_plans_plan_id').on(table.planId),
+  })
+);
+
+export const agentPlanSteps = pgTable(
+  'agent_plan_steps',
+  {
+    id: serial('id').primaryKey(),
+    planId: integer('plan_id')
+      .references(() => agentPlans.id, { onDelete: 'cascade' })
+      .notNull(),
+    stepNumber: integer('step_number').notNull(),
+    actionType: text('action_type').notNull(),
+    targetEntityType: text('target_entity_type'),
+    targetEntityId: text('target_entity_id'),
+    parameters: jsonb('parameters'),
+    rationale: text('rationale').notNull(),
+    requiredPermission: text('required_permission').notNull().default('customers:read'),
+    status: text('status').notNull().default('PENDING'), // PENDING, AUTHORIZED, EXECUTING, COMPLETED, FAILED, SKIPPED, CANCELLED
+    requiresConfirmation: boolean('requires_confirmation').notNull().default(true),
+    dependsOnStepNumber: integer('depends_on_step_number'),
+    dependencyPolicy: text('dependency_policy').default('SKIP'), // SKIP, REQUIRE_REVIEW
+    idempotencyKey: text('idempotency_key'),
+    startedAt: timestamp('started_at'),
+    completedAt: timestamp('completed_at'),
+    errorCode: text('error_code'),
+    errorMessage: text('error_message'),
+    resultSummary: text('result_summary'),
+    auditLogId: integer('audit_log_id'),
+    verifiedAt: timestamp('verified_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    stepPlanIdx: index('idx_agent_plan_steps_plan_id').on(table.planId),
+    stepStatusIdx: index('idx_agent_plan_steps_status').on(table.status),
+    stepOrderIdx: index('idx_agent_plan_steps_order').on(table.planId, table.stepNumber),
+    stepIdempotencyIdx: index('idx_agent_plan_steps_idempotency').on(table.idempotencyKey),
+  })
+);
+
+export const agentSessionsRelations = relations(agentSessions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [agentSessions.userId],
+    references: [users.id],
+  }),
+  customer: one(customers, {
+    fields: [agentSessions.customerId],
+    references: [customers.id],
+  }),
+  plans: many(agentPlans),
+}));
+
+export const agentPlansRelations = relations(agentPlans, ({ one, many }) => ({
+  session: one(agentSessions, {
+    fields: [agentPlans.sessionId],
+    references: [agentSessions.id],
+  }),
+  customer: one(customers, {
+    fields: [agentPlans.customerId],
+    references: [customers.id],
+  }),
+  approver: one(users, {
+    fields: [agentPlans.approvedBy],
+    references: [users.id],
+  }),
+  steps: many(agentPlanSteps),
+}));
+
+export const agentPlanStepsRelations = relations(agentPlanSteps, ({ one }) => ({
+  plan: one(agentPlans, {
+    fields: [agentPlanSteps.planId],
+    references: [agentPlans.id],
+  }),
+}));
+

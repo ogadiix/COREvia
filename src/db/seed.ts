@@ -978,6 +978,14 @@ export async function seedDatabase() {
     console.error('Failed to seed Strategy Scenarios:', err);
   }
 
+  // Phase 31 Controlled Banking Agent Seed
+  try {
+    const { seedAgentPlans } = await import('./seedAgentPlans.ts');
+    await seedAgentPlans();
+  } catch (err) {
+    console.error('Failed to seed Agent Plans:', err);
+  }
+
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
 

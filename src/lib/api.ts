@@ -1316,6 +1316,92 @@ export const bankingApi = {
   async searchStrategyScenarios(q: string) {
     return await request<any[]>(`/strategy-scenarios/search?q=${encodeURIComponent(q)}`);
   },
+
+  // ==========================================
+  // PHASE 31: CONTROLLED BANKING AGENT API
+  // ==========================================
+  async getAgentTools() {
+    return await request<{ success: boolean; data: any[]; totalCount: number }>('/agent/tools');
+  },
+
+  async createAgentSession(data: { contextType: string; contextId?: string; customerId?: number }) {
+    return await request<{ success: boolean; data: any }>('/agent/sessions', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async listAgentSessions(limit?: number) {
+    return await request<{ success: boolean; data: any[] }>(`/agent/sessions${limit ? `?limit=${limit}` : ''}`);
+  },
+
+  async getAgentSession(id: string | number) {
+    return await request<{ success: boolean; data: any }>(`/agent/sessions/${encodeURIComponent(id)}`);
+  },
+
+  async createAgentPlan(data: {
+    sessionId: string | number;
+    title: string;
+    objective: string;
+    decisionTraceId?: string;
+    scenarioId?: string;
+    steps: any[];
+  }) {
+    return await request<{ success: boolean; data: any }>('/agent/plans', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async createAgentPlanFromScenario(scenarioId: string | number) {
+    return await request<{ success: boolean; data: any }>('/agent/plans/from-scenario', {
+      method: 'POST',
+      body: JSON.stringify({ scenarioId }),
+    });
+  },
+
+  async createAgentPlanFromContext(data: {
+    customerId: number;
+    source: string;
+    title?: string;
+    objective?: string;
+    decisionTraceId?: string;
+  }) {
+    return await request<{ success: boolean; data: any }>('/agent/plans/from-context', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getAgentPlan(id: string | number) {
+    return await request<{ success: boolean; data: any }>(`/agent/plans/${encodeURIComponent(id)}`);
+  },
+
+  async approveAgentPlan(id: string | number, approvedStepNumbers?: number[]) {
+    return await request<{ success: boolean; data: any; message: string }>(`/agent/plans/${encodeURIComponent(id)}/approve`, {
+      method: 'POST',
+      body: JSON.stringify({ approvedStepNumbers }),
+    });
+  },
+
+  async rejectAgentPlan(id: string | number, reason?: string) {
+    return await request<{ success: boolean; data: any; message: string }>(`/agent/plans/${encodeURIComponent(id)}/reject`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    });
+  },
+
+  async executeAgentPlan(id: string | number) {
+    return await request<{ success: boolean; data: any; message: string }>(`/agent/plans/${encodeURIComponent(id)}/execute`, {
+      method: 'POST',
+    });
+  },
+
+  async getAgentPlanReport(id: string | number) {
+    return await request<{ success: boolean; data: any }>(`/agent/plans/${encodeURIComponent(id)}/report`);
+  },
 };
+
+export const api = bankingApi;
 
 

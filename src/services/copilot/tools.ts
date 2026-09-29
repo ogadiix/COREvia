@@ -15,6 +15,9 @@ import { relationshipTwinService } from '../relationshipTwin.service.ts';
 import { relationshipGraphService } from '../relationshipGraph.service.ts';
 import { decisionTraceService } from '../decisionTrace.service.ts';
 import { strategySimulatorService } from '../strategySimulator.service.ts';
+import { agentPlanningService } from '../agent/agentPlanning.service.ts';
+import { agentExecutionService } from '../agent/agentExecution.service.ts';
+import { agentRepository } from '../../repositories/agent.repository.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -673,6 +676,113 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         scenarioId: { type: Type.STRING, description: 'Scenario ID or code' },
       },
       required: ['scenarioId'],
+    },
+  },
+  // Phase 31: Governed Agent Tools
+  {
+    name: 'createAgentPlan',
+    description: 'Draft a governed multi-step banking agent execution plan with objective, steps, and rationale.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.INTEGER, description: 'Customer DB ID' },
+        title: { type: Type.STRING, description: 'Plan title (e.g. Relationship Recovery Plan)' },
+        objective: { type: Type.STRING, description: 'Business objective for the agent plan' },
+        steps: {
+          type: Type.ARRAY,
+          description: 'Ordered sequence of governed banking steps',
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              actionType: { type: Type.STRING, description: 'Allowlisted action type (e.g. CREATE_TASK, UPDATE_SERVICE_CASE)' },
+              targetEntityType: { type: Type.STRING, description: 'Target entity type' },
+              targetEntityId: { type: Type.STRING, description: 'Target entity ID' },
+              rationale: { type: Type.STRING, description: 'Business justification for step' },
+              parameters: { type: Type.OBJECT, description: 'Structured step parameters' },
+            },
+          },
+        },
+      },
+      required: ['customerId', 'title', 'objective', 'steps'],
+    },
+  },
+  {
+    name: 'validateAgentPlan',
+    description: 'Pre-validate an agent plan against dependency rules, allowlisted actions, and RBAC permissions.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        planId: { type: Type.STRING, description: 'Plan code or ID' },
+      },
+      required: ['planId'],
+    },
+  },
+  {
+    name: 'getAgentPlan',
+    description: 'Retrieve an agent plan, its current approval state, and sequential step details.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        planId: { type: Type.STRING, description: 'Plan code or ID (e.g. PLN-...)' },
+      },
+      required: ['planId'],
+    },
+  },
+  {
+    name: 'approveAgentPlan',
+    description: 'Approve an agent plan for governed execution (or provide specific step numbers for partial approval).',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        planId: { type: Type.STRING, description: 'Plan code or ID' },
+        approvedStepNumbers: { type: Type.ARRAY, items: { type: Type.INTEGER }, description: 'Optional subset of step numbers to approve' },
+      },
+      required: ['planId'],
+    },
+  },
+  {
+    name: 'rejectAgentPlan',
+    description: 'Reject and cancel a drafted agent plan.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        planId: { type: Type.STRING, description: 'Plan code or ID' },
+        reason: { type: Type.STRING, description: 'Rejection rationale' },
+      },
+      required: ['planId'],
+    },
+  },
+  {
+    name: 'executeAgentPlan',
+    description: 'Trigger governed backend sequential execution of an approved agent plan.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        planId: { type: Type.STRING, description: 'Plan code or ID to execute' },
+      },
+      required: ['planId'],
+    },
+  },
+  {
+    name: 'getAgentExecution',
+    description: 'Retrieve execution progress, step outcomes, and verification details of an agent plan.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        planId: { type: Type.STRING, description: 'Plan code or ID' },
+      },
+      required: ['planId'],
+    },
+  },
+  {
+    name: 'getAgentAudit',
+    description: 'Retrieve immutable audit log references and execution trace for a governed agent plan.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        planId: { type: Type.STRING, description: 'Plan code or ID' },
+      },
+      required: ['planId'],
     },
   },
 ];
@@ -2433,6 +2543,141 @@ export async function executeCopilotTool(
       });
       return {
         data: trace,
+        sources,
+      };
+    }
+
+    // Phase 31: Governed Agent Copilot Handlers
+    case 'createAgentPlan': {
+      const plan = await agentPlanningService.createPlanFromSignalOrNba(
+        Number(args.customerId),
+        'COPILOT',
+        String(args.title),
+        String(args.objective),
+        ctx.user as any,
+        ctx.requestId
+      );
+      sources.push({
+        type: 'CUSTOMER',
+        id: plan.planId,
+        label: `Agent Plan · ${plan.planId}`,
+        link: `/agent?planId=${plan.planId}`,
+      });
+      return {
+        data: plan,
+        sources,
+      };
+    }
+
+    case 'validateAgentPlan': {
+      const plan = await agentRepository.findPlanById(args.planId);
+      if (!plan) throw new BankingError('PLAN_NOT_FOUND', `Plan ${args.planId} not found.`, 404);
+      const validation = await agentPlanningService.validatePlanDefinition(plan.steps, plan.customerId, ctx.user as any);
+      return {
+        data: { planId: plan.planId, ...validation },
+        sources,
+      };
+    }
+
+    case 'getAgentPlan': {
+      const plan = await agentRepository.findPlanById(args.planId);
+      if (!plan) throw new BankingError('PLAN_NOT_FOUND', `Plan ${args.planId} not found.`, 404);
+      sources.push({
+        type: 'CUSTOMER',
+        id: plan.planId,
+        label: `Agent Plan · ${plan.planId}`,
+        link: `/agent?planId=${plan.planId}`,
+      });
+      return {
+        data: plan,
+        sources,
+      };
+    }
+
+    case 'approveAgentPlan': {
+      const approved = await agentPlanningService.approvePlan(
+        args.planId,
+        args.approvedStepNumbers,
+        ctx.user as any,
+        ctx.requestId
+      );
+      sources.push({
+        type: 'CUSTOMER',
+        id: approved.planId,
+        label: `Approved Plan · ${approved.planId}`,
+        link: `/agent?planId=${approved.planId}`,
+      });
+      return {
+        data: approved,
+        sources,
+      };
+    }
+
+    case 'rejectAgentPlan': {
+      const rejected = await agentPlanningService.rejectPlan(
+        args.planId,
+        String(args.reason || 'Rejected by officer via Copilot.'),
+        ctx.user as any,
+        ctx.requestId
+      );
+      return {
+        data: rejected,
+        sources,
+      };
+    }
+
+    case 'executeAgentPlan': {
+      const report = await agentExecutionService.executePlan(
+        args.planId,
+        ctx.user as any,
+        ctx.requestId
+      );
+      sources.push({
+        type: 'CUSTOMER',
+        id: report.planId,
+        label: `Execution Report · ${report.planId}`,
+        link: `/agent?planId=${report.planId}`,
+      });
+      return {
+        data: report,
+        sources,
+      };
+    }
+
+    case 'getAgentExecution': {
+      const plan = await agentRepository.findPlanById(args.planId);
+      if (!plan) throw new BankingError('PLAN_NOT_FOUND', `Plan ${args.planId} not found.`, 404);
+      return {
+        data: {
+          planId: plan.planId,
+          status: plan.status,
+          totalSteps: plan.steps.length,
+          completedSteps: plan.steps.filter(s => s.status === 'COMPLETED').length,
+          failedSteps: plan.steps.filter(s => s.status === 'FAILED').length,
+          skippedSteps: plan.steps.filter(s => s.status === 'SKIPPED').length,
+          steps: plan.steps,
+        },
+        sources,
+      };
+    }
+
+    case 'getAgentAudit': {
+      const plan = await agentRepository.findPlanById(args.planId);
+      if (!plan) throw new BankingError('PLAN_NOT_FOUND', `Plan ${args.planId} not found.`, 404);
+      const auditRefs = plan.steps
+        .filter(s => s.auditLogId !== null && s.auditLogId !== undefined)
+        .map(s => ({
+          stepNumber: s.stepNumber,
+          action: s.actionType,
+          auditLogId: s.auditLogId,
+          completedAt: s.completedAt,
+        }));
+      return {
+        data: {
+          planId: plan.planId,
+          status: plan.status,
+          auditReferences: auditRefs,
+        },
         sources,
       };
     }

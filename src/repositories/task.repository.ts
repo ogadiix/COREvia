@@ -75,4 +75,27 @@ export const taskRepository = {
     const [updated] = await db.update(tasks).set(payload).where(eq(tasks.id, id)).returning();
     return updated || null;
   },
+
+  async findById(id: number) {
+    const [record] = await db
+      .select({
+        task: tasks,
+        customerName: customers.name,
+        customerCode: customers.customerCode,
+        assignedToName: users.name,
+      })
+      .from(tasks)
+      .leftJoin(customers, eq(tasks.customerId, customers.id))
+      .leftJoin(users, eq(tasks.assignedToId, users.id))
+      .where(eq(tasks.id, id))
+      .limit(1);
+
+    if (!record) return null;
+    return {
+      ...record.task,
+      customerName: record.customerName,
+      customerCode: record.customerCode,
+      assignedToName: record.assignedToName,
+    };
+  },
 };

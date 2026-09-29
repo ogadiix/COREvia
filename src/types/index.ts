@@ -21,7 +21,8 @@ export type ModuleType =
   | 'documents'
   | 'relationship-twin'
   | 'relationship-graph'
-  | 'strategy-simulator';
+  | 'strategy-simulator'
+  | 'agent';
 
 export type AccountType = 'SAVINGS' | 'CURRENT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT' | 'SALARY' | 'PREMIUM_SAVINGS';
 
@@ -724,7 +725,12 @@ export type NotificationType =
   | 'DOCUMENT_REPLACEMENT_REQUIRED'
   | 'DOCUMENT_EXPIRING'
   | 'DOCUMENT_EXPIRED'
-  | 'DOCUMENT_REQUIREMENT_MISSING';
+  | 'DOCUMENT_REQUIREMENT_MISSING'
+  | 'AGENT_PLAN_AWAITING_APPROVAL'
+  | 'AGENT_PLAN_APPROVED'
+  | 'AGENT_EXECUTION_COMPLETED'
+  | 'AGENT_EXECUTION_PARTIAL'
+  | 'AGENT_EXECUTION_FAILED';
 
 export type NotificationSeverity = 'INFO' | 'SUCCESS' | 'WARNING' | 'CRITICAL';
 
