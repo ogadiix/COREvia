@@ -18,6 +18,7 @@ import {
   Menu,
   X,
   GitFork,
+  Milestone,
 } from 'lucide-react';
 import { BANK_META, formatINR } from '../../data/mockIndianBankingData';
 import { Button } from '../common/Button';
@@ -407,6 +408,50 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
                   )}
                 </div>
+
+                {/* 4. Journeys Category */}
+                {searchResults.journeys && searchResults.journeys.length > 0 && (
+                  <div>
+                    <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <Milestone className="w-3 h-3 text-indigo-500" />
+                        Lifecycle Journeys ({searchResults.journeys.length})
+                      </span>
+                    </div>
+                    <div className="divide-y divide-slate-100">
+                      {searchResults.journeys.map((j: any) => (
+                        <div
+                          key={j.id}
+                          onClick={() => {
+                            setShowDropdown(false);
+                            window.location.href = `/journeys?id=${j.id}`;
+                          }}
+                          className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                        >
+                          <div>
+                            <div className="font-semibold text-slate-900">{j.name}</div>
+                            <div className="text-[11px] text-slate-500 font-mono">
+                              {j.journeyCode} • {j.customerName || `Customer #${j.customerId}`}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <span
+                              className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                                j.status === 'COMPLETED'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : j.status === 'BLOCKED'
+                                  ? 'bg-rose-100 text-rose-800'
+                                  : 'bg-blue-100 text-blue-800'
+                              }`}
+                            >
+                              {j.status}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

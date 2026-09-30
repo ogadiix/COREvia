@@ -2247,4 +2247,212 @@ export const relationshipValueSnapshotsRelations = relations(relationshipValueSn
   }),
 }));
 
+// ====================================================
+// 28. Customer Journey Orchestrator & Lifecycle (Phase 33)
+// ====================================================
+
+export const journeyTemplates = pgTable(
+  'journey_templates',
+  {
+    id: serial('id').primaryKey(),
+    templateCode: text('template_code').notNull().unique(), // e.g. NEW_CUSTOMER_ONBOARDING, LOAN_APPLICATION
+    name: text('name').notNull(),
+    description: text('description').notNull(),
+    category: text('category').notNull().default('LIFECYCLE'), // ONBOARDING, SERVICE, GROWTH, CREDIT, RETENTION, REVIEW
+    defaultPriority: text('default_priority').notNull().default('NORMAL'), // LOW, NORMAL, HIGH, CRITICAL
+    targetDurationDays: integer('target_duration_days').notNull().default(14),
+    defaultOwnerRole: text('default_owner_role').notNull().default('RELATIONSHIP_MANAGER'),
+    isActive: boolean('is_active').notNull().default(true),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    templateCodeIdx: uniqueIndex('idx_journey_templates_code').on(table.templateCode),
+    categoryIdx: index('idx_journey_templates_category').on(table.category),
+    activeIdx: index('idx_journey_templates_active').on(table.isActive),
+  })
+);
+
+export const journeyTemplateSteps = pgTable(
+  'journey_template_steps',
+  {
+    id: serial('id').primaryKey(),
+    templateId: integer('template_id')
+      .references(() => journeyTemplates.id, { onDelete: 'cascade' })
+      .notNull(),
+    stepOrder: integer('step_order').notNull(),
+    stepKey: text('step_key').notNull(), // e.g. kyc_verification
+    name: text('name').notNull(),
+    description: text('description').notNull(),
+    stepType: text('step_type').notNull(), // KYC, DOCUMENT, TASK, INTERACTION, REVIEW, APPROVAL, SERVICE_CASE, OPPORTUNITY, ONBOARDING, COMMITMENT, SIGNAL, AGENT_ACTION, MANUAL_CHECK, WAITING_PERIOD
+    required: boolean('required').notNull().default(true),
+    slaDays: integer('sla_days').notNull().default(3),
+    dependencyStepKeys: jsonb('dependency_step_keys'), // string[] of prerequisite step keys
+    defaultOwnerRole: text('default_owner_role').notNull().default('RELATIONSHIP_MANAGER'),
+    evidenceType: text('evidence_type'), // KYC_RECORD, DOCUMENT, TASK, SERVICE_CASE, OPPORTUNITY, REVIEW, INTERACTION, APPROVAL, SIGNAL
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    tplStepIdx: index('idx_jt_steps_template_id').on(table.templateId),
+    stepOrderIdx: index('idx_jt_steps_order').on(table.templateId, table.stepOrder),
+  })
+);
+
+export const customerJourneys = pgTable(
+  'customer_journeys',
+  {
+    id: serial('id').primaryKey(),
+    journeyId: text('journey_id').notNull().unique(), // e.g. JRN-2026-10482-01
+    customerId: integer('customer_id')
+      .references(() => customers.id, { onDelete: 'cascade' })
+      .notNull(),
+    templateId: integer('template_id').references(() => journeyTemplates.id),
+    journeyType: text('journey_type').notNull(), // templateCode
+    name: text('name').notNull(),
+    description: text('description').notNull(),
+    status: text('status').notNull().default('NOT_STARTED'), // NOT_STARTED, ACTIVE, ON_HOLD, BLOCKED, COMPLETED, CANCELLED, FAILED, EXPIRED
+    priority: text('priority').notNull().default('NORMAL'), // LOW, NORMAL, HIGH, CRITICAL
+    ownerId: integer('owner_id').references(() => users.id),
+    ownerRole: text('owner_role').notNull().default('RELATIONSHIP_MANAGER'),
+    currentStepId: integer('current_step_id'),
+    startedAt: timestamp('started_at'),
+    targetCompletionAt: timestamp('target_completion_at'),
+    completedAt: timestamp('completed_at'),
+    blockedReason: text('blocked_reason'),
+    blockedAt: timestamp('blocked_at'),
+    slaStatus: text('sla_status').notNull().default('ON_TRACK'), // ON_TRACK, AT_RISK, BREACHED, COMPLETED
+    escalatedAt: timestamp('escalated_at'),
+    escalatedTo: integer('escalated_to').references(() => users.id),
+    escalatedBy: integer('escalated_by').references(() => users.id),
+    escalationReason: text('escalation_reason'),
+    decisionTraceId: text('decision_trace_id'),
+    metadata: jsonb('metadata'),
+    createdBy: integer('created_by').references(() => users.id),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    journeyIdIdx: uniqueIndex('idx_cust_journeys_journey_id').on(table.journeyId),
+    custIdx: index('idx_cust_journeys_customer_id').on(table.customerId),
+    statusIdx: index('idx_cust_journeys_status').on(table.status),
+    ownerIdx: index('idx_cust_journeys_owner_id').on(table.ownerId),
+    typeIdx: index('idx_cust_journeys_type').on(table.journeyType),
+    slaIdx: index('idx_cust_journeys_sla').on(table.slaStatus),
+    createdIdx: index('idx_cust_journeys_created_at').on(table.createdAt),
+  })
+);
+
+export const customerJourneySteps = pgTable(
+  'customer_journey_steps',
+  {
+    id: serial('id').primaryKey(),
+    journeyId: integer('journey_id')
+      .references(() => customerJourneys.id, { onDelete: 'cascade' })
+      .notNull(),
+    stepId: text('step_id').notNull(), // e.g. JRN-2026-10482-01-S01
+    stepNumber: integer('step_number').notNull(),
+    stepKey: text('step_key').notNull(),
+    stepType: text('step_type').notNull(), // KYC, DOCUMENT, TASK, INTERACTION, REVIEW, APPROVAL, SERVICE_CASE, OPPORTUNITY, ONBOARDING, COMMITMENT, SIGNAL, AGENT_ACTION, MANUAL_CHECK, WAITING_PERIOD
+    name: text('name').notNull(),
+    description: text('description').notNull(),
+    status: text('status').notNull().default('PENDING'), // PENDING, READY, IN_PROGRESS, WAITING, BLOCKED, COMPLETED, SKIPPED, FAILED, CANCELLED
+    ownerId: integer('owner_id').references(() => users.id),
+    ownerRole: text('owner_role'),
+    required: boolean('required').notNull().default(true),
+    dependency: text('dependency'), // JSON or comma-separated step keys
+    slaDays: integer('sla_days').notNull().default(3),
+    startedAt: timestamp('started_at'),
+    completedAt: timestamp('completed_at'),
+    dueAt: timestamp('due_at'),
+    slaStatus: text('sla_status').notNull().default('ON_TRACK'), // ON_TRACK, AT_RISK, BREACHED, COMPLETED
+    blockedReason: text('blocked_reason'),
+    completionEvidence: jsonb('completion_evidence'), // { evidenceType, entityId, entityCode, summary, verifiedAt, verifiedBy }
+    notes: text('notes'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    cjsJourneyIdx: index('idx_cjs_journey_id').on(table.journeyId),
+    cjsStepIdIdx: index('idx_cjs_step_id').on(table.stepId),
+    cjsStatusIdx: index('idx_cjs_status').on(table.status),
+    cjsOwnerIdx: index('idx_cjs_owner_id').on(table.ownerId),
+    cjsDueAtIdx: index('idx_cjs_due_at').on(table.dueAt),
+  })
+);
+
+export const journeyOutcomes = pgTable(
+  'journey_outcomes',
+  {
+    id: serial('id').primaryKey(),
+    journeyId: integer('journey_id')
+      .references(() => customerJourneys.id, { onDelete: 'cascade' })
+      .notNull(),
+    outcomeType: text('outcome_type').notNull(), // COMPLETED_SUCCESSFULLY, COMPLETED_WITH_EXCEPTION, CANCELLED, FAILED, CUSTOMER_DECLINED, INTERNAL_BLOCK, EXPIRED
+    outcome: text('outcome').notNull(),
+    summary: text('summary').notNull(),
+    evidence: jsonb('evidence'),
+    recordedBy: integer('recorded_by').references(() => users.id).notNull(),
+    recordedAt: timestamp('recorded_at').defaultNow().notNull(),
+    metadata: jsonb('metadata'),
+  },
+  (table) => ({
+    joJourneyIdx: index('idx_journey_outcomes_journey_id').on(table.journeyId),
+    joOutcomeTypeIdx: index('idx_journey_outcomes_type').on(table.outcomeType),
+  })
+);
+
+export const journeyTemplatesRelations = relations(journeyTemplates, ({ many }) => ({
+  steps: many(journeyTemplateSteps),
+  journeys: many(customerJourneys),
+}));
+
+export const journeyTemplateStepsRelations = relations(journeyTemplateSteps, ({ one }) => ({
+  template: one(journeyTemplates, {
+    fields: [journeyTemplateSteps.templateId],
+    references: [journeyTemplates.id],
+  }),
+}));
+
+export const customerJourneysRelations = relations(customerJourneys, ({ one, many }) => ({
+  customer: one(customers, {
+    fields: [customerJourneys.customerId],
+    references: [customers.id],
+  }),
+  template: one(journeyTemplates, {
+    fields: [customerJourneys.templateId],
+    references: [journeyTemplates.id],
+  }),
+  owner: one(users, {
+    fields: [customerJourneys.ownerId],
+    references: [users.id],
+  }),
+  steps: many(customerJourneySteps),
+  outcomes: many(journeyOutcomes),
+}));
+
+export const customerJourneyStepsRelations = relations(customerJourneySteps, ({ one }) => ({
+  journey: one(customerJourneys, {
+    fields: [customerJourneySteps.journeyId],
+    references: [customerJourneys.id],
+  }),
+  owner: one(users, {
+    fields: [customerJourneySteps.ownerId],
+    references: [users.id],
+  }),
+}));
+
+export const journeyOutcomesRelations = relations(journeyOutcomes, ({ one }) => ({
+  journey: one(customerJourneys, {
+    fields: [journeyOutcomes.journeyId],
+    references: [customerJourneys.id],
+  }),
+  recorder: one(users, {
+    fields: [journeyOutcomes.recordedBy],
+    references: [users.id],
+  }),
+}));
+
+
 

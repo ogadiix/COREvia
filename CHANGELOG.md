@@ -1,5 +1,27 @@
 # Changelog
 
+## [Phase 33] - Customer Journey Orchestrator & Lifecycle Management
+- **Governed Multi-Step State Machine**: Implemented an institutional customer journey framework supporting 10 canonical lifecycle templates (`NEW_CUSTOMER_ONBOARDING`, `KYC_COMPLETION`, `LOAN_APPLICATION`, `SERVICE_RECOVERY`, `PRODUCT_ADOPTION`, `RELATIONSHIP_REVIEW`, `OPPORTUNITY_CONVERSION`, `DOCUMENT_COMPLETION`, `CUSTOMER_RETENTION_WORKFLOW`, `RELATIONSHIP_RECOVERY`).
+- **Relational Domain Model**: Added Section 28 PostgreSQL tables (`journey_templates`, `journey_template_steps`, `customer_journeys`, `customer_journey_steps`, `journey_outcomes`) with foreign keys, relations, and indices.
+- **Prerequisite Dependencies & Cascading Transitions**: Step progression requires prerequisite completion; completing a step cascades dependent steps from `PENDING` to `READY`. Terminal outcomes freeze journeys.
+- **Authoritative Evidence Verification**: Verified step completion against live database records (`documents`, `tasks`, `serviceCases`, `opportunities`, `interactions`, `customerOpportunityRadar`) with zero fabricated verification.
+- **SLA Deadline Tracking & Handoffs**: Automated SLA status calculation (`ON_TRACK`, `AT_RISK`, `BREACHED`, `COMPLETED`), role/user handoffs with audit trails, and controlled escalations linked to Decision Trace (`DT-...`).
+- **Portfolio Analytics & Bottleneck Detection**: Aggregated portfolio-level SLA compliance, active count, average duration, and top blocking step bottlenecks with RBAC branch/RM scoping.
+- **Copilot & Controlled Agent Tools**: Registered 7 Copilot tools (`getCustomerJourneys`, `getJourney`, `getJourneyTimeline`, `getJourneySteps`, `getJourneyBlockers`, `getJourneyEvidence`, `getJourneyHistory`) and `proposeJourneyRecovery` in Controlled Banking Agent generating governed plans requiring human approval.
+- **Institutional UI**: Created `CustomerJourneyWorkspace`, `PortfolioJourneysView`, `CustomerJourneysTab` in Customer 360, and Global Search indexing.
+- **Automated Verification**: Added 33 automated test scenarios; all 148 automated tests across 8 suites pass 100%.
+
+## [Phase 32] - Relationship Value Intelligence & Portfolio Scenarios
+- **Multidimensional Value Modeling**: Comprehensive institutional value assessment without synthetic monetary precision.
+- **Trajectory Analysis & Explanations**: Historical trajectory tracking, dimension contribution explanations, and non-destructive scenario delta simulations.
+- **Portfolio Health & Governance**: Scoped aggregation across branches and segments with zero production mutation.
+- **Automated Verification**: 22 automated integration tests verified.
+
+## [Phase 31] - Controlled Banking Agent & Governed Execution
+- **Strict Human-in-the-Loop Boundaries**: Read-only autonomous context gathering coupled with strictly gated two-step execution (Propose Plan -> Human Approval -> Execute Plan).
+- **Safety Allowlist & Context Resolvers**: Hard allowlist of approved actions and strict customer IDOR isolation preventing cross-customer access.
+- **Automated Verification**: 15 automated integration tests verified.
+
 ## [Phase 30] - Relationship Strategy Simulator & What-If Sandbox
 - **Safe & Non-Destructive What-If Simulation**: Implemented an institutional workspace allowing authorized bankers to test counterfactual relationship interventions without mutating production customer or account data.
 - **Relational Scenario Schema**: Added `relationship_scenarios` and `relationship_scenario_actions` tables to PostgreSQL via Drizzle ORM with foreign keys, cascading deletions, and indexes on `scenario_id`, `customer_id`, and `created_by`.

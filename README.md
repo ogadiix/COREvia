@@ -98,6 +98,23 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 - **Governed Action Bridge**: Transition simulated actions to real Core Banking execution (CRM tasks, service ticket resolution) requiring explicit human confirmation notes and audit trail (`STRATEGY_SIMULATION_ACTION_APPLIED`).
 - **Explainability & Copilot Tools**: Decision Trace integration (`STRATEGY_SIMULATION`), staleness detection, side-by-side scenario comparison, and 5 dedicated Copilot tools.
 
+### 11. 🛡️ Controlled Banking Agent & Governed Execution
+- **Strict Human-in-the-Loop Boundaries**: Read-only autonomous context gathering coupled with strictly gated two-step execution (Propose Plan -> Human Approval -> Execute Plan).
+- **Zero Autonomous Execution**: High-impact state transitions (ticket creation, customer status change, review scheduling) cannot execute autonomously without explicit officer confirmation.
+- **Safety Allowlist & Context Resolvers**: Hard allowlist of approved actions and strict customer IDOR isolation preventing cross-customer access.
+
+### 12. 💎 Relationship Value Intelligence & Portfolio Scenarios
+- **Multidimensional Value Modeling**: Comprehensive institutional value assessment without synthetic or fabricated currency precision.
+- **Trajectory Analysis & Explanations**: Historical trajectory tracking, dimension contribution explanations, and non-destructive scenario delta simulations.
+- **Portfolio Health & Governance**: Scoped aggregation across branches and segments with zero production mutation.
+
+### 13. 🗺️ Customer Journey Orchestrator & Lifecycle Management (Phase 33)
+- **Governed Multi-Step State Machine**: Manages the complete customer lifecycle from onboarding to retention across 10 canonical templates with explicit status flow (`PENDING` -> `READY` -> `IN_PROGRESS` -> `COMPLETED` / `BLOCKED`).
+- **Prerequisite Dependencies & Cascading**: Automated dependency resolution ensuring steps cannot progress until preceding compliance steps complete.
+- **Authoritative Evidence Verification**: Validates completion claims directly against authoritative COREvia tables (`documents`, `tasks`, `serviceCases`, `opportunities`, `interactions`, `customerOpportunityRadar`).
+- **SLA Tracking & Controlled Escalations**: Dynamic SLA deadline monitoring (`ON_TRACK`, `AT_RISK`, `BREACHED`) with governed officer handoffs and Decision Trace (`DT-...`) linkages.
+- **Portfolio Analytics & Copilot Tools**: Portfolio-wide bottleneck detection, completion tracking, 7 Copilot tools (`getJourney`, `getJourneyTimeline`, `getJourneyBlockers`, `getJourneyEvidence`, etc.), and Controlled Agent journey recovery planning.
+
 ---
 
 ## 🏗️ Architecture

@@ -3,12 +3,32 @@ export class BankingError extends Error {
   statusCode: number;
   details?: any;
 
-  constructor(code: string, message: string, statusCode: number = 400, details?: any) {
+  constructor(
+    codeOrStatusCode: string | number,
+    message: string,
+    statusCode: number = 400,
+    details?: any
+  ) {
     super(message);
     this.name = 'BankingError';
-    this.code = code;
-    this.statusCode = statusCode;
-    this.details = details;
+    if (typeof codeOrStatusCode === 'number') {
+      this.statusCode = codeOrStatusCode;
+      this.code =
+        codeOrStatusCode >= 500
+          ? 'INTERNAL_SERVER_ERROR'
+          : codeOrStatusCode === 404
+            ? 'NOT_FOUND'
+            : codeOrStatusCode === 403
+              ? 'FORBIDDEN'
+              : codeOrStatusCode === 401
+                ? 'UNAUTHORIZED'
+                : 'BAD_REQUEST';
+      this.details = details;
+    } else {
+      this.code = codeOrStatusCode;
+      this.statusCode = statusCode;
+      this.details = details;
+    }
   }
 }
 

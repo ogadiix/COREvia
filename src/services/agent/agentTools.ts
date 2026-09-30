@@ -24,6 +24,8 @@ export const AGENT_ALLOWED_READ_ONLY_ACTIONS: readonly AgentReadOnlyActionType[]
   'SIMULATE_STRATEGY',
   'GET_RELATIONSHIP_VALUE_PROFILE',
   'COMPARE_RELATIONSHIP_VALUE_SCENARIO',
+  'INSPECT_CUSTOMER_JOURNEYS',
+  'GET_JOURNEY_STATUS',
 ] as const;
 
 export const AGENT_ALLOWED_MUTATIONS: readonly AgentMutatingActionType[] = [
@@ -610,6 +612,54 @@ export const AGENT_TOOL_REGISTRY: Record<AgentActionType, AgentToolDefinition> =
     outputSchema: {
       type: 'object',
       properties: { notificationId: { type: 'number' } },
+    },
+  },
+
+  INSPECT_CUSTOMER_JOURNEYS: {
+    name: 'INSPECT_CUSTOMER_JOURNEYS',
+    description: 'Inspect active and blocked customer lifecycle journeys, SLA breaches, and prerequisite step status.',
+    isMutation: false,
+    requiredPermission: 'journeys:read',
+    resourceType: 'CUSTOMER_JOURNEY',
+    auditAction: 'AGENT_TOOL_CALLED',
+    requiresConfirmation: false,
+    idempotencyRequired: false,
+    inputSchema: {
+      type: 'object',
+      properties: { customerId: { type: ['number', 'string'] } },
+      required: ['customerId'],
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        journeys: { type: 'array' },
+        blockedSteps: { type: 'array' },
+        activeCount: { type: 'number' },
+      },
+    },
+  },
+
+  GET_JOURNEY_STATUS: {
+    name: 'GET_JOURNEY_STATUS',
+    description: 'Retrieve lifecycle status, SLA, and step dependencies for a specific customer journey.',
+    isMutation: false,
+    requiredPermission: 'journeys:read',
+    resourceType: 'CUSTOMER_JOURNEY',
+    auditAction: 'AGENT_TOOL_CALLED',
+    requiresConfirmation: false,
+    idempotencyRequired: false,
+    inputSchema: {
+      type: 'object',
+      properties: { journeyId: { type: ['number', 'string'] } },
+      required: ['journeyId'],
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        journey: { type: 'object' },
+        steps: { type: 'array' },
+        progress: { type: 'object' },
+      },
     },
   },
 };

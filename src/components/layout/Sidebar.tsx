@@ -27,6 +27,7 @@ import {
   GitFork,
   Compass,
   Cpu,
+  Milestone,
 } from 'lucide-react';
 import { ModuleType } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -185,6 +186,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'agent',
           label: 'Controlled Banking Agent',
           icon: <Cpu className="w-4 h-4 text-purple-400" />,
+          shortcut: '',
+          requiredPermission: 'customers:read',
+        },
+        {
+          id: 'journeys',
+          label: 'Customer Journeys',
+          icon: <Milestone className="w-4 h-4 text-emerald-400" />,
           shortcut: '',
           requiredPermission: 'customers:read',
         },

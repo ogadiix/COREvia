@@ -15,6 +15,7 @@ import { CustomerOpportunityRadarWidget } from '../radar/CustomerOpportunityRada
 import { CustomerAlertsCard } from '../notifications/CustomerAlertsCard';
 import { CommunicationProfileWidget } from '../interactions/CommunicationProfileWidget';
 import { CustomerDocumentsTab } from '../documents/CustomerDocumentsTab';
+import { CustomerJourneysTab } from '../journeys/CustomerJourneysTab';
 import { CompactRelationshipTwinWidget } from '../twin/CompactRelationshipTwinWidget';
 import { CustomerTwinTab } from '../twin/CustomerTwinTab';
 import { DecisionTracePanel } from '../decision-trace/DecisionTracePanel';
@@ -59,6 +60,7 @@ import {
   GitCompare,
   Compass,
   BarChart3,
+  Milestone,
 } from 'lucide-react';
 import { useCopilot } from '../../context/CopilotContext';
 import { RelationshipGraph } from '../graph/RelationshipGraph.tsx';
@@ -992,6 +994,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
                   icon: ShieldCheck,
                 },
                 { id: 'DOCUMENTS', label: 'Documents & Vault', icon: FileText },
+                { id: 'JOURNEYS', label: 'Lifecycle Journeys', icon: Milestone },
                 {
                   id: 'ONBOARDING',
                   label: `Onboarding Dossier ${customerOnboarding?.activeApplication ? '(Active)' : ''}`,
@@ -1172,6 +1175,18 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
                     customerId={activeCustomer.id || 1}
                     customerName={activeCustomer.name}
                     customerCode={activeCustomer.customerCode || activeCustomer.cifNumber}
+                  />
+                )}
+
+                {/* Customer Lifecycle Journeys Tab */}
+                {active360Tab === 'JOURNEYS' && (
+                  <CustomerJourneysTab
+                    customerId={activeCustomer.id || 1}
+                    customerName={activeCustomer.name}
+                    customerCode={activeCustomer.customerCode || activeCustomer.cifNumber}
+                    onOpenWorkspaceJourney={(journeyId) => {
+                      window.location.href = `/journeys?id=${journeyId}`;
+                    }}
                   />
                 )}
 

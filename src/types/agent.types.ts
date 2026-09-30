@@ -65,7 +65,9 @@ export type AgentReadOnlyActionType =
   | 'GET_DECISION_TRACE'
   | 'SIMULATE_STRATEGY'
   | 'GET_RELATIONSHIP_VALUE_PROFILE'
-  | 'COMPARE_RELATIONSHIP_VALUE_SCENARIO';
+  | 'COMPARE_RELATIONSHIP_VALUE_SCENARIO'
+  | 'INSPECT_CUSTOMER_JOURNEYS'
+  | 'GET_JOURNEY_STATUS';
 
 // Strict Allowlist of Governed Mutating Actions (Financial Mutations are Strictly Banned)
 export type AgentMutatingActionType =

@@ -205,3 +205,55 @@ All requests require an active authenticated session cookie and anti-CSRF token 
 - **Response**: `{ "success": true, "executedAction": "SCHEDULE_RELATIONSHIP_REVIEW", "entityId": "12", "message": "..." }`
 - **Security**: Requires explicit banker notes and logs `STRATEGY_SIMULATION_ACTION_APPLIED`.
 
+---
+
+## 3. Customer Journey Orchestrator & Lifecycle API Specification (Phase 33)
+
+### Base URL
+`/api/journeys`
+
+### 3.1 Get Journey Templates
+- **Route**: `GET /api/journeys/templates`
+- **Response**: Array of 10 standard lifecycle journey templates with default steps, SLAs, and evidence schemas.
+
+### 3.2 Portfolio Journey Analytics
+- **Route**: `GET /api/journeys/analytics`
+- **Security**: Scoped to assigned customers for Relationship Managers; institution-wide for Admins/Branch Managers.
+- **Response**: Aggregated active, completed, blocked, and at-risk journeys, SLA compliance rate, duration averages, and top bottleneck steps.
+
+### 3.3 List Customer Journeys
+- **Route**: `GET /api/journeys`
+- **Query Params**: `customerId`, `status`, `priority`, `slaStatus`, `journeyType`, `search`, `limit`, `offset`
+- **Response**: Paginated list of journeys with customer summaries, progress percentages, and current step indicators.
+
+### 3.4 Get Journey Details
+- **Route**: `GET /api/journeys/:id`
+- **Parameters**: `:id` - Journey Primary Key or unique Journey Code (e.g. `JRN-2026-10482-01`)
+- **Response**: Comprehensive `CustomerJourneyDTO` with ordered steps, SLA status, blocker details, progress calculation, timeline events, and terminal outcomes.
+
+### 3.5 Create Customer Journey
+- **Route**: `POST /api/journeys`
+- **Body**: `{ "customerId": 1, "templateCode": "KYC_COMPLETION", "priority": "HIGH", "name": "...", "ownerId": 3 }`
+- **Response**: Instantiated `CustomerJourneyDTO` with initial steps cascaded (`Step 1 READY`, subsequent steps `PENDING`).
+
+### 3.6 Update Journey Step
+- **Route**: `PATCH /api/journeys/:journeyId/steps/:stepId`
+- **Body**: `{ "status": "COMPLETED", "completionEvidence": { "evidenceType": "KYC_RECORD", "entityId": "1", "summary": "PAN verified" } }`
+- **State Machine**: Transitions step through `PENDING` -> `READY` -> `IN_PROGRESS` -> `COMPLETED`/`BLOCKED`. Rejects premature transitions if prerequisites are unmet. Cascades dependent steps to `READY`.
+
+### 3.7 Handoff Journey Ownership
+- **Route**: `POST /api/journeys/:id/handoff`
+- **Body**: `{ "targetUserId": 4, "targetRole": "COMPLIANCE_OFFICER", "reason": "Dual control checker review required" }`
+- **Response**: Updated journey with new owner and audit trail (`JOURNEY_OWNER_CHANGED`).
+
+### 3.8 Escalate Journey
+- **Route**: `POST /api/journeys/:id/escalate`
+- **Body**: `{ "escalateToUserId": 4, "reason": "SLA deadline breached due to external registry downtime", "urgency": "HIGH" }`
+- **Response**: Updated journey in `ESCALATED` status with linked Decision Trace record (`DT-...`).
+
+### 3.9 Record Final Journey Outcome
+- **Route**: `POST /api/journeys/:id/outcome`
+- **Body**: `{ "outcomeType": "GOAL_MET", "summary": "All account activation milestones achieved", "evidence": {} }`
+- **Response**: Immutable `JourneyOutcome` record; parent journey transitions to terminal `COMPLETED` status.
+
+

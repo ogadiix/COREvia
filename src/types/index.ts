@@ -22,7 +22,8 @@ export type ModuleType =
   | 'relationship-twin'
   | 'relationship-graph'
   | 'strategy-simulator'
-  | 'agent';
+  | 'agent'
+  | 'journeys';
 
 export type AccountType = 'SAVINGS' | 'CURRENT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT' | 'SALARY' | 'PREMIUM_SAVINGS';
 
@@ -730,7 +731,16 @@ export type NotificationType =
   | 'AGENT_PLAN_APPROVED'
   | 'AGENT_EXECUTION_COMPLETED'
   | 'AGENT_EXECUTION_PARTIAL'
-  | 'AGENT_EXECUTION_FAILED';
+  | 'AGENT_EXECUTION_FAILED'
+  | 'JOURNEY_STARTED'
+  | 'JOURNEY_STEP_ASSIGNED'
+  | 'JOURNEY_STEP_DUE'
+  | 'JOURNEY_STEP_OVERDUE'
+  | 'JOURNEY_BLOCKED'
+  | 'JOURNEY_UNBLOCKED'
+  | 'JOURNEY_ESCALATED'
+  | 'JOURNEY_COMPLETED'
+  | 'JOURNEY_FAILED';
 
 export type NotificationSeverity = 'INFO' | 'SUCCESS' | 'WARNING' | 'CRITICAL';
 

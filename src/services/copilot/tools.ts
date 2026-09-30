@@ -19,6 +19,7 @@ import { agentPlanningService } from '../agent/agentPlanning.service.ts';
 import { agentExecutionService } from '../agent/agentExecution.service.ts';
 import { agentRepository } from '../../repositories/agent.repository.ts';
 import { relationshipValueService } from '../relationshipValue.service.ts';
+import { journeyService } from '../journey.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -831,6 +832,91 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         scenarioId: { type: Type.STRING, description: 'Strategy scenario code' },
       },
       required: ['customerId', 'scenarioId'],
+    },
+  },
+  {
+    name: 'getCustomerJourneys',
+    description: 'Retrieve active and historical customer lifecycle journeys with SLA status, progress, blockers, and assigned owners.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.STRING, description: 'Customer ID or Customer Code (e.g. CUS-10482 or 1)' },
+        status: { type: Type.STRING, description: 'Optional journey status filter (NOT_STARTED, IN_PROGRESS, BLOCKED, COMPLETED, CANCELLED, ESCALATED)' },
+      },
+      required: ['customerId'],
+    },
+  },
+  {
+    name: 'getJourney',
+    description: 'Retrieve detailed customer lifecycle journey state including metadata, SLA, priority, owner, step count, and blocker status.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        journeyId: { type: Type.STRING, description: 'Journey ID or Journey Code (e.g. CJ-2026-0001 or 1)' },
+        customerId: { type: Type.STRING, description: 'Customer ID or Code for resource scoping' },
+      },
+      required: ['journeyId'],
+    },
+  },
+  {
+    name: 'getJourneyTimeline',
+    description: 'Retrieve chronological audit timeline of lifecycle events, transitions, handoffs, and escalations for a journey.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        journeyId: { type: Type.STRING, description: 'Journey ID or Journey Code' },
+        customerId: { type: Type.STRING, description: 'Customer ID or Code for resource scoping' },
+      },
+      required: ['journeyId'],
+    },
+  },
+  {
+    name: 'getJourneySteps',
+    description: 'Retrieve complete step matrix for a journey with dependencies, SLA status, assigned owners, and blocker details.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        journeyId: { type: Type.STRING, description: 'Journey ID or Journey Code' },
+        customerId: { type: Type.STRING, description: 'Customer ID or Code for resource scoping' },
+      },
+      required: ['journeyId'],
+    },
+  },
+  {
+    name: 'getJourneyBlockers',
+    description: 'Retrieve currently blocked steps, prerequisite failures, and SLA breaches across customer journeys.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.STRING, description: 'Customer ID or Customer Code' },
+        journeyId: { type: Type.STRING, description: 'Optional specific journey ID' },
+      },
+      required: ['customerId'],
+    },
+  },
+  {
+    name: 'getJourneyEvidence',
+    description: 'Retrieve verified authoritative evidence records (KYC, documents, service cases, tasks, approvals) for journey steps.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        journeyId: { type: Type.STRING, description: 'Journey ID or Journey Code' },
+        stepId: { type: Type.STRING, description: 'Optional specific step ID or Step Key' },
+        customerId: { type: Type.STRING, description: 'Customer ID or Code for resource scoping' },
+      },
+      required: ['journeyId'],
+    },
+  },
+  {
+    name: 'getJourneyHistory',
+    description: 'Retrieve historical completed and cancelled customer journeys with recorded outcomes and metrics.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.STRING, description: 'Customer ID or Customer Code' },
+        limit: { type: Type.INTEGER, description: 'Max number of historical journeys to return (default 10)' },
+      },
+      required: ['customerId'],
     },
   },
 ];
@@ -2884,6 +2970,307 @@ export async function executeCopilotTool(
             engine: d.sourceEngine,
           })),
           limitations: comparison.limitations,
+        },
+        sources,
+      };
+    }
+
+    case 'getCustomerJourneys': {
+      const cust = await customerService.getCustomerById(args.customerId);
+      const journeys = await journeyService.listJourneys(
+        { customerId: cust.id, status: args.status },
+        ctx.user as any,
+        ctx.requestId
+      );
+
+      for (const j of journeys) {
+        sources.push({
+          type: 'JOURNEY',
+          id: j.journeyCode,
+          label: `Journey · ${j.name} (${j.status})`,
+          link: `/journeys?id=${j.id}`,
+        });
+      }
+
+      const activeCount = journeys.filter((j) => j.status === 'IN_PROGRESS' || j.status === 'BLOCKED').length;
+      const blockedCount = journeys.filter((j) => j.status === 'BLOCKED').length;
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: journeys.map(
+              (j) =>
+                `Journey ${j.journeyCode}: ${j.name} | Status: ${j.status} | Priority: ${j.priority} | Progress: ${j.progressPercentage}% | SLA: ${j.slaStatus} | Owner: ${j.ownerRole}`
+            ),
+            evidence: journeys
+              .filter((j) => j.blockerReason)
+              .map((j) => `Blocker in ${j.journeyCode}: ${j.blockerReason}`),
+            interpretations: [
+              `Customer ${cust.name} has ${journeys.length} total journeys (${activeCount} active, ${blockedCount} blocked).`,
+              blockedCount > 0 ? `Urgent attention required: ${blockedCount} journeys are currently blocked.` : `All active journeys are progressing normally.`,
+            ],
+            recommendations: blockedCount > 0
+              ? ['Investigate blocked journey steps using getJourneyBlockers and resolve prerequisite dependencies.']
+              : ['Continue scheduled lifecycle reviews and monitor upcoming milestone SLAs.'],
+          },
+          journeys,
+          summary: {
+            total: journeys.length,
+            active: activeCount,
+            blocked: blockedCount,
+            completed: journeys.filter((j) => j.status === 'COMPLETED').length,
+          },
+        },
+        sources,
+      };
+    }
+
+    case 'getJourney': {
+      const journey = await journeyService.getJourney(args.journeyId, ctx.user as any, ctx.requestId);
+      const steps = journey.steps || [];
+      const progress = journey.progress || ({} as any);
+
+      sources.push({
+        type: 'JOURNEY',
+        id: journey.journeyCode || journey.journeyId,
+        label: `Journey · ${journey.name} (${journey.status})`,
+        link: `/journeys?id=${journey.id}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: [
+              `Journey Code: ${journey.journeyCode || journey.journeyId}`,
+              `Template: ${journey.journeyType || journey.name}`,
+              `Status: ${journey.status}`,
+              `Priority: ${journey.priority}`,
+              `SLA Status: ${journey.slaStatus}`,
+              `Assigned Owner: ${journey.ownerName || journey.ownerRole}`,
+              `Progress: ${progress.completedSteps || 0}/${progress.totalSteps || 0} steps (${progress.percentage || progress.progressPercentage || 0}%)`,
+              `Target Completion: ${journey.targetCompletionAt || 'Not set'}`,
+            ],
+            evidence: steps
+              .filter((s) => s.status === 'COMPLETED')
+              .map((s) => `Step '${s.name}' completed on ${s.completedAt}`),
+            interpretations: [
+              journey.status === 'BLOCKED'
+                ? `Journey is currently blocked: ${journey.blockedReason || 'Unresolved dependency'}`
+                : `Journey is ${journey.status.toLowerCase()} with SLA health ${journey.slaStatus}.`,
+            ],
+            recommendations: steps
+              .filter((s) => s.status === 'READY')
+              .map((s) => `Action ready: Step '${s.name}' is unblocked and ready for execution by ${s.assignedRole}.`),
+          },
+          journey,
+          steps,
+          progress,
+        },
+        sources,
+      };
+    }
+
+    case 'getJourneyTimeline': {
+      const result = await journeyService.getJourney(args.journeyId, ctx.user as any, ctx.requestId);
+      const timeline = result.timeline || [];
+      sources.push({
+        type: 'JOURNEY',
+        id: result.journeyCode || result.journeyId,
+        label: `Journey Timeline · ${result.journeyCode || result.journeyId}`,
+        link: `/journeys?id=${result.id}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: timeline.map(
+              (t) => `[${t.timestamp}] ${t.title}: ${t.description} (Actor: ${t.actorName || 'System'})`
+            ),
+            evidence: timeline.map((t) => `Event ${t.id} type: ${t.eventType}`),
+          },
+          journeyCode: result.journeyCode || result.journeyId,
+          journeyName: result.name,
+          timeline,
+        },
+        sources,
+      };
+    }
+
+    case 'getJourneySteps': {
+      const result = await journeyService.getJourney(args.journeyId, ctx.user as any, ctx.requestId);
+      const steps = result.steps || [];
+      sources.push({
+        type: 'JOURNEY',
+        id: result.journeyCode || result.journeyId,
+        label: `Journey Steps · ${result.journeyCode || result.journeyId}`,
+        link: `/journeys?id=${result.id}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: steps.map(
+              (s) =>
+                `#${s.stepOrder || s.stepNumber} ${s.name} [${s.stepType}] — Status: ${s.status}, SLA: ${s.slaStatus}, Assignee: ${s.assignedRole}`
+            ),
+            evidence: steps
+              .filter((s) => s.evidenceVerified)
+              .map((s) => `Evidence verified for step ${s.stepKey}: ${JSON.stringify(s.completionEvidence || {})}`),
+            recommendations: steps
+              .filter((s) => s.status === 'READY')
+              .map((s) => `Step ready for processing: ${s.name} (${s.assignedRole})`),
+          },
+          journeyCode: result.journeyCode || result.journeyId,
+          steps,
+        },
+        sources,
+      };
+    }
+
+    case 'getJourneyBlockers': {
+      const cust = await customerService.getCustomerById(args.customerId);
+      const journeys = await journeyService.listJourneys({ customerId: cust.id }, ctx.user as any, ctx.requestId);
+      const targetJourneys = args.journeyId
+        ? journeys.filter((j) => String(j.id) === String(args.journeyId) || j.journeyCode === String(args.journeyId))
+        : journeys;
+
+      const blockers: any[] = [];
+      for (const j of targetJourneys) {
+        const full = await journeyService.getJourney(j.id, ctx.user as any, ctx.requestId);
+        for (const s of full.steps) {
+          if (s.status === 'BLOCKED' || s.slaStatus === 'BREACHED') {
+            blockers.push({
+              journeyId: j.id,
+              journeyCode: j.journeyCode,
+              journeyName: j.name,
+              stepId: s.id,
+              stepKey: s.stepKey,
+              stepName: s.name,
+              status: s.status,
+              slaStatus: s.slaStatus,
+              blockerReason: s.blockerReason || (s.slaStatus === 'BREACHED' ? 'SLA target breached' : 'Dependency incomplete'),
+              assignedRole: s.assignedRole,
+              assignedUserName: s.assignedUserName,
+              blockedAt: s.updatedAt,
+            });
+          }
+        }
+      }
+
+      for (const b of blockers) {
+        sources.push({
+          type: 'JOURNEY',
+          id: b.journeyCode,
+          label: `Blocker · ${b.stepName} (${b.journeyCode})`,
+          link: `/journeys?id=${b.journeyId}`,
+        });
+      }
+
+      return {
+        data: {
+          classification: {
+            type: 'INTERPRETATION',
+            facts: blockers.map((b) => `Blocked Step: ${b.stepName} in ${b.journeyCode} | Reason: ${b.blockerReason}`),
+            evidence: blockers.map((b) => `Step ID: ${b.stepId}, Status: ${b.status}, SLA: ${b.slaStatus}`),
+            interpretations: [
+              blockers.length === 0
+                ? 'No active journey blockers or SLA breaches detected for this customer.'
+                : `Detected ${blockers.length} operational blockers requiring intervention.`,
+            ],
+            recommendations: blockers.map((b) => `Resolve blocker on '${b.stepName}' assigned to ${b.assignedRole}: ${b.blockerReason}`),
+          },
+          blockers,
+          totalBlockers: blockers.length,
+        },
+        sources,
+      };
+    }
+
+    case 'getJourneyEvidence': {
+      const result = await journeyService.getJourney(args.journeyId, ctx.user as any, ctx.requestId);
+      let targetSteps = result.steps || [];
+      if (args.stepId) {
+        targetSteps = targetSteps.filter(
+          (s) => String(s.id) === String(args.stepId) || s.stepKey === String(args.stepId)
+        );
+      }
+
+      sources.push({
+        type: 'JOURNEY',
+        id: result.journeyCode || result.journeyId,
+        label: `Journey Evidence · ${result.journeyCode || result.journeyId}`,
+        link: `/journeys?id=${result.id}`,
+      });
+
+      const evidenceList = targetSteps.map((s) => ({
+        stepId: s.id,
+        stepKey: s.stepKey,
+        stepName: s.name,
+        stepType: s.stepType,
+        evidenceType: (s as any).evidenceType || s.completionEvidence?.evidenceType || null,
+        evidenceVerified: s.evidenceVerified,
+        verifiedAt: (s as any).verifiedAt || s.completionEvidence?.verifiedAt || s.completedAt || null,
+        completionEvidence: s.completionEvidence,
+        status: s.status,
+      }));
+
+      return {
+        data: {
+          classification: {
+            type: 'EVIDENCE',
+            facts: evidenceList.map(
+              (e) =>
+                `Step ${e.stepName}: Evidence Verified = ${e.evidenceVerified ? 'YES' : 'NO'}, Type = ${e.evidenceType || 'N/A'}`
+            ),
+            evidence: evidenceList
+              .filter((e) => e.evidenceVerified)
+              .map((e) => `Verified Evidence Payload: ${JSON.stringify(e.completionEvidence)}`),
+            limitations: [
+              'Evidence records are validated against authoritative COREvia tables (documents, tasks, cases, reviews).',
+            ],
+          },
+          journeyCode: result.journeyCode || result.journeyId,
+          evidence: evidenceList,
+        },
+        sources,
+      };
+    }
+
+    case 'getJourneyHistory': {
+      const cust = await customerService.getCustomerById(args.customerId);
+      const journeys = await journeyService.listJourneys({ customerId: cust.id }, ctx.user as any, ctx.requestId);
+      const limit = Number(args.limit) || 10;
+      const history = journeys
+        .filter((j) => j.status === 'COMPLETED' || j.status === 'CANCELLED')
+        .slice(0, limit);
+
+      for (const h of history) {
+        sources.push({
+          type: 'JOURNEY',
+          id: h.journeyCode,
+          label: `Historical Journey · ${h.name} (${h.status})`,
+          link: `/journeys?id=${h.id}`,
+        });
+      }
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: history.map(
+              (h) =>
+                `Journey ${h.journeyCode || h.journeyId}: ${h.name} ended with status ${h.status} on ${h.completedAt || h.targetCompletionAt || 'N/A'}`
+            ),
+            evidence: history.map((h) => `Journey ID ${h.id} started ${h.startedAt || 'N/A'}`),
+          },
+          customerId: cust.id,
+          customerCode: cust.customerCode,
+          history,
+          totalHistorical: history.length,
         },
         sources,
       };

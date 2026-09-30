@@ -46,6 +46,13 @@ In Phase 29, the Copilot received direct explainability inspection tools:
 | `getStrategyScenario` | `scenarioId` | Retrieves saved scenario with before/after comparisons and staleness check | Validates ownership |
 | `compareStrategyScenario` | `baseScenarioId`, `targetScenarioId` | Compares two scenarios for the same customer side-by-side | Enforces same-customer boundary |
 | `getScenarioTrace` | `scenarioId` | Retrieves explainability decision trace and why factors for simulation | Scoped to customer portfolio |
+| `getCustomerJourneys` | `customerId` | Returns active and historical customer lifecycle journeys with progress | Scoped to customer portfolio |
+| `getJourney` | `journeyId` | Returns comprehensive journey state, steps, blockers, and SLA status | RBAC IDOR authorized |
+| `getJourneyTimeline` | `journeyId` | Chronological audit and event trail for a journey | Authoritative event extraction |
+| `getJourneySteps` | `journeyId` | Ordered execution steps, prerequisites, dependencies, and verification status | Classifies step facts & ready actions |
+| `getJourneyBlockers` | `customerId`, `journeyId` | Diagnoses current blockers and SLA breaches requiring operational intervention | Visibly classified as INTERPRETATION |
+| `getJourneyEvidence` | `journeyId`, `stepId` | Authoritative completion evidence verified against core database entities | Visibly classified as EVIDENCE |
+| `getJourneyHistory` | `customerId`, `limit` | Historical completed/cancelled journeys for lifecycle trajectory analysis | FACT classification |
 
 ---
 
@@ -76,6 +83,13 @@ When simulating counterfactual relationship strategies or what-if interventions:
 3. **Never predict loan approvals, credit underwriting decisions, churn guarantees, or customer conversions**. Simulations illustrate rule-based indicator deltas only.
 4. State explicit **assumptions and limitations** for every simulated action.
 5. Emphasize that actual banking execution requires human confirmation and authorization via production Core Banking workflows.
+
+### Rule 11: Customer Journey Governance & Verification Boundaries (Phase 33)
+When evaluating or explaining customer lifecycle journeys:
+1. **Never fabricate journey progress or claim a step is complete without authoritative evidence** verified against core records (`documents`, `tasks`, `cases`, `opportunities`).
+2. Clearly distinguish between `READY` steps (dependencies satisfied) and `PENDING` steps (waiting for prerequisites).
+3. If a step or journey is `BLOCKED`, cite the exact blocker reason and required resolver role.
+4. Autonomous agent remediation proposals must generate draft plans requiring human approval (`AWAITING_APPROVAL`) before execution.
 
 ---
 

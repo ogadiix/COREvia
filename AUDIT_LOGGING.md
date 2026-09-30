@@ -39,7 +39,22 @@ The Relationship Strategy Simulator & What-If Sandbox introduces tamper-evident 
 
 ---
 
-## 4. Audit Record Schema
+## 4. Customer Journey Orchestrator Audit Events (Phase 33)
+
+The Customer Journey Orchestrator & Lifecycle Management module captures strict regulatory audit trails for journey governance:
+
+| Event Type | Trigger Condition | Logged Metadata |
+|---|---|---|
+| `JOURNEY_CREATED` | New journey initiated from a template | `journeyId`, `customerId`, `templateCode`, `ownerId` |
+| `JOURNEY_VIEWED` | Officer inspects journey workspace or portfolio view | `journeyId`, `actorId`, `requestId` |
+| `JOURNEY_STEP_UPDATED` | Step transitioned (READY, IN_PROGRESS, COMPLETED, BLOCKED) | `journeyId`, `stepId`, `previousStatus`, `newStatus`, `blockerReason` |
+| `JOURNEY_OWNER_CHANGED` | Journey ownership handed off to another officer/role | `journeyId`, `previousOwnerId`, `newOwnerId`, `reason` |
+| `JOURNEY_ESCALATED` | Journey escalated due to SLA breach or critical blocker | `journeyId`, `escalatedTo`, `reason`, `decisionTraceId` |
+| `JOURNEY_OUTCOME_RECORDED` | Final milestone outcome recorded (GOAL_MET, CANCELLED, etc.) | `journeyId`, `outcomeType`, `summary`, `evidence` |
+
+---
+
+## 5. Audit Record Schema
 
 Audit logs are stored in the PostgreSQL `audit_logs` table with the following attributes:
 

@@ -44,6 +44,10 @@ if (baseScenario.customerId !== targetScenario.customerId) {
 ```
 3. **Governed Human Bridge**: Promoting a simulated strategy to actual Core Banking execution requires explicit human justification notes (`confirmationNotes`) and generates an immutable audit record (`STRATEGY_SIMULATION_ACTION_APPLIED`).
 
+### 2.4 Customer Journey Governance & Evidence Verification (Phase 33)
+1. **Mandatory Customer Authorization**: Every journey route (`create`, `read`, `step update`, `handoff`, `escalate`, `outcome`) enforces `resourceAuth.authorizeCustomer` to prevent horizontal IDOR privilege escalation.
+2. **Authoritative Evidence Verification**: Steps requiring compliance evidence (e.g. KYC, documents, service cases, tasks, opportunities) query live PostgreSQL tables directly; completion requests referencing forged or non-existent entity IDs are rejected with `400 Bad Request`.
+3. **Dual-Control Handoffs & Terminal Freeze**: Journey ownership transfers require designated actor confirmation with audit logging. Completed or cancelled journeys are frozen against subsequent step mutations.
 
 ---
 

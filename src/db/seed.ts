@@ -994,6 +994,14 @@ export async function seedDatabase() {
     console.error('Failed to seed Relationship Value snapshots:', err);
   }
 
+  // Phase 33 Customer Journey Orchestrator Seed
+  try {
+    const { seedJourneys } = await import('./seedJourneys.ts');
+    await seedJourneys();
+  } catch (err) {
+    console.error('Failed to seed Customer Journeys:', err);
+  }
+
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
 

@@ -699,8 +699,8 @@ export const bankingApi = {
 
   // Global Search
   async searchAll(query: string) {
-    if (!query.trim()) return { customers: [], accounts: [], loans: [], products: [] };
-    return await request<{ customers: any[]; accounts: any[]; loans: any[]; products: any[] }>(
+    if (!query.trim()) return { customers: [], accounts: [], loans: [], products: [], onboarding: [], decisions: [], scenarios: [], relationshipSnapshots: [], journeys: [] };
+    return await request<{ customers: any[]; accounts: any[]; loans: any[]; products: any[]; onboarding?: any[]; decisions?: any[]; scenarios?: any[]; relationshipSnapshots?: any[]; journeys?: any[] }>(
       `/search?q=${encodeURIComponent(query.trim())}`
     );
   },
@@ -1426,6 +1426,99 @@ export const bankingApi = {
   async getPortfolioRelationshipValue(params: Record<string, any> = {}) {
     const query = new URLSearchParams(params).toString();
     return await request<{ success: boolean; data: any }>(`/relationship-value/portfolio${query ? `?${query}` : ''}`);
+  },
+
+  // ==========================================
+  // PHASE 33: CUSTOMER JOURNEY ORCHESTRATOR & LIFECYCLE MANAGEMENT
+  // ==========================================
+  async getJourneyTemplates() {
+    return await request<{ success: boolean; data: any[] }>(`/journeys/templates`);
+  },
+
+  async getPortfolioJourneyAnalytics() {
+    return await request<{ success: boolean; data: any }>(`/journeys/analytics`);
+  },
+
+  async listCustomerJourneys(params: Record<string, any> = {}) {
+    const cleanParams: Record<string, string> = {};
+    for (const [k, v] of Object.entries(params)) {
+      if (v !== undefined && v !== null && v !== '') {
+        cleanParams[k] = String(v);
+      }
+    }
+    const query = new URLSearchParams(cleanParams).toString();
+    return await request<{ success: boolean; data: any[] }>(`/journeys${query ? `?${query}` : ''}`);
+  },
+
+  async getJourney(id: number | string) {
+    return await request<{ success: boolean; data: any }>(`/journeys/${encodeURIComponent(id)}`);
+  },
+
+  async createCustomerJourney(data: any) {
+    return await request<{ success: boolean; data: any }>(`/journeys`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getJourneySteps(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/journeys/${encodeURIComponent(id)}/steps`);
+  },
+
+  async getJourneyTimeline(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/journeys/${encodeURIComponent(id)}/timeline`);
+  },
+
+  async getJourneyEvidence(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/journeys/${encodeURIComponent(id)}/evidence`);
+  },
+
+  async updateJourneyStep(journeyId: number | string, stepId: number | string, data: any) {
+    return await request<{ success: boolean; data: any }>(`/journeys/${encodeURIComponent(journeyId)}/steps/${encodeURIComponent(stepId)}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async handoffCustomerJourney(id: number | string, data: { newOwnerId?: number; targetUserId?: number; targetRole?: string; newOwnerRole?: string; reason: string }) {
+    return await request<{ success: boolean; data: any }>(`/journeys/${encodeURIComponent(id)}/handoff`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async escalateCustomerJourney(id: number | string, data: { escalateToUserId?: number; reason: string; urgency?: string }) {
+    return await request<{ success: boolean; data: any }>(`/journeys/${encodeURIComponent(id)}/escalate`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async recordCustomerJourneyOutcome(id: number | string, data: { outcomeType: string; outcome?: string; summary: string; evidence?: any; goalMet?: boolean }) {
+    return await request<{ success: boolean; data: any }>(`/journeys/${encodeURIComponent(id)}/outcome`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Aliases for journey module components
+  async getJourneys(params: Record<string, any> = {}) {
+    return await this.listCustomerJourneys(params);
+  },
+  async getJourneyAnalytics() {
+    return await this.getPortfolioJourneyAnalytics();
+  },
+  async createJourney(data: any) {
+    return await this.createCustomerJourney(data);
+  },
+  async handoffJourney(id: number | string, data: any) {
+    return await this.handoffCustomerJourney(id, data);
+  },
+  async escalateJourney(id: number | string, data: any) {
+    return await this.escalateCustomerJourney(id, data);
+  },
+  async recordJourneyOutcome(id: number | string, data: any) {
+    return await this.recordCustomerJourneyOutcome(id, data);
   },
 };
 

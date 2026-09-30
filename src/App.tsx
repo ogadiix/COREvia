@@ -51,6 +51,7 @@ import { RelationshipTwinModule } from './components/modules/RelationshipTwinMod
 import { RelationshipGraphModule } from './components/modules/RelationshipGraphModule';
 import { StrategySimulatorModule } from './components/modules/StrategySimulatorModule';
 import { AgentWorkspaceModule } from './components/modules/AgentWorkspaceModule';
+import { JourneysModule } from './components/modules/JourneysModule';
 import { CopilotDrawer } from './components/copilot/CopilotDrawer';
 import { CopilotProvider, useCopilot } from './context/CopilotContext';
 import { NewTransactionModal } from './components/modals/NewTransactionModal';
@@ -94,6 +95,8 @@ const pathToModule: Record<string, ModuleType> = {
   '/simulator': 'strategy-simulator',
   '/agent': 'agent',
   '/banking-agent': 'agent',
+  '/journeys': 'journeys',
+  '/lifecycle': 'journeys',
 };
 
 const moduleToPath: Record<ModuleType, string> = {
@@ -121,6 +124,7 @@ const moduleToPath: Record<ModuleType, string> = {
   'relationship-graph': '/relationship-graph',
   'strategy-simulator': '/strategy-simulator',
   agent: '/agent',
+  journeys: '/journeys',
 };
 
 function BankingWorkplace() {
@@ -147,6 +151,7 @@ function BankingWorkplace() {
   const canAccessGraph = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
   const canAccessSimulator = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
   const canAccessAgent = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
+  const canAccessJourneys = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
 
   // Navigation State initialized from URL path
   const [activeModule, setActiveModule] = useState<ModuleType>(() => {
@@ -1064,6 +1069,23 @@ function BankingWorkplace() {
               ) : (
                 <AccessRestrictedNotice
                   moduleName="Controlled Banking Agent"
+                  requiredPermission="customers:read"
+                  requiredRoles={['Relationship Manager', 'Branch Manager', 'Analyst', 'Service Agent']}
+                  onGoBack={() => handleSelectModule('dashboard')}
+                />
+              )
+            )}
+
+            {activeModule === 'journeys' && (
+              canAccessJourneys ? (
+                <JourneysModule
+                  onNavigateToCustomer={(_customerId) => {
+                    handleSelectModule('customers');
+                  }}
+                />
+              ) : (
+                <AccessRestrictedNotice
+                  moduleName="Customer Lifecycle Journeys"
                   requiredPermission="customers:read"
                   requiredRoles={['Relationship Manager', 'Branch Manager', 'Analyst', 'Service Agent']}
                   onGoBack={() => handleSelectModule('dashboard')}

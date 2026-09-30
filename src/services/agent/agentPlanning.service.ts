@@ -20,6 +20,7 @@ import {
 import { contextResolver } from './contextResolver.ts';
 import { copilotSecurity } from '../copilot/security.ts';
 import { relationshipValueService } from '../relationshipValue.service.ts';
+import { journeyService } from '../journey.service.ts';
 import {
   AgentPlanDTO,
   AgentPlanStepDTO,
@@ -735,6 +736,86 @@ export const agentPlanningService = {
           dependencyPolicy: 'SKIP',
         },
       ],
+    };
+
+    return await this.createPlan(input, user, requestId);
+  },
+
+  /**
+   * Proposes a governed agent recovery plan for a blocked or breached customer journey.
+   * Identifies blockers and drafts actionable remediation tasks requiring human approval.
+   */
+  async proposeJourneyRecovery(
+    journeyIdOrCode: string | number,
+    user: SafeUser,
+    requestId: string
+  ): Promise<AgentPlanDTO> {
+    const fullJourney = await journeyService.getJourney(journeyIdOrCode, user, requestId);
+    const journey = (fullJourney as any).journey || fullJourney;
+    const steps = fullJourney.steps || journey.steps || [];
+
+    const blockedSteps = steps.filter((s) => s.status === 'BLOCKED' || s.slaStatus === 'BREACHED');
+    if (blockedSteps.length === 0) {
+      throw new BankingError(
+        'NO_BLOCKERS_FOUND',
+        `Journey '${journey.journeyCode}' does not have any blocked or SLA-breached steps requiring remediation.`,
+        400
+      );
+    }
+
+    const sessionCode = `SES-JOURNEY-RECOVERY-${Date.now().toString(36).toUpperCase()}`;
+    const session = await agentRepository.createSession({
+      sessionId: sessionCode,
+      userId: user.id,
+      customerId: journey.customerId,
+      contextType: 'CUSTOMER',
+      contextId: String(journey.customerId),
+      status: 'ACTIVE',
+      metadata: {
+        journeyId: journey.id,
+        journeyCode: journey.journeyCode,
+        journeyName: journey.name,
+        blockedStepsCount: blockedSteps.length,
+      },
+    });
+
+    const proposedSteps: any[] = [];
+    let stepNum = 1;
+
+    for (const bs of blockedSteps.slice(0, 3)) {
+      proposedSteps.push({
+        stepNumber: stepNum++,
+        actionType: 'CREATE_TASK',
+        targetEntityType: 'TASK',
+        rationale: `Remediate blocked journey step '${bs.name}' (${bs.blockerReason || 'Prerequisite incomplete'}).`,
+        parameters: {
+          title: `Remediate Journey Blocker: ${bs.name} [${journey.journeyCode}]`,
+          description: `Action required for journey ${journey.name}: Resolve blocker (${bs.blockerReason || 'Prerequisites incomplete'}). Assigned role: ${bs.assignedRole}.`,
+          priority: 'HIGH',
+          dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        },
+      });
+    }
+
+    proposedSteps.push({
+      stepNumber: stepNum,
+      actionType: 'CREATE_NOTIFICATION',
+      targetEntityType: 'NOTIFICATION',
+      rationale: `Notify journey owner (${journey.ownerRole}) of recovery plan initiation.`,
+      parameters: {
+        title: `Journey Recovery Plan Drafted: ${journey.journeyCode}`,
+        message: `A governed recovery plan has been proposed to unblock ${journey.name}. Human approval required.`,
+      },
+      dependsOnStepNumber: stepNum > 1 ? stepNum - 1 : undefined,
+      dependencyPolicy: 'SKIP',
+    });
+
+    const input: CreateAgentPlanInput = {
+      sessionId: session.id,
+      title: `Recovery Plan: Unblock ${journey.journeyCode} (${journey.name})`,
+      objective: `Resolve ${blockedSteps.length} operational blockers on journey ${journey.journeyCode} to restore SLA compliance.`,
+      decisionTraceId: journey.decisionTraceId || undefined,
+      steps: proposedSteps,
     };
 
     return await this.createPlan(input, user, requestId);
