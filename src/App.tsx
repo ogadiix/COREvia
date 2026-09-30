@@ -52,6 +52,7 @@ import { RelationshipGraphModule } from './components/modules/RelationshipGraphM
 import { StrategySimulatorModule } from './components/modules/StrategySimulatorModule';
 import { AgentWorkspaceModule } from './components/modules/AgentWorkspaceModule';
 import { JourneysModule } from './components/modules/JourneysModule';
+import { GroupsModule } from './components/modules/GroupsModule';
 import { CopilotDrawer } from './components/copilot/CopilotDrawer';
 import { CopilotProvider, useCopilot } from './context/CopilotContext';
 import { NewTransactionModal } from './components/modals/NewTransactionModal';
@@ -97,6 +98,10 @@ const pathToModule: Record<string, ModuleType> = {
   '/banking-agent': 'agent',
   '/journeys': 'journeys',
   '/lifecycle': 'journeys',
+  '/groups': 'groups',
+  '/group': 'groups',
+  '/households': 'groups',
+  '/business-groups': 'groups',
 };
 
 const moduleToPath: Record<ModuleType, string> = {
@@ -125,6 +130,7 @@ const moduleToPath: Record<ModuleType, string> = {
   'strategy-simulator': '/strategy-simulator',
   agent: '/agent',
   journeys: '/journeys',
+  groups: '/groups',
 };
 
 function BankingWorkplace() {
@@ -1088,6 +1094,29 @@ function BankingWorkplace() {
                   moduleName="Customer Lifecycle Journeys"
                   requiredPermission="customers:read"
                   requiredRoles={['Relationship Manager', 'Branch Manager', 'Analyst', 'Service Agent']}
+                  onGoBack={() => handleSelectModule('dashboard')}
+                />
+              )
+            )}
+
+            {activeModule === 'groups' && (
+              canAccessCustomers ? (
+                <GroupsModule
+                  onNavigateToCustomer={(_customerId) => {
+                    handleSelectModule('customers');
+                  }}
+                  onNavigateToGraph={(_grpId) => {
+                    handleSelectModule('relationship-graph');
+                  }}
+                  onNavigateToJourney={(_jId) => {
+                    handleSelectModule('journeys');
+                  }}
+                />
+              ) : (
+                <AccessRestrictedNotice
+                  moduleName="Household & Business Group 360"
+                  requiredPermission="customers:read"
+                  requiredRoles={['Relationship Manager', 'Branch Manager', 'Analyst', 'Private Banking Officer']}
                   onGoBack={() => handleSelectModule('dashboard')}
                 />
               )

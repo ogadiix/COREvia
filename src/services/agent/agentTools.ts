@@ -26,6 +26,8 @@ export const AGENT_ALLOWED_READ_ONLY_ACTIONS: readonly AgentReadOnlyActionType[]
   'COMPARE_RELATIONSHIP_VALUE_SCENARIO',
   'INSPECT_CUSTOMER_JOURNEYS',
   'GET_JOURNEY_STATUS',
+  'INSPECT_GROUP',
+  'GET_GROUP_STATUS',
 ] as const;
 
 export const AGENT_ALLOWED_MUTATIONS: readonly AgentMutatingActionType[] = [
@@ -659,6 +661,57 @@ export const AGENT_TOOL_REGISTRY: Record<AgentActionType, AgentToolDefinition> =
         journey: { type: 'object' },
         steps: { type: 'array' },
         progress: { type: 'object' },
+      },
+    },
+  },
+
+  INSPECT_GROUP: {
+    name: 'INSPECT_GROUP',
+    description: 'Inspect group relationship profile, members, and aggregated health across authorized members.',
+    isMutation: false,
+    requiredPermission: 'customer:read',
+    resourceType: 'RELATIONSHIP_GROUP',
+    auditAction: 'AGENT_TOOL_CALLED',
+    requiresConfirmation: false,
+    idempotencyRequired: false,
+    inputSchema: {
+      type: 'object',
+      properties: { groupId: { type: ['string'] } },
+      required: ['groupId'],
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        groupId: { type: 'string' },
+        groupType: { type: 'string' },
+        members: { type: 'array' },
+        profile: { type: 'object' },
+      },
+    },
+  },
+
+  GET_GROUP_STATUS: {
+    name: 'GET_GROUP_STATUS',
+    description: 'Retrieve current operational status, open cases, stalled opportunities, and active journeys for a relationship group.',
+    isMutation: false,
+    requiredPermission: 'customer:read',
+    resourceType: 'RELATIONSHIP_GROUP',
+    auditAction: 'AGENT_TOOL_CALLED',
+    requiresConfirmation: false,
+    idempotencyRequired: false,
+    inputSchema: {
+      type: 'object',
+      properties: { groupId: { type: ['string'] } },
+      required: ['groupId'],
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        groupId: { type: 'string' },
+        status: { type: 'string' },
+        openServiceCases: { type: 'number' },
+        openOpportunities: { type: 'number' },
+        activeJourneys: { type: 'number' },
       },
     },
   },

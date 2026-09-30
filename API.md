@@ -256,4 +256,87 @@ All requests require an active authenticated session cookie and anti-CSRF token 
 - **Body**: `{ "outcomeType": "GOAL_MET", "summary": "All account activation milestones achieved", "evidence": {} }`
 - **Response**: Immutable `JourneyOutcome` record; parent journey transitions to terminal `COMPLETED` status.
 
+---
+
+## 4. Household & Business Group 360 API Specification (Phase 34)
+
+### Base URL
+`/api/groups`
+
+All endpoints enforce dual authorization (Group Authorization + Per-Member Resource Authorization).
+
+### 4.1 Portfolio Group Analytics
+- **Route**: `GET /api/groups/analytics`
+- **Security**: Scoped to assigned groups/customers for Relationship Managers; institution-wide for Admins and Branch Managers.
+- **Response**: Total groups, household count, business group count, aggregated relationship value, average members per group, and top groups.
+
+### 4.2 List Relationship Groups
+- **Route**: `GET /api/groups`
+- **Query Params**:
+  - `groupType`: Filter by `HOUSEHOLD`, `BUSINESS`, `BUSINESS_GROUP`
+  - `status`: `ACTIVE`, `INACTIVE`, `UNDER_REVIEW`, `ARCHIVED`
+  - `ownerId`: Filter by primary Relationship Manager ID
+  - `search`: Query matching `groupId`, `name`, or `displayName`
+  - `limit`: Page limit (default: 50)
+  - `offset`: Page offset
+- **Response**: Array of `RelationshipGroupDTO` with member counts and primary entity summaries.
+
+### 4.3 Create Relationship Group
+- **Route**: `POST /api/groups`
+- **RBAC**: Requires `ADMINISTRATOR`, `BRANCH_MANAGER`, or `RELATIONSHIP_MANAGER` with `groups:write`.
+- **Body**:
+  ```json
+  {
+    "groupId": "HH-10482",
+    "groupType": "HOUSEHOLD",
+    "name": "Sharma Family Household",
+    "displayName": "Sharma Family",
+    "description": "Private banking household relationship",
+    "primaryCustomerId": 1,
+    "primaryBusinessId": "BIZ-10482",
+    "relationshipManagerId": 2,
+    "metadata": {}
+  }
+  ```
+- **Response**: `201 Created` with full `RelationshipGroupDTO`.
+
+### 4.4 Get Single Group Details
+- **Route**: `GET /api/groups/:id`
+- **Parameters**: `:id` - Numeric primary key or unique group identifier (e.g. `HH-10482`, `BIZ-10482`)
+- **Response**: Comprehensive `RelationshipGroupDTO` containing embedded `members` list and multidimensional `profile`.
+
+### 4.5 Update Relationship Group
+- **Route**: `PUT /api/groups/:id`
+- **Body**: `{ "name": "...", "displayName": "...", "status": "ACTIVE", "description": "..." }`
+- **Response**: Updated `RelationshipGroupDTO`.
+
+### 4.6 Controlled Ownership Handoff
+- **Route**: `POST /api/groups/:id/handoff`
+- **Body**: `{ "targetUserId": 3, "reason": "Branch coverage rebalancing" }`
+- **Audit**: Emits `GROUP_OWNER_CHANGED` with previous and new RM IDs.
+
+### 4.7 Group Members Management
+- **`GET /api/groups/:id/members`**: Retrieves members with strict per-member privacy filtering. Unauthorized members have `name: "Protected Member (Restricted Access)"` and nulled financial fields.
+- **`POST /api/groups/:id/members`**: Adds a verified member (`entityType`: `CUSTOMER` | `BUSINESS`). Validates customer existence and allowable `relationshipType`.
+- **`DELETE /api/groups/:id/members/:memberId`**: Removes an entity from group membership.
+
+### 4.8 Multidimensional Group Profile
+- **Route**: `GET /api/groups/:id/profile`
+- **Aggregation Rules**:
+  - `relationshipValue`: Sum of valid, authorized member values (`formattedValue: "₹61.2L"`). If unpopulated, returns `"Unavailable"`. Never estimated.
+  - `coreProfile`: Distributions (`minScore`, `maxScore`, `averageScore`, score buckets). Never invents a fake single "Group CORE Score".
+  - `productDepth`: Deduplicated unique products vs total relationships to prevent double-counting.
+  - `serviceHealth`: SLA breakdown (`openCases`, `criticalCases`, `atRiskCases`, `breachedCases`).
+  - `opportunities`: Pipeline aggregation without fabricated revenue forecasts.
+  - `activeJourneys`: Phase 33 lifecycle journey states.
+
+### 4.9 Group Activity & Lineage Endpoints
+- **`GET /api/groups/:id/timeline`**: Chronological events across authorized members retaining entity attribution (`INTERACTION-12`, `CASE-4`, `JOURNEY-2`).
+- **`GET /api/groups/:id/relationships`**: Phase 28 relationship graph edges connecting group entities.
+- **`GET /api/groups/:id/evidence`**: Audited relationship evidence with provenance documents and timestamps.
+- **`GET /api/groups/:id/journeys`**: Active, blocked, and completed Phase 33 journeys for authorized members.
+- **`GET /api/groups/:id/opportunities`**: Pipeline opportunities for authorized entities.
+- **`GET /api/groups/:id/service`**: Service desk tickets across group members.
+- **`GET /api/groups/:id/signals`**: Phase 28/29 Signal Center alerts attached to authorized entities.
+
 

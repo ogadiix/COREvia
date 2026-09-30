@@ -23,7 +23,8 @@ export type ModuleType =
   | 'relationship-graph'
   | 'strategy-simulator'
   | 'agent'
-  | 'journeys';
+  | 'journeys'
+  | 'groups';
 
 export type AccountType = 'SAVINGS' | 'CURRENT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT' | 'SALARY' | 'PREMIUM_SAVINGS';
 
@@ -1710,6 +1711,9 @@ export interface RelationshipTwinOverview {
   actionTraces: RelationshipActionTraceItem[];
   snapshots: RelationshipSnapshot[];
 }
+
+export * from './group.types.ts';
+
 
 
 

@@ -28,6 +28,7 @@ import { documentService } from '../services/document.service.ts';
 import { decisionTraceService } from '../services/decisionTrace.service.ts';
 import { relationshipValueService } from '../services/relationshipValue.service.ts';
 import { journeyService } from '../services/journey.service.ts';
+import { groupService } from '../services/group.service.ts';
 import { formatErrorResponse } from '../lib/errors.ts';
 import { db } from '../db/index.ts';
 import { auditLogs, users } from '../db/schema.ts';
@@ -1348,7 +1349,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       return res.json({ customers: [], accounts: [], loans: [], products: [], onboarding: [], decisions: [], scenarios: [], relationshipSnapshots: [] });
     }
 
-    const [customerResults, accountResults, loanResults, productResults, onboardingResults, decisionResults, scenarioResults, snapshotResults, journeyResults] = await Promise.all([
+    const [customerResults, accountResults, loanResults, productResults, onboardingResults, decisionResults, scenarioResults, snapshotResults, journeyResults, groupResults] = await Promise.all([
       customerService.listCustomers({
         search: query,
         rmId: req.user?.role === 'RELATIONSHIP_MANAGER' ? req.user.id : undefined,
@@ -1372,6 +1373,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       strategySimulatorService.searchScenarios(query, req.user!),
       relationshipValueService.searchSnapshots(query, req.user!),
       journeyService.listJourneys({ search: query }, req.user!, req.requestId).catch(() => []),
+      groupService.listGroups({ search: query, limit: 5 }, req.user!, req.requestId).catch(() => []),
     ]);
 
     // Mask PII in returned search records
@@ -1395,6 +1397,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       scenarios: scenarioResults,
       relationshipSnapshots: snapshotResults,
       journeys: (journeyResults || []).slice(0, 5),
+      groups: (groupResults || []).slice(0, 5),
     });
   } catch (err) {
     const { statusCode, body } = formatErrorResponse(err, req.requestId);
@@ -3175,4 +3178,10 @@ apiRouter.use('/relationship-value', relationshipValueRouter);
 // ==========================================
 import { journeyRouter } from './journeyRoutes.ts';
 apiRouter.use('/journeys', journeyRouter);
+
+// ==========================================
+// PHASE 34: HOUSEHOLD & BUSINESS GROUP 360
+// ==========================================
+import { groupRouter } from './groupRoutes.ts';
+apiRouter.use('/groups', groupRouter);
 

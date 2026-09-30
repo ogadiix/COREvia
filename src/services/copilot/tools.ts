@@ -20,6 +20,7 @@ import { agentExecutionService } from '../agent/agentExecution.service.ts';
 import { agentRepository } from '../../repositories/agent.repository.ts';
 import { relationshipValueService } from '../relationshipValue.service.ts';
 import { journeyService } from '../journey.service.ts';
+import { groupService } from '../group.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -917,6 +918,118 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         limit: { type: Type.INTEGER, description: 'Max number of historical journeys to return (default 10)' },
       },
       required: ['customerId'],
+    },
+  },
+  {
+    name: 'getRelationshipGroups',
+    description: 'Retrieve authorized relationship groups (households, business groups) matching filters.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        search: { type: Type.STRING, description: 'Optional search keyword (e.g. Sharma or HH-10482)' },
+        groupType: { type: Type.STRING, description: 'Optional group type: HOUSEHOLD, BUSINESS, BUSINESS_GROUP' },
+        limit: { type: Type.INTEGER, description: 'Max groups to return (default 10)' },
+      },
+    },
+  },
+  {
+    name: 'getRelationshipGroup',
+    description: 'Retrieve detailed relationship group entity by group ID or code (e.g. HH-10482 or BIZ-10482).',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        groupId: { type: Type.STRING, description: 'Group ID or Code (e.g. HH-10482)' },
+      },
+      required: ['groupId'],
+    },
+  },
+  {
+    name: 'getGroupMembers',
+    description: 'Retrieve members of a relationship group with member-level RBAC privacy protection.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        groupId: { type: Type.STRING, description: 'Group ID or Code (e.g. HH-10482)' },
+      },
+      required: ['groupId'],
+    },
+  },
+  {
+    name: 'getGroupProfile',
+    description: 'Retrieve multidimensional group profile including relationship value, CORE profile range, products, service health, and opportunities.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        groupId: { type: Type.STRING, description: 'Group ID or Code (e.g. HH-10482)' },
+      },
+      required: ['groupId'],
+    },
+  },
+  {
+    name: 'getGroupTimeline',
+    description: 'Retrieve chronological interaction timeline across all entities in the group.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        groupId: { type: Type.STRING, description: 'Group ID or Code' },
+        limit: { type: Type.INTEGER, description: 'Max events to return (default 20)' },
+      },
+      required: ['groupId'],
+    },
+  },
+  {
+    name: 'getGroupSignals',
+    description: 'Retrieve active signals, risks, and alerts across group members from Signal Center.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        groupId: { type: Type.STRING, description: 'Group ID or Code' },
+      },
+      required: ['groupId'],
+    },
+  },
+  {
+    name: 'getGroupJourneys',
+    description: 'Retrieve lifecycle journeys active or blocked across group members.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        groupId: { type: Type.STRING, description: 'Group ID or Code' },
+      },
+      required: ['groupId'],
+    },
+  },
+  {
+    name: 'getGroupOpportunities',
+    description: 'Retrieve CRM business opportunities across authorized group members.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        groupId: { type: Type.STRING, description: 'Group ID or Code' },
+      },
+      required: ['groupId'],
+    },
+  },
+  {
+    name: 'getGroupServiceCases',
+    description: 'Retrieve service desk tickets, SLAs, and open issues across group members.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        groupId: { type: Type.STRING, description: 'Group ID or Code' },
+      },
+      required: ['groupId'],
+    },
+  },
+  {
+    name: 'getGroupEvidence',
+    description: 'Retrieve verified graph edges, KYC provenance, and audit evidence for group relationships.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        groupId: { type: Type.STRING, description: 'Group ID or Code' },
+      },
+      required: ['groupId'],
     },
   },
 ];
@@ -3271,6 +3384,315 @@ export async function executeCopilotTool(
           customerCode: cust.customerCode,
           history,
           totalHistorical: history.length,
+        },
+        sources,
+      };
+    }
+
+    // ==========================================
+    // PHASE 34: HOUSEHOLD & BUSINESS GROUP 360 TOOLS
+    // ==========================================
+    case 'getRelationshipGroups': {
+      const groups = await groupService.listGroups(
+        {
+          search: args.search,
+          groupType: args.groupType,
+          limit: Number(args.limit) || 10,
+        },
+        ctx.user as any,
+        ctx.requestId
+      );
+
+      for (const g of groups) {
+        sources.push({
+          type: 'GROUP',
+          id: g.groupId,
+          label: `${g.displayName} (${g.groupType})`,
+          link: `/group/${g.groupId}`,
+        });
+      }
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: groups.map(
+              (g) =>
+                `Group ${g.groupId}: ${g.displayName} (${g.groupType}) · Status: ${g.status} · Members: ${g.members?.length || 0}`
+            ),
+            evidence: groups.map((g) => `Group ID ${g.groupId} created ${g.createdAt}`),
+          },
+          groups,
+          count: groups.length,
+        },
+        sources,
+      };
+    }
+
+    case 'getRelationshipGroup': {
+      const group = await groupService.getGroup(args.groupId, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'GROUP',
+        id: group.groupId,
+        label: `${group.displayName} (${group.groupType})`,
+        link: `/group/${group.groupId}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: [
+              `Group ${group.groupId}: ${group.name} (${group.groupType})`,
+              `Status: ${group.status}, Description: ${group.description || 'N/A'}`,
+              `Total Members: ${group.members?.length || 0}`,
+            ],
+            evidence: [`Group created at ${group.createdAt}, updated at ${group.updatedAt}`],
+          },
+          group,
+        },
+        sources,
+      };
+    }
+
+    case 'getGroupMembers': {
+      const group = await groupService.getGroup(args.groupId, ctx.user as any, ctx.requestId);
+      const members = await groupService.getGroupMembers(args.groupId, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'GROUP',
+        id: group.groupId,
+        label: `${group.displayName} Members`,
+        link: `/group/${group.groupId}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: members.map(
+              (m) =>
+                `Member ${m.name || m.entityId}: Role: ${m.role}, Type: ${m.relationshipType}, Authorized: ${m.isAuthorized ? 'YES' : 'NO (Protected)'}`
+            ),
+            evidence: members.map(
+              (m) => `Entity ${m.entityType}:${m.entityId} primary: ${m.isPrimary ? 'YES' : 'NO'}`
+            ),
+            limitations: [
+              'Members with restricted permissions have masked financial and scoring details.',
+            ],
+          },
+          groupId: group.groupId,
+          members,
+          count: members.length,
+        },
+        sources,
+      };
+    }
+
+    case 'getGroupProfile': {
+      const group = await groupService.getGroup(args.groupId, ctx.user as any, ctx.requestId);
+      const profile = await groupService.getGroupProfile(args.groupId, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'GROUP',
+        id: group.groupId,
+        label: `${group.displayName} Relationship Profile`,
+        link: `/group/${group.groupId}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'INTERPRETATION',
+            facts: [
+              `Group Relationship Value: ${profile.relationshipValue.formattedValue}`,
+              `CORE Score Distribution: Min ${profile.coreProfile.minScore ?? 'N/A'}, Max ${profile.coreProfile.maxScore ?? 'N/A'}, Avg ${profile.coreProfile.averageScore ?? 'N/A'}`,
+              `Unique Products: ${profile.productDepth.uniqueProductsCount}, Total Product Relations: ${profile.productDepth.totalProductRelationships}`,
+              `Open Service Cases: ${profile.serviceHealth.openCases}, Critical: ${profile.serviceHealth.criticalCases}`,
+              `Open Opportunities: ${profile.opportunities.openCount}, Total Value: ${profile.opportunities.formattedPipelineValue}`,
+              `Active Journeys: ${profile.activeJourneys.activeCount}, Blocked: ${profile.activeJourneys.blockedCount}`,
+            ],
+            evidence: [
+              `Aggregated across authorized group members (only authorized member values included).`,
+            ],
+            limitations: [
+              'CORE Score is presented as distribution/range without fabricating a synthetic single group score.',
+              'Unauthorized member records are excluded from financial sums.',
+            ],
+          },
+          groupId: group.groupId,
+          profile,
+        },
+        sources,
+      };
+    }
+
+    case 'getGroupTimeline': {
+      const group = await groupService.getGroup(args.groupId, ctx.user as any, ctx.requestId);
+      const limit = Number(args.limit) || 20;
+      const timeline = await groupService.getGroupTimeline(args.groupId, limit, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'GROUP',
+        id: group.groupId,
+        label: `${group.displayName} Timeline`,
+        link: `/group/${group.groupId}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: timeline.map(
+              (t) =>
+                `[${new Date(t.timestamp).toLocaleDateString()}] ${t.entity} (${t.entityId}): ${t.title || t.interactionType}`
+            ),
+            evidence: timeline.map((t) => `Event source: ${t.source} ID: ${t.id}`),
+          },
+          groupId: group.groupId,
+          timeline,
+          count: timeline.length,
+        },
+        sources,
+      };
+    }
+
+    case 'getGroupSignals': {
+      const group = await groupService.getGroup(args.groupId, ctx.user as any, ctx.requestId);
+      const signals = await groupService.getGroupSignals(args.groupId, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'GROUP',
+        id: group.groupId,
+        label: `${group.displayName} Signals`,
+        link: `/group/${group.groupId}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'INTERPRETATION',
+            facts: signals.map(
+              (s: any) =>
+                `Signal ${s.signalCode || s.id}: ${s.title || s.type} (${s.severity || s.priority}) for ${s.entityName || s.customerName || 'Group Member'}`
+            ),
+            evidence: signals.map((s: any) => `Signal origin: ${s.sourceEngine || 'SignalCenter'}`),
+          },
+          groupId: group.groupId,
+          signals,
+          count: signals.length,
+        },
+        sources,
+      };
+    }
+
+    case 'getGroupJourneys': {
+      const group = await groupService.getGroup(args.groupId, ctx.user as any, ctx.requestId);
+      const journeys = await groupService.getGroupJourneys(args.groupId, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'GROUP',
+        id: group.groupId,
+        label: `${group.displayName} Journeys`,
+        link: `/group/${group.groupId}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: journeys.map(
+              (j: any) =>
+                `Journey ${j.journeyCode || j.journeyId}: ${j.name} (${j.status}) for ${j.customerName || j.customerCode} · SLA: ${j.slaStatus}`
+            ),
+            evidence: journeys.map((j: any) => `Journey ID ${j.id} started ${j.startedAt}`),
+          },
+          groupId: group.groupId,
+          journeys,
+          count: journeys.length,
+        },
+        sources,
+      };
+    }
+
+    case 'getGroupOpportunities': {
+      const group = await groupService.getGroup(args.groupId, ctx.user as any, ctx.requestId);
+      const opportunities = await groupService.getGroupOpportunities(args.groupId, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'GROUP',
+        id: group.groupId,
+        label: `${group.displayName} Opportunities`,
+        link: `/group/${group.groupId}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: opportunities.map(
+              (o: any) =>
+                `Opportunity ${o.opportunityCode || o.id}: ${o.title} · Stage: ${o.stage} · Value: ₹${o.estimatedValue || '0'} · Owner: ${o.customerName || o.memberId}`
+            ),
+            evidence: opportunities.map((o: any) => `Opportunity ID ${o.id}`),
+          },
+          groupId: group.groupId,
+          opportunities,
+          count: opportunities.length,
+        },
+        sources,
+      };
+    }
+
+    case 'getGroupServiceCases': {
+      const group = await groupService.getGroup(args.groupId, ctx.user as any, ctx.requestId);
+      const serviceCases = await groupService.getGroupServiceCases(args.groupId, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'GROUP',
+        id: group.groupId,
+        label: `${group.displayName} Service Desk Cases`,
+        link: `/group/${group.groupId}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: serviceCases.map(
+              (c: any) =>
+                `Case ${c.caseNumber || c.id}: ${c.subject || c.title} · Status: ${c.status} · Priority: ${c.priority} · Member: ${c.customerName || c.memberId}`
+            ),
+            evidence: serviceCases.map((c: any) => `Case ID ${c.id} created ${c.createdAt}`),
+          },
+          groupId: group.groupId,
+          serviceCases,
+          count: serviceCases.length,
+        },
+        sources,
+      };
+    }
+
+    case 'getGroupEvidence': {
+      const group = await groupService.getGroup(args.groupId, ctx.user as any, ctx.requestId);
+      const evidenceData = await groupService.getGroupEvidence(args.groupId, ctx.user as any, ctx.requestId);
+      const evidenceRecords: any[] = (evidenceData as any).evidenceRecords || (Array.isArray(evidenceData) ? evidenceData : []);
+      sources.push({
+        type: 'GROUP',
+        id: group.groupId,
+        label: `${group.displayName} Evidence`,
+        link: `/group/${group.groupId}`,
+      });
+
+      return {
+        data: {
+          classification: {
+            type: 'EVIDENCE',
+            facts: evidenceRecords.map(
+              (e: any) =>
+                `Evidence ${e.relationshipType}: ${e.source} -> ${e.target} · Provenance: ${e.provenanceType || 'DIRECT_RECORD'}`
+            ),
+            evidence: evidenceRecords.map((e: any) => `Graph Edge ID ${e.id} provenanceId: ${e.provenanceId || 'N/A'}`),
+            limitations: [
+              'Group relationship evidence links directly to verified Phase 28 relationship graph edges and official KYC records.',
+            ],
+          },
+          groupId: group.groupId,
+          evidence: evidenceRecords,
+          count: evidenceRecords.length,
         },
         sources,
       };

@@ -2454,5 +2454,81 @@ export const journeyOutcomesRelations = relations(journeyOutcomes, ({ one }) => 
   }),
 }));
 
+// ==========================================
+// 29. HOUSEHOLD & BUSINESS GROUP 360 (PHASE 34)
+// ==========================================
+
+export const relationshipGroups = pgTable(
+  'relationship_groups',
+  {
+    id: serial('id').primaryKey(),
+    groupId: text('group_id').notNull().unique(), // e.g. HH-10482, BIZ-10482
+    groupType: text('group_type').notNull(), // HOUSEHOLD, BUSINESS, BUSINESS_GROUP
+    name: text('name').notNull(),
+    displayName: text('display_name').notNull(),
+    description: text('description'),
+    status: text('status').notNull().default('ACTIVE'), // ACTIVE, INACTIVE, UNDER_REVIEW, ARCHIVED
+    primaryCustomerId: integer('primary_customer_id').references(() => customers.id, { onDelete: 'set null' }),
+    primaryBusinessId: text('primary_business_id'),
+    relationshipManagerId: integer('relationship_manager_id').references(() => users.id, { onDelete: 'set null' }),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    rgGroupIdIdx: uniqueIndex('idx_relationship_groups_group_id').on(table.groupId),
+    rgGroupTypeIdx: index('idx_relationship_groups_type').on(table.groupType),
+    rgPrimaryCustIdx: index('idx_relationship_groups_primary_cust').on(table.primaryCustomerId),
+    rgRmIdx: index('idx_relationship_groups_rm_id').on(table.relationshipManagerId),
+    rgStatusIdx: index('idx_relationship_groups_status').on(table.status),
+  })
+);
+
+export const relationshipGroupMembers = pgTable(
+  'relationship_group_members',
+  {
+    id: serial('id').primaryKey(),
+    groupId: integer('group_id')
+      .references(() => relationshipGroups.id, { onDelete: 'cascade' })
+      .notNull(),
+    entityType: text('entity_type').notNull(), // CUSTOMER, BUSINESS
+    entityId: text('entity_id').notNull(), // Customer ID (number as string) or Business ID
+    role: text('role').notNull(), // Head of Family, Managing Director, Director, Member, Partner, etc.
+    relationshipType: text('relationship_type').notNull(), // HOUSEHOLD_MEMBER, SPOUSE, DEPENDENT, PARENT, CHILD, OWNER, DIRECTOR, SHAREHOLDER, PARTNER, AUTHORIZED_SIGNATORY, BENEFICIAL_OWNER, KEY_PERSON, RELATED_BUSINESS, OTHER
+    ownershipPercentage: numeric('ownership_percentage', { precision: 5, scale: 2 }),
+    isPrimary: boolean('is_primary').notNull().default(false),
+    validFrom: date('valid_from'),
+    validTo: date('valid_to'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    rgmGroupIdIdx: index('idx_group_members_group_id').on(table.groupId),
+    rgmEntityIdx: index('idx_group_members_entity').on(table.entityType, table.entityId),
+    rgmRelTypeIdx: index('idx_group_members_rel_type').on(table.relationshipType),
+  })
+);
+
+export const relationshipGroupsRelations = relations(relationshipGroups, ({ one, many }) => ({
+  primaryCustomer: one(customers, {
+    fields: [relationshipGroups.primaryCustomerId],
+    references: [customers.id],
+  }),
+  relationshipManager: one(users, {
+    fields: [relationshipGroups.relationshipManagerId],
+    references: [users.id],
+  }),
+  members: many(relationshipGroupMembers),
+}));
+
+export const relationshipGroupMembersRelations = relations(relationshipGroupMembers, ({ one }) => ({
+  group: one(relationshipGroups, {
+    fields: [relationshipGroupMembers.groupId],
+    references: [relationshipGroups.id],
+  }),
+}));
+
+
 
 

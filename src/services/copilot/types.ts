@@ -1,4 +1,4 @@
-export type CopilotContextType = 'GLOBAL' | 'CUSTOMER' | 'OPPORTUNITY' | 'CASE' | 'TASK' | 'DOCUMENT' | 'JOURNEY';
+export type CopilotContextType = 'GLOBAL' | 'CUSTOMER' | 'OPPORTUNITY' | 'CASE' | 'TASK' | 'DOCUMENT' | 'JOURNEY' | 'GROUP';
 
 export interface CopilotContext {
   type: CopilotContextType;
@@ -14,7 +14,7 @@ export interface CopilotChatMessage {
 }
 
 export interface CopilotSource {
-  type: 'CUSTOMER' | 'CORE_SCORE' | 'CASE' | 'OPPORTUNITY' | 'TASK' | 'INTERACTION' | 'NBA' | 'RADAR' | 'INTELLIGENCE' | 'ACCOUNT' | 'NOTIFICATION' | 'ANALYTICS' | 'DOCUMENT' | 'JOURNEY';
+  type: 'CUSTOMER' | 'CORE_SCORE' | 'CASE' | 'OPPORTUNITY' | 'TASK' | 'INTERACTION' | 'NBA' | 'RADAR' | 'INTELLIGENCE' | 'ACCOUNT' | 'NOTIFICATION' | 'ANALYTICS' | 'DOCUMENT' | 'JOURNEY' | 'GROUP';
   id: string;
   label: string;
   link?: string;

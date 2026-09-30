@@ -49,6 +49,16 @@ if (baseScenario.customerId !== targetScenario.customerId) {
 2. **Authoritative Evidence Verification**: Steps requiring compliance evidence (e.g. KYC, documents, service cases, tasks, opportunities) query live PostgreSQL tables directly; completion requests referencing forged or non-existent entity IDs are rejected with `400 Bad Request`.
 3. **Dual-Control Handoffs & Terminal Freeze**: Journey ownership transfers require designated actor confirmation with audit logging. Completed or cancelled journeys are frozen against subsequent step mutations.
 
+### 2.5 Group 360 Dual-Level Authorization & Privacy Filtering (Phase 34)
+1. **Group Authorization != Member Authorization**: Group-level visibility grants awareness that the relationship group exists, but **NEVER grants implicit access to every member's confidential records**.
+2. **Automated Per-Member Privacy Masking**: When an RM queries a group containing members not assigned to their portfolio:
+   - Protected member names are masked to `"Protected Member (Restricted Access)"`.
+   - Customer codes, CIF numbers, PAN, and identity attributes are omitted.
+   - Financial relationship values and CORE scores are nulled.
+   - Their financial metrics are excluded from group relationship value aggregation.
+   - Cross-customer opportunities and service tickets are strictly filtered from nested responses.
+3. **Forged Membership & Relationship Validation**: Membership addition validates actual customer entity existence in PostgreSQL (`404 Customer Not Found`) and enforces a strict allowlist of domain relationship types (`HOUSEHOLD_MEMBER`, `SPOUSE`, `DIRECTOR`, etc.). Fabricated types trigger `400 Bad Request`.
+
 ---
 
 ## 3. Defense-in-Depth API Safeguards

@@ -115,6 +115,13 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 - **SLA Tracking & Controlled Escalations**: Dynamic SLA deadline monitoring (`ON_TRACK`, `AT_RISK`, `BREACHED`) with governed officer handoffs and Decision Trace (`DT-...`) linkages.
 - **Portfolio Analytics & Copilot Tools**: Portfolio-wide bottleneck detection, completion tracking, 7 Copilot tools (`getJourney`, `getJourneyTimeline`, `getJourneyBlockers`, `getJourneyEvidence`, etc.), and Controlled Agent journey recovery planning.
 
+### 14. 👨‍👩‍👧‍👦 Household & Business Group 360 (Phase 34)
+- **Governed Group Relationship Intelligence**: Answers how family units (`HOUSEHOLD`) and corporate structures (`BUSINESS` / `BUSINESS_GROUP`) connect to COREvia, tracking their overall relationship profile and individual member contributions.
+- **Strict Dual-Level Authorization & Member-Level Privacy Filtering**: Viewing a group never grants implicit access to every member. When an RM is unassigned to a member, that member's protected fields are masked as `"Protected Member (Restricted Access)"` and excluded from group financial sums, preventing cross-customer IDOR leakages.
+- **Multidimensional Group Profiles**: Aggregates relationship value (strictly based on authorized records without fake estimation), CORE profile distribution and averages (avoiding fabricated single "group scores"), deduplicated product depth, service desk SLA health, opportunity coverage, and active lifecycle journeys.
+- **Unified Interaction Timeline & Visual Relationship Map**: Consolidates interactions across authorized entities preserving original entity attribution, accompanied by an interactive hierarchical tree map and accessible table fallback.
+- **Full Platform Synergy**: Direct integration with Relationship Graph (Phase 28 provenance), Decision Trace (Phase 29), Strategy Simulator (Phase 30 sandbox mode), Controlled Banking Agent (Phase 31 multi-entity recovery plans), and 10 Copilot tools.
+
 ---
 
 ## 🏗️ Architecture

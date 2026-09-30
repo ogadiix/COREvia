@@ -54,7 +54,27 @@ The Customer Journey Orchestrator & Lifecycle Management module captures strict 
 
 ---
 
-## 5. Audit Record Schema
+## 5. Household & Business Group 360 Audit Events (Phase 34)
+
+The Household & Business Group 360 module tracks every access and administrative mutation to prevent unauthorized intelligence harvesting:
+
+| Event Type | Trigger Condition | Logged Metadata |
+|---|---|---|
+| `GROUP_CREATED` | New relationship group (Household, Business Group) created | `groupId`, `groupType`, `name`, `actorId` |
+| `GROUP_VIEWED` | Officer inspects group workspace | `groupId`, `actorId`, `requestId` |
+| `GROUP_MEMBER_VIEWED` | Officer inspects group members list | `groupId`, `memberCount`, `restrictedMembersMasked` |
+| `GROUP_RELATIONSHIP_VIEWED`| Officer views relationship network connections | `groupId`, `edgeCount` |
+| `GROUP_GRAPH_VIEWED` | Officer renders or explores the interactive group graph | `groupId`, `actorId` |
+| `GROUP_EVIDENCE_VIEWED` | Officer verifies group provenance documents | `groupId`, `evidenceCount` |
+| `GROUP_OWNER_CHANGED` | Primary relationship manager handoff executed | `groupId`, `previousOwnerId`, `newOwnerId`, `reason` |
+| `GROUP_PROFILE_VIEWED` | Officer loads multidimensional group intelligence profile | `groupId`, `actorId` |
+| `GROUP_TIMELINE_VIEWED` | Officer accesses unified chronological group interaction timeline | `groupId`, `eventCount` |
+| `GROUP_SCENARIO_CREATED` | Strategy simulator what-if scenario executed on group snapshot | `groupId`, `scenarioType` |
+| `GROUP_AGENT_PLAN_CREATED` | Controlled Banking Agent drafts multi-entity recovery plan | `groupId`, `planId`, `stepCount` |
+
+---
+
+## 6. Audit Record Schema
 
 Audit logs are stored in the PostgreSQL `audit_logs` table with the following attributes:
 

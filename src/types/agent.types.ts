@@ -45,7 +45,8 @@ export type AgentContextType =
   | 'DIGITAL_TWIN'
   | 'STRATEGY_SCENARIO'
   | 'COMMAND_CENTER'
-  | 'PORTFOLIO';
+  | 'PORTFOLIO'
+  | 'GROUP';
 
 // Strict Allowlist of Controlled Read-only Actions
 export type AgentReadOnlyActionType =
@@ -67,7 +68,9 @@ export type AgentReadOnlyActionType =
   | 'GET_RELATIONSHIP_VALUE_PROFILE'
   | 'COMPARE_RELATIONSHIP_VALUE_SCENARIO'
   | 'INSPECT_CUSTOMER_JOURNEYS'
-  | 'GET_JOURNEY_STATUS';
+  | 'GET_JOURNEY_STATUS'
+  | 'INSPECT_GROUP'
+  | 'GET_GROUP_STATUS';
 
 // Strict Allowlist of Governed Mutating Actions (Financial Mutations are Strictly Banned)
 export type AgentMutatingActionType =

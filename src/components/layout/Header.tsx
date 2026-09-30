@@ -19,6 +19,7 @@ import {
   X,
   GitFork,
   Milestone,
+  Users2,
 } from 'lucide-react';
 import { BANK_META, formatINR } from '../../data/mockIndianBankingData';
 import { Button } from '../common/Button';
@@ -54,6 +55,8 @@ export const Header: React.FC<HeaderProps> = ({
     accounts: any[];
     loans: any[];
     customers: any[];
+    journeys?: any[];
+    groups?: any[];
   } | null>(null);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
@@ -445,6 +448,52 @@ export const Header: React.FC<HeaderProps> = ({
                               }`}
                             >
                               {j.status}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 5. Relationship Groups & Households Category */}
+                {searchResults.groups && searchResults.groups.length > 0 && (
+                  <div>
+                    <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <Users2 className="w-3 h-3 text-cyan-600" />
+                        Relationship Groups ({searchResults.groups.length})
+                      </span>
+                    </div>
+                    <div className="divide-y divide-slate-100">
+                      {searchResults.groups.map((g: any) => (
+                        <div
+                          key={g.id || g.groupId}
+                          onClick={() => {
+                            setShowDropdown(false);
+                            if (onNavigatePath) {
+                              onNavigatePath(`/group/${g.groupId}`);
+                            } else {
+                              window.location.href = `/group/${g.groupId}`;
+                            }
+                          }}
+                          className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                        >
+                          <div>
+                            <div className="font-semibold text-slate-900">{g.displayName || g.name}</div>
+                            <div className="text-[11px] text-slate-500 font-mono">
+                              {g.groupId} • {g.groupType}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <span
+                              className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                                g.groupType === 'HOUSEHOLD'
+                                  ? 'bg-purple-100 text-purple-800'
+                                  : 'bg-cyan-100 text-cyan-800'
+                              }`}
+                            >
+                              {g.groupType}
                             </span>
                           </div>
                         </div>

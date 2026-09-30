@@ -1520,6 +1520,103 @@ export const bankingApi = {
   async recordJourneyOutcome(id: number | string, data: any) {
     return await this.recordCustomerJourneyOutcome(id, data);
   },
+
+  // ==========================================
+  // PHASE 34: HOUSEHOLD & BUSINESS GROUP 360
+  // ==========================================
+  async listGroups(params: Record<string, any> = {}) {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '') query.append(k, String(v));
+    });
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/groups${qs}`);
+  },
+
+  async getGroups(params: Record<string, any> = {}) {
+    return await this.listGroups(params);
+  },
+
+  async getGroupAnalytics() {
+    return await request<{ success: boolean; data: any }>(`/groups/analytics`);
+  },
+
+  async getGroup(id: number | string) {
+    return await request<{ success: boolean; data: any }>(`/groups/${encodeURIComponent(id)}`);
+  },
+
+  async createGroup(data: any) {
+    return await request<{ success: boolean; data: any }>(`/groups`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async updateGroup(id: number | string, data: any) {
+    return await request<{ success: boolean; data: any }>(`/groups/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async handoffGroup(id: number | string, data: { newOwnerId: number; reason: string }) {
+    return await request<{ success: boolean; data: any }>(`/groups/${encodeURIComponent(id)}/handoff`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getGroupMembers(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/groups/${encodeURIComponent(id)}/members`);
+  },
+
+  async addGroupMember(id: number | string, data: any) {
+    return await request<{ success: boolean; data: any }>(`/groups/${encodeURIComponent(id)}/members`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async removeGroupMember(id: number | string, memberId: number) {
+    return await request<{ success: boolean; data: { success: boolean } }>(
+      `/groups/${encodeURIComponent(id)}/members/${encodeURIComponent(memberId)}`,
+      { method: 'DELETE' }
+    );
+  },
+
+  async getGroupProfile(id: number | string) {
+    return await request<{ success: boolean; data: any }>(`/groups/${encodeURIComponent(id)}/profile`);
+  },
+
+  async getGroupTimeline(id: number | string, limit: number = 50) {
+    return await request<{ success: boolean; data: any[] }>(
+      `/groups/${encodeURIComponent(id)}/timeline?limit=${limit}`
+    );
+  },
+
+  async getGroupRelationships(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/groups/${encodeURIComponent(id)}/relationships`);
+  },
+
+  async getGroupJourneys(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/groups/${encodeURIComponent(id)}/journeys`);
+  },
+
+  async getGroupOpportunities(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/groups/${encodeURIComponent(id)}/opportunities`);
+  },
+
+  async getGroupServiceCases(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/groups/${encodeURIComponent(id)}/service`);
+  },
+
+  async getGroupSignals(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/groups/${encodeURIComponent(id)}/signals`);
+  },
+
+  async getGroupEvidence(id: number | string) {
+    return await request<{ success: boolean; data: any[] }>(`/groups/${encodeURIComponent(id)}/evidence`);
+  },
 };
 
 export const api = bankingApi;

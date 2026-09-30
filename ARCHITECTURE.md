@@ -137,6 +137,92 @@ When a banker decides to execute a simulated strategy, the action transitions ac
 4. Generates immutable audit event `STRATEGY_SIMULATION_ACTION_APPLIED` referencing both the simulation scenario and the resulting real entity ID.
 
 ### 7.3 Decision Trace & Staleness Engine
+### 7.3 Decision Trace & Staleness Engine
 - **Decision Trace Binding**: Every simulation automatically logs a `STRATEGY_SIMULATION` Decision Trace capturing why factors, constraints, limitations, and simulated evidence deltas.
 - **Staleness Detection**: Saved scenarios track `baseSnapshot.asOf`. When a banker views a saved scenario, the engine checks if `customer.updatedAt > scenario.baseSnapshot.asOf`. If true, the scenario is explicitly labeled stale with a prominent amber alert badge and an instant "Re-run with Current Data" action.
+
+---
+
+## 8. Controlled Banking Agent & Governed Execution (Phase 31)
+- **Zero Autonomous Execution**: Two-step gated execution model where autonomous actions are strictly read-only, producing proposed plans (`AWAITING_APPROVAL`) requiring human approval before mutation.
+- **Context Resolvers & Hard Action Allowlist**: Resolves entity context with boundary verification (`CUSTOMER`, `ACCOUNT`, `JOURNEY`, `GROUP`) ensuring strict IDOR defense.
+
+---
+
+## 9. Relationship Value Intelligence & Portfolio Scenarios (Phase 32)
+- **Multidimensional Value Aggregation**: Deterministic calculation across deposits, advances, fee-based products, and engagement momentum.
+- **Zero Hallucinated Values**: If an underlying entity's value is absent, it is explicitly reported as `Unavailable` rather than fabricated.
+
+---
+
+## 10. Customer Journey Orchestrator & Lifecycle Management (Phase 33)
+- **Governed Multi-Step State Machine**: 10 canonical templates orchestrating customer onboarding, servicing, and retention.
+- **Authoritative Database Evidence**: Completion claims are directly evaluated against authoritative database tables (`documents`, `tasks`, `serviceCases`, `opportunities`, `interactions`).
+
+---
+
+## 11. Household & Business Group 360 Architecture (Phase 34)
+
+```text
+               ┌────────────────────────────────────────────────────────┐
+               │         RELATIONSHIP GROUPS (HH / BIZ)                 │
+               │  - id: serial PK                                       │
+               │  - group_id: text unique (HH-10482, BIZ-10482)         │
+               │  - group_type: HOUSEHOLD | BUSINESS | BUSINESS_GROUP   │
+               │  - primary_customer_id / primary_business_id           │
+               │  - relationship_manager_id / secondary_rm_id           │
+               └───────────────────────────┬────────────────────────────┘
+                                           │ 1:N
+                                           ▼
+               ┌────────────────────────────────────────────────────────┐
+               │              RELATIONSHIP GROUP MEMBERS                │
+               │  - id: serial PK                                       │
+               │  - group_id: integer FK -> relationship_groups(id)     │
+               │  - entity_type: CUSTOMER | BUSINESS                    │
+               │  - entity_id: text ID (numeric customer id or biz code)│
+               │  - role / relationship_type / ownership_percentage     │
+               └───────────────────────────┬────────────────────────────┘
+                                           │ Dual-Level RBAC Gate
+                                           ▼
+      ┌──────────────────────────────────────────────────────────────────────────┐
+      │         MEMBER RESOURCE AUTHORIZATION & PRIVACY FILTERING                │
+      │                                                                          │
+      │   RM assigned to Member A?  ──> YES: Full details, score, and value      │
+      │   RM assigned to Member B?  ──> NO:  Masked: "Protected Member",         │
+      │                                      Score & Value excluded from totals  │
+      └────────────────────────────────────┬─────────────────────────────────────┘
+                                           │
+                                           ▼
+      ┌──────────────────────────────────────────────────────────────────────────┐
+      │                    MULTIDIMENSIONAL GROUP PROFILE                        │
+      │  - Relationship Value: Sum of authorized member values (or Unavailable)  │
+      │  - Group CORE Profile: Range, Average, Distribution (No fake score)      │
+      │  - Deduplicated Product Depth: Unique product types across members       │
+      │  - Group Service Health: Open, Critical, At Risk, Breached SLA cases     │
+      │  - Group Opportunities: Pipeline by member and affiliated enterprise     │
+      │  - Group Journeys: Phase 33 Active, Blocked, Completed journeys          │
+      │  - Unified Timeline: Chronological interactions retaining provenance     │
+      └──────────────────────────────────────────────────────────────────────────┘
+```
+
+### 11.1 Dual-Level Authorization Invariant (Crucial Security Defense)
+1. **Group Authorization**: Confirms the requesting user is allowed to access the group metadata and know that the group exists.
+2. **Member Resource Authorization**: Iterates through each nested entity. If the officer is not authorized for that specific customer:
+   - Name is masked to `"Protected Member (Restricted Access)"`.
+   - Customer code, CIF, PAN, and identity fields are omitted.
+   - Financial value and CORE score are nulled.
+   - Their financial figures are strictly excluded from group totals.
+   - Cross-customer opportunities and service cases are filtered out.
+
+### 11.2 No Fake Group Aggregation Invariant
+- **No Single "Group CORE Score"**: CORE Score is strictly an individual customer engine. The group profile presents distributions (min, max, average, tier counts).
+- **No Fabricated Financial Aggregation**: Group relationship value is computed strictly by summing valid, authorized records. If records are unpopulated or unauthorized, the group reports `Unavailable`.
+
+### 11.3 AI & Engine Synergy
+- **Relationship Graph (Phase 28)**: Traverses existing `relationship_edges` and presents provenance data without duplicating the graph engine.
+- **Decision Trace (Phase 29)**: Traces group prioritization evidence linking member score shifts, stalled commercial opportunities, and open service tickets.
+- **Strategy Simulator (Phase 30)**: Executes what-if counterfactual scenarios on authorized snapshots without mutating production databases.
+- **Controlled Banking Agent (Phase 31)**: Generates multi-entity group recovery plans (`proposeGroupRecovery`) requiring explicit human authorization.
+- **Copilot (10 Tools)**: Exposes classified tools (`getRelationshipGroups`, `getRelationshipGroup`, `getGroupMembers`, `getGroupProfile`, `getGroupTimeline`, `getGroupSignals`, `getGroupJourneys`, `getGroupOpportunities`, `getGroupServiceCases`, `getGroupEvidence`) adhering to dual authorization.
+
 

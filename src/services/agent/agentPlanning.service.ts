@@ -820,4 +820,112 @@ export const agentPlanningService = {
 
     return await this.createPlan(input, user, requestId);
   },
+
+  /**
+   * Generates a multi-entity Governed Recovery Plan for a Relationship Group
+   * (e.g. 1. Review member's service case, 2. Schedule household relationship review, 3. Follow up business opportunity)
+   */
+  async proposeGroupRecovery(
+    groupIdOrCode: string,
+    user: SafeUser,
+    requestId: string
+  ): Promise<AgentPlanDTO> {
+    const { groupService } = await import('../group.service.ts');
+    const group = await groupService.getGroup(groupIdOrCode, user, requestId);
+    const members = await groupService.getGroupMembers(groupIdOrCode, user, requestId);
+    const authorizedMembers = members.filter(m => m.isAuthorized);
+
+    const sessionCode = `SES-GROUP-RECOVERY-${Date.now().toString(36).toUpperCase()}`;
+    const session = await agentRepository.createSession({
+      sessionId: sessionCode,
+      userId: user.id,
+      customerId: group.primaryCustomerId || undefined,
+      contextType: 'GROUP' as any,
+      contextId: group.groupId,
+      status: 'ACTIVE',
+      metadata: {
+        groupId: group.groupId,
+        groupName: group.displayName,
+        groupType: group.groupType,
+        authorizedMembersCount: authorizedMembers.length,
+      },
+    });
+
+    const proposedSteps: any[] = [];
+    let stepNum = 1;
+
+    // Step 1: Service Case Remediation for authorized members
+    const serviceCases = await groupService.getGroupServiceCases(groupIdOrCode, user, requestId);
+    const openCase = serviceCases.find((c: any) => c.status !== 'RESOLVED' && c.status !== 'CLOSED');
+    if (openCase) {
+      proposedSteps.push({
+        stepNumber: stepNum++,
+        actionType: 'UPDATE_SERVICE_CASE',
+        targetEntityType: 'SERVICE_CASE',
+        targetEntityId: String(openCase.id),
+        rationale: `Escalate and prioritize service recovery for case ${openCase.caseNumber || openCase.id} belonging to group member ${(openCase as any).customerName || 'authorized member'}.`,
+        parameters: {
+          caseId: openCase.id,
+          priority: 'CRITICAL',
+          notes: `Agent group recovery plan: Prioritized by officer ${user.name} for group ${group.displayName}.`,
+        },
+      });
+    }
+
+    // Step 2: Household / Group Relationship Review Task
+    proposedSteps.push({
+      stepNumber: stepNum++,
+      actionType: 'CREATE_RELATIONSHIP_REVIEW',
+      targetEntityType: 'RELATIONSHIP_REVIEW',
+      targetEntityId: String(group.primaryCustomerId || group.groupId),
+      rationale: `Schedule comprehensive relationship review for ${group.displayName} (${group.groupType}) across all authorized entities.`,
+      parameters: {
+        customerId: group.primaryCustomerId,
+        reviewType: 'ANNUAL_COMPREHENSIVE',
+        scheduledDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        notes: `Group Relationship Review scheduled under Group 360 governance for ${group.displayName}.`,
+      },
+    });
+
+    // Step 3: Opportunity Follow-Up for authorized business/member
+    const opportunities = await groupService.getGroupOpportunities(groupIdOrCode, user, requestId);
+    const openOpp = opportunities.find((o: any) => o.stage !== 'CLOSED_WON' && o.stage !== 'CLOSED_LOST');
+    if (openOpp) {
+      proposedSteps.push({
+        stepNumber: stepNum++,
+        actionType: 'UPDATE_OPPORTUNITY',
+        targetEntityType: 'OPPORTUNITY',
+        targetEntityId: String(openOpp.id),
+        rationale: `Follow up on stalled pipeline opportunity ${openOpp.opportunityCode || openOpp.id} (${openOpp.title}) across ${group.displayName}.`,
+        parameters: {
+          opportunityId: openOpp.id,
+          stage: openOpp.stage,
+          notes: `Follow-up contact logged by Group Recovery Agent for ${group.displayName}.`,
+        },
+      });
+    }
+
+    // Final Step: RM Notification
+    proposedSteps.push({
+      stepNumber: stepNum,
+      actionType: 'CREATE_NOTIFICATION',
+      targetEntityType: 'NOTIFICATION',
+      rationale: `Notify relationship manager of proposed multi-entity group recovery plan for ${group.displayName}.`,
+      parameters: {
+        title: `Group Recovery Plan Proposed: ${group.displayName} (${group.groupId})`,
+        message: `A governed recovery plan spanning ${authorizedMembers.length} authorized entities has been drafted for ${group.displayName}. Human authorization required.`,
+      },
+      dependsOnStepNumber: stepNum > 1 ? stepNum - 1 : undefined,
+      dependencyPolicy: 'SKIP',
+    });
+
+    const input: CreateAgentPlanInput = {
+      sessionId: session.id,
+      title: `Group Recovery Plan: ${group.displayName} (${group.groupId})`,
+      objective: `Coordinate multi-entity governed service recovery, relationship review, and opportunity acceleration across authorized entities in ${group.displayName}.`,
+      steps: proposedSteps,
+    };
+
+    return await this.createPlan(input, user, requestId);
+  },
 };

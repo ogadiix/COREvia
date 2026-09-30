@@ -197,6 +197,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           requiredPermission: 'customers:read',
         },
         {
+          id: 'groups',
+          label: 'Household & Groups 360',
+          icon: <Users2 className="w-4 h-4 text-cyan-400" />,
+          shortcut: '',
+          requiredPermission: 'customers:read',
+        },
+        {
           id: 'copilot',
           label: 'Banking Copilot',
           icon: <Bot className="w-4 h-4 text-emerald-400" />,

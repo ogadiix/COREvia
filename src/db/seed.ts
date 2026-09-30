@@ -1002,6 +1002,14 @@ export async function seedDatabase() {
     console.error('Failed to seed Customer Journeys:', err);
   }
 
+  // Phase 34 Household & Business Group 360 Seed
+  try {
+    const { seedGroups } = await import('./seedGroups.ts');
+    await seedGroups();
+  } catch (err) {
+    console.error('Failed to seed Relationship Groups:', err);
+  }
+
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
 

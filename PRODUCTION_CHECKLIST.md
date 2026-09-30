@@ -90,4 +90,21 @@
 - [x] 33/33 Phase 33 automated test cases passing (148/148 total platform tests passing).
 - [x] TypeScript compiler (`npm run lint` / `tsc --noEmit`) and Vite production bundle (`npm run build`) passing with zero errors.
 
+## HOUSEHOLD & BUSINESS GROUP 360 (PHASE 34)
+- [x] Relational schema migrated for `relationship_groups` and `relationship_group_members` with foreign keys, cascading deletions, and indexes.
+- [x] Dual-level authorization invariant verified: having access to a group NEVER grants unrestricted access to nested members.
+- [x] Member-level privacy filtering verified: unauthorized member details are masked as `"Protected Member (Restricted Access)"`, financial values and CORE scores are nulled, and financial sums strictly exclude their records.
+- [x] Multidimensional group profile verified: group relationship value strictly summed from authorized records (reported as `"Unavailable"` if unpopulated), CORE profile distributions and averages without inventing a fake single "group score".
+- [x] Deduplicated product depth verified: unique product types aggregated to avoid double-counting shared accounts/loans.
+- [x] Service desk SLA metrics (open, critical, at-risk, breached) aggregated across group members.
+- [x] Commercial opportunity pipeline aggregated by member and affiliated enterprise without predictive revenue hallucinations.
+- [x] Unified chronological interaction timeline verified preserving entity, entityId, timestamp, and interaction type attribution.
+- [x] Full platform synergy verified: Phase 28 Relationship Graph provenance, Phase 29 Decision Trace prioritization, Phase 30 Strategy Simulator snapshot mode, Phase 31 Controlled Banking Agent group recovery plans (`proposeGroupRecovery`), and Phase 33 Customer Journeys.
+- [x] 10 dedicated Copilot tools registered, RBAC-guarded, and classified (FACT/EVIDENCE/INTERPRETATION).
+- [x] Global Search Category 5 integration verified matching by group ID, household name, and business code.
+- [x] Controlled group ownership handoff verified with mandatory justification notes and `GROUP_OWNER_CHANGED` audit logging.
+- [x] 30/30 Phase 34 automated test cases passing (178/178 total platform tests passing in 1.72s).
+- [x] TypeScript compiler (`npm run lint` / `tsc --noEmit`) and Vite/esbuild production bundle (`npm run build`) passing with zero errors.
+
+
 

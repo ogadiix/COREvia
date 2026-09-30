@@ -61,6 +61,7 @@ import {
   Compass,
   BarChart3,
   Milestone,
+  Users2,
 } from 'lucide-react';
 import { useCopilot } from '../../context/CopilotContext';
 import { RelationshipGraph } from '../graph/RelationshipGraph.tsx';
@@ -919,6 +920,21 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
                 >
                   <Compass className="w-3.5 h-3.5" />
                   <span>Simulate Strategy</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    const grpId = activeCustomer.customerCode === 'CUS-10482' ? 'HH-10482' : (activeCustomer.customerCode === 'CUS-10821' ? 'HH-10482' : null);
+                    if (grpId) {
+                      window.location.href = `/group/${grpId}`;
+                    } else {
+                      window.location.href = `/groups`;
+                    }
+                  }}
+                  className="px-3 py-1.5 bg-cyan-700 hover:bg-cyan-600 text-white rounded text-xs font-medium transition flex items-center gap-1 shadow-2xs"
+                >
+                  <Users2 className="w-3.5 h-3.5" />
+                  <span>Household 360</span>
                 </button>
               </div>
             </div>

@@ -53,6 +53,16 @@ In Phase 29, the Copilot received direct explainability inspection tools:
 | `getJourneyBlockers` | `customerId`, `journeyId` | Diagnoses current blockers and SLA breaches requiring operational intervention | Visibly classified as INTERPRETATION |
 | `getJourneyEvidence` | `journeyId`, `stepId` | Authoritative completion evidence verified against core database entities | Visibly classified as EVIDENCE |
 | `getJourneyHistory` | `customerId`, `limit` | Historical completed/cancelled journeys for lifecycle trajectory analysis | FACT classification |
+| `getRelationshipGroups` | `groupType`, `limit` | Lists relationship groups (households, business groups) | RBAC scoped list |
+| `getRelationshipGroup` | `groupId` | Retrieves group details, members, and multidimensional profile | Strict dual authorization |
+| `getGroupMembers` | `groupId` | Retrieves group members with per-member privacy masking for unauthorized records | Member-level privacy filter |
+| `getGroupProfile` | `groupId` | Returns multidimensional profile (value, CORE distribution, SLA health, products) | FACT / INTERPRETATION |
+| `getGroupTimeline` | `groupId`, `limit` | Chronological unified timeline preserving entity attribution | Preserves entity source |
+| `getGroupSignals` | `groupId` | Signal Center radar alerts linked to group entities | Scoped to authorized members |
+| `getGroupJourneys` | `groupId` | Active and blocked lifecycle journeys across group members | Phase 33 integration |
+| `getGroupOpportunities`| `groupId` | Commercial opportunities across authorized household/corporate entities | Pipeline aggregation |
+| `getGroupServiceCases` | `groupId` | Open and critical service desk cases across group members | Service Desk SLA metrics |
+| `getGroupEvidence` | `groupId` | Traceable relationship provenance records and verified edges | Provenance verification |
 
 ---
 
@@ -90,6 +100,14 @@ When evaluating or explaining customer lifecycle journeys:
 2. Clearly distinguish between `READY` steps (dependencies satisfied) and `PENDING` steps (waiting for prerequisites).
 3. If a step or journey is `BLOCKED`, cite the exact blocker reason and required resolver role.
 4. Autonomous agent remediation proposals must generate draft plans requiring human approval (`AWAITING_APPROVAL`) before execution.
+
+### Rule 12: Household & Business Group 360 Boundaries (Phase 34)
+When analyzing or summarizing relationship groups:
+1. **Never bypass member-level resource authorization**: Having access to a group does NOT grant unrestricted access to every member. Unassigned members must be reported as `"Protected Member (Restricted Access)"` with financial values omitted.
+2. **Never invent a single "Group CORE Score"**: Present distributions, ranges, and averages across authorized members.
+3. **Never fabricate financial aggregation**: Relationship value is computed strictly by summing valid, authorized records. If values are absent, explicitly report `Unavailable`.
+4. **Preserve entity attribution on timeline events**: Every group interaction must retain original entity, entityId, timestamp, and source.
+5. **Controlled Agent multi-entity recovery**: Plans spanning multiple group members require individual authorization and human approval before execution.
 
 ---
 

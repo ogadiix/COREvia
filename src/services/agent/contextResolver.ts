@@ -176,6 +176,17 @@ export const contextResolver = {
         break;
       }
 
+      case 'GROUP': {
+        if (!contextId) {
+          throw new BankingError('VALIDATION_ERROR', 'Group ID or Code is required for GROUP context.', 400);
+        }
+        const { groupService } = await import('../group.service.ts');
+        const grp = await groupService.getGroup(contextId, user, requestId);
+        targetCustomerId = grp.primaryCustomerId || null;
+        contextEntitySummary = `Relationship Group 360 inspection for ${grp.displayName} (${grp.groupId})`;
+        break;
+      }
+
       case 'COMMAND_CENTER':
       case 'PORTFOLIO': {
         // High-level institutional oversight
