@@ -18,6 +18,7 @@ import { strategySimulatorService } from '../strategySimulator.service.ts';
 import { agentPlanningService } from '../agent/agentPlanning.service.ts';
 import { agentExecutionService } from '../agent/agentExecution.service.ts';
 import { agentRepository } from '../../repositories/agent.repository.ts';
+import { relationshipValueService } from '../relationshipValue.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -783,6 +784,53 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         planId: { type: Type.STRING, description: 'Plan code or ID' },
       },
       required: ['planId'],
+    },
+  },
+  // Phase 32: Relationship Value & Portfolio Scenario Intelligence Tools
+  {
+    name: 'getRelationshipValueProfile',
+    description: 'Retrieve multidimensional relationship value profile across 10 measurable dimensions including CORE score, products, engagement, and service health.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.STRING, description: 'Customer ID or Code (e.g. 1 or CUS-10482)' },
+      },
+      required: ['customerId'],
+    },
+  },
+  {
+    name: 'getRelationshipValueHistory',
+    description: 'Retrieve 30/60/90-day historical relationship profile trend timeline.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.STRING, description: 'Customer ID or Code' },
+      },
+      required: ['customerId'],
+    },
+  },
+  {
+    name: 'compareRelationshipValueScenario',
+    description: 'Compare current relationship value profile against a simulated strategy scenario across all 10 relationship dimensions.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.STRING, description: 'Customer ID or Code' },
+        scenarioId: { type: Type.STRING, description: 'Strategy scenario code (e.g. STR-20260928-001)' },
+      },
+      required: ['customerId', 'scenarioId'],
+    },
+  },
+  {
+    name: 'explainRelationshipValueChange',
+    description: 'Provide an explainable breakdown of why a relationship profile changes under a scenario, distinguishing FACT, SCENARIO, INTERPRETATION, and LIMITATION.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        customerId: { type: Type.STRING, description: 'Customer ID or Code' },
+        scenarioId: { type: Type.STRING, description: 'Strategy scenario code' },
+      },
+      required: ['customerId', 'scenarioId'],
     },
   },
 ];
@@ -2677,6 +2725,165 @@ export async function executeCopilotTool(
           planId: plan.planId,
           status: plan.status,
           auditReferences: auditRefs,
+        },
+        sources,
+      };
+    }
+
+    // Phase 32: Relationship Value Copilot Handlers
+    case 'getRelationshipValueProfile': {
+      const custId = Number(args.customerId) || 1;
+      const cust = await customerService.getCustomerById(custId);
+      const profile = await relationshipValueService.getCurrentProfile(custId, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'CUSTOMER',
+        id: String(custId),
+        label: `Relationship Value Profile · ${cust?.name || 'Customer'}`,
+        link: `/customers?id=${custId}&tab=value`,
+      });
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: [
+              `Current CORE Score: ${profile.baseSnapshot.coreScore}`,
+              `Total Relationship Value: ${profile.baseSnapshot.relationshipValueFormatted}`,
+              `Product Depth: ${profile.baseSnapshot.productDepth} facilities`,
+              `Service Health: ${profile.baseSnapshot.serviceHealth}`,
+              `Engagement Score: ${profile.baseSnapshot.engagement}`,
+            ],
+            interpretations: [profile.explanation],
+            limitations: profile.limitations,
+          },
+          profile,
+        },
+        sources,
+      };
+    }
+
+    case 'getRelationshipValueHistory': {
+      const custId = Number(args.customerId) || 1;
+      const cust = await customerService.getCustomerById(custId);
+      const history = await relationshipValueService.getHistory(custId, ctx.user as any, ctx.requestId);
+      sources.push({
+        type: 'CUSTOMER',
+        id: String(custId),
+        label: `Relationship History · ${cust?.name || 'Customer'}`,
+        link: `/customers?id=${custId}&tab=value`,
+      });
+      return {
+        data: {
+          classification: {
+            type: 'FACT',
+            facts: [
+              `Historical snapshot count: ${history.trendSummary?.recordCount || history.timeline?.length || 0}`,
+              `CORE Score trend: ${history.trendSummary?.coreScoreTrend || 'STABLE'}`,
+              `Earliest recorded snapshot: ${history.trendSummary?.earliestDate || 'N/A'}`,
+            ],
+            interpretations: [history.notice || 'Historical records loaded from governed database ledger.'],
+            limitations: ['Historical data reflects recorded book values at snapshot dates.'],
+          },
+          history,
+        },
+        sources,
+      };
+    }
+
+    case 'compareRelationshipValueScenario': {
+      const custId = Number(args.customerId) || 1;
+      const cust = await customerService.getCustomerById(custId);
+      let comparison;
+      if (args.scenarioId) {
+        comparison = await relationshipValueService.compareScenario(custId, args.scenarioId, ctx.user as any, ctx.requestId);
+      } else {
+        const actionTypes = Array.isArray(args.scenarioActions) && args.scenarioActions.length > 0
+          ? args.scenarioActions
+          : ['RESOLVE_SERVICE_CASE', 'SCHEDULE_RELATIONSHIP_REVIEW'];
+        comparison = await relationshipValueService.simulateAndCompareScenario(
+          custId,
+          {
+            name: 'Copilot Strategy Scenario',
+            actions: actionTypes.map((t: string, i: number) => ({ actionType: t as any, orderIndex: i })),
+          },
+          ctx.user as any,
+          ctx.requestId
+        );
+      }
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: String(comparison.scenarioId || 'SCENARIO'),
+        label: `Scenario Value Comparison · ${comparison.scenarioName || 'Simulation'}`,
+        link: `/strategy-simulator?scenarioId=${comparison.scenarioId}`,
+      });
+      return {
+        data: {
+          classification: {
+            type: 'SCENARIO',
+            scenarios: [
+              `Simulated Scenario: ${comparison.scenarioName || comparison.scenarioId}`,
+              `Projected CORE Score: ${comparison.scenarioSnapshot?.coreScore}`,
+              `Simulated Service Health: ${comparison.scenarioSnapshot?.serviceHealth}`,
+            ],
+            interpretations: [comparison.explanation],
+            limitations: comparison.limitations,
+          },
+          comparison,
+          limitations: [
+            'LIMITATION: Monetary relationship value is not recalculated.',
+            'LIMITATION: Strategic projections require operational approval before realization.',
+          ],
+        },
+        sources,
+      };
+    }
+
+    case 'explainRelationshipValueChange': {
+      const custId = Number(args.customerId) || 1;
+      const cust = await customerService.getCustomerById(custId);
+      let comparison;
+      if (args.scenarioId) {
+        comparison = await relationshipValueService.compareScenario(custId, args.scenarioId, ctx.user as any, ctx.requestId);
+      } else {
+        comparison = await relationshipValueService.getCurrentProfile(custId, ctx.user as any, ctx.requestId);
+      }
+
+      const dim = comparison.dimensions.find(
+        (d) => d.dimension === args.dimension || d.label.toLowerCase() === String(args.dimension || '').toLowerCase()
+      );
+      const explanationText = dim
+        ? `Dimension ${dim.label} is currently ${dim.currentValueFormatted} (${dim.status}) based on ${dim.sourceEngine}. ${dim.explanation}`
+        : comparison.explanation;
+
+      sources.push({
+        type: 'CUSTOMER',
+        id: String(custId),
+        label: `Scenario Explanation · ${args.dimension || 'Profile'}`,
+        link: `/customers?id=${custId}&tab=value`,
+      });
+      return {
+        data: {
+          classification: {
+            type: 'INTERPRETATION',
+            facts: [
+              `Dimension: ${dim?.label || args.dimension || 'CORE Score'}`,
+              `Observed Value: ${dim?.currentValueFormatted || 'Evaluated'}`,
+              `Source Engine: ${dim?.sourceEngine || 'CORE Score Engine'}`,
+            ],
+            interpretations: [explanationText],
+            limitations: comparison.limitations,
+          },
+          explanation: explanationText,
+          supportingSignals: comparison.supportingSignals,
+          dimensions: comparison.dimensions.map((d) => ({
+            dimension: d.label,
+            current: d.currentValue,
+            simulated: d.scenarioValue,
+            change: d.change,
+            changeType: d.changeType,
+            engine: d.sourceEngine,
+          })),
+          limitations: comparison.limitations,
         },
         sources,
       };

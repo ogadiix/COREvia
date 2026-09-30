@@ -34,6 +34,7 @@ import {
 import { ScenarioComparisonModal } from '../simulator/ScenarioComparisonModal';
 import { ApplyActionConfirmationModal } from '../simulator/ApplyActionConfirmationModal';
 import { DecisionTracePanel } from '../decision-trace/DecisionTracePanel';
+import { RelationshipValueProfile } from '../relationship-value/RelationshipValueProfile';
 
 interface StrategySimulatorModuleProps {
   initialCustomerId?: number;
@@ -956,6 +957,14 @@ export const StrategySimulatorModule: React.FC<StrategySimulatorModuleProps> = (
               </div>
             </div>
           )}
+
+          {/* Phase 32: Multidimensional Relationship Value Profile Comparison */}
+          <div className="border-t border-slate-100 dark:border-slate-800 pt-5">
+            <RelationshipValueProfile
+              customerId={selectedCustomerId}
+              scenarioId={simulationResult.scenarioId}
+            />
+          </div>
         </div>
       )}
 

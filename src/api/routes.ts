@@ -26,6 +26,7 @@ import { analyticsService } from '../services/analytics.service.ts';
 import { onboardingService } from '../services/onboarding.service.ts';
 import { documentService } from '../services/document.service.ts';
 import { decisionTraceService } from '../services/decisionTrace.service.ts';
+import { relationshipValueService } from '../services/relationshipValue.service.ts';
 import { formatErrorResponse } from '../lib/errors.ts';
 import { db } from '../db/index.ts';
 import { auditLogs, users } from '../db/schema.ts';
@@ -1343,10 +1344,10 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
     const rawQuery = String(req.query.q || '').trim();
     const query = sanitizeText(rawQuery, 100);
     if (!query) {
-      return res.json({ customers: [], accounts: [], loans: [], products: [], onboarding: [], decisions: [], scenarios: [] });
+      return res.json({ customers: [], accounts: [], loans: [], products: [], onboarding: [], decisions: [], scenarios: [], relationshipSnapshots: [] });
     }
 
-    const [customerResults, accountResults, loanResults, productResults, onboardingResults, decisionResults, scenarioResults] = await Promise.all([
+    const [customerResults, accountResults, loanResults, productResults, onboardingResults, decisionResults, scenarioResults, snapshotResults] = await Promise.all([
       customerService.listCustomers({
         search: query,
         rmId: req.user?.role === 'RELATIONSHIP_MANAGER' ? req.user.id : undefined,
@@ -1368,6 +1369,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       ),
       decisionTraceService.searchDecisionTraces(query, req.user!, req.requestId),
       strategySimulatorService.searchScenarios(query, req.user!),
+      relationshipValueService.searchSnapshots(query, req.user!),
     ]);
 
     // Mask PII in returned search records
@@ -1389,6 +1391,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       onboarding: onboardingResults.data,
       decisions: decisionResults,
       scenarios: scenarioResults,
+      relationshipSnapshots: snapshotResults,
     });
   } catch (err) {
     const { statusCode, body } = formatErrorResponse(err, req.requestId);
@@ -3157,4 +3160,10 @@ apiRouter.use('/strategy-scenarios', strategySimulatorRouter);
 // ==========================================
 import agentRouter from './agentRoutes.ts';
 apiRouter.use('/agent', agentRouter);
+
+// ==========================================
+// PHASE 32: RELATIONSHIP VALUE & PORTFOLIO SCENARIO INTELLIGENCE
+// ==========================================
+import { relationshipValueRouter } from './relationshipValueRoutes.ts';
+apiRouter.use('/relationship-value', relationshipValueRouter);
 

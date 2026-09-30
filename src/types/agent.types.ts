@@ -63,7 +63,9 @@ export type AgentReadOnlyActionType =
   | 'GET_DOCUMENT_STATUS'
   | 'GET_RELATIONSHIP_GRAPH'
   | 'GET_DECISION_TRACE'
-  | 'SIMULATE_STRATEGY';
+  | 'SIMULATE_STRATEGY'
+  | 'GET_RELATIONSHIP_VALUE_PROFILE'
+  | 'COMPARE_RELATIONSHIP_VALUE_SCENARIO';
 
 // Strict Allowlist of Governed Mutating Actions (Financial Mutations are Strictly Banned)
 export type AgentMutatingActionType =
@@ -234,6 +236,8 @@ export interface CreateAgentPlanInput {
   objective: string;
   decisionTraceId?: string;
   scenarioId?: string;
+  estimatedEffect?: string;
+  planRationale?: string;
   steps: Array<{
     stepNumber?: number;
     actionType: AgentActionType;

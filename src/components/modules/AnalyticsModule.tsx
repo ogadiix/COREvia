@@ -42,6 +42,7 @@ import { ModuleType } from '../../types';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { formatINR } from '../../data/mockIndianBankingData';
+import type { PortfolioRelationshipValueAnalyticsDTO } from '../../types/relationshipValue.types';
 
 interface AnalyticsModuleProps {
   onNavigateToCustomer?: (cifOrCode: string | number) => void;
@@ -51,6 +52,7 @@ interface AnalyticsModuleProps {
 type TabType =
   | 'overview'
   | 'portfolio'
+  | 'relationship_value'
   | 'health'
   | 'opportunities'
   | 'service'
@@ -94,12 +96,14 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
   const [productData, setProductData] = useState<any>(null);
   const [trendsData, setTrendsData] = useState<any>(null);
   const [whatChangedData, setWhatChangedData] = useState<any>(null);
+  const [relationshipValueData, setRelationshipValueData] = useState<PortfolioRelationshipValueAnalyticsDTO | null>(null);
 
   // Table search & sort helpers
   const [portfolioSearch, setPortfolioSearch] = useState<string>('');
   const [healthSearch, setHealthSearch] = useState<string>('');
   const [oppSearch, setOppSearch] = useState<string>('');
   const [caseSearch, setCaseSearch] = useState<string>('');
+  const [rvSearch, setRvSearch] = useState<string>('');
 
   const currentFilters = useMemo(() => {
     return {
@@ -170,6 +174,9 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
       } else if (activeTab === 'portfolio') {
         const res = await bankingApi.getRelationshipPortfolio(currentFilters);
         setPortfolioData(res);
+      } else if (activeTab === 'relationship_value') {
+        const res = await bankingApi.getPortfolioRelationshipValue(currentFilters);
+        setRelationshipValueData(res);
       } else if (activeTab === 'health') {
         const res = await bankingApi.getCustomerHealth(currentFilters);
         setHealthData(res);
@@ -585,6 +592,20 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           }`}
         >
           Relationship Portfolio
+        </button>
+
+        <button
+          onClick={() => setActiveTab('relationship_value')}
+          className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+            activeTab === 'relationship_value'
+              ? 'border-cyan-700 text-cyan-800 font-bold'
+              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+          }`}
+        >
+          <span>Relationship Value Intelligence</span>
+          <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 font-bold font-mono">
+            Phase 32
+          </span>
         </button>
 
         <button
@@ -1612,6 +1633,298 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* TAB: RELATIONSHIP VALUE & PORTFOLIO SCENARIO INTELLIGENCE (Phase 32) */}
+          {activeTab === 'relationship_value' && relationshipValueData && (
+            <div className="space-y-6">
+              {/* Executive Summary Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    Total Portfolio TRV
+                  </div>
+                  <div className="text-xl font-bold text-slate-900 mt-1">
+                    {relationshipValueData.totalPortfolioValueFormatted}
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">
+                    Across {relationshipValueData.totalCustomers} governed relationships
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    Portfolio CORE Score
+                  </div>
+                  <div className="text-xl font-bold text-slate-900 mt-1 flex items-center gap-1.5">
+                    <span>{relationshipValueData.overallAverages.avgCoreScore}</span>
+                    <span className="text-xs text-slate-400 font-normal">/ 100</span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">
+                    Deterministic bank health composite
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    Product Depth
+                  </div>
+                  <div className="text-xl font-bold text-slate-900 mt-1">
+                    {relationshipValueData.overallAverages.avgProductDepth}
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">
+                    Active banking facilities / client
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    Engagement Index
+                  </div>
+                  <div className="text-xl font-bold text-slate-900 mt-1">
+                    {relationshipValueData.overallAverages.avgEngagement}
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">
+                    Touchpoint & interaction recency
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    Service Health
+                  </div>
+                  <div className="text-base font-bold text-slate-900 mt-1 flex items-center gap-1.5">
+                    <span className="text-emerald-600">{relationshipValueData.serviceHealthDistribution.good + relationshipValueData.serviceHealthDistribution.excellent} Good</span>
+                    <span className="text-slate-300">|</span>
+                    <span className="text-amber-600">{relationshipValueData.serviceHealthDistribution.fair} Fair</span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">
+                    SLA risk: {relationshipValueData.serviceHealthDistribution.critical} critical
+                  </div>
+                </div>
+              </div>
+
+              {/* Relationship Value Distribution Buckets */}
+              <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                      Relationship Value Distribution Tiers
+                    </h3>
+                    <p className="text-[11px] text-slate-500">
+                      Empirical segmentation based on existing Total Relationship Value (TRV). Zero fabricated monetary projections.
+                    </p>
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
+                    Server-Side Aggregation
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {relationshipValueData.valueDistribution.map((tier, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-3.5 rounded-lg border ${
+                        tier.tier === 'HIGH'
+                          ? 'bg-emerald-50/40 border-emerald-200'
+                          : tier.tier === 'MEDIUM'
+                          ? 'bg-blue-50/40 border-blue-200'
+                          : 'bg-slate-50 border-slate-200'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-slate-900">{tier.label}</span>
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 bg-white rounded border border-slate-200 font-semibold">
+                          {tier.rangeLabel}
+                        </span>
+                      </div>
+                      <div className="text-lg font-bold text-slate-900 mt-2">
+                        {tier.totalValueFormatted}
+                      </div>
+                      <div className="text-xs text-slate-600 mt-0.5">
+                        {tier.customerCount} Customers ({relationshipValueData.totalCustomers > 0 ? Math.round((tier.customerCount / relationshipValueData.totalCustomers) * 100) : 0}%)
+                      </div>
+                      <div className="mt-2.5 pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px] text-slate-600">
+                        <span>Avg CORE: <strong>{tier.avgCoreScore}</strong></span>
+                        <span>Products: <strong>{tier.avgProductDepth}</strong></span>
+                        <span>Engage: <strong>{tier.avgEngagement}</strong></span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Portfolio Segment Comparison (Requirement 19) */}
+              <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs space-y-3">
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                    Portfolio Segment Comparison
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Descriptive aggregate intelligence across customer categories. Purely descriptive metrics without subjective employee rankings.
+                  </p>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs border border-slate-200 rounded">
+                    <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider border-b border-slate-200 text-[11px]">
+                      <tr>
+                        <th className="px-3 py-2 font-semibold">Segment</th>
+                        <th className="px-3 py-2 font-semibold text-center">Customers</th>
+                        <th className="px-3 py-2 font-semibold">Total TRV</th>
+                        <th className="px-3 py-2 font-semibold text-center">Avg CORE</th>
+                        <th className="px-3 py-2 font-semibold text-center">Avg Products</th>
+                        <th className="px-3 py-2 font-semibold text-center">Avg Engagement</th>
+                        <th className="px-3 py-2 font-semibold text-center">Opportunity Coverage</th>
+                        <th className="px-3 py-2 font-semibold">Dominant Health</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {relationshipValueData.segments.map((seg, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50 transition">
+                          <td className="px-3 py-2.5 font-bold text-slate-900">
+                            {seg.segmentLabel}
+                          </td>
+                          <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                            {seg.customerCount}
+                          </td>
+                          <td className="px-3 py-2.5 font-mono font-bold text-slate-900">
+                            {seg.totalValueFormatted}
+                          </td>
+                          <td className="px-3 py-2.5 text-center font-mono font-semibold text-indigo-700">
+                            {seg.avgCoreScore}
+                          </td>
+                          <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                            {seg.avgProductDepth}
+                          </td>
+                          <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                            {seg.avgEngagement}
+                          </td>
+                          <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                            {seg.avgOpportunityCoverage}%
+                          </td>
+                          <td className="px-3 py-2.5">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                              seg.dominantServiceHealth === 'EXCELLENT' || seg.dominantServiceHealth === 'GOOD'
+                                ? 'bg-emerald-100 text-emerald-800'
+                                : 'bg-amber-100 text-amber-800'
+                            }`}>
+                              {seg.dominantServiceHealth}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Customer Drilldown Table (Requirement 18) */}
+              <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                      Customer Relationship Value Drilldown
+                    </h3>
+                    <p className="text-[11px] text-slate-500">
+                      Examine individual client profiles and launch what-if strategy simulations.
+                    </p>
+                  </div>
+                  <div className="relative w-64">
+                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+                    <input
+                      type="text"
+                      placeholder="Search client, code, or RM..."
+                      value={rvSearch}
+                      onChange={(e) => setRvSearch(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded pl-8 pr-3 py-1 text-xs text-slate-800 focus:outline-hidden focus:ring-1 focus:ring-cyan-600"
+                    />
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs border border-slate-200 rounded">
+                    <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider border-b border-slate-200 text-[11px]">
+                      <tr>
+                        <th className="px-3 py-2 font-semibold">Customer</th>
+                        <th className="px-3 py-2 font-semibold">Segment</th>
+                        <th className="px-3 py-2 font-semibold">RM</th>
+                        <th className="px-3 py-2 font-semibold">TRV Footprint</th>
+                        <th className="px-3 py-2 font-semibold text-center">CORE Score</th>
+                        <th className="px-3 py-2 font-semibold text-center">Products</th>
+                        <th className="px-3 py-2 font-semibold text-center">Engagement</th>
+                        <th className="px-3 py-2 font-semibold text-center">Service Health</th>
+                        <th className="px-3 py-2 font-semibold text-center">Momentum</th>
+                        <th className="px-3 py-2 font-semibold text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {relationshipValueData.drilldownList
+                        .filter((c) => {
+                          if (!rvSearch) return true;
+                          const q = rvSearch.toLowerCase();
+                          return (
+                            c.customerName.toLowerCase().includes(q) ||
+                            c.customerCode.toLowerCase().includes(q) ||
+                            c.rmName.toLowerCase().includes(q) ||
+                            c.segment.toLowerCase().includes(q)
+                          );
+                        })
+                        .map((cust, idx) => (
+                          <tr key={idx} className="hover:bg-slate-50 transition">
+                            <td className="px-3 py-2.5">
+                              <div className="font-bold text-slate-900">{cust.customerName}</div>
+                              <div className="text-[10px] text-slate-400 font-mono">{cust.customerCode}</div>
+                            </td>
+                            <td className="px-3 py-2.5 text-slate-600">
+                              {cust.segment.replace(/_/g, ' ')}
+                            </td>
+                            <td className="px-3 py-2.5 text-slate-600">
+                              {cust.rmName}
+                            </td>
+                            <td className="px-3 py-2.5 font-bold font-mono text-slate-900">
+                              {cust.relationshipValueFormatted}
+                            </td>
+                            <td className="px-3 py-2.5 text-center font-bold text-indigo-700">
+                              {cust.coreScore}
+                            </td>
+                            <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                              {cust.productDepth}
+                            </td>
+                            <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                              {cust.engagement}
+                            </td>
+                            <td className="px-3 py-2.5 text-center">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                cust.serviceHealth === 'EXCELLENT' || cust.serviceHealth === 'GOOD'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : 'bg-amber-100 text-amber-800'
+                              }`}>
+                                {cust.serviceHealth}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2.5 text-center">
+                              <span className="text-[11px] font-medium text-slate-700">
+                                {cust.momentum}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2.5 text-right">
+                              <button
+                                onClick={() => {
+                                  if (onNavigateToCustomer) onNavigateToCustomer(cust.customerId);
+                                }}
+                                className="px-2.5 py-1 text-xs bg-cyan-700 hover:bg-cyan-800 text-white rounded font-medium transition"
+                              >
+                                View 360
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           )}
         </>

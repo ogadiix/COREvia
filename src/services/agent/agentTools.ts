@@ -22,6 +22,8 @@ export const AGENT_ALLOWED_READ_ONLY_ACTIONS: readonly AgentReadOnlyActionType[]
   'GET_RELATIONSHIP_GRAPH',
   'GET_DECISION_TRACE',
   'SIMULATE_STRATEGY',
+  'GET_RELATIONSHIP_VALUE_PROFILE',
+  'COMPARE_RELATIONSHIP_VALUE_SCENARIO',
 ] as const;
 
 export const AGENT_ALLOWED_MUTATIONS: readonly AgentMutatingActionType[] = [
@@ -360,6 +362,46 @@ export const AGENT_TOOL_REGISTRY: Record<AgentActionType, AgentToolDefinition> =
     outputSchema: {
       type: 'object',
       properties: { projectedScore: { type: 'number' }, projectedBand: { type: 'string' }, deltas: { type: 'array' } },
+    },
+  },
+
+  GET_RELATIONSHIP_VALUE_PROFILE: {
+    name: 'GET_RELATIONSHIP_VALUE_PROFILE',
+    description: 'Retrieve deterministic multidimensional relationship value snapshot across 10 core dimensions.',
+    isMutation: false,
+    requiredPermission: 'customer:read',
+    resourceType: 'RELATIONSHIP_VALUE',
+    auditAction: 'AGENT_TOOL_CALLED',
+    requiresConfirmation: false,
+    idempotencyRequired: false,
+    inputSchema: {
+      type: 'object',
+      properties: { customerId: { type: ['number', 'string'] } },
+      required: ['customerId'],
+    },
+    outputSchema: {
+      type: 'object',
+      properties: { coreScore: { type: 'number' }, relationshipValueFormatted: { type: 'string' }, dimensions: { type: 'array' } },
+    },
+  },
+
+  COMPARE_RELATIONSHIP_VALUE_SCENARIO: {
+    name: 'COMPARE_RELATIONSHIP_VALUE_SCENARIO',
+    description: 'Compare current relationship profile against simulated strategy scenario across 10 dimensions without mutating live data.',
+    isMutation: false,
+    requiredPermission: 'analytics:read',
+    resourceType: 'RELATIONSHIP_VALUE',
+    auditAction: 'AGENT_TOOL_CALLED',
+    requiresConfirmation: false,
+    idempotencyRequired: false,
+    inputSchema: {
+      type: 'object',
+      properties: { customerId: { type: ['number', 'string'] }, scenarioId: { type: 'string' } },
+      required: ['customerId', 'scenarioId'],
+    },
+    outputSchema: {
+      type: 'object',
+      properties: { baseScore: { type: 'number' }, scenarioScore: { type: 'number' }, dimensions: { type: 'array' } },
     },
   },
 

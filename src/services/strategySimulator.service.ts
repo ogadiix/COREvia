@@ -670,7 +670,7 @@ export class StrategySimulatorService {
     await resourceAuth.authorizeCustomer(user, params.customerId);
 
     const baseSnapshot = await this.getBaseSnapshot(params.customerId, user);
-    const scenarioId = `STR-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${Math.floor(
+    const scenarioId = `STR-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${Date.now().toString(36).slice(-4).toUpperCase()}-${Math.floor(
       100 + Math.random() * 900
     )}`;
 

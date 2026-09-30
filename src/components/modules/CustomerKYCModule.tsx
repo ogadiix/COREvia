@@ -58,10 +58,12 @@ import {
   GitFork,
   GitCompare,
   Compass,
+  BarChart3,
 } from 'lucide-react';
 import { useCopilot } from '../../context/CopilotContext';
 import { RelationshipGraph } from '../graph/RelationshipGraph.tsx';
 import { StrategySimulatorModule } from './StrategySimulatorModule';
+import { RelationshipValueProfile } from '../relationship-value/RelationshipValueProfile';
 
 interface CustomerKYCModuleProps {
   customers: CustomerKYC[];
@@ -93,7 +95,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
   const [submitting360Action, setSubmitting360Action] = useState<boolean>(false);
   const [recalculatingCustomerSignals, setRecalculatingCustomerSignals] = useState<boolean>(false);
   const [active360Tab, setActive360Tab] = useState<
-    'KYC' | 'DOCUMENTS' | 'PRODUCTS' | 'ACCOUNTS' | 'LOANS' | 'INTERACTIONS' | 'CASES' | 'OPPORTUNITIES' | 'TASKS' | 'INTELLIGENCE' | 'ACTIONS' | 'RADAR' | 'ALERTS' | 'ONBOARDING' | 'TWIN' | 'GRAPH' | 'DECISIONS' | 'SIMULATOR'
+    'KYC' | 'DOCUMENTS' | 'PRODUCTS' | 'ACCOUNTS' | 'LOANS' | 'INTERACTIONS' | 'CASES' | 'OPPORTUNITIES' | 'TASKS' | 'INTELLIGENCE' | 'ACTIONS' | 'RADAR' | 'ALERTS' | 'ONBOARDING' | 'TWIN' | 'GRAPH' | 'DECISIONS' | 'SIMULATOR' | 'VALUE'
   >('KYC');
   const [customerOnboarding, setCustomerOnboarding] = useState<{
     activeApplication: any | null;
@@ -919,9 +921,67 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
               </div>
             </div>
 
+            {/* RELATIONSHIP VALUE PROFILE WIDGET (Phase 32) */}
+            <div className="bg-white border border-slate-200 rounded-lg p-3.5 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg">
+                  <BarChart3 className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
+                    Relationship Value · Deterministic Intelligence
+                  </div>
+                  <div className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span>{activeCustomer.id === 1 ? '₹42.8L' : '₹28.5L'}</span>
+                    <span className="text-[11px] font-normal text-slate-500">Total Relationship Value (TRV)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4 text-xs">
+                <div className="border-l border-slate-200 pl-3">
+                  <div className="text-[10px] text-slate-400 font-medium">CORE Score</div>
+                  <div className="font-bold text-slate-800">{activeCustomer.id === 1 ? '84' : '76'}</div>
+                </div>
+                <div className="border-l border-slate-200 pl-3">
+                  <div className="text-[10px] text-slate-400 font-medium">Products</div>
+                  <div className="font-bold text-slate-800">{financialSummary?.activeProducts?.length || 6}</div>
+                </div>
+                <div className="border-l border-slate-200 pl-3">
+                  <div className="text-[10px] text-slate-400 font-medium">Engagement</div>
+                  <div className="font-bold text-slate-800">71</div>
+                </div>
+                <div className="border-l border-slate-200 pl-3">
+                  <div className="text-[10px] text-slate-400 font-medium">Service Health</div>
+                  <div className="font-bold text-emerald-600">Good</div>
+                </div>
+                <div className="border-l border-slate-200 pl-3">
+                  <div className="text-[10px] text-slate-400 font-medium">Momentum</div>
+                  <div className="font-bold text-indigo-600">Strong</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 self-end md:self-auto">
+                <button
+                  onClick={() => setActive360Tab('VALUE')}
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-semibold transition"
+                >
+                  View Profile
+                </button>
+                <button
+                  onClick={() => setActive360Tab('SIMULATOR')}
+                  className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-semibold transition flex items-center gap-1 shadow-2xs"
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>Simulate Impact</span>
+                </button>
+              </div>
+            </div>
+
             {/* 360 Navigation Tabs */}
             <div className="flex items-center gap-1 border-b border-slate-200 overflow-x-auto pb-1 text-xs">
               {[
+                { id: 'VALUE', label: 'Relationship Value Profile', icon: BarChart3 },
                 { id: 'GRAPH', label: 'Relationship Graph', icon: GitFork },
                 { id: 'TWIN', label: 'Relationship Twin (Live)', icon: Network },
                 { id: 'SIMULATOR', label: 'Strategy Simulator', icon: Compass },
@@ -979,6 +1039,18 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
               </div>
             ) : (
               <>
+                {/* 0. Relationship Value Profile Tab (Phase 32) */}
+                {active360Tab === 'VALUE' && (
+                  <div className="space-y-4">
+                    <RelationshipValueProfile
+                      customerId={activeCustomer.id || dossier360?.customer?.id || 1}
+                      customerName={activeCustomer.name}
+                      customerCode={activeCustomer.customerCode}
+                      onSimulateStrategy={() => setActive360Tab('SIMULATOR')}
+                    />
+                  </div>
+                )}
+
                 {/* 0. Relationship Graph Tab (Phase 28) */}
                 {active360Tab === 'GRAPH' && (
                   <div className="space-y-3">

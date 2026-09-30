@@ -2204,3 +2204,47 @@ export const agentPlanStepsRelations = relations(agentPlanSteps, ({ one }) => ({
   }),
 }));
 
+// ====================================================
+// 27. Relationship Value Intelligence (Phase 32)
+// ====================================================
+
+export const relationshipValueSnapshots = pgTable(
+  'relationship_value_snapshots',
+  {
+    id: serial('id').primaryKey(),
+    customerId: integer('customer_id')
+      .references(() => customers.id, { onDelete: 'cascade' })
+      .notNull(),
+    snapshotDate: date('snapshot_date').notNull(),
+    relationshipValue: numeric('relationship_value', { precision: 18, scale: 2 }).notNull().default('0.00'),
+    coreScore: integer('core_score').notNull(),
+    productDepth: integer('product_depth').notNull().default(0),
+    engagement: integer('engagement').notNull().default(0),
+    serviceHealth: text('service_health').notNull().default('GOOD'), // EXCELLENT, GOOD, FAIR, CRITICAL, POOR
+    relationshipMomentum: text('relationship_momentum').notNull().default('STABLE'), // ACCELERATING, STABLE, DECLINING, STRONG, MODERATE, WEAK
+    opportunityCoverage: numeric('opportunity_coverage', { precision: 5, scale: 2 }).notNull().default('0.00'),
+    commitmentHealth: numeric('commitment_health', { precision: 5, scale: 2 }).notNull().default('0.00'),
+    activityHealth: numeric('activity_health', { precision: 5, scale: 2 }).notNull().default('0.00'),
+    relationshipState: text('relationship_state').notNull().default('STABLE'),
+    sourceVersion: text('source_version').notNull().default('1.0'),
+    scenarioId: text('scenario_id'),
+    decisionTraceId: text('decision_trace_id'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    rvCustIdx: index('idx_rv_snapshots_customer_id').on(table.customerId),
+    rvDateIdx: index('idx_rv_snapshots_date').on(table.snapshotDate),
+    rvStateIdx: index('idx_rv_snapshots_state').on(table.relationshipState),
+    rvCreatedAtIdx: index('idx_rv_snapshots_created_at').on(table.createdAt),
+  })
+);
+
+export const relationshipValueSnapshotsRelations = relations(relationshipValueSnapshots, ({ one }) => ({
+  customer: one(customers, {
+    fields: [relationshipValueSnapshots.customerId],
+    references: [customers.id],
+  }),
+}));
+
+

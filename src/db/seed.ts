@@ -986,6 +986,14 @@ export async function seedDatabase() {
     console.error('Failed to seed Agent Plans:', err);
   }
 
+  // Phase 32 Relationship Value Intelligence Seed
+  try {
+    const { seedRelationshipValueData } = await import('./seedRelationshipValue.ts');
+    await seedRelationshipValueData();
+  } catch (err) {
+    console.error('Failed to seed Relationship Value snapshots:', err);
+  }
+
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
 

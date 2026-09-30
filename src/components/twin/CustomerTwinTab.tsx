@@ -30,6 +30,7 @@ import {
 } from '../../types';
 import { formatINR } from '../../data/mockIndianBankingData';
 import { useCopilot } from '../../context/CopilotContext';
+import { RelationshipValueProfile } from '../relationship-value/RelationshipValueProfile';
 
 interface CustomerTwinTabProps {
   customerId: number;
@@ -450,6 +451,18 @@ export const CustomerTwinTab: React.FC<CustomerTwinTabProps> = ({
             </div>
           ))}
         </div>
+      </div>
+
+      {/* 7. RELATIONSHIP VALUE PROFILE (Phase 32) */}
+      <div className="pt-2">
+        <RelationshipValueProfile
+          customerId={customerId}
+          customerName={customerName}
+          customerCode={cifNumber}
+          onSimulateStrategy={() => {
+            if (onNavigateToModule) onNavigateToModule('simulator');
+          }}
+        />
       </div>
     </div>
   );

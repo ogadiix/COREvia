@@ -1400,6 +1400,33 @@ export const bankingApi = {
   async getAgentPlanReport(id: string | number) {
     return await request<{ success: boolean; data: any }>(`/agent/plans/${encodeURIComponent(id)}/report`);
   },
+
+  // ==========================================
+  // PHASE 32: RELATIONSHIP VALUE & PORTFOLIO SCENARIO INTELLIGENCE
+  // ==========================================
+  async getRelationshipValueProfile(customerId: number | string) {
+    return await request<{ success: boolean; data: any }>(`/relationship-value/${encodeURIComponent(customerId)}`);
+  },
+
+  async getRelationshipValueHistory(customerId: number | string) {
+    return await request<{ success: boolean; data: any }>(`/relationship-value/${encodeURIComponent(customerId)}/history`);
+  },
+
+  async compareRelationshipValueScenario(customerId: number | string, scenarioId: string | number) {
+    return await request<{ success: boolean; data: any }>(`/relationship-value/${encodeURIComponent(customerId)}/compare/${encodeURIComponent(scenarioId)}`);
+  },
+
+  async simulateRelationshipValue(customerId: number | string, data: { actions: any[]; name?: string; description?: string }) {
+    return await request<{ success: boolean; data: any }>(`/relationship-value/${encodeURIComponent(customerId)}/simulate`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getPortfolioRelationshipValue(params: Record<string, any> = {}) {
+    const query = new URLSearchParams(params).toString();
+    return await request<{ success: boolean; data: any }>(`/relationship-value/portfolio${query ? `?${query}` : ''}`);
+  },
 };
 
 export const api = bankingApi;

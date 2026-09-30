@@ -30,6 +30,7 @@ import {
   Zap,
   GitFork,
   Compass,
+  BarChart3,
 } from 'lucide-react';
 import {
   RelationshipTwinOverview,
@@ -41,6 +42,7 @@ import {
 import { formatINR } from '../../data/mockIndianBankingData';
 import { useAuth } from '../../context/AuthContext';
 import { useCopilot } from '../../context/CopilotContext';
+import { RelationshipValueProfile } from '../relationship-value/RelationshipValueProfile';
 
 interface RelationshipTwinModuleProps {
   initialCustomerId?: number;
@@ -63,7 +65,7 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   // Active view tab inside Digital Twin
-  const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'snapshots' | 'actions' | 'portfolio'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'value' | 'timeline' | 'snapshots' | 'actions' | 'portfolio'>('overview');
 
   // Modal states
   const [isSnapshotModalOpen, setIsSnapshotModalOpen] = useState(false);
@@ -570,6 +572,21 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
         </button>
 
         <button
+          onClick={() => setActiveTab('value')}
+          className={`px-4 py-2.5 text-xs font-semibold border-b-2 transition flex items-center gap-2 whitespace-nowrap ${
+            activeTab === 'value'
+              ? 'border-violet-500 text-violet-400'
+              : 'border-transparent text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <BarChart3 className="w-4 h-4" />
+          <span>Relationship Value Profile</span>
+          <span className="px-1.5 py-0.2 text-[10px] bg-emerald-900/60 text-emerald-300 rounded font-mono">
+            Phase 32
+          </span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('timeline')}
           className={`px-4 py-2.5 text-xs font-semibold border-b-2 transition flex items-center gap-2 whitespace-nowrap ${
             activeTab === 'timeline'
@@ -626,6 +643,20 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
           <span>Portfolio Twin Health</span>
         </button>
       </div>
+
+      {/* TAB: RELATIONSHIP VALUE PROFILE (Phase 32) */}
+      {activeTab === 'value' && (
+        <div className="space-y-4">
+          <RelationshipValueProfile
+            customerId={selectedCustomerId}
+            customerName={twinData?.customerName}
+            customerCode={twinData?.customerCode}
+            onSimulateStrategy={() => {
+              if (onNavigateToModule) onNavigateToModule('simulator');
+            }}
+          />
+        </div>
+      )}
 
       {/* TAB 1: OVERVIEW & HEALTH PILLARS & BEFORE YOU ACT */}
       {activeTab === 'overview' && (

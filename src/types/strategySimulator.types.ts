@@ -84,6 +84,7 @@ export interface ScenarioIntermediateStep {
 
 export interface StrategySimulationResultDTO {
   scenarioId: string;
+  scenarioName?: string;
   customerId: number;
   customerName: string;
   customerCode: string;

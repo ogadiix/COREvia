@@ -19,6 +19,7 @@ import {
 } from './agentTools.ts';
 import { contextResolver } from './contextResolver.ts';
 import { copilotSecurity } from '../copilot/security.ts';
+import { relationshipValueService } from '../relationshipValue.service.ts';
 import {
   AgentPlanDTO,
   AgentPlanStepDTO,
@@ -252,8 +253,8 @@ export const agentPlanningService = {
         planVersion: 1,
         decisionTraceId: input.decisionTraceId || null,
         scenarioId: input.scenarioId || null,
-        planRationale: `Deterministic multi-step banking workflow targeting: ${sanitizedObjective}`,
-        estimatedEffect: 'Based on deterministic COREvia simulation rules and portfolio impact scoring.',
+        planRationale: input.planRationale || `Deterministic multi-step banking workflow targeting: ${sanitizedObjective}`,
+        estimatedEffect: input.estimatedEffect || 'Based on deterministic COREvia simulation rules and portfolio impact scoring.',
         expiresAt,
       },
       formattedSteps
@@ -602,12 +603,33 @@ export const agentPlanningService = {
       metadata: { source: 'STRATEGY_SIMULATOR', scenarioId },
     });
 
+    // Phase 32: Attach Relationship Value Profile comparison context to agent plan
+    let planRationale: string | undefined = undefined;
+    let estimatedEffect: string | undefined = undefined;
+    if (context.customerId) {
+      try {
+        const rvProfile = await relationshipValueService.getRelationshipValueProfile(
+          context.customerId,
+          String(scenarioId),
+          user,
+          requestId
+        );
+        const improved = rvProfile.dimensions.filter((d) => d.status === 'IMPROVED');
+        planRationale = `Relationship Value Profile Projection: CORE Score ${rvProfile.baseSnapshot.coreScore} → ${rvProfile.scenarioSnapshot?.coreScore || 'N/A'}. Changes: ${improved.map((d) => `${d.label} improved`).join(', ')}. Human approval mandatory prior to execution.`;
+        estimatedEffect = `Service Health: ${rvProfile.baseSnapshot.serviceHealth} → ${rvProfile.scenarioSnapshot?.serviceHealth || 'GOOD'}, Momentum: ${rvProfile.baseSnapshot.relationshipMomentum} → ${rvProfile.scenarioSnapshot?.relationshipMomentum || 'STABLE'}.`;
+      } catch {
+        // Safe fallback if profile evaluation fails
+      }
+    }
+
     // Build standard multi-step recovery plan from simulated actions
     const input: CreateAgentPlanInput = {
       sessionId: session.id,
       title: `Execute Approved Strategy Scenario: ${context.customerName || 'Relationship'}`,
       objective: `Implement strategic simulated improvements for customer ${context.customerName}`,
       scenarioId: String(scenarioId),
+      planRationale,
+      estimatedEffect,
       steps: [
         {
           stepNumber: 1,
