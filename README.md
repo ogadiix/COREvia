@@ -122,6 +122,16 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 - **Unified Interaction Timeline & Visual Relationship Map**: Consolidates interactions across authorized entities preserving original entity attribution, accompanied by an interactive hierarchical tree map and accessible table fallback.
 - **Full Platform Synergy**: Direct integration with Relationship Graph (Phase 28 provenance), Decision Trace (Phase 29), Strategy Simulator (Phase 30 sandbox mode), Controlled Banking Agent (Phase 31 multi-entity recovery plans), and 10 Copilot tools.
 
+### 15. 🛡️ Trust & Governance Center (Phase 35)
+- **Centralized Enterprise Governance Workspace (`/governance`)**: Unified observability and control layer providing compliance users, administrators, and security officers with transparent visibility across AI governance, Agent governance, Decision governance, Data governance, Access governance, Security, Approvals, and Exceptions.
+- **Cryptographic SHA-256 Tamper-Evident Chaining**: Enhanced `audit_logs` table with `previous_hash` and `record_hash` forming an immutable cryptographic audit chain with real-time chain verification (`VERIFIED_IMMUTABLE`).
+- **AI Governance & Zero Secret Exposure**: Safe Gemini configuration metadata monitoring (Model: `gemini-2.5-flash`, Key Status: Configured/Missing) with absolute guarantee that API keys and session secrets are never exposed in responses.
+- **Source Classification Architecture**: Explicitly delineates between `DETERMINISTIC`, `AI_GENERATED`, `HYBRID`, and `SYSTEM_RULE` operations, ensuring rule-based calculations are never misrepresented as "AI decisions".
+- **Governance Exceptions Management**: Full lifecycle tracking (`OPEN` → `UNDER_REVIEW` → `RESOLVED` / `DISMISSED`) with assigned officer workflows, audit mutations, and automatic notifications on high/critical anomalies.
+- **Canonical Intelligence Lineage**: End-to-end provenance graph linking customer master data, interaction records, service tickets, CORE Score, Relationship Intelligence, Next Best Action, Decision Trace, Agent Plan, and human action to the tamper-evident audit trail.
+- **System Health Live Verification**: Real-time evaluation of Express API Gateway, PostgreSQL 16 connection latency via live `SELECT 1` ping, authentication engine, and Gemini configuration.
+- **Copilot Governance Tools (8 Tools)**: Registered controlled inspection tools (`getGovernanceOverview`, `getAuditEvents`, `getAIGovernance`, `getAgentGovernance`, `getSecurityEvents`, `getAccessEvents`, `getGovernanceExceptions`, `getSystemHealth`) strictly respecting server-side RBAC and read-only boundaries.
+
 ---
 
 ## 🏗️ Architecture

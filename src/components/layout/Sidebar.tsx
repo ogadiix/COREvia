@@ -28,6 +28,7 @@ import {
   Compass,
   Cpu,
   Milestone,
+  ShieldCheck,
 } from 'lucide-react';
 import { ModuleType } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -266,6 +267,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           shortcut: 'F8',
           requiredPermission: 'audit:read',
           requiredRoles: ['ADMINISTRATOR', 'BRANCH_MANAGER', 'OPERATIONS', 'ANALYST'],
+        },
+        {
+          id: 'governance',
+          label: 'Trust & Governance',
+          icon: <ShieldCheck className="w-4 h-4 text-emerald-400" />,
+          shortcut: 'F12',
+          requiredRoles: ['ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER'],
         },
       ],
     },

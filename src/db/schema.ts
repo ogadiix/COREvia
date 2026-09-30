@@ -595,12 +595,15 @@ export const auditLogs = pgTable(
     requestId: text('request_id').notNull(),
     outcome: text('outcome').notNull(), // SUCCESS, FAILURE, DENIED
     metadata: text('metadata'), // JSON stringified payload / changes
+    previousHash: text('previous_hash'), // Tamper-evident chaining hash of previous record
+    recordHash: text('record_hash'), // Cryptographic SHA-256 hash of this record
     createdAt: timestamp('created_at').defaultNow().notNull(),
   },
   (table) => ({
     auditActorIdx: index('audit_actor_idx').on(table.actorId),
     auditResourceIdx: index('audit_resource_idx').on(table.resourceType, table.resourceId),
     auditReqIdx: index('audit_request_idx').on(table.requestId),
+    auditHashIdx: index('audit_record_hash_idx').on(table.recordHash),
   })
 );
 
@@ -2529,6 +2532,42 @@ export const relationshipGroupMembersRelations = relations(relationshipGroupMemb
   }),
 }));
 
+// ============================================================================
+// 30. Trust & Governance Center (Phase 35)
+// ============================================================================
 
+export const governanceExceptions = pgTable(
+  'governance_exceptions',
+  {
+    id: serial('id').primaryKey(),
+    exceptionId: text('exception_id').notNull().unique(), // e.g. GEX-2026-00101
+    category: text('category').notNull(), // SECURITY, AUTHORIZATION, AI, AGENT, DATA, AUDIT, CONFIGURATION, INTEGRATION, OPERATIONAL
+    severity: text('severity').notNull(), // INFO, LOW, MEDIUM, HIGH, CRITICAL
+    resourceType: text('resource_type'), // AGENT_PLAN, DECISION_TRACE, CUSTOMER, GROUP, JOURNEY, USER, SYSTEM
+    resourceId: text('resource_id'), // Corresponding resource identifier
+    description: text('description').notNull(),
+    detectedAt: timestamp('detected_at').defaultNow().notNull(),
+    status: text('status').notNull().default('OPEN'), // OPEN, UNDER_REVIEW, RESOLVED, DISMISSED
+    assignedTo: integer('assigned_to').references(() => users.id, { onDelete: 'set null' }),
+    resolvedAt: timestamp('resolved_at'),
+    resolution: text('resolution'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    gexExceptionIdIdx: uniqueIndex('idx_gex_exception_id').on(table.exceptionId),
+    gexStatusIdx: index('idx_gex_status').on(table.status),
+    gexCategoryIdx: index('idx_gex_category').on(table.category),
+    gexSeverityIdx: index('idx_gex_severity').on(table.severity),
+    gexAssignedIdx: index('idx_gex_assigned_to').on(table.assignedTo),
+    gexDetectedIdx: index('idx_gex_detected_at').on(table.detectedAt),
+  })
+);
 
-
+export const governanceExceptionsRelations = relations(governanceExceptions, ({ one }) => ({
+  assignedUser: one(users, {
+    fields: [governanceExceptions.assignedTo],
+    references: [users.id],
+  }),
+}));

@@ -1617,6 +1617,86 @@ export const bankingApi = {
   async getGroupEvidence(id: number | string) {
     return await request<{ success: boolean; data: any[] }>(`/groups/${encodeURIComponent(id)}/evidence`);
   },
+
+  // ==========================================
+  // PHASE 35: TRUST & GOVERNANCE CENTER
+  // ==========================================
+  async getGovernanceOverview() {
+    return await request<{ success: boolean; data: any }>('/governance/overview');
+  },
+
+  async getAuditExplorer(params: Record<string, any> = {}) {
+    const query = new URLSearchParams(params).toString();
+    return await request<{ success: boolean; data: any }>(`/governance/audit${query ? `?${query}` : ''}`);
+  },
+
+  async getAIGovernance() {
+    return await request<{ success: boolean; data: any }>('/governance/ai');
+  },
+
+  async getAgentGovernance() {
+    return await request<{ success: boolean; data: any }>('/governance/agents');
+  },
+
+  async getSecurityGovernance() {
+    return await request<{ success: boolean; data: any }>('/governance/security');
+  },
+
+  async getAccessGovernance() {
+    return await request<{ success: boolean; data: any }>('/governance/access');
+  },
+
+  async getDataGovernance() {
+    return await request<{ success: boolean; data: any }>('/governance/data');
+  },
+
+  async getGovernanceApprovals() {
+    return await request<{ success: boolean; data: any }>('/governance/approvals');
+  },
+
+  async getDecisionGovernance() {
+    return await request<{ success: boolean; data: any }>('/governance/decisions');
+  },
+
+  async getExportGovernance() {
+    return await request<{ success: boolean; data: any }>('/governance/exports');
+  },
+
+  async getSystemHealth() {
+    return await request<{ success: boolean; data: any }>('/governance/health');
+  },
+
+  async getGovernanceExceptions(params: Record<string, any> = {}) {
+    const query = new URLSearchParams(params).toString();
+    return await request<{ success: boolean; data: any }>(`/governance/exceptions${query ? `?${query}` : ''}`);
+  },
+
+  async acknowledgeGovernanceException(id: number | string) {
+    return await request<{ success: boolean; data: any }>(`/governance/exceptions/${id}/acknowledge`, {
+      method: 'POST',
+    });
+  },
+
+  async assignGovernanceException(id: number | string, assignedTo: string) {
+    return await request<{ success: boolean; data: any }>(`/governance/exceptions/${id}/assign`, {
+      method: 'POST',
+      body: JSON.stringify({ assignedTo }),
+    });
+  },
+
+  async resolveGovernanceException(id: number | string, resolution: string) {
+    return await request<{ success: boolean; data: any }>(`/governance/exceptions/${id}/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({ resolution }),
+    });
+  },
+
+  async dismissGovernanceException(id: number | string, reason: string) {
+    return await request<{ success: boolean; data: any }>(`/governance/exceptions/${id}/dismiss`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    });
+  },
 };
 
 export const api = bankingApi;

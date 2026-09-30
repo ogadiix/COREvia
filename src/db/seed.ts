@@ -29,6 +29,14 @@ import {
 export async function seedDatabase() {
   console.log('--- Starting COREvia PostgreSQL Database Seeding ---');
 
+  // Phase 35 DDL: Ensure tamper-evident columns and governance_exceptions table exist
+  try {
+    const { ensureGovernanceTablesExist } = await import('./seedGovernance.ts');
+    await ensureGovernanceTablesExist();
+  } catch (err) {
+    console.error('Failed to ensure governance tables and audit columns exist:', err);
+  }
+
   // 1. Roles
   const [roleBranchHead] = await db
     .insert(roles)
@@ -1008,6 +1016,14 @@ export async function seedDatabase() {
     await seedGroups();
   } catch (err) {
     console.error('Failed to seed Relationship Groups:', err);
+  }
+
+  // Phase 35 Trust & Governance Center Seed
+  try {
+    const { seedGovernanceExceptions } = await import('./seedGovernance.ts');
+    await seedGovernanceExceptions();
+  } catch (err) {
+    console.error('Failed to seed Governance Exceptions:', err);
   }
 
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');

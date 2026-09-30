@@ -24,7 +24,8 @@ export type ModuleType =
   | 'strategy-simulator'
   | 'agent'
   | 'journeys'
-  | 'groups';
+  | 'groups'
+  | 'governance';
 
 export type AccountType = 'SAVINGS' | 'CURRENT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT' | 'SALARY' | 'PREMIUM_SAVINGS';
 

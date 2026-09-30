@@ -31,8 +31,8 @@ import { journeyService } from '../services/journey.service.ts';
 import { groupService } from '../services/group.service.ts';
 import { formatErrorResponse } from '../lib/errors.ts';
 import { db } from '../db/index.ts';
-import { auditLogs, users } from '../db/schema.ts';
-import { desc } from 'drizzle-orm';
+import { auditLogs, users, governanceExceptions } from '../db/schema.ts';
+import { desc, sql } from 'drizzle-orm';
 import { DEV_TEST_PASSWORD } from '../db/seedAuthUsers.ts';
 import { resourceAuth } from '../lib/resourceAuth.ts';
 import { maskAccountNumber, maskPAN } from '../lib/masking.ts';
@@ -1349,7 +1349,27 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       return res.json({ customers: [], accounts: [], loans: [], products: [], onboarding: [], decisions: [], scenarios: [], relationshipSnapshots: [] });
     }
 
-    const [customerResults, accountResults, loanResults, productResults, onboardingResults, decisionResults, scenarioResults, snapshotResults, journeyResults, groupResults] = await Promise.all([
+    const isGovernanceAuthorized = [
+      'ADMINISTRATOR',
+      'COMPLIANCE_OFFICER',
+      'BRANCH_OPS_HEAD',
+      'RELATIONSHIP_MANAGER',
+      'AUDITOR',
+    ].includes(req.user?.role || '');
+
+    const [
+      customerResults,
+      accountResults,
+      loanResults,
+      productResults,
+      onboardingResults,
+      decisionResults,
+      scenarioResults,
+      snapshotResults,
+      journeyResults,
+      groupResults,
+      governanceResults,
+    ] = await Promise.all([
       customerService.listCustomers({
         search: query,
         rmId: req.user?.role === 'RELATIONSHIP_MANAGER' ? req.user.id : undefined,
@@ -1374,6 +1394,30 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       relationshipValueService.searchSnapshots(query, req.user!),
       journeyService.listJourneys({ search: query }, req.user!, req.requestId).catch(() => []),
       groupService.listGroups({ search: query, limit: 5 }, req.user!, req.requestId).catch(() => []),
+      isGovernanceAuthorized
+        ? (async () => {
+            try {
+              const exRes = await db
+                .select()
+                .from(governanceExceptions)
+                .where(
+                  sql`(${governanceExceptions.exceptionId} ILIKE ${'%' + query + '%'} OR ${governanceExceptions.description} ILIKE ${'%' + query + '%'})`
+                )
+                .limit(5);
+              return exRes.map((ex) => ({
+                id: ex.id,
+                exceptionId: ex.exceptionId,
+                category: ex.category,
+                severity: ex.severity,
+                description: ex.description,
+                status: ex.status,
+                detectedAt: ex.detectedAt,
+              }));
+            } catch {
+              return [];
+            }
+          })()
+        : Promise.resolve([]),
     ]);
 
     // Mask PII in returned search records
@@ -1398,6 +1442,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       relationshipSnapshots: snapshotResults,
       journeys: (journeyResults || []).slice(0, 5),
       groups: (groupResults || []).slice(0, 5),
+      governance: governanceResults,
     });
   } catch (err) {
     const { statusCode, body } = formatErrorResponse(err, req.requestId);
@@ -3184,4 +3229,10 @@ apiRouter.use('/journeys', journeyRouter);
 // ==========================================
 import { groupRouter } from './groupRoutes.ts';
 apiRouter.use('/groups', groupRouter);
+
+// ==========================================
+// PHASE 35: TRUST & GOVERNANCE CENTER
+// ==========================================
+import { governanceRouter } from './governanceRoutes.ts';
+apiRouter.use('/governance', governanceRouter);
 

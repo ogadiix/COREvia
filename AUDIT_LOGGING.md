@@ -72,27 +72,69 @@ The Household & Business Group 360 module tracks every access and administrative
 | `GROUP_SCENARIO_CREATED` | Strategy simulator what-if scenario executed on group snapshot | `groupId`, `scenarioType` |
 | `GROUP_AGENT_PLAN_CREATED` | Controlled Banking Agent drafts multi-entity recovery plan | `groupId`, `planId`, `stepCount` |
 
----
+75: ---
+76: 
+77: ## 6. Trust & Governance Audit Events (Phase 35)
+78: 
+79: The Trust & Governance Center introduces comprehensive audit coverage for AI governance, approvals, data access, export tracking, and exceptions:
+80: 
+81: | Event Type | Trigger Condition | Logged Metadata |
+82: |---|---|---|
+83: | `GOVERNANCE_VIEWED` | User accesses `/governance` workspace tab | `tab`, `actorId`, `role` |
+84: | `AI_COPILOT_SESSION_STARTED` | User starts or continues Copilot session | `sessionId`, `actorId`, `customerId` |
+85: | `AGENT_PLAN_CREATED` | Autonomous Banking Agent drafts executable plan | `planId`, `customerId`, `objective`, `stepCount` |
+86: | `AGENT_STEP_COMPLETED` | Execution engine completes an approved plan step | `planId`, `stepId`, `stepTitle`, `outcome` |
+87: | `DATA_EXPORT_REQUESTED` | User initiates file or data export | `exportType`, `actorId`, `role`, `rowCount`, `filterScope` |
+88: | `GOVERNANCE_EXCEPTION_ACKNOWLEDGED` | Staff acknowledges open governance exception | `exceptionId`, `actorId`, `previousStatus`, `newStatus` |
+89: | `GOVERNANCE_EXCEPTION_ASSIGNED` | Exception assigned to designated owner/team | `exceptionId`, `actorId`, `assignedTo` |
+90: | `GOVERNANCE_EXCEPTION_RESOLVED` | Exception marked resolved with justification | `exceptionId`, `actorId`, `resolutionNotes` |
+91: | `GOVERNANCE_EXCEPTION_DISMISSED` | Exception dismissed with compliance reasoning | `exceptionId`, `actorId`, `dismissReason` |
+92: | `AUTHORIZATION_FAILURE` | Denied request or IDOR breach attempt blocked | `path`, `actorId`, `role`, `reason`, `ipAddress` |
+93: 
+94: ---
+95: 
+96: ## 7. Cryptographic Tamper-Evident SHA-256 Audit Chaining
+97: 
+98: In Phase 35, all audit entries are cryptographically chained using SHA-256 hashing to guarantee tamper-evidence:
+99: 
+100: ```typescript
+101: // Record hash computation
+102: const payload = `${previousHash}|${userId}|${action}|${entityType}|${entityId}|${requestId}|${outcome}|${timestamp.toISOString()}`;
+103: const recordHash = crypto.createHash('sha256').update(payload).digest('hex');
+104: ```
+105: 
+106: - **Genesis Hash**: The first record in the audit chain links to `0000000000000000000000000000000000000000000000000000000000000000`.
+107: - **Chain Verification**: The Audit Explorer service provides `verifyChainIntegrity(limit)` which recomputes SHA-256 hashes sequentially across records. Any unauthorized database tampering, row deletion, or payload modification is immediately flagged with `chainValid: false` and the specific broken index.
+108: 
+109: ---
+110: 
+111: ## 8. Audit Record Schema
+112: 
+113: Audit logs are stored in the PostgreSQL `audit_logs` table with the following attributes:
+114: 
+115: - `id`: Auto-incrementing unique sequence identifier.
+116: - `user_id`: Authenticated banking staff ID (or `SYSTEM` for automated engine events).
+117: - `user_role`: System role (`ADMIN`, `MAKER`, `CHECKER`, `OFFICER`, `AUDITOR`, `COMPLIANCE_OFFICER`).
+118: - `action`: Standardized event string (e.g., `AGENT_STEP_COMPLETED`, `DATA_EXPORT_REQUESTED`).
+119: - `entity_type`: Target domain entity (`DECISION_TRACE`, `AGENT_PLAN`, `GOVERNANCE_EXCEPTION`, `CUSTOMER`, `ACCOUNT`).
+120: - `entity_id`: Primary identifier or unique business code.
+121: - `details`: Structured JSON snapshot of event payload, state changes, or reason codes.
+122: - `ip_address`: Originating client IP.
+123: - `user_agent`: Originating browser or internal service agent string.
+124: - `previous_hash`: SHA-256 hash of the immediately preceding audit record.
+125: - `record_hash`: SHA-256 hash of the current record payload.
+126: - `timestamp`: UTC timestamp with microsecond precision.
+127: 
+128: ---
+129: 
+130: ## 9. Immutability & Data Retention Policy
+131: 
+132: 1. **No Mutations or Deletions**: Audit logs have no `UPDATE` or `DELETE` endpoints. Database-level permissions prohibit table modifications by application roles.
+133: 2. **PII Masking**: Sensitive identity values (e.g., full PAN, raw Aadhaar, private contact details) are masked or omitted in audit payloads.
+134: 3. **Export Governance**: File and data exports are tracked with actor, role, dataset, and filter scope, without persisting raw customer records in audit logs.
+135: 4. **Retention Policies**:
+136:    - **Operational Audit Logs**: Retained in primary storage for a configurable period (recommended 7 years for enterprise banking compliance).
+137:    - **Security & Authorization Logs**: Retained for a minimum of 3 years for forensic review.
+138:    - **Governance Exceptions**: Retained indefinitely with full resolution and review history.
+139:    - *Note: Legal and regulatory retention rules require institution-specific legal sign-off; COREvia does not claim generic automatic legal certification.*
 
-## 6. Audit Record Schema
-
-Audit logs are stored in the PostgreSQL `audit_logs` table with the following attributes:
-
-- `id`: Auto-incrementing unique sequence identifier.
-- `user_id`: Authenticated banking staff ID (or `SYSTEM` for automated engine events).
-- `user_role`: System role (`ADMIN`, `MAKER`, `CHECKER`, `OFFICER`, `AUDITOR`).
-- `action`: Standardized event string (e.g., `DECISION_TRACE_ACTION_CONFIRMED`).
-- `entity_type`: Target domain entity (`DECISION_TRACE`, `CUSTOMER`, `ACCOUNT`, `TRANSACTION`).
-- `entity_id`: Primary identifier or unique business code (e.g., `DT-20260928-00101`).
-- `details`: Structured JSON snapshot of event payload, state changes, or reason codes.
-- `ip_address`: Originating client IP.
-- `user_agent`: Originating browser or internal service agent string.
-- `timestamp`: UTC timestamp with microsecond precision.
-
----
-
-## 5. Immutability & Retention Policy
-
-1. **No Mutations or Deletions**: Audit logs have no `UPDATE` or `DELETE` endpoints. Database-level permissions prohibit table modifications by application roles.
-2. **PII Masking**: Sensitive identity values (e.g., full PAN, raw Aadhaar, private contact details) are masked or omitted in audit payloads.
-3. **Regulatory Inspection**: Auditors have read-only access to query audit event streams by date range, customer, actor, or event type.

@@ -21,6 +21,7 @@ import { agentRepository } from '../../repositories/agent.repository.ts';
 import { relationshipValueService } from '../relationshipValue.service.ts';
 import { journeyService } from '../journey.service.ts';
 import { groupService } from '../group.service.ts';
+import { governanceService } from '../governance.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -1030,6 +1031,80 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         groupId: { type: Type.STRING, description: 'Group ID or Code' },
       },
       required: ['groupId'],
+    },
+  },
+  // ==========================================
+  // PHASE 35: TRUST & GOVERNANCE TOOLS
+  // ==========================================
+  {
+    name: 'getGovernanceOverview',
+    description: 'Retrieve enterprise governance overview, status, AI metrics, audit metrics, security events, and active exceptions.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getAuditEvents',
+    description: 'Search and inspect tamper-evident audit logs with actor, module, event, outcome, and cryptographic chain status.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        event: { type: Type.STRING, description: 'Action or event type (e.g. AGENT_STEP_COMPLETED, PERMISSION_DENIED)' },
+        module: { type: Type.STRING, description: 'Target module (e.g. AGENT_PLAN, CUSTOMER_360, GROUP)' },
+        limit: { type: Type.INTEGER, description: 'Maximum number of records to return' },
+      },
+    },
+  },
+  {
+    name: 'getAIGovernance',
+    description: 'Inspect AI governance metrics, model configuration status (without secrets), tool execution counts, and fallback events.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getAgentGovernance',
+    description: 'Inspect Controlled Banking Agent activity, plan approvals, executions, partial completions, and failures.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getSecurityEvents',
+    description: 'Inspect security metrics, failed logins, authorization failures, expired sessions, and rate-limit events.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getAccessEvents',
+    description: 'Inspect data and resource access governance, customer context requests, and group access.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getGovernanceExceptions',
+    description: 'Retrieve open, under review, and resolved governance exceptions across AI, Agent, Security, and Operational domains.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        status: { type: Type.STRING, description: 'Status filter: OPEN, UNDER_REVIEW, RESOLVED, DISMISSED' },
+        severity: { type: Type.STRING, description: 'Severity filter: INFO, LOW, MEDIUM, HIGH, CRITICAL' },
+      },
+    },
+  },
+  {
+    name: 'getSystemHealth',
+    description: 'Retrieve live health status of API Gateway, PostgreSQL Database, Auth Engine, Gemini configuration, and Notification service.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
     },
   },
 ];
@@ -3693,6 +3768,224 @@ export async function executeCopilotTool(
           groupId: group.groupId,
           evidence: evidenceRecords,
           count: evidenceRecords.length,
+        },
+        sources,
+      };
+    }
+
+    // ==========================================
+    // PHASE 35: TRUST & GOVERNANCE TOOL HANDLERS
+    // ==========================================
+    case 'getGovernanceOverview': {
+      const overview = await governanceService.getOverview(ctx.user as any);
+      sources.push({
+        type: 'GOVERNANCE',
+        id: 'GOV-OVERVIEW',
+        label: 'Trust & Governance Center',
+        link: '/governance',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'GOVERNANCE_OVERVIEW',
+            facts: [
+              `System Status: ${overview.systemStatus} (${overview.statusReason})`,
+              `Audit Activity: ${overview.auditActivity.totalEvents} events (${overview.auditActivity.recentEvents24h} in last 24h)`,
+              `AI Activity: ${overview.aiActivity.copilotSessions} Copilot sessions, ${overview.aiActivity.agentPlans} Agent plans`,
+              `Human Approvals Pending: ${overview.humanApprovals.pendingCount}`,
+              `Security Anomalies: ${overview.security.authorizationFailures} authorization failures, ${overview.security.criticalEvents} critical events`,
+              `Governance Exceptions: ${overview.governanceExceptions.open} open (${overview.governanceExceptions.highCritical} high/critical)`,
+            ],
+            limitations: ['Synthetic environment telemetry. Production metrics require institution-specific deployment.'],
+          },
+          overview,
+        },
+        sources,
+      };
+    }
+
+    case 'getAuditEvents': {
+      const auditData = await governanceService.getAuditExplorer(
+        {
+          event: args.event,
+          module: args.module,
+          limit: args.limit || 10,
+        },
+        ctx.user as any
+      );
+      sources.push({
+        type: 'GOVERNANCE',
+        id: 'GOV-AUDIT',
+        label: 'Audit Explorer',
+        link: '/governance?tab=audit',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'AUDIT_TRAIL',
+            facts: [
+              `Total Audit Records: ${auditData.total}`,
+              `Tamper-Evident Status: ${auditData.chainIntegrity.chainStatus} (${auditData.chainIntegrity.recordsChecked} checked)`,
+            ],
+            limitations: ['Append-only cryptographic record hashes prevent retroactive modification.'],
+          },
+          auditData,
+        },
+        sources,
+      };
+    }
+
+    case 'getAIGovernance': {
+      const aiGov = await governanceService.getAIGovernance(ctx.user as any);
+      sources.push({
+        type: 'GOVERNANCE',
+        id: 'GOV-AI',
+        label: 'AI Governance',
+        link: '/governance?tab=ai',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'AI_GOVERNANCE',
+            facts: [
+              `Configured Model: ${aiGov.modelConfig.provider} ${aiGov.modelConfig.model}`,
+              `Model Availability: ${aiGov.modelConfig.status} (Key: ${aiGov.modelConfig.keyConfigured ? 'CONFIGURED' : 'MISSING'})`,
+              `Copilot Sessions: ${aiGov.copilotSessions} | Deterministic: ${aiGov.deterministicResponses} | AI Generated: ${aiGov.aiGeneratedResponses}`,
+              `Fallback Activations: ${aiGov.aiFallbacks.length}`,
+            ],
+            limitations: ['Zero API key exposure enforced. Real credentials never transmitted.'],
+          },
+          aiGov,
+        },
+        sources,
+      };
+    }
+
+    case 'getAgentGovernance': {
+      const agentGov = await governanceService.getAgentGovernance(ctx.user as any);
+      sources.push({
+        type: 'GOVERNANCE',
+        id: 'GOV-AGENT',
+        label: 'Agent Governance',
+        link: '/governance?tab=agents',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'AGENT_GOVERNANCE',
+            facts: [
+              `Plans Created: ${agentGov.plansCreated} | Approved: ${agentGov.approved} | Completed: ${agentGov.completed}`,
+              `Rejected: ${agentGov.rejected} | Failed: ${agentGov.failed} | Expired: ${agentGov.expired}`,
+            ],
+            limitations: ['All agent plans operate strictly under bounded Maker-Checker human approval.'],
+          },
+          agentGov,
+        },
+        sources,
+      };
+    }
+
+    case 'getSecurityEvents': {
+      const secGov = await governanceService.getSecurityGovernance(ctx.user as any);
+      sources.push({
+        type: 'GOVERNANCE',
+        id: 'GOV-SECURITY',
+        label: 'Security Center',
+        link: '/governance?tab=security',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'SECURITY_GOVERNANCE',
+            facts: [
+              `Authorization Failures: ${secGov.authorizationFailures} | Failed Logins: ${secGov.failedLogins}`,
+              `Rate Limit Events: ${secGov.rateLimitEvents} | Active Sessions: ${secGov.activeSessionsCount}`,
+            ],
+            limitations: ['Monitored under neutral terminology without biased threat profiling.'],
+          },
+          secGov,
+        },
+        sources,
+      };
+    }
+
+    case 'getAccessEvents': {
+      const accessGov = await governanceService.getAccessGovernance(ctx.user as any);
+      sources.push({
+        type: 'GOVERNANCE',
+        id: 'GOV-ACCESS',
+        label: 'Access Governance',
+        link: '/governance?tab=access',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'ACCESS_GOVERNANCE',
+            facts: [
+              `Total Access Events 24h: ${accessGov.totalEvents}`,
+              `Logins: ${accessGov.loginEvents} | Logouts: ${accessGov.logoutEvents}`,
+              `Authorization Failures: ${accessGov.authorizationFailures}`,
+            ],
+            limitations: ['Access logged per resource authorization boundaries.'],
+          },
+          accessGov,
+        },
+        sources,
+      };
+    }
+
+    case 'getGovernanceExceptions': {
+      const exceptions = await governanceService.getExceptions(
+        {
+          status: args.status,
+          severity: args.severity,
+          limit: 10,
+        },
+        ctx.user as any
+      );
+      sources.push({
+        type: 'GOVERNANCE',
+        id: 'GOV-EXCEPTIONS',
+        label: 'Governance Exceptions',
+        link: '/governance?tab=exceptions',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'GOVERNANCE_EXCEPTIONS',
+            facts: [
+              `Open Exceptions Total: ${exceptions.total}`,
+              `Items Retrieved: ${exceptions.items.length}`,
+            ],
+            limitations: ['Human investigators retain full authority to acknowledge, assign, resolve, or dismiss.'],
+          },
+          exceptions,
+        },
+        sources,
+      };
+    }
+
+    case 'getSystemHealth': {
+      const health = await governanceService.getSystemHealth(ctx.user as any);
+      sources.push({
+        type: 'GOVERNANCE',
+        id: 'GOV-HEALTH',
+        label: 'System Health',
+        link: '/governance?tab=health',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'SYSTEM_HEALTH',
+            facts: [
+              `Overall Status: ${health.overall}`,
+              `PostgreSQL Database: ${health.services.database.status} (latency: ${health.services.database.latencyMs}ms)`,
+              `API Gateway: ${health.services.api.status}`,
+              `Gemini Engine: ${health.services.gemini.status}`,
+            ],
+            limitations: ['Evaluated via real database pings and environment checks.'],
+          },
+          health,
         },
         sources,
       };

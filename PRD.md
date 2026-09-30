@@ -31,5 +31,33 @@ Build a governed group relationship intelligence workspace answering:
 ### 1.4 Critical Non-Functional & Security Requirements
 - **Mandatory Dual-Level Authorization Invariant**: Group access never implies access to member details. Officers without assignment to a member receive masked details and excluded financial totals.
 - **No Single Fake "Group CORE Score"**: CORE Score is an individual metric. Group profile presents distribution and averages.
-- **No Fake Financial Aggregation**: Relationship values are strictly computed from valid, authorized records or reported as `Unavailable`.
-- **Zero Autonomous Financial Mutations**: High-impact actions require human-in-the-loop review and confirmation.
+34: - **No Fake Financial Aggregation**: Relationship values are strictly computed from valid, authorized records or reported as `Unavailable`.
+35: - **Zero Autonomous Financial Mutations**: High-impact actions require human-in-the-loop review and confirmation.
+36: 
+37: ---
+38: 
+39: ## 2. Phase 35: Trust & Governance Center
+40: 
+41: ### 2.1 Objective
+42: Establish a centralized enterprise governance workspace (`/governance`) answering:
+43: > "WHO? WHAT? WHEN? WHY? WHICH DATA? WHICH ENGINE? WHICH TOOL? WHICH PERMISSION? WHICH APPROVAL? WHICH RESULT?"
+44: For all meaningful actions, AI inferences, agent plans, and security events across COREvia.
+45: 
+46: ### 2.2 Core Modules & Workspaces
+47: 1. **Governance Overview**: Enterprise health status (`OPERATIONAL`, `ATTENTION_REQUIRED`, `CRITICAL`), audit statistics, AI/Copilot sessions, agent plan outcomes, security alerts, and open exceptions.
+48: 2. **Audit Explorer**: Searchable, filterable audit records with SHA-256 cryptographic tamper-evident chaining (`previousHash`, `recordHash`) and automated chain integrity verification.
+49: 3. **AI Governance**: Visibility into AI Copilot sessions, tool invocations, safe Gemini configuration status, AI fallback tracking, and mandatory AI Source Classification (`DETERMINISTIC`, `AI_GENERATED`, `HYBRID`, `SYSTEM_RULE`).
+50: 4. **Agent Governance**: Controlled Banking Agent plan lifecycle tracking (plans drafted, approved, rejected, completed, partially completed, failed, expired) with step-level audit trails.
+51: 5. **Access & Security Governance**: Neutral monitoring of authorization denials, repeated failures, active sessions, expired tokens, and IDOR prevention events.
+52: 6. **Data Governance & Lineage**: Visual data lineage tracking intelligence flow from raw customer records through CORE Score, Next Best Action, Decision Trace, Agent Plan, Action, to Audit.
+53: 7. **Approval Center**: Unified Maker-Checker dual control across agent plans, journey escalations, group ownership transfers, and sensitive operations.
+54: 8. **Export Activity Tracking**: Lightweight logging of file and report exports (`DATA_EXPORT_REQUESTED`) capturing actor, role, dataset, and filter scope.
+55: 9. **System Health**: Genuine live PostgreSQL database latency ping, Gemini availability, authentication health, notifications, and search subsystem checks.
+56: 10. **Governance Exceptions**: Managed exception workflow (`governance_exceptions` table) across categories (`SECURITY`, `AUTHORIZATION`, `AI`, `AGENT`, `DATA`, `AUDIT`, `CONFIGURATION`, `INTEGRATION`, `OPERATIONAL`) with assignment, acknowledgment, resolution, and dismissal.
+57: 
+58: ### 2.3 Non-Functional & Regulatory Invariants
+59: - **Zero Secret Exposure**: Model API keys, passwords, and tokens are strictly masked (`CONFIGURED` / `MISSING`).
+60: - **No Meaningless "Trust Scores"**: System condition is derived from real metrics, never an arbitrary score.
+61: - **No False Certification Claims**: Strictly avoids claiming actual RBI, ISO, or SOC compliance unless technically verified by accredited auditors.
+62: - **Controlled AI Agent Security Boundary**: AI agents remain strictly read-only within the Governance Center and cannot resolve exceptions or modify system configuration.
+

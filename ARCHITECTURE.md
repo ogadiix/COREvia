@@ -223,6 +223,49 @@ When a banker decides to execute a simulated strategy, the action transitions ac
 - **Decision Trace (Phase 29)**: Traces group prioritization evidence linking member score shifts, stalled commercial opportunities, and open service tickets.
 - **Strategy Simulator (Phase 30)**: Executes what-if counterfactual scenarios on authorized snapshots without mutating production databases.
 - **Controlled Banking Agent (Phase 31)**: Generates multi-entity group recovery plans (`proposeGroupRecovery`) requiring explicit human authorization.
-- **Copilot (10 Tools)**: Exposes classified tools (`getRelationshipGroups`, `getRelationshipGroup`, `getGroupMembers`, `getGroupProfile`, `getGroupTimeline`, `getGroupSignals`, `getGroupJourneys`, `getGroupOpportunities`, `getGroupServiceCases`, `getGroupEvidence`) adhering to dual authorization.
+227: - **Copilot (10 Tools)**: Exposes classified tools (`getRelationshipGroups`, `getRelationshipGroup`, `getGroupMembers`, `getGroupProfile`, `getGroupTimeline`, `getGroupSignals`, `getGroupJourneys`, `getGroupOpportunities`, `getGroupServiceCases`, `getGroupEvidence`) adhering to dual authorization.
+228: 
+229: ---
+230: 
+231: ## 12. Trust & Governance Center Architecture (Phase 35)
+232: 
+233: The Trust & Governance Center (`/governance`) operates as an enterprise observability, verification, and exception management layer over existing core systems. It does not replace or parallelize existing security, audit, or execution engines.
+234: 
+235: ### 12.1 Governance Topology
+236: 
+237: ```text
+238: ┌──────────────────────────────────────────────────────────────────────────┐
+239: │                        COREvia OPERATIONAL STACK                         │
+240: │                                                                          │
+241: │  USER ──> AUTH ──> RBAC ──> RESOURCE AUTH ──> OPERATIONS ──> AUDIT LOGS │
+242: │                                                                    │     │
+243: │  DATA ──> INTELLIGENCE ──> DECISION TRACE ──> SIMULATOR ──> AGENT  │     │
+244: │                                 │               │           │      │     │
+245: │                                 ▼               ▼           ▼      │     │
+246: │                             HUMAN APPROVAL (Maker-Checker)         │     │
+247: │                                         │                          │     │
+248: │                                         ▼                          ▼     │
+249: │                                     EXECUTION ──────────────> AUDIT LOGS │
+250: └─────────────────────────────────────────────┬───────────────────────┬────┘
+251:                                               │                       │
+252:                                               ▼                       ▼
+253: ┌──────────────────────────────────────────────────────────────────────────┐
+254: │                     TRUST & GOVERNANCE CENTER (OBSERVABILITY)            │
+255: │                                                                          │
+256: │   [1] Overview        [2] Audit Explorer     [3] AI Governance           │
+257: │   [4] Agent Gov       [5] Access Gov         [6] Security Center         │
+258: │   [7] Data & Lineage  [8] Approvals          [9] Decision Trace          │
+259: │   [10] Export Activity [11] System Health    [12] Exceptions Workflow    │
+260: └──────────────────────────────────────────────────────────────────────────┘
+261: ```
+262: 
+263: ### 12.2 Architectural Principles
+264: 1. **Zero Secondary Engine**: The Governance Center observes, aggregates, and validates existing tables (`audit_logs`, `security_events`, `agent_plans`, `decision_traces`, `journeys`, `notifications`). It does NOT replicate audit or execution pipelines.
+265: 2. **Tamper-Evident SHA-256 Audit Chain**: Every audit record links to the preceding record via `previous_hash` and generates `record_hash`. Verification checks ensure mathematical immutability without claiming physical database append-only media.
+266: 3. **AI Source Classification**: Distinguishes `DETERMINISTIC` rules from `AI_GENERATED` narratives, `HYBRID` intelligence, and `SYSTEM_RULE` automation.
+267: 4. **Safe Metadata Disclosure**: System configuration endpoints completely scrub secrets, tokens, and credentials. Model status is exposed only as `AVAILABLE` / `NOT_CONFIGURED` with `keyConfigured: boolean`.
+268: 5. **Live Health Verification**: Verifies PostgreSQL connection latency with a genuine `SELECT 1` ping. Never fakes health statuses.
+269: 6. **Controlled AI Read-Only Boundary**: Copilot tools and autonomous agents can inspect governance telemetry but cannot mutate governance settings or resolve exceptions.
+
 
 

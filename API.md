@@ -336,7 +336,94 @@ All endpoints enforce dual authorization (Group Authorization + Per-Member Resou
 - **`GET /api/groups/:id/evidence`**: Audited relationship evidence with provenance documents and timestamps.
 - **`GET /api/groups/:id/journeys`**: Active, blocked, and completed Phase 33 journeys for authorized members.
 - **`GET /api/groups/:id/opportunities`**: Pipeline opportunities for authorized entities.
-- **`GET /api/groups/:id/service`**: Service desk tickets across group members.
-- **`GET /api/groups/:id/signals`**: Phase 28/29 Signal Center alerts attached to authorized entities.
+339: - **`GET /api/groups/:id/service`**: Service desk tickets across group members.
+340: - **`GET /api/groups/:id/signals`**: Phase 28/29 Signal Center alerts attached to authorized entities.
+341: 
+342: ---
+343: 
+344: ## 5. Trust & Governance Center API Specification (Phase 35)
+345: 
+346: ### Base URL
+347: `/api/governance`
+348: 
+349: ### 5.1 Enterprise Governance Overview
+350: - **Route**: `GET /api/governance/overview`
+351: - **RBAC**: Requires `GOVERNANCE_VIEW`
+352: - **Response**: `GovernanceOverviewDTO` with live `systemStatus` (`OPERATIONAL`, `ATTENTION_REQUIRED`, `CRITICAL`), audit event counts, AI/Copilot session counts, agent plans, pending approvals, security events, data requests, open exceptions, and model config (with secret masked).
+353: 
+354: ### 5.2 Audit Explorer & Tamper-Evident Verification
+355: - **Route**: `GET /api/governance/audit`
+356: - **Query Params**: `actorId`, `role`, `action`, `module`, `customerId`, `groupId`, `severity`, `limit`, `offset`, `verifyChain` (`true`/`false`)
+357: - **RBAC**: Requires `GOVERNANCE_AUDIT_VIEW`
+358: - **Response**: Paginated audit events with `previousHash`, `recordHash`, and optional `chainIntegrity` verification (`chainValid: boolean`, `verifiedCount: number`).
+359: 
+360: ### 5.3 Single Audit Record Details
+361: - **Route**: `GET /api/governance/audit/:id`
+362: - **RBAC**: Requires `GOVERNANCE_AUDIT_VIEW`
+363: - **Response**: Granular audit record with full authorization context, related decision trace, related agent plan, related journey, and related group.
+364: 
+365: ### 5.4 AI Governance & Source Classification
+366: - **Route**: `GET /api/governance/ai`
+367: - **RBAC**: Requires `GOVERNANCE_AI_VIEW`
+368: - **Response**: `AIGovernanceDTO` with Copilot session counts, tool call telemetry, source classification breakdown (`DETERMINISTIC`, `AI_GENERATED`, `HYBRID`, `SYSTEM_RULE`), mutation proposals, fallback telemetry, and safe Gemini configuration.
+369: 
+370: ### 5.5 Agent Governance
+371: - **Route**: `GET /api/governance/agents`
+372: - **RBAC**: Requires `GOVERNANCE_AGENT_VIEW` (scoped by user portfolio)
+373: - **Response**: `AgentGovernanceDTO` with agent activity metrics (created, approved, rejected, completed, partial, failed, expired) and recent plans with step status details.
+374: 
+375: ### 5.6 Access Governance
+376: - **Route**: `GET /api/governance/access`
+377: - **RBAC**: Requires `GOVERNANCE_VIEW`
+378: - **Response**: `AccessGovernanceDTO` with login/logout events, authorization failures, customer/group access logs, and administrative actions.
+379: 
+380: ### 5.7 Security Center & Active Sessions
+381: - **Route**: `GET /api/governance/security`
+382: - **RBAC**: Requires `GOVERNANCE_SECURITY_VIEW` (Admin, Compliance)
+383: - **Response**: `SecurityGovernanceDTO` with failed login counts, authorization failures, expired sessions, active sessions, and neutral security configuration warnings.
+384: 
+385: ### 5.8 Data Governance & Lineage
+386: - **Route**: `GET /api/governance/data`
+387: - **RBAC**: Requires `GOVERNANCE_DATA_VIEW`
+388: - **Response**: `DataGovernanceDTO` with context access events, search access, decision evidence queries, and lineage representation.
+389: 
+390: ### 5.9 Intelligence Data Lineage Graph
+391: - **Route**: `GET /api/governance/lineage`
+392: - **RBAC**: Requires `GOVERNANCE_DATA_VIEW`
+393: - **Response**: Graph nodes (`CUSTOMER RECORD` → `INTERACTION DATA` → `SERVICE DATA` → `CORE SCORE` → `RELATIONSHIP INTELLIGENCE` → `NEXT BEST ACTION` → `DECISION TRACE` → `AGENT PLAN` → `ACTION` → `AUDIT`) with edges and node classifications (`SOURCE`, `DERIVED`, `SIMULATED`, `AI_EXPLANATION`, `HUMAN_ACTION`).
+394: 
+395: ### 5.10 Approval Center
+396: - **Route**: `GET /api/governance/approvals`
+397: - **RBAC**: Requires `GOVERNANCE_VIEW`
+398: - **Response**: `ApprovalCenterDTO` with pending approvals across agent plans, journey escalations, group ownership transfers, and sensitive operations.
+399: 
+400: ### 5.11 Decision Governance
+401: - **Route**: `GET /api/governance/decisions`
+402: - **RBAC**: Requires `GOVERNANCE_VIEW`
+403: - **Response**: `DecisionGovernanceDTO` with Decision Trace count, evidence availability, source engine distribution, decision modes, and human review stats.
+404: 
+405: ### 5.12 Export Activity Tracking
+406: - **Route**: `GET /api/governance/exports`
+407: - **RBAC**: Requires `GOVERNANCE_EXPORT_VIEW`
+408: - **Response**: `ExportGovernanceDTO` with lightweight export logs, data exfiltration alerts, actor, dataset, and filter scope.
+409: 
+410: ### 5.13 System Health
+411: - **Route**: `GET /api/governance/health`
+412: - **RBAC**: Requires `GOVERNANCE_VIEW`
+413: - **Response**: `SystemHealthDTO` with genuine live PostgreSQL latency test, Gemini connectivity, authentication status, notifications, and search status (`HEALTHY`, `DEGRADED`, `UNAVAILABLE`, `NOT_CONFIGURED`).
+414: 
+415: ### 5.14 Governance Exceptions List
+416: - **Route**: `GET /api/governance/exceptions`
+417: - **Query Params**: `status`, `severity`, `category`, `limit`, `offset`
+418: - **RBAC**: Requires `GOVERNANCE_VIEW`
+419: - **Response**: Paginated list of `GovernanceExceptionDTO` records.
+420: 
+421: ### 5.15 Governance Exception Lifecycle Mutations
+422: - **`POST /api/governance/exceptions/:id/acknowledge`**: Mark exception `UNDER_REVIEW`.
+423: - **`POST /api/governance/exceptions/:id/assign`**: Body `{ "assignedTo": "SEC-OPS-1" }`. Emits notification and audit event.
+424: - **`POST /api/governance/exceptions/:id/resolve`**: Body `{ "resolution": "..." }`. Marks exception `RESOLVED`.
+425: - **`POST /api/governance/exceptions/:id/dismiss`**: Body `{ "reason": "..." }`. Marks exception `DISMISSED`.
+426: - **RBAC**: Requires `GOVERNANCE_EXCEPTION_MANAGE` (Admin, Compliance). Emits audit log for every mutation.
+
 
 

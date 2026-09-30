@@ -57,14 +57,32 @@ if (baseScenario.customerId !== targetScenario.customerId) {
    - Financial relationship values and CORE scores are nulled.
    - Their financial metrics are excluded from group relationship value aggregation.
    - Cross-customer opportunities and service tickets are strictly filtered from nested responses.
-3. **Forged Membership & Relationship Validation**: Membership addition validates actual customer entity existence in PostgreSQL (`404 Customer Not Found`) and enforces a strict allowlist of domain relationship types (`HOUSEHOLD_MEMBER`, `SPOUSE`, `DIRECTOR`, etc.). Fabricated types trigger `400 Bad Request`.
+60: 3. **Forged Membership & Relationship Validation**: Membership addition validates actual customer entity existence in PostgreSQL (`404 Customer Not Found`) and enforces a strict allowlist of domain relationship types (`HOUSEHOLD_MEMBER`, `SPOUSE`, `DIRECTOR`, etc.). Fabricated types trigger `400 Bad Request`.
+61: 
+62: ### 2.6 Trust & Governance Center Security & Integrity (Phase 35)
+63: 1. **Zero Secret Exposure**:
+64:    - Model configurations, database connection strings, session secrets, and credentials are NEVER displayed in API responses or user interfaces.
+65:    - `GEMINI_API_KEY` status is reflected strictly as a boolean `keyConfigured: true` / `"Configured"` or `"Missing"`.
+66: 2. **Tamper-Evident SHA-256 Audit Chaining**:
+67:    - Every audit log entry records `previousHash` and `recordHash` computed over `sha256(previousHash|actorId|action|resourceType|resourceId|requestId|outcome|timestamp)`.
+68:    - Genesis hash begins at `0000000000000000000000000000000000000000000000000000000000000000`.
+69:    - Audit logs are strictly append-only; modification or deletion attempts break the cryptographic verification chain.
+70: 3. **Neutral, Non-Accusatory Authorization Monitoring**:
+71:    - Access failures and denied requests are recorded with neutral operational terminology (`"Authorization failure"`, `"Repeated authorization failures"`, `"Requires review"`).
+72:    - Subjective labels such as "malicious user" or arbitrary "Trust Scores" are strictly prohibited.
+73: 4. **Role Scoping & Exception Mutation Dual Control**:
+74:    - Governance workspaces enforce strict RBAC (`ADMINISTRATOR`, `COMPLIANCE_OFFICER`, `BRANCH_OPS_HEAD`, `RELATIONSHIP_MANAGER`, `AUDITOR`).
+75:    - Copilot governance tools are blocked for unauthorized operational roles (`TELLER` receives `403 Forbidden`).
+76:    - Controlled AI Agents are strictly read-only and barred from mutating governance configurations, resolving exceptions, or modifying authorization rules.
+77: 
+78: ---
+79: 
+80: ## 3. Defense-in-Depth API Safeguards
+81: 
+82: 1. **CSRF Mitigation**: Anti-CSRF double-submit cookies and custom header tokens protect state-changing POST/PUT/DELETE operations.
+83: 2. **Strict Transport Security & Headers**: `Helmet` configures `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and robust Content Security Policies (CSP).
+84: 3. **Payload Sanitization & Size Limits**: JSON payloads are capped to 1MB to prevent memory exhaustion attacks.
+85: 4. **Rate Limiting**: AI Copilot endpoints are bounded to 30 requests per minute per IP to mitigate Denial-of-Wallet and API abuse.
+86: 5. **Zero Secrets in Source Control**: `GEMINI_API_KEY`, `SESSION_SECRET`, and `DATABASE_URL` reside solely in server environment variables.
+87: 6. **Export Governance & Non-Exfiltration**: Data export operations generate immutable audit records (`DATA_EXPORT_REQUESTED`) capturing requesting actor, role, dataset, filter scope, and timestamp, without persisting raw customer payloads in audit storage.
 
----
-
-## 3. Defense-in-Depth API Safeguards
-
-1. **CSRF Mitigation**: Anti-CSRF double-submit cookies and custom header tokens protect state-changing POST/PUT/DELETE operations.
-2. **Strict Transport Security & Headers**: `Helmet` configures `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and robust Content Security Policies (CSP).
-3. **Payload Sanitization & Size Limits**: JSON payloads are capped to 1MB to prevent memory exhaustion attacks.
-4. **Rate Limiting**: AI Copilot endpoints are bounded to 30 requests per minute per IP to mitigate Denial-of-Wallet and API abuse.
-5. **Zero Secrets in Source Control**: `GEMINI_API_KEY`, `SESSION_SECRET`, and `DATABASE_URL` reside solely in server environment variables.

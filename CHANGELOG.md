@@ -1,5 +1,22 @@
 # Changelog
 
+## [Phase 35] - Trust & Governance Center
+- **Enterprise Governance Workspace (`/governance`)**: Centralized enterprise governance and observability workspace providing authorized administrators, compliance users, security officers, and branch managers with comprehensive visibility into AI, Agent, Decision, Data, and Security envelopes.
+- **Observability Invariants & Principles**: Answers WHO, WHAT, WHEN, WHY, WHICH DATA, WHICH ENGINE, WHICH TOOL, WHICH PERMISSION, WHICH APPROVAL, and WHICH RESULT for meaningful bank operations. Eliminates arbitrary fake "Trust Scores" in favor of genuine condition-based statuses (`Operational`, `Attention Required`, `Critical`).
+- **Cryptographic SHA-256 Tamper-Evident Chaining**: Enhanced PostgreSQL `audit_logs` table with `previous_hash` and `record_hash` columns. Computes immutable cryptographic hash chains over key fields and prior hashes; includes real-time chain integrity verification (`VERIFIED_IMMUTABLE`).
+- **AI Governance & Zero Secret Leakage**: Tracks Copilot sessions, tool call breakdowns, deterministic vs. generative response classifications, and model configuration metadata (Provider: Google Gemini, Model: `gemini-2.5-flash`, Key Status: Configured/Missing). Strict guarantee: `GEMINI_API_KEY` and credentials are never exposed in responses or source code.
+- **AI Fallback Telemetry**: Monitors latency and transient disconnect failovers where Copilot automatically transitions to institutional rule engines without leaking sensitive prompt contents.
+- **Controlled Banking Agent Governance**: Comprehensive metrics across plans created, approved, rejected, completed, partially completed, failed, and expired, with full provenance linking back to Decision Trace and Scenario Simulation.
+- **Approval Governance Center**: Consolidated review center tracking pending human approvals across Agent Plans, Sensitive Operations, and Group Ownership transfers under strict Maker-Checker dual control.
+- **Data Governance & Canonical Intelligence Lineage**: End-to-end provenance graph linking customer master data, interaction records, service tickets, CORE Score, Relationship Intelligence, Next Best Action, Decision Trace, Agent Plan, and human action to the tamper-evident audit trail.
+- **Access & Security Governance**: Neutral monitoring of login/logout telemetry, resource context lookups, and authorization failures without biased profiling.
+- **Governance Exceptions Management**: Added Section 30 PostgreSQL table `governance_exceptions` with full lifecycle workflow: Detection → Exception → Assignment → Investigation → Resolution / Dismissal with mandatory audit logging and notifications.
+- **System Health Live Verification**: Real-time health checks evaluating Express API Gateway, PostgreSQL 16 connection latency via live `SELECT 1` ping, authentication engine, and Gemini configuration.
+- **Lightweight Export Governance**: Real-time auditing of portfolio data exports without storing full file payloads in audit logs.
+- **Copilot Integration (8 Governed Tools)**: Registered `getGovernanceOverview`, `getAuditEvents`, `getAIGovernance`, `getAgentGovernance`, `getSecurityEvents`, `getAccessEvents`, `getGovernanceExceptions`, `getSystemHealth` with server-side RBAC guards and fact/evidence classification.
+- **Global Search & Institutional Clarity UI**: Responsive multi-panel desktop and mobile workspace across 1440px to 375px; global search indexing for exception codes, audit request IDs, and plan references.
+- **Automated Verification**: Implemented 47 automated integration and security tests in Suite 10; all 225 platform tests across all 10 suites pass 100% in 2.09s.
+
 ## [Phase 34] - Household & Business Group 360
 - **Governed Group Relationship Intelligence Layer**: Unified enterprise workspace and API suite answering how relationship groups connect to COREvia, tracking multidimensional group relationship profiles and individual member contributions across `HOUSEHOLD`, `BUSINESS`, and `BUSINESS_GROUP`.
 - **Relational Domain Schema**: Added Section 29 PostgreSQL tables (`relationship_groups`, `relationship_group_members`) with foreign keys, cascading deletions, and indexes on `group_id`, `relationship_manager_id`, `status`, `entity_type`, and `entity_id`.

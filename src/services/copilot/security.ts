@@ -133,7 +133,55 @@ export const copilotSecurity = {
       }
     }
 
-    // 2. Customer Scoping checks
+    // 2. Governance tools RBAC checks (Phase 35)
+    const governanceTools = [
+      'getGovernanceOverview',
+      'getAuditEvents',
+      'getAIGovernance',
+      'getAgentGovernance',
+      'getSecurityEvents',
+      'getAccessEvents',
+      'getGovernanceExceptions',
+      'getSystemHealth',
+    ];
+
+    if (governanceTools.includes(toolName)) {
+      const allowedRoles = ['ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR'];
+      const isAllowed = allowedRoles.includes(user.role) || user.permissions?.includes('admin:all');
+
+      if (!isAllowed) {
+        await auditRepository.createLog({
+          actorId: user.employeeId,
+          actorName: user.name,
+          action: 'COPILOT_TOOL_UNAUTHORIZED',
+          resourceType: 'COPILOT_GOVERNANCE_TOOL',
+          resourceId: toolName,
+          requestId,
+          outcome: 'DENIED',
+          metadata: { reason: 'UNAUTHORIZED_GOVERNANCE_ACCESS', userRole: user.role },
+        });
+
+        throw new BankingError(
+          'FORBIDDEN',
+          `Role '${user.role}' is not authorized to query enterprise governance via Copilot.`,
+          403
+        );
+      }
+
+      // Security events tool requires elevated administrative or compliance role
+      if (toolName === 'getSecurityEvents') {
+        const securityRoles = ['ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD'];
+        if (!securityRoles.includes(user.role)) {
+          throw new BankingError(
+            'FORBIDDEN',
+            `Access to security governance events requires administrative or compliance privileges.`,
+            403
+          );
+        }
+      }
+    }
+
+    // 3. Customer Scoping checks
     if (args?.customerId) {
       await resourceAuth.authorizeCustomer(user, args.customerId, 'COPILOT_TOOL', requestId);
     } else if (args?.entityId && args?.entityType === 'CUSTOMER') {

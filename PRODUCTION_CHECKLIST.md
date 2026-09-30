@@ -103,8 +103,27 @@
 - [x] 10 dedicated Copilot tools registered, RBAC-guarded, and classified (FACT/EVIDENCE/INTERPRETATION).
 - [x] Global Search Category 5 integration verified matching by group ID, household name, and business code.
 - [x] Controlled group ownership handoff verified with mandatory justification notes and `GROUP_OWNER_CHANGED` audit logging.
-- [x] 30/30 Phase 34 automated test cases passing (178/178 total platform tests passing in 1.72s).
-- [x] TypeScript compiler (`npm run lint` / `tsc --noEmit`) and Vite/esbuild production bundle (`npm run build`) passing with zero errors.
+106: - [x] 30/30 Phase 34 automated test cases passing (178/178 total platform tests passing in 1.72s).
+107: - [x] TypeScript compiler (`npm run lint` / `tsc --noEmit`) and Vite/esbuild production bundle (`npm run build`) passing with zero errors.
+108: 
+109: ## TRUST & GOVERNANCE CENTER (PHASE 35)
+110: - [x] Relational schema migrated for `governance_exceptions` and cryptographic chaining attributes (`previous_hash`, `record_hash`) on `audit_logs`.
+111: - [x] Enterprise Governance Overview implemented with live operational status (`OPERATIONAL`, `ATTENTION_REQUIRED`, `CRITICAL`), real audit counts, AI sessions, agent plans, and open exceptions.
+112: - [x] Cryptographic SHA-256 tamper-evident audit chaining implemented and verified with `verifyChainIntegrity()`.
+113: - [x] Zero secret exposure guarantee strictly enforced: model API keys, database URLs, and session secrets are never leaked in API or Copilot outputs (`keyConfigured: true` / `"Configured"`).
+114: - [x] AI Governance implemented with source classification (`DETERMINISTIC`, `AI_GENERATED`, `HYBRID`, `SYSTEM_RULE`), tool invocation metrics, and fallback telemetry.
+115: - [x] Controlled Banking Agent governance implemented with plan lifecycle metrics (created, approved, rejected, completed, partial, failed, expired) and step-level outcomes.
+116: - [x] Approval Center implemented unifying dual control across agent plans, journey escalations, group handoffs, and sensitive banking operations.
+117: - [x] Access & Security Center implemented with neutral monitoring of authorization failures, repeated denials, active sessions, and IDOR prevention events.
+118: - [x] Data Governance & Lineage visualizer implemented mapping intelligence provenance from raw records to audit logs.
+119: - [x] Lightweight export activity tracking implemented logging requesting actor, role, dataset, and filter scope (`DATA_EXPORT_REQUESTED`).
+120: - [x] Genuine live PostgreSQL database latency ping implemented without fake green statuses.
+121: - [x] Managed Governance Exceptions workflow implemented (`OPEN` -> `UNDER_REVIEW` -> `RESOLVED` / `DISMISSED`) with full audit traceability.
+122: - [x] 8 dedicated Copilot governance tools registered with strict RBAC boundary (read-only; blocked for TELLER with 403 Forbidden; Security Events restricted to Admin/Compliance).
+123: - [x] Global Search updated to index governance exception codes (`GEX-...`).
+124: - [x] 47/47 Phase 35 automated test cases passing (225/225 total platform tests passing in 2.09s).
+125: - [x] TypeScript compiler (`npm run lint` / `tsc --noEmit`) and Vite/esbuild production bundle (`npm run build`) passing with zero errors.
+
 
 
 
