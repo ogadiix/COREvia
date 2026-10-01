@@ -16,8 +16,127 @@ import {
 import { sql } from 'drizzle-orm';
 import { documentStorage } from '../services/storage/documentStorage.ts';
 
+export async function ensureDocumentTablesExist() {
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS documents (
+      id SERIAL PRIMARY KEY,
+      document_code TEXT NOT NULL UNIQUE,
+      document_type TEXT NOT NULL,
+      category TEXT NOT NULL DEFAULT 'IDENTITY',
+      customer_id INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+      customer_name TEXT NOT NULL,
+      related_entity_type TEXT NOT NULL DEFAULT 'CUSTOMER',
+      related_entity_id TEXT,
+      file_name TEXT NOT NULL,
+      file_size TEXT DEFAULT '1.2 MB',
+      mime_type TEXT DEFAULT 'application/pdf',
+      storage_key TEXT,
+      version INTEGER NOT NULL DEFAULT 1,
+      status TEXT NOT NULL DEFAULT 'UPLOADED',
+      review_status TEXT NOT NULL DEFAULT 'PENDING',
+      uploaded_by_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      uploaded_by_name TEXT,
+      uploaded_at TIMESTAMP NOT NULL DEFAULT NOW(),
+      reviewed_by_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      reviewed_by_name TEXT,
+      reviewed_at TIMESTAMP,
+      expiry_date DATE,
+      rejection_reason TEXT,
+      replacement_required BOOLEAN NOT NULL DEFAULT false,
+      replacement_reason TEXT,
+      replacement_doc_type TEXT,
+      replacement_due_date DATE,
+      visibility TEXT NOT NULL DEFAULT 'INTERNAL',
+      description TEXT,
+      is_synthetic BOOLEAN NOT NULL DEFAULT true,
+      metadata TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS document_versions (
+      id SERIAL PRIMARY KEY,
+      document_id INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+      version INTEGER NOT NULL,
+      file_name TEXT NOT NULL,
+      file_size TEXT DEFAULT '1.2 MB',
+      mime_type TEXT DEFAULT 'application/pdf',
+      storage_key TEXT,
+      status TEXT NOT NULL,
+      review_status TEXT NOT NULL,
+      uploaded_by_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      uploaded_by_name TEXT,
+      uploaded_at TIMESTAMP NOT NULL DEFAULT NOW(),
+      change_reason TEXT,
+      rejection_reason TEXT,
+      metadata TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS document_requirements (
+      id SERIAL PRIMARY KEY,
+      requirement_code TEXT NOT NULL,
+      customer_id INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+      related_entity_type TEXT NOT NULL DEFAULT 'CUSTOMER',
+      related_entity_id TEXT,
+      document_type TEXT NOT NULL,
+      category TEXT NOT NULL DEFAULT 'IDENTITY',
+      is_mandatory BOOLEAN NOT NULL DEFAULT true,
+      status TEXT NOT NULL DEFAULT 'MISSING',
+      fulfilled_document_id INTEGER REFERENCES documents(id) ON DELETE SET NULL,
+      notes TEXT,
+      due_date DATE,
+      created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS document_reviews (
+      id SERIAL PRIMARY KEY,
+      document_id INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+      version INTEGER NOT NULL DEFAULT 1,
+      reviewer_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      reviewer_name TEXT NOT NULL,
+      decision TEXT NOT NULL,
+      comments TEXT,
+      rejection_reason TEXT,
+      replacement_doc_type TEXT,
+      replacement_due_date DATE,
+      reviewed_at TIMESTAMP NOT NULL DEFAULT NOW(),
+      createdAt TIMESTAMP NOT NULL DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS document_links (
+      id SERIAL PRIMARY KEY,
+      document_id INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+      entity_type TEXT NOT NULL,
+      entity_id TEXT NOT NULL,
+      entity_title TEXT,
+      relationship TEXT NOT NULL DEFAULT 'SUPPORTING_DOCUMENT',
+      created_by_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS document_extractions (
+      id SERIAL PRIMARY KEY,
+      document_id INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+      version INTEGER NOT NULL DEFAULT 1,
+      field_name TEXT NOT NULL,
+      extracted_value TEXT,
+      confidence NUMERIC(4, 2) DEFAULT 0.92,
+      verification_status TEXT NOT NULL DEFAULT 'NOT_VERIFIED',
+      verified_by_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      verified_by_name TEXT,
+      verified_at TIMESTAMP,
+      created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+    );
+  `);
+}
+
 export async function seedPhase25Documents() {
   console.log('Checking Phase 25 Banking Document Intelligence seed data...');
+
+  await ensureDocumentTablesExist();
 
   const allCustomers = await db.select().from(customers).limit(10);
   const allUsers = await db.select().from(users);
@@ -30,6 +149,7 @@ export async function seedPhase25Documents() {
     console.log('Customers or users not available for seeding documents.');
     return;
   }
+
 
   const existingCount = await db
     .select({ count: sql<number>`count(*)::int` })

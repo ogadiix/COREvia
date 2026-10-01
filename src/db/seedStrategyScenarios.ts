@@ -18,22 +18,25 @@ export async function seedStrategyScenarios() {
   }
 
   // Find admin/RM user
-  const [adminUser] = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, 'admin@corevia.bank.in'));
+  const allUsers = await db.select().from(users);
+  const adminUser = allUsers.find((u) => u.role === 'ADMINISTRATOR' || u.role === 'BRANCH_OPS_HEAD') || allUsers[0];
 
-  const userId = adminUser?.id || 1;
+  if (!adminUser) {
+    console.warn('No active user found for scenario seed. Skipping.');
+    return;
+  }
+
   const mockUser = {
-    id: userId,
-    email: adminUser?.email || 'admin@corevia.bank.in',
-    name: adminUser?.name || 'Administrator',
-    role: 'ADMINISTRATOR',
-    department: 'OPERATIONS',
-    status: 'ACTIVE',
-    isActive: true,
-    employeeId: adminUser?.employeeId || 'EMP-10001',
+    id: adminUser.id,
+    email: adminUser.email,
+    name: adminUser.name,
+    role: adminUser.role,
+    department: adminUser.department,
+    status: adminUser.status,
+    isActive: adminUser.isActive,
+    employeeId: adminUser.employeeId,
   } as any;
+
 
   // Check if scenarios already seeded
   const existing = await db

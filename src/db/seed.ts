@@ -954,12 +954,22 @@ export async function seedDatabase() {
     ])
     .onConflictDoNothing();
 
+  // Phase 25 Documents Intelligence Seed
+  try {
+    const { seedPhase25Documents } = await import('./seedDocuments.ts');
+    await seedPhase25Documents();
+  } catch (err) {
+    console.error('Failed to seed Phase 25 Documents:', err);
+    throw err;
+  }
+
   // Phase 26 Relationship Digital Twin Seed
   try {
     const { seedRelationshipTwinData } = await import('./seedRelationshipTwin.ts');
     await seedRelationshipTwinData();
   } catch (err) {
     console.error('Failed to seed Relationship Digital Twin data:', err);
+    throw err;
   }
 
   // Ensure Enterprise Auth Users with password hashes are seeded
@@ -968,6 +978,16 @@ export async function seedDatabase() {
     await seedAuthUsersAndRoles();
   } catch (err) {
     console.error('Failed to seed Auth Users & Roles:', err);
+    throw err;
+  }
+
+  // Phase 28 Relationship Graph & Network Intelligence Seed
+  try {
+    const { seedPhase28RelationshipGraphData } = await import('./seedRelationshipGraph.ts');
+    await seedPhase28RelationshipGraphData();
+  } catch (err) {
+    console.error('Failed to seed Phase 28 Relationship Graph:', err);
+    throw err;
   }
 
   // Phase 29 Decision Trace & Explainability Seed
@@ -976,6 +996,7 @@ export async function seedDatabase() {
     await seedDecisionTraces();
   } catch (err) {
     console.error('Failed to seed Decision Traces:', err);
+    throw err;
   }
 
   // Phase 30 Strategy Simulator Seed
@@ -984,6 +1005,7 @@ export async function seedDatabase() {
     await seedStrategyScenarios();
   } catch (err) {
     console.error('Failed to seed Strategy Scenarios:', err);
+    throw err;
   }
 
   // Phase 31 Controlled Banking Agent Seed
@@ -992,6 +1014,7 @@ export async function seedDatabase() {
     await seedAgentPlans();
   } catch (err) {
     console.error('Failed to seed Agent Plans:', err);
+    throw err;
   }
 
   // Phase 32 Relationship Value Intelligence Seed
@@ -1000,6 +1023,7 @@ export async function seedDatabase() {
     await seedRelationshipValueData();
   } catch (err) {
     console.error('Failed to seed Relationship Value snapshots:', err);
+    throw err;
   }
 
   // Phase 33 Customer Journey Orchestrator Seed
@@ -1008,6 +1032,7 @@ export async function seedDatabase() {
     await seedJourneys();
   } catch (err) {
     console.error('Failed to seed Customer Journeys:', err);
+    throw err;
   }
 
   // Phase 34 Household & Business Group 360 Seed
@@ -1016,6 +1041,7 @@ export async function seedDatabase() {
     await seedGroups();
   } catch (err) {
     console.error('Failed to seed Relationship Groups:', err);
+    throw err;
   }
 
   // Phase 35 Trust & Governance Center Seed
@@ -1024,10 +1050,12 @@ export async function seedDatabase() {
     await seedGovernanceExceptions();
   } catch (err) {
     console.error('Failed to seed Governance Exceptions:', err);
+    throw err;
   }
 
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
+
 
 // If invoked directly
 if (process.argv[1]?.endsWith('seed.ts')) {

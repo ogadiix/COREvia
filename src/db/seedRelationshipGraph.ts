@@ -1,6 +1,41 @@
 import { db } from './index.ts';
-import { relationshipEdges } from './schema.ts';
-import { and, eq } from 'drizzle-orm';
+import { relationshipEdges, customers } from './schema.ts';
+import { and, eq, sql } from 'drizzle-orm';
+
+/**
+ * Ensures table relationship_edges exists with proper indices before seeding
+ */
+export async function ensureRelationshipGraphTablesExist() {
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS relationship_edges (
+      id SERIAL PRIMARY KEY,
+      source_entity_type TEXT NOT NULL,
+      source_entity_id TEXT NOT NULL,
+      target_entity_type TEXT NOT NULL,
+      target_entity_id TEXT NOT NULL,
+      relationship_type TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'ACTIVE',
+      provenance_type TEXT NOT NULL DEFAULT 'DIRECT_RECORD',
+      provenance_id TEXT,
+      visibility_scope TEXT NOT NULL DEFAULT 'BRANCH',
+      metadata TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_rel_edge_source ON relationship_edges(source_entity_type, source_entity_id);
+    CREATE INDEX IF NOT EXISTS idx_rel_edge_target ON relationship_edges(target_entity_type, target_entity_id);
+    CREATE INDEX IF NOT EXISTS idx_rel_edge_type ON relationship_edges(relationship_type);
+    CREATE INDEX IF NOT EXISTS idx_rel_edge_status ON relationship_edges(status);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_rel_edge_unique_pair ON relationship_edges(
+      source_entity_type,
+      source_entity_id,
+      target_entity_type,
+      target_entity_id,
+      relationship_type
+    );
+  `);
+}
 
 /**
  * Enterprise Banking Seed for Phase 28: Relationship Graph & Network Intelligence
@@ -9,10 +44,30 @@ import { and, eq } from 'drizzle-orm';
 export async function seedPhase28RelationshipGraphData() {
   console.log('[Seed] Seeding Phase 28 Relationship Graph explicit edges...');
 
+  await ensureRelationshipGraphTablesExist();
+
+  // Find canonical customer Rahul Sharma (CUS-10482)
+  const [rahul] = await db
+    .select()
+    .from(customers)
+    .where(eq(customers.customerCode, 'CUS-10482'))
+    .limit(1);
+
+  const rahulId = rahul ? String(rahul.id) : '1';
+
+  // Find canonical customer Sunil Varma (CUS-40182)
+  const [sunil] = await db
+    .select()
+    .from(customers)
+    .where(eq(customers.customerCode, 'CUS-40182'))
+    .limit(1);
+
+  const sunilId = sunil ? String(sunil.id) : '4';
+
   const edgesToSeed = [
     {
       sourceEntityType: 'CUSTOMER',
-      sourceEntityId: '1',
+      sourceEntityId: rahulId,
       targetEntityType: 'HOUSEHOLD',
       targetEntityId: 'HH-10482',
       relationshipType: 'CUSTOMER_BELONGS_TO_HOUSEHOLD',
@@ -31,7 +86,7 @@ export async function seedPhase28RelationshipGraphData() {
     },
     {
       sourceEntityType: 'CUSTOMER',
-      sourceEntityId: '1',
+      sourceEntityId: rahulId,
       targetEntityType: 'BUSINESS',
       targetEntityId: 'BIZ-10482',
       relationshipType: 'CUSTOMER_ASSOCIATED_WITH_BUSINESS',
@@ -50,7 +105,7 @@ export async function seedPhase28RelationshipGraphData() {
     },
     {
       sourceEntityType: 'CUSTOMER',
-      sourceEntityId: '4', // Sunil Varma
+      sourceEntityId: sunilId,
       targetEntityType: 'BUSINESS',
       targetEntityId: 'BIZ-40182',
       relationshipType: 'CUSTOMER_ASSOCIATED_WITH_BUSINESS',
