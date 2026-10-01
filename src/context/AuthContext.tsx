@@ -87,7 +87,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Login handler
   const login = async (credentials: { email: string; password: string }) => {
     console.log('[AuthContext] login started');
-    setIsLoading(true);
     setSessionExpired(false);
     setShowInactivityWarning(false);
     lastActivityRef.current = Date.now();
@@ -107,9 +106,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (e) {
       console.error('[AuthContext] login error:', e);
       throw e;
-    } finally {
-      console.log('[AuthContext] login finally, setting isLoading false');
-      setIsLoading(false);
     }
   };
 

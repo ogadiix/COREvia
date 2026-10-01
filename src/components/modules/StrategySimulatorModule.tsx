@@ -166,8 +166,9 @@ export const StrategySimulatorModule: React.FC<StrategySimulatorModuleProps> = (
     async function loadCustomerData() {
       try {
         // Fetch saved scenarios
-        const scenarios = await bankingApi.getCustomerStrategyScenarios(selectedCustomerId);
-        setScenariosList(scenarios || []);
+        const scenariosRaw = await bankingApi.getCustomerStrategyScenarios(selectedCustomerId);
+        const scenarios = Array.isArray(scenariosRaw) ? scenariosRaw : (scenariosRaw as any)?.data || [];
+        setScenariosList(scenarios);
 
         // Fetch ad-hoc baseline snapshot by running empty simulation
         const adhoc = await bankingApi.simulateAdhocStrategy({
@@ -313,7 +314,7 @@ export const StrategySimulatorModule: React.FC<StrategySimulatorModuleProps> = (
     }
 
     const baseId = selectedScenario?.scenarioId || simulationResult?.scenarioId;
-    const target = targetScenarioId || scenariosList.find((s) => s.scenarioId !== baseId)?.scenarioId;
+    const target = targetScenarioId || (Array.isArray(scenariosList) ? scenariosList.find((s) => s.scenarioId !== baseId)?.scenarioId : undefined);
 
     if (!target) {
       setNotificationMsg({ type: 'error', text: 'At least two saved scenarios are required to run comparison.' });
@@ -462,7 +463,7 @@ export const StrategySimulatorModule: React.FC<StrategySimulatorModuleProps> = (
         {/* Demo Scenarios Quick Pick */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-xs font-semibold text-slate-400">Library:</span>
-          {scenariosList.map((s) => (
+          {(Array.isArray(scenariosList) ? scenariosList : []).map((s) => (
             <button
               key={s.id}
               onClick={() => loadScenarioIntoBuilder(s)}

@@ -43,6 +43,7 @@ import { formatINR } from '../../data/mockIndianBankingData';
 import { useAuth } from '../../context/AuthContext';
 import { useCopilot } from '../../context/CopilotContext';
 import { RelationshipValueProfile } from '../relationship-value/RelationshipValueProfile';
+import { getSessionToken } from '../../lib/api';
 
 interface RelationshipTwinModuleProps {
   initialCustomerId?: number;
@@ -108,12 +109,19 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
     setIsLoading(true);
     setError(null);
     try {
+      const token = getSessionToken();
+      const headers: Record<string, string> = {
+        'x-mock-user-id': String(user?.id || 1),
+        'x-mock-user-name': user?.name || 'Bank Officer',
+        'x-mock-user-role': user?.role || 'RELATIONSHIP_MANAGER',
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const res = await fetch(`/api/relationship-twin/${cId}`, {
-        headers: {
-          'x-mock-user-id': String(user?.id || 1),
-          'x-mock-user-name': user?.name || 'Bank Officer',
-          'x-mock-user-role': user?.role || 'RELATIONSHIP_MANAGER',
-        },
+        credentials: 'include',
+        headers,
       });
 
       if (!res.ok) {
@@ -121,14 +129,34 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
       }
 
       const data: RelationshipTwinOverview = await res.json();
-      setTwinData(data);
+      const normalizedData = {
+        ...data,
+        snapshots: Array.isArray(data?.snapshots) ? data.snapshots : [],
+        timeline: Array.isArray(data?.timeline) ? data.timeline : [],
+        signals: Array.isArray(data?.signals) ? data.signals : [],
+        actions: Array.isArray((data as any)?.actions)
+          ? (data as any).actions
+          : Array.isArray(data?.actionTraces)
+          ? data.actionTraces
+          : [],
+        beforeYouAct: {
+          recommendedPrecautions: Array.isArray(data?.beforeYouAct?.recommendedPrecautions)
+            ? data.beforeYouAct.recommendedPrecautions
+            : [],
+          nextBestActions: Array.isArray((data?.beforeYouAct as any)?.nextBestActions)
+            ? (data?.beforeYouAct as any).nextBestActions
+            : [],
+          ...(data?.beforeYouAct || {}),
+        },
+      };
+      setTwinData(normalizedData);
 
-      if (data.snapshots.length >= 2) {
-        setCompareSnapA(data.snapshots[data.snapshots.length - 1].snapshotCode);
-        setCompareSnapB(data.snapshots[0].snapshotCode);
-      } else if (data.snapshots.length === 1) {
-        setCompareSnapA(data.snapshots[0].snapshotCode);
-        setCompareSnapB(data.snapshots[0].snapshotCode);
+      if (normalizedData.snapshots.length >= 2) {
+        setCompareSnapA(normalizedData.snapshots[normalizedData.snapshots.length - 1].snapshotCode);
+        setCompareSnapB(normalizedData.snapshots[0].snapshotCode);
+      } else if (normalizedData.snapshots.length === 1) {
+        setCompareSnapA(normalizedData.snapshots[0].snapshotCode);
+        setCompareSnapB(normalizedData.snapshots[0].snapshotCode);
       }
     } catch (err: any) {
       setError(err.message || 'Error loading Digital Twin data');
@@ -140,12 +168,19 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
   // Fetch portfolio analytics
   const fetchPortfolioAnalytics = async () => {
     try {
+      const token = getSessionToken();
+      const headers: Record<string, string> = {
+        'x-mock-user-id': String(user?.id || 1),
+        'x-mock-user-name': user?.name || 'Bank Officer',
+        'x-mock-user-role': user?.role || 'RELATIONSHIP_MANAGER',
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const res = await fetch('/api/relationship-twin/analytics', {
-        headers: {
-          'x-mock-user-id': String(user?.id || 1),
-          'x-mock-user-name': user?.name || 'Bank Officer',
-          'x-mock-user-role': user?.role || 'RELATIONSHIP_MANAGER',
-        },
+        credentials: 'include',
+        headers,
       });
       if (res.ok) {
         const data = await res.json();
@@ -493,22 +528,37 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
               <span className="text-xs text-slate-400">Automated Reasoning Engine</span>
             </div>
 
-            <p className="text-xs leading-relaxed text-slate-300 bg-slate-950/60 border border-slate-800/70 p-3 rounded-xl font-mono">
-              {twinData.whyThisState}
-            </p>
+            <div className="text-xs leading-relaxed text-slate-300 bg-slate-950/60 border border-slate-800/70 p-3 rounded-xl font-mono">
+              {Array.isArray(twinData?.whyThisState) ? (
+                twinData.whyThisState.length === 0 ? (
+                  <span>Core parameters stable. No elevated risk alerts detected.</span>
+                ) : (
+                  <ul className="space-y-1">
+                    {twinData.whyThisState.map((item: any, idx: number) => (
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <span className="text-violet-400 mt-0.5">•</span>
+                        <span>{typeof item === 'string' ? item : item?.reason || item?.details || JSON.stringify(item)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )
+              ) : (
+                <span>{String(twinData?.whyThisState || 'Core parameters stable.')}</span>
+              )}
+            </div>
 
             {/* What Changed in 7 / 30 days */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
               <div className="bg-slate-950/40 border border-slate-800 rounded-xl p-2.5">
                 <p className="text-[11px] text-slate-400">Score Shift (7D)</p>
                 <div className="flex items-center gap-1.5 mt-1">
-                  {twinData.whatChanged.scoreChange >= 0 ? (
+                  {(twinData?.whatChanged as any)?.scoreChange >= 0 ? (
                     <span className="text-sm font-bold text-emerald-400 flex items-center">
-                      <TrendingUp className="w-3.5 h-3.5 mr-0.5" /> +{twinData.whatChanged.scoreChange} pts
+                      <TrendingUp className="w-3.5 h-3.5 mr-0.5" /> +{(twinData?.whatChanged as any)?.scoreChange || 0} pts
                     </span>
                   ) : (
                     <span className="text-sm font-bold text-rose-400 flex items-center">
-                      <TrendingDown className="w-3.5 h-3.5 mr-0.5" /> {twinData.whatChanged.scoreChange} pts
+                      <TrendingDown className="w-3.5 h-3.5 mr-0.5" /> {(twinData?.whatChanged as any)?.scoreChange || 0} pts
                     </span>
                   )}
                 </div>
@@ -517,8 +567,8 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
               <div className="bg-slate-950/40 border border-slate-800 rounded-xl p-2.5">
                 <p className="text-[11px] text-slate-400">Grievance / Case SLA</p>
                 <div className="flex items-center gap-1.5 mt-1">
-                  <span className={`text-sm font-bold ${twinData.header.slaAtRiskCount > 0 ? 'text-amber-400' : 'text-slate-200'}`}>
-                    {twinData.header.openCasesCount} Open ({twinData.header.slaAtRiskCount} SLA Risk)
+                  <span className={`text-sm font-bold ${(twinData?.header as any)?.slaAtRiskCount > 0 ? 'text-amber-400' : 'text-slate-200'}`}>
+                    {twinData?.header?.openCasesCount || 0} Open ({((twinData?.header as any)?.slaAtRiskCount) || 0} SLA Risk)
                   </span>
                 </div>
               </div>
@@ -526,9 +576,9 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
               <div className="bg-slate-950/40 border border-slate-800 rounded-xl p-2.5">
                 <p className="text-[11px] text-slate-400">KYC & Document Vault</p>
                 <div className="flex items-center gap-1.5 mt-1">
-                  <span className={`text-sm font-bold ${twinData.header.pendingDocumentsCount > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
-                    {twinData.header.pendingDocumentsCount > 0
-                      ? `${twinData.header.pendingDocumentsCount} Action Req.`
+                  <span className={`text-sm font-bold ${(twinData?.header as any)?.pendingDocumentsCount > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                    {(twinData?.header as any)?.pendingDocumentsCount > 0
+                      ? `${(twinData?.header as any)?.pendingDocumentsCount} Action Req.`
                       : 'All Verified'}
                   </span>
                 </div>
@@ -597,7 +647,7 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
           <History className="w-4 h-4" />
           <span>Temporal Event Stream</span>
           <span className="px-1.5 py-0.2 text-[10px] bg-slate-800 text-slate-300 rounded-full">
-            {twinData.timeline.length}
+            {twinData?.timeline?.length || 0}
           </span>
         </button>
 
@@ -612,7 +662,7 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
           <GitCompare className="w-4 h-4" />
           <span>Historical Snapshots & Time-Travel Diff</span>
           <span className="px-1.5 py-0.2 text-[10px] bg-slate-800 text-slate-300 rounded-full">
-            {twinData.snapshots.length}
+            {twinData?.snapshots?.length || 0}
           </span>
         </button>
 
@@ -627,7 +677,7 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
           <Layers className="w-4 h-4" />
           <span>Closed-Loop Action Trace</span>
           <span className="px-1.5 py-0.2 text-[10px] bg-slate-800 text-slate-300 rounded-full">
-            {twinData.actions.length}
+            {twinData?.actions?.length || 0}
           </span>
         </button>
 
@@ -693,7 +743,7 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
                   Active Precautions & Risk Factors:
                 </h4>
                 <ul className="space-y-1.5">
-                  {twinData.beforeYouAct.recommendedPrecautions.map((prec, i) => (
+                  {(twinData.beforeYouAct?.recommendedPrecautions || []).map((prec, i) => (
                     <li key={i} className="flex items-start gap-2 text-slate-300">
                       <span className="text-amber-400 mt-0.5">•</span>
                       <span>{prec}</span>
@@ -708,7 +758,7 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
                   Recommended Next Best Steps:
                 </h4>
                 <ul className="space-y-1.5">
-                  {twinData.beforeYouAct.nextBestActions.map((nba, i) => (
+                  {(((twinData?.beforeYouAct as any)?.nextBestActions) || []).map((nba: any, i: number) => (
                     <li key={i} className="flex items-start gap-2 text-slate-300">
                       <span className="text-emerald-400 mt-0.5">✓</span>
                       <span>{nba}</span>
@@ -787,13 +837,13 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
                 <Activity className="w-4 h-4 text-violet-400" />
                 <h3 className="text-sm font-semibold text-slate-100">Active Signals & Triggers</h3>
                 <span className="px-2 py-0.5 text-[11px] font-bold rounded-full bg-slate-800 text-slate-300">
-                  {twinData.signals.length} Detected
+                  {twinData?.signals?.length || 0} Detected
                 </span>
               </div>
               <span className="text-xs text-slate-400">Deterministic Rule Engine & Signal Listener</span>
             </div>
 
-            {twinData.signals.length === 0 ? (
+            {(!twinData?.signals || twinData.signals.length === 0) ? (
               <div className="text-center py-8 text-slate-500 text-xs">
                 No active anomaly signals detected. Relationship parameters operating normally.
               </div>
@@ -1104,7 +1154,7 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
             </button>
           </div>
 
-          {twinData.actions.length === 0 ? (
+          {(!twinData?.actions || twinData.actions.length === 0) ? (
             <div className="text-center py-8 text-slate-500 text-xs">
               No actions logged yet. Use "Log Action" to record proactive outreach, waiver, or follow-up.
             </div>

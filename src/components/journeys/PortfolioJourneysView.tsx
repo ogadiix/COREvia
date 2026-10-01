@@ -66,9 +66,13 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
         bankingApi.getJourneyAnalytics().catch(() => null),
       ]);
 
-      setJourneys(journeysData || []);
-      setTemplates(templatesData || []);
-      setAnalytics(analyticsData);
+      const rawJourneys = (journeysData as any)?.data || journeysData || [];
+      const rawTemplates = (templatesData as any)?.data || templatesData || [];
+      const rawAnalytics = (analyticsData as any)?.data || analyticsData;
+
+      setJourneys(Array.isArray(rawJourneys) ? rawJourneys : []);
+      setTemplates(Array.isArray(rawTemplates) ? rawTemplates : []);
+      setAnalytics(rawAnalytics);
     } catch (err) {
       console.error('Failed to load portfolio journeys:', err);
     } finally {
@@ -110,10 +114,11 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
     }
   };
 
-  const activeCount = journeys.filter((j) => j.status === 'IN_PROGRESS' || j.status === 'BLOCKED').length;
-  const blockedCount = journeys.filter((j) => j.status === 'BLOCKED').length;
-  const slaBreachedCount = journeys.filter((j) => j.slaStatus === 'BREACHED').length;
-  const completedCount = journeys.filter((j) => j.status === 'COMPLETED').length;
+  const journeyList = Array.isArray(journeys) ? journeys : [];
+  const activeCount = journeyList.filter((j) => j.status === 'IN_PROGRESS' || j.status === 'BLOCKED').length;
+  const blockedCount = journeyList.filter((j) => j.status === 'BLOCKED').length;
+  const slaBreachedCount = journeyList.filter((j) => j.slaStatus === 'BREACHED').length;
+  const completedCount = journeyList.filter((j) => j.status === 'COMPLETED').length;
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">

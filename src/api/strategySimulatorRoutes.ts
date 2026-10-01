@@ -1,8 +1,10 @@
 import { Router, Request, Response } from 'express';
+import { requireAuth, AuthRequest } from '../middleware/auth.ts';
 import { strategySimulatorService } from '../services/strategySimulator.service';
 import { BankingError } from '../lib/errors';
 
 export const strategySimulatorRouter = Router();
+strategySimulatorRouter.use(requireAuth);
 
 /**
  * GET /api/strategy-scenarios/analytics

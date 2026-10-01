@@ -27,7 +27,7 @@ async function startServer() {
   validateEnvironment();
 
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
   // Disable server identification header
   app.disable('x-powered-by');
@@ -81,6 +81,16 @@ async function startServer() {
 
   const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`COREvia Server running on http://0.0.0.0:${PORT}`);
+  });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n❌ Error: Port ${PORT} is already in use by another process.`);
+      console.error(`👉 Tip: Free the port using 'kill -9 $(lsof -t -i :${PORT})' or specify another port: 'PORT=${PORT + 1} npm run dev'\n`);
+    } else {
+      console.error('Server error:', err);
+    }
+    process.exit(1);
   });
 
   const gracefulShutdown = () => {

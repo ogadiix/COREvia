@@ -46,8 +46,9 @@ export const CustomerJourneysTab: React.FC<CustomerJourneysTabProps> = ({
     fetchJourneys();
   }, [customerId]);
 
-  const activeJourneys = journeys.filter((j) => j.status === 'IN_PROGRESS' || j.status === 'BLOCKED');
-  const completedJourneys = journeys.filter((j) => j.status === 'COMPLETED');
+  const journeyList = Array.isArray(journeys) ? journeys : [];
+  const activeJourneys = journeyList.filter((j) => j.status === 'IN_PROGRESS' || j.status === 'BLOCKED');
+  const completedJourneys = journeyList.filter((j) => j.status === 'COMPLETED');
 
   return (
     <div className="space-y-4">

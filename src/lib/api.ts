@@ -1270,7 +1270,8 @@ export const bankingApi = {
   },
 
   async getCustomerStrategyScenarios(customerId: number) {
-    return await request<any[]>(`/strategy-scenarios/customer/${customerId}`);
+    const res = await request<any>(`/strategy-scenarios/customer/${customerId}`);
+    return Array.isArray(res) ? res : res?.data || [];
   },
 
   async simulateStrategyScenario(id: string | number) {
@@ -1314,7 +1315,8 @@ export const bankingApi = {
   },
 
   async searchStrategyScenarios(q: string) {
-    return await request<any[]>(`/strategy-scenarios/search?q=${encodeURIComponent(q)}`);
+    const res = await request<any>(`/strategy-scenarios/search?q=${encodeURIComponent(q)}`);
+    return Array.isArray(res) ? res : res?.data || [];
   },
 
   // ==========================================

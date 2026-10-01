@@ -23,7 +23,7 @@ export function securityHeaders(req: Request, res: Response, next: NextFunction)
   // X-Frame-Options & CSP frame-ancestors for AI Studio preview
   res.setHeader(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https: wss:; frame-ancestors 'self' https://*.google.com https://*.run.app https://ai.studio https://*.ai.studio;"
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https: wss: ws:; frame-ancestors 'self' https://*.google.com https://*.run.app https://ai.studio https://*.ai.studio;"
   );
 
   // Cross-Origin Embedder and Opener Policies
