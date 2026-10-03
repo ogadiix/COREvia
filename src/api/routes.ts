@@ -3267,4 +3267,8 @@ apiRouter.use('/governance', governanceRouter);
 import { operationsRouter } from './operationsRoutes.ts';
 apiRouter.use('/operations', operationsRouter);
 
-
+// ==========================================
+// PHASE 37: ADVANCED PORTFOLIO INTELLIGENCE
+// ==========================================
+import { portfolioIntelligenceRouter } from './portfolioIntelligenceRoutes.ts';
+apiRouter.use('/portfolio-intelligence', portfolioIntelligenceRouter);

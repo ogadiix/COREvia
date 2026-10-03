@@ -63,7 +63,7 @@ export async function runGroupTests() {
 
   // Test 1: Group Creation
   console.log('Test 1: Create a governed Relationship Group (Household)');
-  const testGroupCode = `HH-TEST-${Date.now().toString().slice(-4)}`;
+  const testGroupCode = `HH-TEST-${Date.now()}-${Math.floor(Math.random() * 100000)}`;
   const createdGroup = await groupService.createGroup(
     {
       groupId: testGroupCode,

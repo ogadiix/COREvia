@@ -223,7 +223,53 @@ export const copilotSecurity = {
       }
     }
 
-    // 4. Customer Scoping checks
+    // 4. Portfolio intelligence tools RBAC checks (Phase 37)
+    const portfolioTools = [
+      'getPortfolioOverview',
+      'getPortfolioHealth',
+      'getPortfolioCoreScoreDistribution',
+      'getPortfolioRelationshipValue',
+      'getPortfolioProductPenetration',
+      'getPortfolioEngagement',
+      'getPortfolioServiceHealth',
+      'getPortfolioPipeline',
+      'getPortfolioSignals',
+      'getPortfolioActions',
+      'getPortfolioChanges',
+    ];
+
+    if (portfolioTools.includes(toolName)) {
+      const allowedRoles = [
+        'ADMINISTRATOR',
+        'BRANCH_MANAGER',
+        'RELATIONSHIP_MANAGER',
+        'BRANCH_OPS_HEAD',
+        'COMPLIANCE_OFFICER',
+        'OPERATIONS',
+      ];
+      const isAllowed = allowedRoles.includes(user.role) || user.permissions?.includes('admin:all');
+
+      if (!isAllowed) {
+        await auditRepository.createLog({
+          actorId: user.employeeId,
+          actorName: user.name,
+          action: 'COPILOT_TOOL_UNAUTHORIZED',
+          resourceType: 'COPILOT_PORTFOLIO_TOOL',
+          resourceId: toolName,
+          requestId,
+          outcome: 'DENIED',
+          metadata: { reason: 'UNAUTHORIZED_PORTFOLIO_ACCESS', userRole: user.role },
+        });
+
+        throw new BankingError(
+          'FORBIDDEN',
+          `Role '${user.role}' is not authorized to query portfolio intelligence tools via Copilot.`,
+          403
+        );
+      }
+    }
+
+    // 5. Customer Scoping checks
     if (args?.customerId) {
       await resourceAuth.authorizeCustomer(user, args.customerId, 'COPILOT_TOOL', requestId);
     } else if (args?.entityId && args?.entityType === 'CUSTOMER') {

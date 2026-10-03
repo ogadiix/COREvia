@@ -23,6 +23,7 @@ import { journeyService } from '../journey.service.ts';
 import { groupService } from '../group.service.ts';
 import { governanceService } from '../governance.service.ts';
 import { operationsService } from '../operations.service.ts';
+import { portfolioIntelligenceService } from '../portfolioIntelligence.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -1173,6 +1174,104 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         severity: { type: Type.STRING, description: 'Severity: INFO, LOW, MEDIUM, HIGH, CRITICAL' },
         limit: { type: Type.INTEGER, description: 'Max events to return' },
       },
+    },
+  },
+  // ==========================================
+  // PHASE 37: ADVANCED PORTFOLIO INTELLIGENCE
+  // ==========================================
+  {
+    name: 'getPortfolioOverview',
+    description: 'Retrieve authorized relationship portfolio overview KPIs including total relationship value, customer count, average CORE score, pipeline value, open service cases, and signals.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        segment: { type: Type.STRING, description: 'Optional customer segment filter' },
+        entityType: { type: Type.STRING, description: 'Optional entity type filter (INDIVIDUAL, CORPORATE, etc.)' },
+      },
+    },
+  },
+  {
+    name: 'getPortfolioHealth',
+    description: 'Retrieve authorized customer distribution across relationship health categories (HEALTHY, STABLE, WATCH, AT_RISK, CRITICAL).',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        segment: { type: Type.STRING, description: 'Optional customer segment filter' },
+      },
+    },
+  },
+  {
+    name: 'getPortfolioCoreScoreDistribution',
+    description: 'Analyze authorized portfolio CORE score distribution, average, range, components breakdown, and significant score movements.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        segment: { type: Type.STRING, description: 'Optional customer segment filter' },
+      },
+    },
+  },
+  {
+    name: 'getPortfolioRelationshipValue',
+    description: 'Analyze total relationship value, concentration by top customers, and entity type distribution across authorized portfolio.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getPortfolioProductPenetration',
+    description: 'Examine product adoption rates, product depth distribution, and multi-product relationships across authorized customers.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getPortfolioEngagement',
+    description: 'Review interaction volume, recency distribution, channels breakdown, and inactive customers (>45 days without interaction).',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getPortfolioServiceHealth',
+    description: 'Examine open customer service cases, SLA breach counts, SLA risk status, and case category distribution.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getPortfolioPipeline',
+    description: 'Retrieve opportunity pipeline metrics, stages breakdown, weighted pipeline values, and stalled opportunities.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getPortfolioSignals',
+    description: 'Inspect active operational and relationship signals across authorized customers by severity and type.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getPortfolioActions',
+    description: 'Retrieve Next Best Action (NBA) availability, categories, and action outcome trace metrics (proposed, executed, outcome).',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getPortfolioChanges',
+    description: 'Inspect "What Changed" portfolio telemetry and chronological events across the relationship portfolio.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
     },
   },
 ];
@@ -4225,6 +4324,272 @@ export async function executeCopilotTool(
             limitations: ['Sensitive account numbers and customer identifiers masked.'],
           },
           events,
+        },
+        sources,
+      };
+    }
+
+    // ==========================================
+    // PHASE 37: ADVANCED PORTFOLIO INTELLIGENCE
+    // ==========================================
+    case 'getPortfolioOverview': {
+      const overview = await portfolioIntelligenceService.getPortfolioOverview(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-OVERVIEW',
+        label: 'Portfolio Intelligence Overview',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Authorized Customers: ${overview.authorizedCustomers}`,
+              `Total Relationship Value: ₹${(overview.totalRelationshipValue / 10000000).toFixed(2)} Cr`,
+              `Average CORE Score: ${overview.averageCoreScore}`,
+              `Open Pipeline Value: ₹${(overview.opportunityPipelineValue / 10000000).toFixed(2)} Cr`,
+              `Active Signals: ${overview.activeSignals}`,
+            ],
+            limitations: ['Aggregated strictly from authorized customer records. Non-predictive.'],
+          },
+          overview,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioHealth': {
+      const health = await portfolioIntelligenceService.getRelationshipHealthDistribution(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-HEALTH',
+        label: 'Relationship Health Distribution',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [`Health categories calculated from canonical CORE Scores and momentum.`],
+            limitations: ['Descriptive health categorization; not a predictive churn or default model.'],
+          },
+          health,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioCoreScoreDistribution': {
+      const coreScore = await portfolioIntelligenceService.getCoreScoreAnalysis(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-CORE',
+        label: 'CORE Score Distribution Analysis',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Average Score: ${coreScore.averageScore}`,
+              `Score Range: ${coreScore.minScore} - ${coreScore.maxScore}`,
+            ],
+            limitations: ['Uses existing deterministic CORE Score engine components.'],
+          },
+          coreScore,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioRelationshipValue': {
+      const valueAnalysis = await portfolioIntelligenceService.getRelationshipValueAnalysis(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-VAL',
+        label: 'Relationship Value Analysis',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Total Portfolio Value: ₹${(valueAnalysis.totalValue / 10000000).toFixed(2)} Cr`,
+              `Top 5 Concentration: ${valueAnalysis.top5ConcentrationPct}%`,
+            ],
+            limitations: ['Based on current deposit balances, credit facilities, and active investment accounts.'],
+          },
+          valueAnalysis,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioProductPenetration': {
+      const penetration = await portfolioIntelligenceService.getProductPenetration(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-PROD',
+        label: 'Product Penetration & Depth',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Product Types Tracked: ${penetration.products.length}`,
+              `Shallow Depth Customers: ${penetration.shallowDepthCustomers.length}`,
+            ],
+            limitations: ['Observed product holdings only.'],
+          },
+          penetration,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioEngagement': {
+      const engagement = await portfolioIntelligenceService.getEngagementIntelligence(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-ENG',
+        label: 'Portfolio Engagement Metrics',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Total Interactions: ${engagement.totalInteractions}`,
+              `Inactive Customers (>45D): ${engagement.inactiveCustomers.length}`,
+            ],
+            limitations: ['Logged customer touchpoints and meetings only.'],
+          },
+          engagement,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioServiceHealth': {
+      const serviceQuality = await portfolioIntelligenceService.getServiceQuality(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-SRV',
+        label: 'Portfolio Service Health',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Open Service Cases: ${serviceQuality.openCases}`,
+              `SLA Breached Cases: ${serviceQuality.slaBreachedCount}`,
+            ],
+            limitations: ['Service cases managed via banking service desk.'],
+          },
+          serviceQuality,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioPipeline': {
+      const pipeline = await portfolioIntelligenceService.getOpportunityPortfolio(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-OPP',
+        label: 'Opportunity Pipeline Portfolio',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Total Pipeline Value: ₹${(pipeline.totalPipelineValue / 10000000).toFixed(2)} Cr`,
+              `Open Opportunities: ${pipeline.totalOpportunities}`,
+            ],
+            limitations: ['Pipeline figures derived from CRM opportunity records.'],
+          },
+          pipeline,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioSignals': {
+      const signals = await portfolioIntelligenceService.getSignalPortfolio(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-SIG',
+        label: 'Portfolio Signal Center',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Active Signals: ${signals.totalActiveSignals}`,
+              `Critical / High Severity: ${signals.severityBreakdown.critical + signals.severityBreakdown.high}`,
+            ],
+            limitations: ['Traceable event signals; no speculative alarms.'],
+          },
+          signals,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioActions': {
+      const nbas = await portfolioIntelligenceService.getNbaPortfolio(ctx.user as any, args);
+      const outcomes = await portfolioIntelligenceService.getActionOutcomes(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-ACT',
+        label: 'Portfolio Actions & Outcomes',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Available NBAs: ${nbas.totalAvailableNbas}`,
+              `Actions Executed: ${outcomes.totalExecuted}`,
+            ],
+            limitations: ['Explicit action logs and customer next-best-action rules.'],
+          },
+          nbas,
+          outcomes,
+        },
+        sources,
+      };
+    }
+
+    case 'getPortfolioChanges': {
+      const changes = await portfolioIntelligenceService.getWhatChanged(ctx.user as any, args);
+      sources.push({
+        type: 'PORTFOLIO_INTELLIGENCE' as any,
+        id: 'PORT-CHG',
+        label: 'What Changed Telemetry',
+        link: '/portfolio-intelligence',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [`Recent Material Portfolio Changes: ${changes.length}`],
+            limitations: ['Derived from snapshot differentials and audit events.'],
+          },
+          changes,
         },
         sources,
       };

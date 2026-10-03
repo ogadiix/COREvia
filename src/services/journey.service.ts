@@ -294,7 +294,7 @@ export const journeyService = {
       throw new BankingError(404, `Journey template '${payload.templateCode}' not found.`);
     }
 
-    const journeyCode = `JRN-${new Date().getFullYear()}-${cust.id}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const journeyCode = `JRN-${new Date().getFullYear()}-${cust.id}-${Date.now().toString().slice(-4)}${Math.floor(100 + Math.random() * 900)}`;
     const now = new Date();
     const targetCompletionAt = new Date(now.getTime() + template.targetDurationDays * 24 * 60 * 60 * 1000);
 

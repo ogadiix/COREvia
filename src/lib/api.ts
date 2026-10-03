@@ -1865,6 +1865,109 @@ export const bankingApi = {
     const qs = query.toString() ? `?${query.toString()}` : '';
     return await request<{ success: boolean; data: any[] }>(`/operations/events${qs}`);
   },
+
+  // ==========================================
+  // PHASE 37: ADVANCED PORTFOLIO INTELLIGENCE
+  // ==========================================
+  _buildPortfolioQuery(params?: any) {
+    const query = new URLSearchParams();
+    if (!params) return '';
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '' && v !== 'ALL') {
+        query.set(k, String(v));
+      }
+    });
+    const qs = query.toString();
+    return qs ? `?${qs}` : '';
+  },
+
+  async getPortfolioOverview(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/overview${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioHealthDistribution(params?: any) {
+    return await request<{ success: boolean; data: any[] }>(`/portfolio-intelligence/health-distribution${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioCoreScoreAnalysis(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/core-score-analysis${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioValueAnalysis(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/relationship-value${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioProductPenetration(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/product-penetration${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioEngagement(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/engagement${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioServiceQuality(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/service-quality${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioOpportunities(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/opportunities${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioSignals(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/signals${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioNbas(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/nbas${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioActionOutcomes(params?: any) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/action-outcomes${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioWhatChanged(params?: any) {
+    return await request<{ success: boolean; data: any[] }>(`/portfolio-intelligence/what-changed${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioChangelog(params?: any) {
+    return await request<{ success: boolean; data: any[] }>(`/portfolio-intelligence/changelog${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioHealthMatrix(params?: any) {
+    return await request<{ success: boolean; data: any[] }>(`/portfolio-intelligence/health-matrix${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioFocusAreas(params?: any) {
+    return await request<{ success: boolean; data: any[] }>(`/portfolio-intelligence/focus-areas${this._buildPortfolioQuery(params)}`);
+  },
+
+  async getPortfolioCustomers(params?: any) {
+    return await request<{ success: boolean; data: { customers: any[]; total: number; page: number; totalPages: number } }>(
+      `/portfolio-intelligence/customers${this._buildPortfolioQuery(params)}`
+    );
+  },
+
+  async getPortfolioCustomerProfile(customerId: number) {
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/customers/${customerId}`);
+  },
+
+  async getPortfolioComparison(period1 = '30D_AGO', period2 = 'CURRENT') {
+    const query = new URLSearchParams({ period1, period2 }).toString();
+    return await request<{ success: boolean; data: any }>(`/portfolio-intelligence/comparison?${query}`);
+  },
+
+  async exportPortfolioCSV(params?: any): Promise<string> {
+    const query = this._buildPortfolioQuery(params);
+    const token = localStorage.getItem('corevia_auth_token');
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const res = await fetch(`/api/portfolio-intelligence/export${query}`, { headers });
+    if (!res.ok) {
+      const errJson = await res.json().catch(() => ({}));
+      throw new Error(errJson.error?.message || `Failed to export CSV: ${res.statusText}`);
+    }
+    return await res.text();
+  },
 };
 
 export const api = bankingApi;

@@ -9,6 +9,7 @@ import { runCustomerJourneyTests } from './journey.test.ts';
 import { runGroupTests } from './group.test.ts';
 import { runGovernanceTests } from './governance.test.ts';
 import { runOperationsTests } from './operations.test.ts';
+import { runPortfolioIntelligenceTests } from './portfolioIntelligence.test.ts';
 
 async function runAllTests() {
   console.log('========================================================================');
@@ -17,7 +18,7 @@ async function runAllTests() {
 
   const startTime = Date.now();
   let passedSuites = 0;
-  const totalSuites = 11;
+  const totalSuites = 12;
 
   try {
     // Suite 1: Core Banking Platform & RBAC IDOR
@@ -81,10 +82,16 @@ async function runAllTests() {
     console.log('>>> [SUITE 10/11] PASSED\n');
 
     // Suite 11: Banking Operations Workspace (Phase 36)
-    console.log('>>> [SUITE 11/11] BANKING OPERATIONS WORKSPACE SUITE (PHASE 36)');
+    console.log('>>> [SUITE 11/12] BANKING OPERATIONS WORKSPACE SUITE (PHASE 36)');
     await runOperationsTests();
     passedSuites++;
-    console.log('>>> [SUITE 11/11] PASSED\n');
+    console.log('>>> [SUITE 11/12] PASSED\n');
+
+    // Suite 12: Advanced Portfolio Intelligence (Phase 37)
+    console.log('>>> [SUITE 12/12] ADVANCED PORTFOLIO INTELLIGENCE SUITE (PHASE 37)');
+    await runPortfolioIntelligenceTests();
+    passedSuites++;
+    console.log('>>> [SUITE 12/12] PASSED\n');
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
     console.log('========================================================================');
@@ -100,7 +107,8 @@ async function runAllTests() {
     console.log('   - Household & Business Group 360: PASS (30 tests)');
     console.log('   - Trust & Governance Center: PASS (47 tests)');
     console.log('   - Banking Operations Workspace: PASS (20 tests)');
-    console.log('   Total 245 automated integration & security verifications passed.');
+    console.log('   - Advanced Portfolio Intelligence: PASS (24 tests)');
+    console.log('   Total 269 automated integration & security verifications passed.');
     console.log('========================================================================');
     process.exit(0);
   } catch (error) {

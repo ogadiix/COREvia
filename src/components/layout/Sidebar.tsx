@@ -30,6 +30,7 @@ import {
   Milestone,
   ShieldCheck,
   Activity,
+  PieChart,
 } from 'lucide-react';
 import { ModuleType } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -217,6 +218,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: <BarChart3 className="w-4 h-4 text-cyan-400" />,
           shortcut: 'F11',
           requiredPermission: 'analytics:read',
+        },
+        {
+          id: 'portfolio-intelligence',
+          label: 'Portfolio Intelligence',
+          icon: <PieChart className="w-4 h-4 text-blue-400" />,
+          shortcut: '',
+          requiredPermission: 'portfolio:view',
         },
       ],
     },

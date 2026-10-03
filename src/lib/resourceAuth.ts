@@ -54,7 +54,7 @@ export const resourceAuth = {
       if (customer.assignedRmId && customer.assignedRmId !== user.id) {
         // Log IDOR Security Violation
         await auditRepository.createLog({
-          actorId: user.employeeId,
+          actorId: user.employeeId || String(user.id) || 'SYSTEM',
           actorName: user.name,
           action: 'SECURITY_IDOR_VIOLATION',
           resourceType: 'CUSTOMER',
@@ -143,7 +143,7 @@ export const resourceAuth = {
         await this.authorizeCustomer(user, taskRecord.customerId, action, requestId);
       } else {
         await auditRepository.createLog({
-          actorId: user.employeeId,
+          actorId: user.employeeId || String(user.id) || 'SYSTEM',
           actorName: user.name,
           action: 'SECURITY_IDOR_VIOLATION',
           resourceType: 'TASK',
@@ -184,7 +184,7 @@ export const resourceAuth = {
 
     if (notif.userId !== user.id && user.role !== 'ADMINISTRATOR') {
       await auditRepository.createLog({
-        actorId: user.employeeId,
+        actorId: user.employeeId || String(user.id) || 'SYSTEM',
         actorName: user.name,
         action: 'SECURITY_IDOR_VIOLATION',
         resourceType: 'NOTIFICATION',
