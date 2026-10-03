@@ -425,5 +425,40 @@ All endpoints enforce dual authorization (Group Authorization + Per-Member Resou
 425: - **`POST /api/governance/exceptions/:id/dismiss`**: Body `{ "reason": "..." }`. Marks exception `DISMISSED`.
 426: - **RBAC**: Requires `GOVERNANCE_EXCEPTION_MANAGE` (Admin, Compliance). Emits audit log for every mutation.
 
+---
+
+## 6. Enterprise Integration & API Gateway Endpoints (Phase 38)
+
+### 6.1 Integration Registry
+- **`GET /api/integrations`**: List all registered integrations (Core Banking, KYC, Document Management, Payments, Notifications). Supports `domain`, `mode`, `status`, and `search` query parameters.
+- **`GET /api/integrations/:id`**: Retrieve integration metadata, adapter specification, health history, and circuit breaker configuration.
+- **`GET /api/integrations/summary`**: Aggregated overview metrics (Total Integrations, Active Simulators, 24h Events, Success Rate, Average Latency, Circuit Breakers).
+- **`PATCH /api/integrations/:id/status`**: Update operational state (`CONFIGURED`, `AVAILABLE`, `DISABLED`, `DEGRADED`, `FAILED`). Strictly blocks setting unverified adapters to `CONNECTED`.
+- **`POST /api/integrations/:id/health-check`**: Trigger on-demand health/connectivity check. Returns latency and explicit `SIMULATOR_HEALTHY` status for synthetic adapters.
+
+### 6.2 Internal Gateway Execution & Idempotency
+- **`POST /api/integrations/:id/execute`**: Governed operation execution through internal adapter.
+  - **Headers**: Supports `Idempotency-Key` for mutation safety.
+  - **Body**: `{ "operation": "getBalance", "payload": { "accountNumber": "10482001" } }`.
+  - **Behavior**: Verifies permissions, computes request hash, checks circuit breaker state, enforces rate limits, bounds timeouts, and sanitizes payload telemetry in event logs.
+  - **Idempotency Replay**: Replaying exact request returns cached response. Mismatched payload with identical key returns `422 Unprocessable Entity`.
+
+### 6.3 Registered API Endpoints
+- **`GET /api/integrations/endpoints/all`**: Returns controlled integration endpoint specifications (`EP-CB-01`, `EP-PAY-01`, etc.) including method, purpose, auth type, rate limit, timeout, and idempotency requirements.
+
+### 6.4 Webhooks & Delivery Management
+- **`GET /api/integrations/webhooks/all`**: List registered webhooks with HMAC-SHA256 secret metadata.
+- **`POST /api/integrations/webhooks`**: Create new webhook subscription with generated signing secret.
+- **`POST /api/integrations/webhooks/:webhookId/test`**: Trigger simulated synthetic webhook event dispatch.
+- **`GET /api/integrations/deliveries/all`**: List delivery attempts, status (`DELIVERED`, `FAILED`, `RETRYING`, `EXHAUSTED`), HTTP response status, latency, and correlation IDs.
+- **`POST /api/integrations/deliveries/:deliveryId/retry`**: Bounded manual retry of retryable delivery failures (max 3 attempts).
+
+### 6.5 Credentials & API Keys
+- **`POST /api/integrations/:id/api-keys`**: Generate secure service token. Raw secret is displayed once in the response; only the SHA-256 hash and truncated prefix are stored in PostgreSQL.
+
+### 6.6 Telemetry & Audit
+- **`GET /api/integrations/events/all`**: Query integration event stream with masked PAN, Aadhaar, and secret tokens.
+- **`GET /api/integrations/failures/all`**: List active integration errors with error classification (`TIMEOUT`, `NETWORK_ERROR`, `VALIDATION_ERROR`, etc.) and retryability status.
+
 
 

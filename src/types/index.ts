@@ -27,10 +27,12 @@ export type ModuleType =
   | 'groups'
   | 'governance'
   | 'operations'
-  | 'portfolio-intelligence';
+  | 'portfolio-intelligence'
+  | 'integrations';
 
 export * from './operations.types';
 export * from './portfolioIntelligence.types';
+export * from './integration.types';
 
 export type AccountType = 'SAVINGS' | 'CURRENT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT' | 'SALARY' | 'PREMIUM_SAVINGS';
 

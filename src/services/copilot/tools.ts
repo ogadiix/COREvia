@@ -24,6 +24,7 @@ import { groupService } from '../group.service.ts';
 import { governanceService } from '../governance.service.ts';
 import { operationsService } from '../operations.service.ts';
 import { portfolioIntelligenceService } from '../portfolioIntelligence.service.ts';
+import { integrationService } from '../integrations/integration.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -1272,6 +1273,70 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
     parameters: {
       type: Type.OBJECT,
       properties: {},
+    },
+  },
+  {
+    name: 'getIntegrations',
+    description: 'List enterprise integrations, simulator adapters, statuses, and domains in the API gateway.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        domain: { type: Type.STRING, description: 'Optional domain filter (CORE_BANKING, KYC, PAYMENTS, etc.)' },
+        status: { type: Type.STRING, description: 'Optional status filter (SIMULATED, AVAILABLE, etc.)' },
+      },
+    },
+  },
+  {
+    name: 'getIntegration',
+    description: 'Retrieve technical metadata, environment, adapter type, and version for an integration.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        integrationId: { type: Type.STRING, description: 'Integration ID (e.g. INT-COREBANKING, INT-KYC)' },
+      },
+      required: ['integrationId'],
+    },
+  },
+  {
+    name: 'getIntegrationHealth',
+    description: 'Inspect live health status, circuit breaker state, latency, and diagnostics for an integration.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        integrationId: { type: Type.STRING, description: 'Integration ID to inspect health for' },
+      },
+      required: ['integrationId'],
+    },
+  },
+  {
+    name: 'getIntegrationEvents',
+    description: 'Query integration event logs with correlation ID, direction, and latency metrics.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        integrationId: { type: Type.STRING, description: 'Optional integration ID filter' },
+        status: { type: Type.STRING, description: 'Optional status filter (SUCCESS, FAILED, TIMEOUT)' },
+        limit: { type: Type.INTEGER, description: 'Max events to return (default 20)' },
+      },
+    },
+  },
+  {
+    name: 'getIntegrationFailures',
+    description: 'List recent integration outages, timeout failures, and retryable errors.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getWebhookDeliveries',
+    description: 'Query webhook delivery attempts, retry status, latency, and HTTP response codes.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        webhookId: { type: Type.STRING, description: 'Optional webhook ID filter' },
+        status: { type: Type.STRING, description: 'Optional status filter (DELIVERED, RETRYING, EXHAUSTED)' },
+      },
     },
   },
 ];
@@ -4590,6 +4655,178 @@ export async function executeCopilotTool(
             limitations: ['Derived from snapshot differentials and audit events.'],
           },
           changes,
+        },
+        sources,
+      };
+    }
+
+    // ==========================================
+    // PHASE 38: ENTERPRISE INTEGRATION TOOLS
+    // ==========================================
+
+    case 'getIntegrations': {
+      const integrations = await integrationService.listIntegrations(args);
+      sources.push({
+        type: 'INTEGRATIONS' as any,
+        id: 'INT-REGISTRY',
+        label: 'Enterprise Integration Registry',
+        link: '/integrations',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Total Integrations: ${integrations.length}`,
+              `Simulators: ${integrations.filter((i) => i.mode === 'SIMULATOR').length}`,
+            ],
+            limitations: ['Simulators represent synthetic core banking rails, not real external networks.'],
+          },
+          integrations: integrations.map((i) => ({
+            integrationId: i.integrationId,
+            name: i.name,
+            domain: i.domain,
+            mode: i.mode,
+            status: i.status,
+            healthStatus: i.healthStatus,
+            circuitBreaker: i.circuitBreaker.state,
+            version: i.version,
+          })),
+        },
+        sources,
+      };
+    }
+
+    case 'getIntegration': {
+      const item = await integrationService.getIntegration(args.integrationId);
+      sources.push({
+        type: 'INTEGRATIONS' as any,
+        id: item.integrationId,
+        label: `${item.name} (${item.integrationId})`,
+        link: '/integrations',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Integration: ${item.name} [${item.status}]`,
+              `Mode: ${item.mode}`,
+              `Domain: ${item.domain}`,
+              `Adapter: ${item.adapterType} v${item.version}`,
+            ],
+            limitations: ['Secrets and private API keys are omitted in accordance with security policy.'],
+          },
+          integration: {
+            integrationId: item.integrationId,
+            name: item.name,
+            domain: item.domain,
+            mode: item.mode,
+            status: item.status,
+            environment: item.environment,
+            version: item.version,
+            healthStatus: item.healthStatus,
+            rateLimitRpm: item.rateLimitRpm,
+            timeoutMs: item.timeoutMs,
+            circuitBreaker: item.circuitBreaker,
+          },
+        },
+        sources,
+      };
+    }
+
+    case 'getIntegrationHealth': {
+      const health = await integrationService.testConnection(args.integrationId, ctx.user as any);
+      sources.push({
+        type: 'INTEGRATIONS' as any,
+        id: args.integrationId,
+        label: `Health Check · ${args.integrationId}`,
+        link: '/integrations',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Health Status: ${health.status}`,
+              `Latency: ${health.latencyMs}ms`,
+              `Circuit Breaker: ${health.details.circuitBreaker}`,
+            ],
+            limitations: ['Live adapter health check result.'],
+          },
+          health,
+        },
+        sources,
+      };
+    }
+
+    case 'getIntegrationEvents': {
+      const events = await integrationService.listEvents(args);
+      sources.push({
+        type: 'INTEGRATIONS' as any,
+        id: 'INT-EVENTS',
+        label: 'Integration Event Stream',
+        link: '/integrations',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [`Queried Integration Events: ${events.length}`],
+            limitations: ['Sensitive identifiers (PAN, Aadhaar, account numbers) are masked in payload metadata.'],
+          },
+          events: events.slice(0, 20).map((e) => ({
+            eventId: e.eventId,
+            integrationId: e.integrationId,
+            eventType: e.eventType,
+            direction: e.direction,
+            status: e.status,
+            correlationId: e.correlationId,
+            latencyMs: e.latencyMs,
+            createdAt: e.createdAt,
+          })),
+        },
+        sources,
+      };
+    }
+
+    case 'getIntegrationFailures': {
+      const failures = await integrationService.listFailures();
+      sources.push({
+        type: 'INTEGRATIONS' as any,
+        id: 'INT-FAILURES',
+        label: 'Integration Outage & Failure Registry',
+        link: '/integrations',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [`Active Failures & Outages: ${failures.length}`],
+            limitations: ['Includes gateway timeouts, provider errors, and exhausted delivery attempts.'],
+          },
+          failures,
+        },
+        sources,
+      };
+    }
+
+    case 'getWebhookDeliveries': {
+      const deliveries = await integrationService.listDeliveries(args);
+      sources.push({
+        type: 'INTEGRATIONS' as any,
+        id: 'INT-WEBHOOKS',
+        label: 'Webhook Delivery Telemetry',
+        link: '/integrations',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [`Recorded Webhook Deliveries: ${deliveries.length}`],
+            limitations: ['Deliveries bound to 3 maximum retry attempts.'],
+          },
+          deliveries,
         },
         sources,
       };

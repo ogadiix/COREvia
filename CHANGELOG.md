@@ -1,5 +1,23 @@
 # Changelog
 
+## [Phase 38] - Enterprise Integration & API Gateway
+- **Enterprise Integration & API Gateway Workspace (`/integrations`)**: Centralized integration registry, adapter orchestration, endpoint management, webhook delivery engine, and health monitoring layer for enterprise banking connectivity.
+- **Strict Distinction Between Simulated and Live Connectivity**: Never displays `SIMULATED` as `CONNECTED`. Integrations without verified live contracts are tagged `SIMULATOR` / `SIMULATED` with watermarked disclaimers: `SIMULATED DATA — NOT REAL EXTERNAL BANKING CONNECTIVITY`.
+- **5 Production-Grade Synthetic Banking Simulators**:
+  - Core Banking Engine Simulator (`INT-COREBANKING`): Account lookups, balance verification, statement statements, and service holds.
+  - National Identity & KYC Simulator (`INT-KYC`): Identity verification, cKYC status checks, and token review workflows with PAN/Aadhaar masking.
+  - Enterprise Document Vault Simulator (`INT-DOCMGMT`): SHA-256 fingerprint registration, document retrieval, and forensic checks.
+  - Payments & Clearing Simulator (`INT-PAYMENTS`): RTGS/NEFT/IMPS payment instruction dispatch with mandatory idempotency and clearing status tracking.
+  - Multi-Channel Notification Simulator (`INT-NOTIFICATION`): Synthetic SMS, Email, and Push dispatch with delivery report telemetry.
+- **Internal API Gateway Abstraction**: Governs internal route dispatching (`/api/v1/integrations/...`), correlation ID injection, dual-control service token/API key authentication, rate limiting, and bounded timeouts.
+- **Strict Idempotency Engine**: Supports `Idempotency-Key` headers on mutation routes with SHA-256 request hashing. Replaying exact requests serves cached responses; duplicate keys with modified payloads are strictly rejected (`422 Unprocessable Entity`).
+- **Circuit Breaker State Machine**: Lightweight circuit breaker (`CLOSED` / `HALF_OPEN` / `OPEN`) monitoring adapter latency and failure thresholds. Tripping to `OPEN` automatically creates a Phase 36 Operational Exception (`OEX-...`).
+- **Webhook Management & Delivery Engine**: Supports HMAC-SHA256 signature generation (`X-Signature-SHA256`), 300-second timestamp replay protection (`X-Timestamp`), and bounded delivery retries (maximum 3 attempts) with retryable error classification.
+- **Secret & Credential Lifecycle**: Generates cryptographically secure API keys displayed once upon creation. Normal database records store only SHA-256 key hashes and truncated key prefixes.
+- **Sensitive Data Masking**: Automatically masks PAN, Aadhaar, account numbers, and secrets in integration event logs and previews.
+- **Copilot Integration**: Added 6 read-only deterministic tools (`getIntegrations`, `getIntegration`, `getIntegrationHealth`, `getIntegrationEvents`, `getIntegrationFailures`, `getWebhookDeliveries`) with strict prohibition on mutations or secret disclosure.
+- **Comprehensive Verification**: 26 automated integration and security tests in Suite 13; all 295 tests across all 13 suites pass 100%. Production build and live visual QA verified on `/integrations`.
+
 ## [Phase 37] - Advanced Portfolio Intelligence
 - **Explainable Portfolio Intelligence Workspace (`/portfolio-intelligence`)**: Centralized institutional relationship intelligence layer for branch managers, relationship managers, compliance officers, and executive leadership answering "What is happening across my authorized portfolio?" and "Where has the portfolio changed, and what evidence explains that change?".
 - **Non-Predictive Governance Invariant**: Strictly non-predictive. Strictly excludes speculative credit default scoring, loan approval recommendations, employee rankings, and churn predictions. Consumes canonical CORE Score, Relationship Intelligence, and Relationship Momentum engines without creating competing scoring models.

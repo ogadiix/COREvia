@@ -56,6 +56,7 @@ import { GroupsModule } from './components/modules/GroupsModule';
 import { GovernanceModule } from './components/modules/GovernanceModule';
 import { OperationsModule } from './components/modules/OperationsModule';
 import { PortfolioIntelligenceModule } from './components/modules/PortfolioIntelligenceModule';
+import { IntegrationsModule } from './components/modules/IntegrationsModule';
 import { CopilotDrawer } from './components/copilot/CopilotDrawer';
 import { CopilotProvider, useCopilot } from './context/CopilotContext';
 import { NewTransactionModal } from './components/modals/NewTransactionModal';
@@ -108,6 +109,7 @@ const pathToModule: Record<string, ModuleType> = {
   '/governance': 'governance',
   '/operations': 'operations',
   '/portfolio-intelligence': 'portfolio-intelligence',
+  '/integrations': 'integrations',
 };
 
 const moduleToPath: Record<ModuleType, string> = {
@@ -140,6 +142,7 @@ const moduleToPath: Record<ModuleType, string> = {
   governance: '/governance',
   operations: '/operations',
   'portfolio-intelligence': '/portfolio-intelligence',
+  integrations: '/integrations',
 };
 
 function BankingWorkplace() {
@@ -170,6 +173,7 @@ function BankingWorkplace() {
   const canAccessGovernance = hasRole('ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER') || hasPermission('admin:all') || hasPermission('governance:view');
   const canAccessOperations = hasRole('ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'MAKER_L2', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS') || hasPermission('admin:all') || hasPermission('operations:view');
   const canAccessPortfolio = hasRole('ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS') || hasPermission('admin:all') || hasPermission('portfolio:view') || hasPermission('analytics:view');
+  const canAccessIntegrations = hasRole('ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS') || hasPermission('admin:all') || hasPermission('integrations:view');
 
   // Navigation State initialized from URL path
   const [activeModule, setActiveModule] = useState<ModuleType>(() => {
@@ -1178,6 +1182,19 @@ function BankingWorkplace() {
                   moduleName="Portfolio Intelligence"
                   requiredPermission="portfolio:view"
                   requiredRoles={['Administrator', 'Branch Manager', 'Relationship Manager', 'Branch Operations Head', 'Compliance Officer']}
+                  onGoBack={() => handleSelectModule('dashboard')}
+                />
+              )
+            )}
+
+            {activeModule === 'integrations' && (
+              canAccessIntegrations ? (
+                <IntegrationsModule />
+              ) : (
+                <AccessRestrictedNotice
+                  moduleName="Enterprise Integration & API Gateway"
+                  requiredPermission="integrations:view"
+                  requiredRoles={['Administrator', 'Branch Manager', 'Relationship Manager', 'Branch Operations Head', 'Compliance Officer', 'Operations']}
                   onGoBack={() => handleSelectModule('dashboard')}
                 />
               )

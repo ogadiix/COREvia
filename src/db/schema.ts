@@ -2776,3 +2776,199 @@ export const operationalEventsRelations = relations(operationalEvents, ({ one })
   }),
 }));
 
+// ==========================================
+// PHASE 38: ENTERPRISE INTEGRATION & API GATEWAY
+// ==========================================
+
+export const integrations = pgTable(
+  'integrations',
+  {
+    id: serial('id').primaryKey(),
+    integrationId: text('integration_id').notNull().unique(), // e.g. INT-COREBANKING, INT-KYC
+    name: text('name').notNull(),
+    domain: text('domain').notNull(),
+    adapterType: text('adapter_type').notNull(),
+    mode: text('mode').notNull().default('SIMULATOR'), // SIMULATOR, ADAPTER, EXTERNAL
+    status: text('status').notNull().default('SIMULATED'), // NOT_CONFIGURED, CONFIGURED, AVAILABLE, CONNECTED, DEGRADED, FAILED, DISABLED, SIMULATED
+    environment: text('environment').notNull().default('DEVELOPMENT'),
+    version: text('version').notNull().default('1.0.0'),
+    baseUrl: text('base_url').notNull().default('http://localhost:3000/api/integrations/simulators'),
+    timeoutMs: integer('timeout_ms').notNull().default(5000),
+    rateLimitRpm: integer('rate_limit_rpm').notNull().default(120),
+    retryPolicy: jsonb('retry_policy').notNull().default({ maxRetries: 3, backoffMs: 1000, retryableCodes: ['TIMEOUT', 'NETWORK_ERROR', '503', '502'] }),
+    circuitBreaker: jsonb('circuit_breaker').notNull().default({ state: 'CLOSED', failureThreshold: 5, consecutiveFailures: 0, resetTimeoutMs: 30000 }),
+    healthStatus: text('health_status').notNull().default('SIMULATOR_HEALTHY'),
+    lastHealthCheck: timestamp('last_health_check'),
+    lastSuccessfulEvent: timestamp('last_successful_event'),
+    failureCount: integer('failure_count').notNull().default(0),
+    successRate: numeric('success_rate', { precision: 5, scale: 2 }).notNull().default('100.0'),
+    averageLatencyMs: integer('average_latency_ms').notNull().default(45),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    intIntegrationIdIdx: uniqueIndex('idx_int_integration_id').on(table.integrationId),
+    intDomainIdx: index('idx_int_domain').on(table.domain),
+    intStatusIdx: index('idx_int_status').on(table.status),
+    intModeIdx: index('idx_int_mode').on(table.mode),
+  })
+);
+
+export const integrationEndpoints = pgTable(
+  'integration_endpoints',
+  {
+    id: serial('id').primaryKey(),
+    endpointId: text('endpoint_id').notNull().unique(), // e.g. EP-CB-01
+    integrationId: text('integration_id').notNull(),
+    method: text('method').notNull(),
+    path: text('path').notNull(),
+    purpose: text('purpose').notNull(),
+    version: text('version').notNull().default('v1'),
+    authType: text('auth_type').notNull().default('SERVICE_TOKEN'),
+    rateLimit: integer('rate_limit').notNull().default(60),
+    timeoutMs: integer('timeout_ms').notNull().default(5000),
+    idempotencyRequired: boolean('idempotency_required').notNull().default(false),
+    status: text('status').notNull().default('ACTIVE'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    ieEndpointIdIdx: uniqueIndex('idx_ie_endpoint_id').on(table.endpointId),
+    ieIntegrationIdIdx: index('idx_ie_integration_id').on(table.integrationId),
+    iePathIdx: index('idx_ie_path').on(table.path),
+  })
+);
+
+export const integrationWebhooks = pgTable(
+  'integration_webhooks',
+  {
+    id: serial('id').primaryKey(),
+    webhookId: text('webhook_id').notNull().unique(), // e.g. WHK-2026-PAY
+    integrationId: text('integration_id').notNull(),
+    eventType: text('event_type').notNull(),
+    targetUrl: text('target_url').notNull(),
+    status: text('status').notNull().default('ACTIVE'),
+    secretHash: text('secret_hash').notNull(),
+    secretMetadata: jsonb('secret_metadata').notNull(),
+    lastDeliveryAt: timestamp('last_delivery_at'),
+    lastResponseStatus: integer('last_response_status'),
+    failureCount: integer('failure_count').notNull().default(0),
+    retryCount: integer('retry_count').notNull().default(0),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    iwWebhookIdIdx: uniqueIndex('idx_iw_webhook_id').on(table.webhookId),
+    iwIntegrationIdIdx: index('idx_iw_integration_id').on(table.integrationId),
+    iwEventTypeIdx: index('idx_iw_event_type').on(table.eventType),
+  })
+);
+
+export const webhookDeliveries = pgTable(
+  'webhook_deliveries',
+  {
+    id: serial('id').primaryKey(),
+    deliveryId: text('delivery_id').notNull().unique(), // e.g. DEL-2026-001
+    webhookId: text('webhook_id').notNull(),
+    eventId: text('event_id').notNull(),
+    attempt: integer('attempt').notNull().default(1),
+    status: text('status').notNull().default('PENDING'), // PENDING, DELIVERED, FAILED, RETRYING, EXHAUSTED
+    httpStatus: integer('http_status'),
+    startedAt: timestamp('started_at').defaultNow().notNull(),
+    completedAt: timestamp('completed_at'),
+    latencyMs: integer('latency_ms'),
+    error: text('error'),
+    retryable: boolean('retryable').notNull().default(false),
+    correlationId: text('correlation_id').notNull(),
+    payload: jsonb('payload'),
+    responseBody: jsonb('response_body'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    wdDeliveryIdIdx: uniqueIndex('idx_wd_delivery_id').on(table.deliveryId),
+    wdWebhookIdIdx: index('idx_wd_webhook_id').on(table.webhookId),
+    wdStatusIdx: index('idx_wd_status').on(table.status),
+    wdCorrelationIdIdx: index('idx_wd_correlation_id').on(table.correlationId),
+  })
+);
+
+export const integrationEvents = pgTable(
+  'integration_events',
+  {
+    id: serial('id').primaryKey(),
+    eventId: text('event_id').notNull().unique(), // e.g. EVT-2026-001
+    integrationId: text('integration_id').notNull(),
+    eventType: text('event_type').notNull(),
+    direction: text('direction').notNull().default('OUTBOUND'), // INBOUND, OUTBOUND
+    status: text('status').notNull().default('SUCCESS'), // SUCCESS, FAILED, RETRYING, EXHAUSTED, TIMEOUT
+    correlationId: text('correlation_id').notNull(),
+    relatedEntityType: text('related_entity_type'),
+    relatedEntityId: text('related_entity_id'),
+    startedAt: timestamp('started_at').defaultNow().notNull(),
+    completedAt: timestamp('completed_at'),
+    latencyMs: integer('latency_ms'),
+    errorCode: text('error_code'),
+    errorMessage: text('error_message'),
+    retryable: boolean('retryable').notNull().default(false),
+    retryCount: integer('retry_count').notNull().default(0),
+    payloadMetadata: jsonb('payload_metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    ievEventIdIdx: uniqueIndex('idx_iev_event_id').on(table.eventId),
+    ievIntegrationIdIdx: index('idx_iev_integration_id').on(table.integrationId),
+    ievStatusIdx: index('idx_iev_status').on(table.status),
+    ievCorrelationIdIdx: index('idx_iev_correlation_id').on(table.correlationId),
+    ievCreatedAtIdx: index('idx_iev_created_at').on(table.createdAt),
+  })
+);
+
+export const idempotencyRecords = pgTable(
+  'idempotency_records',
+  {
+    id: serial('id').primaryKey(),
+    idempotencyKey: text('idempotency_key').notNull().unique(),
+    requestHash: text('request_hash').notNull(),
+    endpoint: text('endpoint').notNull(),
+    actorId: text('actor_id').notNull(),
+    status: text('status').notNull().default('PROCESSING'), // PROCESSING, COMPLETED, FAILED
+    responseStatus: integer('response_status'),
+    responseData: jsonb('response_data'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    expiresAt: timestamp('expires_at').notNull(),
+  },
+  (table) => ({
+    idempKeyIdx: uniqueIndex('idx_idemp_key').on(table.idempotencyKey),
+    idempExpiresAtIdx: index('idx_idemp_expires_at').on(table.expiresAt),
+  })
+);
+
+export const integrationCredentials = pgTable(
+  'integration_credentials',
+  {
+    id: serial('id').primaryKey(),
+    credentialId: text('credential_id').notNull().unique(),
+    integrationId: text('integration_id').notNull(),
+    name: text('name').notNull(),
+    keyPrefix: text('key_prefix').notNull(),
+    keyHash: text('key_hash').notNull(),
+    status: text('status').notNull().default('ACTIVE'), // ACTIVE, ROTATED, REVOKED, EXPIRED
+    environment: text('environment').notNull().default('DEVELOPMENT'),
+    permissions: jsonb('permissions').notNull().default(['read', 'execute']),
+    lastUsedAt: timestamp('last_used_at'),
+    expiresAt: timestamp('expires_at'),
+    revokedAt: timestamp('revoked_at'),
+    revokedBy: text('revoked_by'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    icCredentialIdIdx: uniqueIndex('idx_ic_credential_id').on(table.credentialId),
+    icIntegrationIdIdx: index('idx_ic_integration_id').on(table.integrationId),
+  })
+);
+
+

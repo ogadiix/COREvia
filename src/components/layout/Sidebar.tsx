@@ -291,6 +291,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           shortcut: '',
           requiredRoles: ['ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'MAKER_L2', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS'],
         },
+        {
+          id: 'integrations',
+          label: 'Integration & Gateway',
+          icon: <Network className="w-4 h-4 text-indigo-400" />,
+          shortcut: '',
+          requiredRoles: ['ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS'],
+        },
       ],
     },
   ];

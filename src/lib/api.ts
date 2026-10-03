@@ -1968,6 +1968,115 @@ export const bankingApi = {
     }
     return await res.text();
   },
+
+  // ==========================================
+  // PHASE 38: ENTERPRISE INTEGRATION & API GATEWAY
+  // ==========================================
+
+  async getIntegrations(params?: { domain?: string; mode?: string; status?: string; search?: string }) {
+    const cleanParams: Record<string, string> = {};
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') cleanParams[k] = String(v);
+      });
+    }
+    const qs = Object.keys(cleanParams).length > 0 ? `?${new URLSearchParams(cleanParams).toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/integrations${qs}`);
+  },
+
+  async getIntegration(idOrCode: string | number) {
+    return await request<{ success: boolean; data: any }>(`/integrations/${idOrCode}`);
+  },
+
+  async getIntegrationSummary() {
+    return await request<{ success: boolean; data: any }>('/integrations/summary');
+  },
+
+  async testIntegrationConnection(idOrCode: string | number) {
+    return await request<{ success: boolean; data: any }>(`/integrations/${idOrCode}/health-check`, {
+      method: 'POST',
+    });
+  },
+
+  async updateIntegrationStatus(idOrCode: string | number, status: string, reason?: string) {
+    return await request<{ success: boolean; data: any }>(`/integrations/${idOrCode}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status, reason }),
+    });
+  },
+
+  async executeIntegrationOperation(idOrCode: string | number, operation: string, payload?: any, idempotencyKey?: string) {
+    const headers: Record<string, string> = {};
+    if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey;
+    return await request<any>(`/integrations/${idOrCode}/execute`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ operation, payload }),
+    });
+  },
+
+  async getIntegrationEndpoints(integrationId?: string) {
+    const qs = integrationId ? `?integrationId=${encodeURIComponent(integrationId)}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/integrations/endpoints/all${qs}`);
+  },
+
+  async getIntegrationWebhooks(integrationId?: string) {
+    const qs = integrationId ? `?integrationId=${encodeURIComponent(integrationId)}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/integrations/webhooks/all${qs}`);
+  },
+
+  async createWebhook(data: { integrationId: string; eventType: string; targetUrl: string }) {
+    return await request<{ success: boolean; data: any }>('/integrations/webhooks', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async triggerWebhookTest(webhookId: string, payload?: any) {
+    return await request<{ success: boolean; data: any }>(`/integrations/webhooks/${webhookId}/test`, {
+      method: 'POST',
+      body: JSON.stringify({ payload }),
+    });
+  },
+
+  async getWebhookDeliveries(params?: { webhookId?: string; status?: string; limit?: number }) {
+    const cleanParams: Record<string, string> = {};
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') cleanParams[k] = String(v);
+      });
+    }
+    const qs = Object.keys(cleanParams).length > 0 ? `?${new URLSearchParams(cleanParams).toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/integrations/deliveries/all${qs}`);
+  },
+
+  async retryWebhookDelivery(deliveryId: string) {
+    return await request<{ success: boolean; data: any }>(`/integrations/deliveries/${deliveryId}/retry`, {
+      method: 'POST',
+    });
+  },
+
+  async getIntegrationEvents(params?: { integrationId?: string; status?: string; direction?: string; search?: string; limit?: number }) {
+    const cleanParams: Record<string, string> = {};
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') cleanParams[k] = String(v);
+      });
+    }
+    const qs = Object.keys(cleanParams).length > 0 ? `?${new URLSearchParams(cleanParams).toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/integrations/events/all${qs}`);
+  },
+
+  async getIntegrationFailures() {
+    return await request<{ success: boolean; data: any[] }>('/integrations/failures/all');
+  },
+
+  async createIntegrationApiKey(integrationId: string, name: string, permissions?: string[]) {
+    return await request<{ success: boolean; data: any }>(`/integrations/${integrationId}/api-keys`, {
+      method: 'POST',
+      body: JSON.stringify({ name, permissions }),
+    });
+  },
 };
 
 export const api = bankingApi;

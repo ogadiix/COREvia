@@ -269,7 +269,48 @@ export const copilotSecurity = {
       }
     }
 
-    // 5. Customer Scoping checks
+    // 5. Integration and API Gateway tools RBAC checks (Phase 38)
+    const integrationTools = [
+      'getIntegrations',
+      'getIntegration',
+      'getIntegrationHealth',
+      'getIntegrationEvents',
+      'getIntegrationFailures',
+      'getWebhookDeliveries',
+    ];
+
+    if (integrationTools.includes(toolName)) {
+      const allowedRoles = [
+        'ADMINISTRATOR',
+        'BRANCH_OPS_HEAD',
+        'COMPLIANCE_OFFICER',
+        'OPERATIONS',
+        'BRANCH_MANAGER',
+        'RELATIONSHIP_MANAGER',
+      ];
+      const isAllowed = allowedRoles.includes(user.role) || user.permissions?.includes('admin:all');
+
+      if (!isAllowed) {
+        await auditRepository.createLog({
+          actorId: user.employeeId || String(user.id),
+          actorName: user.name,
+          action: 'COPILOT_TOOL_UNAUTHORIZED',
+          resourceType: 'COPILOT_INTEGRATION_TOOL',
+          resourceId: toolName,
+          requestId,
+          outcome: 'DENIED',
+          metadata: { reason: 'UNAUTHORIZED_INTEGRATION_ACCESS', userRole: user.role },
+        });
+
+        throw new BankingError(
+          'FORBIDDEN',
+          `Role '${user.role}' is not authorized to query enterprise integration tools via Copilot.`,
+          403
+        );
+      }
+    }
+
+    // 6. Customer Scoping checks
     if (args?.customerId) {
       await resourceAuth.authorizeCustomer(user, args.customerId, 'COPILOT_TOOL', requestId);
     } else if (args?.entityId && args?.entityType === 'CUSTOMER') {

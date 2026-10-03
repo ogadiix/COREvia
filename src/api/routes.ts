@@ -3272,3 +3272,10 @@ apiRouter.use('/operations', operationsRouter);
 // ==========================================
 import { portfolioIntelligenceRouter } from './portfolioIntelligenceRoutes.ts';
 apiRouter.use('/portfolio-intelligence', portfolioIntelligenceRouter);
+
+// ==========================================
+// PHASE 38: ENTERPRISE INTEGRATION & API GATEWAY
+// ==========================================
+import { integrationRouter } from './integrationRoutes.ts';
+apiRouter.use('/integrations', integrationRouter);
+
