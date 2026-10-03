@@ -31,7 +31,7 @@ import { journeyService } from '../services/journey.service.ts';
 import { groupService } from '../services/group.service.ts';
 import { formatErrorResponse } from '../lib/errors.ts';
 import { db } from '../db/index.ts';
-import { auditLogs, users, governanceExceptions } from '../db/schema.ts';
+import { auditLogs, users, governanceExceptions, operationalApprovals, operationalExceptions } from '../db/schema.ts';
 import { desc, sql } from 'drizzle-orm';
 import { DEV_TEST_PASSWORD } from '../db/seedAuthUsers.ts';
 import { resourceAuth } from '../lib/resourceAuth.ts';
@@ -1369,6 +1369,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       journeyResults,
       groupResults,
       governanceResults,
+      operationsResults,
     ] = await Promise.all([
       customerService.listCustomers({
         search: query,
@@ -1418,6 +1419,29 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
             }
           })()
         : Promise.resolve([]),
+      (async () => {
+        try {
+          const [appRows, exRows] = await Promise.all([
+            db
+              .select()
+              .from(operationalApprovals)
+              .where(
+                sql`(${operationalApprovals.approvalId} ILIKE ${'%' + query + '%'} OR ${operationalApprovals.reason} ILIKE ${'%' + query + '%'} OR ${operationalApprovals.customerName} ILIKE ${'%' + query + '%'})`
+              )
+              .limit(5),
+            db
+              .select()
+              .from(operationalExceptions)
+              .where(
+                sql`(${operationalExceptions.exceptionId} ILIKE ${'%' + query + '%'} OR ${operationalExceptions.description} ILIKE ${'%' + query + '%'} OR ${operationalExceptions.customerName} ILIKE ${'%' + query + '%'})`
+              )
+              .limit(5),
+          ]);
+          return { approvals: appRows, exceptions: exRows };
+        } catch {
+          return { approvals: [], exceptions: [] };
+        }
+      })(),
     ]);
 
     // Mask PII in returned search records
@@ -1443,6 +1467,7 @@ apiRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
       journeys: (journeyResults || []).slice(0, 5),
       groups: (groupResults || []).slice(0, 5),
       governance: governanceResults,
+      operations: operationsResults,
     });
   } catch (err) {
     const { statusCode, body } = formatErrorResponse(err, req.requestId);
@@ -3235,4 +3260,11 @@ apiRouter.use('/groups', groupRouter);
 // ==========================================
 import { governanceRouter } from './governanceRoutes.ts';
 apiRouter.use('/governance', governanceRouter);
+
+// ==========================================
+// PHASE 36: BANKING OPERATIONS WORKSPACE
+// ==========================================
+import { operationsRouter } from './operationsRoutes.ts';
+apiRouter.use('/operations', operationsRouter);
+
 

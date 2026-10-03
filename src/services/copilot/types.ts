@@ -14,7 +14,7 @@ export interface CopilotChatMessage {
 }
 
 export interface CopilotSource {
-  type: 'CUSTOMER' | 'CORE_SCORE' | 'CASE' | 'OPPORTUNITY' | 'TASK' | 'INTERACTION' | 'NBA' | 'RADAR' | 'INTELLIGENCE' | 'ACCOUNT' | 'NOTIFICATION' | 'ANALYTICS' | 'DOCUMENT' | 'JOURNEY' | 'GROUP' | 'GOVERNANCE';
+  type: 'CUSTOMER' | 'CORE_SCORE' | 'CASE' | 'OPPORTUNITY' | 'TASK' | 'INTERACTION' | 'NBA' | 'RADAR' | 'INTELLIGENCE' | 'ACCOUNT' | 'NOTIFICATION' | 'ANALYTICS' | 'DOCUMENT' | 'JOURNEY' | 'GROUP' | 'GOVERNANCE' | 'OPERATIONS';
   id: string;
   label: string;
   link?: string;

@@ -1699,6 +1699,172 @@ export const bankingApi = {
       body: JSON.stringify({ reason }),
     });
   },
+
+  // ==========================================
+  // PHASE 36: BANKING OPERATIONS WORKSPACE API
+  // ==========================================
+
+  async getOperationsSummary() {
+    return await request<{ success: boolean; data: any }>('/operations/summary');
+  },
+
+  async getOperationalApprovals(params?: {
+    status?: string;
+    priority?: string;
+    requestType?: string;
+    customerId?: number;
+    limit?: number;
+  }) {
+    const query = new URLSearchParams();
+    if (params?.status) query.set('status', params.status);
+    if (params?.priority) query.set('priority', params.priority);
+    if (params?.requestType) query.set('requestType', params.requestType);
+    if (params?.customerId) query.set('customerId', String(params.customerId));
+    if (params?.limit) query.set('limit', String(params.limit));
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/operations/approvals${qs}`);
+  },
+
+  async getOperationalApproval(id: string | number) {
+    return await request<{ success: boolean; data: any }>(`/operations/approvals/${encodeURIComponent(id)}`);
+  },
+
+  async createOperationalApproval(data: {
+    requestType: string;
+    customerId?: number;
+    relatedEntityType?: string;
+    relatedEntityId?: string;
+    amount?: number;
+    priority?: string;
+    reason: string;
+    evidence?: any;
+  }) {
+    return await request<{ success: boolean; data: any }>('/operations/approvals', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async actOnOperationalApproval(id: string | number, action: 'APPROVE' | 'REJECT' | 'RETURN', checkerNotes: string) {
+    return await request<{ success: boolean; data: any }>(`/operations/approvals/${encodeURIComponent(id)}/action`, {
+      method: 'POST',
+      body: JSON.stringify({ action, checkerNotes }),
+    });
+  },
+
+  async getOperationalExceptions(params?: {
+    category?: string;
+    severity?: string;
+    status?: string;
+    customerId?: number;
+    search?: string;
+    limit?: number;
+  }) {
+    const query = new URLSearchParams();
+    if (params?.category) query.set('category', params.category);
+    if (params?.severity) query.set('severity', params.severity);
+    if (params?.status) query.set('status', params.status);
+    if (params?.customerId) query.set('customerId', String(params.customerId));
+    if (params?.search) query.set('search', params.search);
+    if (params?.limit) query.set('limit', String(params.limit));
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/operations/exceptions${qs}`);
+  },
+
+  async getOperationalException(id: string | number) {
+    return await request<{ success: boolean; data: any }>(`/operations/exceptions/${encodeURIComponent(id)}`);
+  },
+
+  async createOperationalException(data: {
+    category: string;
+    severity?: string;
+    source: string;
+    customerId?: number;
+    relatedEntityType?: string;
+    relatedEntityId?: string;
+    description: string;
+    evidence?: any;
+    slaHours?: number;
+  }) {
+    return await request<{ success: boolean; data: any }>('/operations/exceptions', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async acknowledgeOperationalException(id: string | number, notes: string) {
+    return await request<{ success: boolean; data: any }>(`/operations/exceptions/${encodeURIComponent(id)}/acknowledge`, {
+      method: 'POST',
+      body: JSON.stringify({ notes }),
+    });
+  },
+
+  async assignOperationalException(id: string | number, assignedToUserId: number, notes: string) {
+    return await request<{ success: boolean; data: any }>(`/operations/exceptions/${encodeURIComponent(id)}/assign`, {
+      method: 'POST',
+      body: JSON.stringify({ assignedToUserId, notes }),
+    });
+  },
+
+  async resolveOperationalException(id: string | number, resolutionNotes: string) {
+    return await request<{ success: boolean; data: any }>(`/operations/exceptions/${encodeURIComponent(id)}/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({ resolutionNotes }),
+    });
+  },
+
+  async getReconciliationRecords(params?: {
+    status?: string;
+    reconciliationType?: string;
+    source?: string;
+    limit?: number;
+  }) {
+    const query = new URLSearchParams();
+    if (params?.status) query.set('status', params.status);
+    if (params?.reconciliationType) query.set('reconciliationType', params.reconciliationType);
+    if (params?.source) query.set('source', params.source);
+    if (params?.limit) query.set('limit', String(params.limit));
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/operations/reconciliation${qs}`);
+  },
+
+  async reviewReconciliationRecord(id: string | number, notes: string, status: string) {
+    return await request<{ success: boolean; data: any }>(`/operations/reconciliation/${encodeURIComponent(id)}/review`, {
+      method: 'POST',
+      body: JSON.stringify({ notes, status }),
+    });
+  },
+
+  async resolveReconciliationRecord(id: string | number, resolutionNotes: string) {
+    return await request<{ success: boolean; data: any }>(`/operations/reconciliation/${encodeURIComponent(id)}/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({ resolutionNotes }),
+    });
+  },
+
+  async getFailedWorkflows() {
+    return await request<{ success: boolean; data: any[] }>('/operations/failed-workflows');
+  },
+
+  async retryWorkflow(id: string, workflowType: string) {
+    return await request<{ success: boolean; data: any }>(`/operations/failed-workflows/${encodeURIComponent(id)}/retry`, {
+      method: 'POST',
+      body: JSON.stringify({ workflowType }),
+    });
+  },
+
+  async getOperationalTasks() {
+    return await request<{ success: boolean; data: any[] }>('/operations/tasks');
+  },
+
+  async getOperationalEvents(params?: { severity?: string; eventType?: string; limit?: number }) {
+    const query = new URLSearchParams();
+    if (params?.severity) query.set('severity', params.severity);
+    if (params?.eventType) query.set('eventType', params.eventType);
+    if (params?.limit) query.set('limit', String(params.limit));
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/operations/events${qs}`);
+  },
 };
 
 export const api = bankingApi;

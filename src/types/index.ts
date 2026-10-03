@@ -25,7 +25,10 @@ export type ModuleType =
   | 'agent'
   | 'journeys'
   | 'groups'
-  | 'governance';
+  | 'governance'
+  | 'operations';
+
+export * from './operations.types';
 
 export type AccountType = 'SAVINGS' | 'CURRENT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT' | 'SALARY' | 'PREMIUM_SAVINGS';
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## [Phase 36] - Banking Operations Workspace
+- **Operational Control Workspace (`/operations`)**: Centralized operational control layer giving branch operations, maker/checker, compliance, and authorized administrators an institutional workspace for synthetic banking workflows without CRM dashboard duplication.
+- **Strict Dual-Control Maker / Checker Engine**: Implemented dual-control segregation of duties across operational approvals (Fee Reversals, Transaction Exceptions, Limit Revisions, Loan Workflows, KYC Resolutions, Document Overrides, Service Compensations, Operational Adjustments). Backend strictly prohibits the Maker from authorizing their own submission (`MAKER_CANNOT_SELF_APPROVE`). Checkers record mandatory compliance notes before approving, rejecting, or returning items.
+- **Operational Exceptions Management**: Normalized relational model supporting 11 institutional categories (`TRANSACTION`, `KYC`, `DOCUMENT`, `SLA`, `RECONCILIATION`, `WORKFLOW`, `SERVICE`, `ACCOUNT`, `LOAN`, `INTEGRATION`, `SYSTEM`) and 5 severities (`INFO`, `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`) with complete lifecycle workflow (Open → Acknowledge → Assign → Resolve → Close).
+- **Synthetic Reconciliation Workspace**: Core reconciliation workspace computing true variances (`observed - expected`) across core ledger vs. sub-ledger, cash vault physical vs. system counts, NEFT/RTGS payment gateway settlements, and loan balance discrepancies, with balancing voucher resolution workflows.
+- **Controlled Workflow Failure Review & Safe Retry**: Supervised view of failed customer journey steps and background processing pipelines with idempotent retries, precondition verification, and audit logging.
+- **Operational Tasks & System Events Stream**: Real-time integration with existing enterprise task service and filterable system event telemetry with PII masking.
+- **Copilot Controlled Read Tools**: Added 6 read-only operational telemetry tools (`getMyOperationalApprovals`, `getOperationalExceptions`, `getOperationalException`, `getReconciliationRecords`, `getOperationalTasks`, `getOperationalEvents`) with server-side RBAC guards and strict prohibition on autonomous mutations.
+- **Global Search & Audit Logging**: Indexed operational approval IDs, exception IDs, and reconciliation references in global search; immutable audit logging for all operational actions (`OPERATIONS_APPROVAL_CREATED`, `OPERATIONS_APPROVAL_APPROVED`, `OPERATIONS_EXCEPTION_RESOLVED`, etc.).
+- **Automated Verification**: Added 20 automated tests in Suite 11; all 245 platform tests across all 11 suites pass 100% in 1.92s. Production build and live QA verified on `/operations`.
+
 ## [Phase 35] - Trust & Governance Center
 - **Enterprise Governance Workspace (`/governance`)**: Centralized enterprise governance and observability workspace providing authorized administrators, compliance users, security officers, and branch managers with comprehensive visibility into AI, Agent, Decision, Data, and Security envelopes.
 - **Observability Invariants & Principles**: Answers WHO, WHAT, WHEN, WHY, WHICH DATA, WHICH ENGINE, WHICH TOOL, WHICH PERMISSION, WHICH APPROVAL, and WHICH RESULT for meaningful bank operations. Eliminates arbitrary fake "Trust Scores" in favor of genuine condition-based statuses (`Operational`, `Attention Required`, `Critical`).

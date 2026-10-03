@@ -29,6 +29,7 @@ import {
   Cpu,
   Milestone,
   ShieldCheck,
+  Activity,
 } from 'lucide-react';
 import { ModuleType } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -274,6 +275,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: <ShieldCheck className="w-4 h-4 text-emerald-400" />,
           shortcut: 'F12',
           requiredRoles: ['ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER'],
+        },
+        {
+          id: 'operations',
+          label: 'Banking Operations',
+          icon: <Activity className="w-4 h-4 text-cyan-400" />,
+          shortcut: '',
+          requiredRoles: ['ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'MAKER_L2', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS'],
         },
       ],
     },

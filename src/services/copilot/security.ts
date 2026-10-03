@@ -181,7 +181,49 @@ export const copilotSecurity = {
       }
     }
 
-    // 3. Customer Scoping checks
+    // 3. Operations workspace tools RBAC checks (Phase 36)
+    const operationsTools = [
+      'getMyOperationalApprovals',
+      'getOperationalExceptions',
+      'getOperationalException',
+      'getReconciliationRecords',
+      'getOperationalTasks',
+      'getOperationalEvents',
+    ];
+
+    if (operationsTools.includes(toolName)) {
+      const allowedRoles = [
+        'ADMINISTRATOR',
+        'BRANCH_OPS_HEAD',
+        'BRANCH_MANAGER',
+        'OPERATIONS',
+        'MAKER_L2',
+        'COMPLIANCE_OFFICER',
+        'RELATIONSHIP_MANAGER',
+      ];
+      const isAllowed = allowedRoles.includes(user.role) || user.permissions?.includes('admin:all');
+
+      if (!isAllowed) {
+        await auditRepository.createLog({
+          actorId: user.employeeId,
+          actorName: user.name,
+          action: 'COPILOT_TOOL_UNAUTHORIZED',
+          resourceType: 'COPILOT_OPERATIONS_TOOL',
+          resourceId: toolName,
+          requestId,
+          outcome: 'DENIED',
+          metadata: { reason: 'UNAUTHORIZED_OPERATIONS_ACCESS', userRole: user.role },
+        });
+
+        throw new BankingError(
+          'FORBIDDEN',
+          `Role '${user.role}' is not authorized to query banking operations workspace tools via Copilot.`,
+          403
+        );
+      }
+    }
+
+    // 4. Customer Scoping checks
     if (args?.customerId) {
       await resourceAuth.authorizeCustomer(user, args.customerId, 'COPILOT_TOOL', requestId);
     } else if (args?.entityId && args?.entityType === 'CUSTOMER') {

@@ -1053,6 +1053,15 @@ export async function seedDatabase() {
     throw err;
   }
 
+  // Phase 36 Banking Operations Workspace Seed
+  try {
+    const { seedOperationsData } = await import('./seedOperations.ts');
+    await seedOperationsData();
+  } catch (err) {
+    console.error('Failed to seed Operations Workspace Data:', err);
+    throw err;
+  }
+
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
 

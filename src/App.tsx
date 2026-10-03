@@ -54,6 +54,7 @@ import { AgentWorkspaceModule } from './components/modules/AgentWorkspaceModule'
 import { JourneysModule } from './components/modules/JourneysModule';
 import { GroupsModule } from './components/modules/GroupsModule';
 import { GovernanceModule } from './components/modules/GovernanceModule';
+import { OperationsModule } from './components/modules/OperationsModule';
 import { CopilotDrawer } from './components/copilot/CopilotDrawer';
 import { CopilotProvider, useCopilot } from './context/CopilotContext';
 import { NewTransactionModal } from './components/modals/NewTransactionModal';
@@ -104,6 +105,7 @@ const pathToModule: Record<string, ModuleType> = {
   '/households': 'groups',
   '/business-groups': 'groups',
   '/governance': 'governance',
+  '/operations': 'operations',
 };
 
 const moduleToPath: Record<ModuleType, string> = {
@@ -134,6 +136,7 @@ const moduleToPath: Record<ModuleType, string> = {
   journeys: '/journeys',
   groups: '/groups',
   governance: '/governance',
+  operations: '/operations',
 };
 
 function BankingWorkplace() {
@@ -162,6 +165,7 @@ function BankingWorkplace() {
   const canAccessAgent = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
   const canAccessJourneys = canAccessCustomers || hasRole('ADMINISTRATOR', 'BRANCH_MANAGER', 'RELATIONSHIP_MANAGER', 'ANALYST', 'SERVICE_AGENT');
   const canAccessGovernance = hasRole('ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER') || hasPermission('admin:all') || hasPermission('governance:view');
+  const canAccessOperations = hasRole('ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'MAKER_L2', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS') || hasPermission('admin:all') || hasPermission('operations:view');
 
   // Navigation State initialized from URL path
   const [activeModule, setActiveModule] = useState<ModuleType>(() => {
@@ -1134,6 +1138,19 @@ function BankingWorkplace() {
                   moduleName="Trust & Governance Center"
                   requiredPermission="governance:view"
                   requiredRoles={['Administrator', 'Compliance Officer', 'Branch Operations Head', 'Relationship Manager', 'Auditor']}
+                  onGoBack={() => handleSelectModule('dashboard')}
+                />
+              )
+            )}
+
+            {activeModule === 'operations' && (
+              canAccessOperations ? (
+                <OperationsModule />
+              ) : (
+                <AccessRestrictedNotice
+                  moduleName="Banking Operations Workspace"
+                  requiredPermission="operations:view"
+                  requiredRoles={['Administrator', 'Branch Operations Head', 'Maker L2', 'Relationship Manager', 'Compliance Officer']}
                   onGoBack={() => handleSelectModule('dashboard')}
                 />
               )

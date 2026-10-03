@@ -2571,3 +2571,208 @@ export const governanceExceptionsRelations = relations(governanceExceptions, ({ 
     references: [users.id],
   }),
 }));
+
+// ============================================================================
+// 31. Banking Operations Workspace (Phase 36)
+// ============================================================================
+
+export const operationalApprovals = pgTable(
+  'operational_approvals',
+  {
+    id: serial('id').primaryKey(),
+    approvalId: text('approval_id').notNull().unique(), // e.g. APR-2026-00101
+    requestType: text('request_type').notNull(), // FEE_REVERSAL, TRANSACTION_EXCEPTION, LIMIT_REVISION, LOAN_WORKFLOW_APPROVAL, KYC_EXCEPTION_RESOLUTION, DOCUMENT_OVERRIDE, SERVICE_COMPENSATION, OPERATIONAL_ADJUSTMENT
+    customerId: integer('customer_id').references(() => customers.id, { onDelete: 'set null' }),
+    customerCode: text('customer_code'),
+    customerName: text('customer_name'),
+    relatedEntityType: text('related_entity_type'), // TRANSACTION, ACCOUNT, LOAN, DOCUMENT, SERVICE_CASE, ONBOARDING, KYC, SYSTEM
+    relatedEntityId: text('related_entity_id'),
+    amount: numeric('amount', { precision: 15, scale: 2 }),
+    currency: text('currency').notNull().default('INR'),
+    makerId: integer('maker_id').references(() => users.id, { onDelete: 'restrict' }).notNull(),
+    makerName: text('maker_name').notNull(),
+    makerRole: text('maker_role'),
+    checkerId: integer('checker_id').references(() => users.id, { onDelete: 'set null' }),
+    checkerName: text('checker_name'),
+    checkerRole: text('checker_role'),
+    status: text('status').notNull().default('PENDING'), // PENDING, UNDER_REVIEW, APPROVED, REJECTED, RETURNED, EXPIRED
+    priority: text('priority').notNull().default('MEDIUM'), // LOW, MEDIUM, HIGH, CRITICAL
+    reason: text('reason').notNull(),
+    evidence: jsonb('evidence'), // { documents: [...], sourceRecord: '...', justification: '...' }
+    checkerNotes: text('checker_notes'),
+    slaDeadline: timestamp('sla_deadline'),
+    actionedAt: timestamp('actioned_at'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    oaApprovalIdIdx: uniqueIndex('idx_oa_approval_id').on(table.approvalId),
+    oaStatusIdx: index('idx_oa_status').on(table.status),
+    oaRequestTypeIdx: index('idx_oa_request_type').on(table.requestType),
+    oaCustomerIdx: index('idx_oa_customer_id').on(table.customerId),
+    oaMakerIdx: index('idx_oa_maker_id').on(table.makerId),
+    oaCheckerIdx: index('idx_oa_checker_id').on(table.checkerId),
+    oaPriorityIdx: index('idx_oa_priority').on(table.priority),
+    oaSlaIdx: index('idx_oa_sla_deadline').on(table.slaDeadline),
+  })
+);
+
+export const operationalExceptions = pgTable(
+  'operational_exceptions',
+  {
+    id: serial('id').primaryKey(),
+    exceptionId: text('exception_id').notNull().unique(), // e.g. OEX-2026-00201
+    category: text('category').notNull(), // TRANSACTION, KYC, DOCUMENT, SLA, RECONCILIATION, WORKFLOW, SERVICE, ACCOUNT, LOAN, INTEGRATION, SYSTEM
+    severity: text('severity').notNull().default('MEDIUM'), // INFO, LOW, MEDIUM, HIGH, CRITICAL
+    source: text('source').notNull(), // e.g. LEDGER_ENGINE, DOCUMENT_INTELLIGENCE, ONBOARDING_PIPELINE, JOURNEY_ORCHESTRATOR, SERVICE_DESK, RECONCILIATION_JOB, CORE_BANKING_SWITCH
+    customerId: integer('customer_id').references(() => customers.id, { onDelete: 'set null' }),
+    customerCode: text('customer_code'),
+    customerName: text('customer_name'),
+    relatedEntityType: text('related_entity_type'),
+    relatedEntityId: text('related_entity_id'),
+    description: text('description').notNull(),
+    evidence: jsonb('evidence'), // { sourceRecords: [...], ruleBreached: '...', diagnosticContext: '...' }
+    status: text('status').notNull().default('OPEN'), // OPEN, ACKNOWLEDGED, IN_PROGRESS, WAITING, RESOLVED, CLOSED
+    ownerId: integer('owner_id').references(() => users.id, { onDelete: 'set null' }),
+    ownerName: text('owner_name'),
+    ownerRole: text('owner_role'),
+    slaDeadline: timestamp('sla_deadline'),
+    resolutionNotes: text('resolution_notes'),
+    resolvedById: integer('resolved_by_id').references(() => users.id, { onDelete: 'set null' }),
+    resolvedByName: text('resolved_by_name'),
+    resolvedAt: timestamp('resolved_at'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    oexExceptionIdIdx: uniqueIndex('idx_oex_exception_id').on(table.exceptionId),
+    oexCategoryIdx: index('idx_oex_category').on(table.category),
+    oexSeverityIdx: index('idx_oex_severity').on(table.severity),
+    oexStatusIdx: index('idx_oex_status').on(table.status),
+    oexCustomerIdx: index('idx_oex_customer_id').on(table.customerId),
+    oexOwnerIdx: index('idx_oex_owner_id').on(table.ownerId),
+    oexSlaIdx: index('idx_oex_sla_deadline').on(table.slaDeadline),
+  })
+);
+
+export const reconciliationRecords = pgTable(
+  'reconciliation_records',
+  {
+    id: serial('id').primaryKey(),
+    reconciliationId: text('reconciliation_id').notNull().unique(), // e.g. REC-2026-00301
+    businessDate: date('business_date').notNull(),
+    source: text('source').notNull(), // e.g. CASA_CORE_LEDGER, LOAN_DISBURSEMENT_REGISTER, UPI_SWITCH_CLEARING, NEFT_RTGS_SETTLEMENT, ATM_HOST_SETTLEMENT, INTEREST_ACCRUAL_LEDGER
+    reconciliationType: text('reconciliation_type').notNull(), // ACCOUNT_BALANCE_MISMATCH, TRANSACTION_COUNT_MISMATCH, SETTLEMENT_MISMATCH, PRODUCT_LEDGER_MISMATCH, LOAN_BALANCE_DISCREPANCY
+    expectedValue: numeric('expected_value', { precision: 15, scale: 2 }).notNull(),
+    observedValue: numeric('observed_value', { precision: 15, scale: 2 }).notNull(),
+    variance: numeric('variance', { precision: 15, scale: 2 }).notNull(),
+    status: text('status').notNull().default('MISMATCH'), // MATCHED, MISMATCH, INVESTIGATING, ADJUSTMENT_PENDING, RESOLVED
+    customerId: integer('customer_id').references(() => customers.id, { onDelete: 'set null' }),
+    accountNumber: text('account_number'),
+    ownerId: integer('owner_id').references(() => users.id, { onDelete: 'set null' }),
+    ownerName: text('owner_name'),
+    lastChecked: timestamp('last_checked').defaultNow().notNull(),
+    notes: text('notes'),
+    adjustmentApprovalId: text('adjustment_approval_id'),
+    resolvedAt: timestamp('resolved_at'),
+    resolvedById: integer('resolved_by_id').references(() => users.id, { onDelete: 'set null' }),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    recReconciliationIdIdx: uniqueIndex('idx_rec_reconciliation_id').on(table.reconciliationId),
+    recDateIdx: index('idx_rec_business_date').on(table.businessDate),
+    recTypeIdx: index('idx_rec_type').on(table.reconciliationType),
+    recStatusIdx: index('idx_rec_status').on(table.status),
+    recCustomerIdx: index('idx_rec_customer_id').on(table.customerId),
+    recOwnerIdx: index('idx_rec_owner_id').on(table.ownerId),
+  })
+);
+
+export const operationalEvents = pgTable(
+  'operational_events',
+  {
+    id: serial('id').primaryKey(),
+    eventId: text('event_id').notNull().unique(), // e.g. OEV-2026-00401
+    eventType: text('event_type').notNull(), // APPROVAL_CREATED, APPROVAL_COMPLETED, EXCEPTION_OPENED, EXCEPTION_ESCALATED, WORKFLOW_FAILED, WORKFLOW_RECOVERED, DOCUMENT_REJECTED, KYC_EXCEPTION_CREATED, RECONCILIATION_MISMATCH_DETECTED, RECONCILIATION_RESOLVED, SLA_BREACHED, SYSTEM_WARNING
+    severity: text('severity').notNull().default('INFO'), // INFO, LOW, MEDIUM, HIGH, CRITICAL
+    sourceModule: text('source_module').notNull(), // OPERATIONS_WORKSPACE, MAKER_CHECKER, RECONCILIATION, DOCUMENT_VAULT, KYC, JOURNEY_ENGINE
+    customerId: integer('customer_id').references(() => customers.id, { onDelete: 'set null' }),
+    relatedEntityType: text('related_entity_type'),
+    relatedEntityId: text('related_entity_id'),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    actorId: integer('actor_id').references(() => users.id, { onDelete: 'set null' }),
+    actorName: text('actor_name'),
+    actorRole: text('actor_role'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    oevEventIdIdx: uniqueIndex('idx_oev_event_id').on(table.eventId),
+    oevTypeIdx: index('idx_oev_type').on(table.eventType),
+    oevSeverityIdx: index('idx_oev_severity').on(table.severity),
+    oevCustomerIdx: index('idx_oev_customer_id').on(table.customerId),
+    oevCreatedIdx: index('idx_oev_created_at').on(table.createdAt),
+  })
+);
+
+export const operationalApprovalsRelations = relations(operationalApprovals, ({ one }) => ({
+  customer: one(customers, {
+    fields: [operationalApprovals.customerId],
+    references: [customers.id],
+  }),
+  maker: one(users, {
+    fields: [operationalApprovals.makerId],
+    references: [users.id],
+  }),
+  checker: one(users, {
+    fields: [operationalApprovals.checkerId],
+    references: [users.id],
+  }),
+}));
+
+export const operationalExceptionsRelations = relations(operationalExceptions, ({ one }) => ({
+  customer: one(customers, {
+    fields: [operationalExceptions.customerId],
+    references: [customers.id],
+  }),
+  owner: one(users, {
+    fields: [operationalExceptions.ownerId],
+    references: [users.id],
+  }),
+  resolvedBy: one(users, {
+    fields: [operationalExceptions.resolvedById],
+    references: [users.id],
+  }),
+}));
+
+export const reconciliationRecordsRelations = relations(reconciliationRecords, ({ one }) => ({
+  customer: one(customers, {
+    fields: [reconciliationRecords.customerId],
+    references: [customers.id],
+  }),
+  owner: one(users, {
+    fields: [reconciliationRecords.ownerId],
+    references: [users.id],
+  }),
+  resolvedBy: one(users, {
+    fields: [reconciliationRecords.resolvedById],
+    references: [users.id],
+  }),
+}));
+
+export const operationalEventsRelations = relations(operationalEvents, ({ one }) => ({
+  customer: one(customers, {
+    fields: [operationalEvents.customerId],
+    references: [customers.id],
+  }),
+  actor: one(users, {
+    fields: [operationalEvents.actorId],
+    references: [users.id],
+  }),
+}));
+

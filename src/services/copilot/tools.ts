@@ -22,6 +22,7 @@ import { relationshipValueService } from '../relationshipValue.service.ts';
 import { journeyService } from '../journey.service.ts';
 import { groupService } from '../group.service.ts';
 import { governanceService } from '../governance.service.ts';
+import { operationsService } from '../operations.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -1105,6 +1106,73 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
     parameters: {
       type: Type.OBJECT,
       properties: {},
+    },
+  },
+  // ==========================================
+  // PHASE 36: BANKING OPERATIONS WORKSPACE TOOLS
+  // ==========================================
+  {
+    name: 'getMyOperationalApprovals',
+    description: 'Retrieve pending maker/checker operational approval requests awaiting authorization.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        status: { type: Type.STRING, description: 'Approval status: PENDING, UNDER_REVIEW, APPROVED, REJECTED, RETURNED' },
+        priority: { type: Type.STRING, description: 'Priority: LOW, MEDIUM, HIGH, CRITICAL' },
+      },
+    },
+  },
+  {
+    name: 'getOperationalExceptions',
+    description: 'List operational exceptions across TRANSACTION, KYC, DOCUMENT, SLA, RECONCILIATION, and WORKFLOW domains.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        category: { type: Type.STRING, description: 'Category: TRANSACTION, KYC, DOCUMENT, SLA, RECONCILIATION, WORKFLOW, SERVICE, ACCOUNT, LOAN' },
+        severity: { type: Type.STRING, description: 'Severity: INFO, LOW, MEDIUM, HIGH, CRITICAL' },
+        status: { type: Type.STRING, description: 'Status: OPEN, ACKNOWLEDGED, IN_PROGRESS, RESOLVED' },
+      },
+    },
+  },
+  {
+    name: 'getOperationalException',
+    description: 'Retrieve detailed information, evidence, and resolution timeline for a specific operational exception ID.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        exceptionId: { type: Type.STRING, description: 'Exception ID (e.g. OEX-2026-10482-01)' },
+      },
+      required: ['exceptionId'],
+    },
+  },
+  {
+    name: 'getReconciliationRecords',
+    description: 'Inspect synthetic reconciliation records with expected, observed, and variance amounts.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        status: { type: Type.STRING, description: 'Status: MATCHED, MISMATCH, INVESTIGATING, ADJUSTMENT_PENDING, RESOLVED' },
+        reconciliationType: { type: Type.STRING, description: 'Type of reconciliation' },
+      },
+    },
+  },
+  {
+    name: 'getOperationalTasks',
+    description: 'Retrieve pending operational tasks requiring branch operations attention.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getOperationalEvents',
+    description: 'Inspect chronological stream of banking operations events and system alerts.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        severity: { type: Type.STRING, description: 'Severity: INFO, LOW, MEDIUM, HIGH, CRITICAL' },
+        limit: { type: Type.INTEGER, description: 'Max events to return' },
+      },
     },
   },
 ];
@@ -3986,6 +4054,177 @@ export async function executeCopilotTool(
             limitations: ['Evaluated via real database pings and environment checks.'],
           },
           health,
+        },
+        sources,
+      };
+    }
+
+    // ==========================================
+    // PHASE 36: BANKING OPERATIONS WORKSPACE EXECUTION CASES
+    // ==========================================
+    case 'getMyOperationalApprovals': {
+      const approvals = await operationsService.getApprovals(
+        {
+          status: args.status,
+          priority: args.priority,
+          limit: 15,
+        },
+        ctx.user as any
+      );
+      sources.push({
+        type: 'OPERATIONS',
+        id: 'OPS-APPROVALS',
+        label: 'Operational Approvals Queue',
+        link: '/operations?tab=approvals',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Total Retrieved: ${approvals.length}`,
+              `Awaiting Checker Count: ${approvals.filter((a) => a.status === 'PENDING').length}`,
+            ],
+            limitations: ['Dual control strictly enforced. Maker cannot self-approve.'],
+          },
+          approvals,
+        },
+        sources,
+      };
+    }
+
+    case 'getOperationalExceptions': {
+      const exceptions = await operationsService.getExceptions(
+        {
+          category: args.category,
+          severity: args.severity,
+          status: args.status,
+          limit: 20,
+        },
+        ctx.user as any
+      );
+      sources.push({
+        type: 'OPERATIONS',
+        id: 'OPS-EXCEPTIONS',
+        label: 'Operational Exceptions',
+        link: '/operations?tab=exceptions',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Total Exceptions Retrieved: ${exceptions.length}`,
+              `High/Critical Severity: ${exceptions.filter((e) => e.severity === 'HIGH' || e.severity === 'CRITICAL').length}`,
+            ],
+            limitations: ['Exceptions require authorized officer resolution with audit trail.'],
+          },
+          exceptions,
+        },
+        sources,
+      };
+    }
+
+    case 'getOperationalException': {
+      const ex = await operationsService.getExceptionById(args.exceptionId, ctx.user as any);
+      sources.push({
+        type: 'OPERATIONS',
+        id: ex.exceptionId,
+        label: `Exception ${ex.exceptionId}`,
+        link: `/operations?tab=exceptions&id=${ex.exceptionId}`,
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Exception ID: ${ex.exceptionId}`,
+              `Category: ${ex.category} | Severity: ${ex.severity}`,
+              `Status: ${ex.status}`,
+              `Customer: ${ex.customerName || 'Institutional'}`,
+            ],
+            limitations: ['Read-only inspection. Mutations require manual dual control.'],
+          },
+          exception: ex,
+        },
+        sources,
+      };
+    }
+
+    case 'getReconciliationRecords': {
+      const records = await operationsService.getReconciliationRecords(
+        {
+          status: args.status,
+          reconciliationType: args.reconciliationType,
+          limit: 15,
+        },
+        ctx.user as any
+      );
+      sources.push({
+        type: 'OPERATIONS',
+        id: 'OPS-RECONCILIATION',
+        label: 'Reconciliation Workspace',
+        link: '/operations?tab=reconciliation',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Total Records: ${records.length}`,
+              `Unresolved Mismatches: ${records.filter((r) => r.status === 'MISMATCH').length}`,
+            ],
+            limitations: ['Synthetic reconciliation data for testing and operational simulation.'],
+          },
+          records,
+        },
+        sources,
+      };
+    }
+
+    case 'getOperationalTasks': {
+      const tasksList = await operationsService.getOperationalTasks(ctx.user as any);
+      sources.push({
+        type: 'OPERATIONS',
+        id: 'OPS-TASKS',
+        label: 'Operational Tasks',
+        link: '/operations?tab=tasks',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [`Pending Operational Tasks: ${tasksList.length}`],
+            limitations: ['Fetched directly from Core Banking task engine.'],
+          },
+          tasks: tasksList,
+        },
+        sources,
+      };
+    }
+
+    case 'getOperationalEvents': {
+      const events = await operationsService.getOperationalEvents(
+        {
+          severity: args.severity,
+          limit: args.limit || 20,
+        },
+        ctx.user as any
+      );
+      sources.push({
+        type: 'OPERATIONS',
+        id: 'OPS-EVENTS',
+        label: 'Operational Events Stream',
+        link: '/operations?tab=events',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [`Operational Events Retrieved: ${events.length}`],
+            limitations: ['Sensitive account numbers and customer identifiers masked.'],
+          },
+          events,
         },
         sources,
       };
