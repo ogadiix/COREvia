@@ -11,6 +11,8 @@ import { runGovernanceTests } from './governance.test.ts';
 import { runOperationsTests } from './operations.test.ts';
 import { runPortfolioIntelligenceTests } from './portfolioIntelligence.test.ts';
 import { runIntegrationTests } from './integrations.test.ts';
+import { runAdminTests } from './admin.test.ts';
+import { runFinalHardeningTests } from './finalHardening.test.ts';
 
 async function runAllTests() {
   console.log('========================================================================');
@@ -19,7 +21,7 @@ async function runAllTests() {
 
   const startTime = Date.now();
   let passedSuites = 0;
-  const totalSuites = 13;
+  const totalSuites = 15;
 
   try {
     // Suite 1: Core Banking Platform & RBAC IDOR
@@ -95,10 +97,22 @@ async function runAllTests() {
     console.log('>>> [SUITE 12/13] PASSED\n');
 
     // Suite 13: Enterprise Integration & API Gateway (Phase 38)
-    console.log('>>> [SUITE 13/13] ENTERPRISE INTEGRATION & API GATEWAY SUITE (PHASE 38)');
+    console.log('>>> [SUITE 13/14] ENTERPRISE INTEGRATION & API GATEWAY SUITE (PHASE 38)');
     await runIntegrationTests();
     passedSuites++;
-    console.log('>>> [SUITE 13/13] PASSED\n');
+    console.log('>>> [SUITE 13/14] PASSED\n');
+
+    // Suite 14: Enterprise Administration & Governance Center (Phase 39)
+    console.log('>>> [SUITE 14/15] ENTERPRISE ADMINISTRATION & GOVERNANCE SUITE (PHASE 39)');
+    await runAdminTests();
+    passedSuites++;
+    console.log('>>> [SUITE 14/15] PASSED\n');
+
+    // Suite 15: Final Production Hardening & Release Gate (Phase 40)
+    console.log('>>> [SUITE 15/15] FINAL PRODUCTION HARDENING & RELEASE GATE SUITE (PHASE 40)');
+    await runFinalHardeningTests();
+    passedSuites++;
+    console.log('>>> [SUITE 15/15] PASSED\n');
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
     console.log('========================================================================');
@@ -116,7 +130,9 @@ async function runAllTests() {
     console.log('   - Banking Operations Workspace: PASS (20 tests)');
     console.log('   - Advanced Portfolio Intelligence: PASS (24 tests)');
     console.log('   - Enterprise Integration & API Gateway: PASS (26 tests)');
-    console.log('   Total 295 automated integration & security verifications passed.');
+    console.log('   - Enterprise Administration & Governance: PASS (26 tests)');
+    console.log('   - Final Production Hardening & Release Gate: PASS (10 tests)');
+    console.log('   Total 331 automated integration & security verifications passed.');
     console.log('========================================================================');
     process.exit(0);
   } catch (error) {

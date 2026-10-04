@@ -48,3 +48,39 @@ Governance access is compartmentalized into specific permissions:
    - No subjective user profiling or unverified "Trust Scores" are permitted.
 3. **Controlled AI Agent Security Boundary**:
    - The Controlled Banking Agent is strictly barred from modifying user roles, disabling audit logging, dismissing exceptions, or altering Gemini security settings.
+
+---
+
+## 5. Enterprise Administration & Governance Center (Phase 39)
+
+### 5.1 Route Authorization & Control Plane
+- **Route**: `/admin` (API: `/api/admin/*`)
+- **Strict Server-Side Enforcement**: All administrative routes enforce `requireAuth` and `requireRole('ADMINISTRATOR')`. Non-administrators and unauthenticated requests are rejected with `401 Unauthorized` or `403 Forbidden`. No relying on frontend UI route hiding alone.
+
+### 5.2 15 Standard Permission Domains
+Permissions are categorized and evaluated across 15 enterprise domains:
+1. `CUSTOMERS`
+2. `ACCOUNTS`
+3. `LOANS`
+4. `PRODUCTS`
+5. `SERVICE`
+6. `OPPORTUNITIES`
+7. `TASKS`
+8. `ANALYTICS`
+9. `COPILOT`
+10. `OPERATIONS`
+11. `INTEGRATIONS`
+12. `DOCUMENTS`
+13. `ONBOARDING`
+14. `GOVERNANCE`
+15. `ADMIN`
+
+### 5.3 User Status & Life-Cycle Governance
+- **Supported Statuses**: `ACTIVE`, `INACTIVE`, `LOCKED`, `SUSPENDED`.
+- **Self-Deactivation Guard**: An administrator cannot deactivate, suspend, or lock their own active administrative user account (`ADMIN_CANNOT_DEACTIVATE_SELF`), preventing accidental or intentional lockout.
+- **Session Purge Invariant**: Transitioning any user account to `INACTIVE`, `LOCKED`, or `SUSPENDED` immediately purges and revokes all active HTTP sessions for that user across all devices.
+- **Dangerous Mutations**: Re-authenticates confirmation requirements, logs an audit entry, and records security telemetry.
+
+### 5.4 Feature Flag Safety Invariant
+- Feature flags (`COPILOT_ENABLED`, `INTEGRATIONS_ENABLED`, etc.) allow dynamic feature gating and canary rollouts.
+- **Invariant**: Feature flags may NEVER disable authentication, authorization, IDOR protection, maker-checker controls, or audit trails (`SECURITY_CONTROLS_CANNOT_BE_DISABLED_BY_FEATURE_FLAGS`).

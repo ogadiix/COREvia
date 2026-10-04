@@ -23,6 +23,7 @@ import { seedStrategyScenarios } from './src/db/seedStrategyScenarios.ts';
 import { seedJourneys } from './src/db/seedJourneys.ts';
 import { seedOperationsData } from './src/db/seedOperations.ts';
 import { seedIntegrationData } from './src/db/seedIntegrations.ts';
+import { seedAdminData } from './src/db/seedAdmin.ts';
 
 async function startServer() {
   // Validate required configuration before starting
@@ -79,6 +80,7 @@ async function startServer() {
     await seedJourneys();
     await seedOperationsData();
     await seedIntegrationData();
+    await seedAdminData();
   } catch (err: any) {
     console.warn(`[Startup Info] Database auto-seed deferred: ${err.message || 'Database not yet reachable'}`);
   }

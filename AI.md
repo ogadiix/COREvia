@@ -128,6 +128,19 @@ When evaluating governance or AI operations:
 3. **Read-Only Governance Boundary**: Copilot tools and Autonomous Agents are strictly observation-only; they cannot resolve exceptions, change permissions, or bypass dual control.
 4. **AI Fallback Telemetry**: If Gemini is unavailable, the fallback reason, timestamp, module, and deterministic recovery must be recorded for audit inspection.
 
+### Rule 14: Enterprise Administration & Copilot Governance (Phase 39)
+When providing administrative intelligence:
+1. **Administrative Read-Only Boundary**: 5 governed admin tools (`getAdminOverview`, `getUsers`, `getIntegrationStatus`, `getFeatureFlags`, `getJobStatus`) are registered strictly for authorized users holding the `ADMINISTRATOR` role.
+2. **Absolute Prohibition of Administrative Mutations via AI**: Copilot MUST NOT:
+   - Modify user roles or permissions.
+   - Deactivate, suspend, or unlock users.
+   - Activate or disable maintenance mode.
+   - Toggle or bypass feature flags or security controls.
+   - Rotate credentials or API keys.
+   - Execute arbitrary SQL queries or operating system commands.
+3. **Zero Secret Exposure**: Under no circumstances should `GEMINI_API_KEY`, `SESSION_SECRET`, or database credentials be emitted into Copilot responses or context logs.
+4. **Source Classification**: All admin tool responses are classified as `DETERMINISTIC` derived directly from authoritative system telemetry.
+
 ---
 
 ## 4. Hallucination Prevention & Synthetic Data Safeguards

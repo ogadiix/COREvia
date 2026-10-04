@@ -460,5 +460,76 @@ All endpoints enforce dual authorization (Group Authorization + Per-Member Resou
 - **`GET /api/integrations/events/all`**: Query integration event stream with masked PAN, Aadhaar, and secret tokens.
 - **`GET /api/integrations/failures/all`**: List active integration errors with error classification (`TIMEOUT`, `NETWORK_ERROR`, `VALIDATION_ERROR`, etc.) and retryability status.
 
+---
+
+## 7. Enterprise Administration & Governance Center API Specification (Phase 39)
+
+### Base URL
+`/api/admin`
+
+All endpoints under `/api/admin` enforce `requireAuth` and `requireRole('ADMINISTRATOR')`. Unauthorized calls return `401 Unauthorized` or `403 Forbidden`.
+
+### 7.1 Control Plane Overview
+- **Route**: `GET /api/admin/overview`
+- **Response**: Derived institutional metrics (`activeUsers`, `inactiveUsers`, `activeSessions`, `failedLoginAttempts`, `authorizationFailures`, `openExceptions`, `securityEvents`, `activeIntegrations`, `failedIntegrations`, `enabledFeatureFlags`, `runningJobs`, `failedJobs`).
+
+### 7.2 User Administration
+- **`GET /api/admin/users`**: Query user roster. Supports `status`, `role`, `department`, `search`, `limit`, `offset`.
+- **`GET /api/admin/users/:id`**: Comprehensive user profile with identity, employment, roles, effective permissions, resource scopes, active sessions, and audit history. Zero password/hash disclosure.
+- **`PATCH /api/admin/users/:id/status`**: Update user status (`ACTIVE`, `INACTIVE`, `LOCKED`, `SUSPENDED`).
+  - **Body**: `{ "status": "INACTIVE", "reason": "Employee leaves on sabbatical" }`
+  - **Invariants**: Blocks self-deactivation (`ADMIN_CANNOT_DEACTIVATE_SELF`); purges all active user sessions immediately upon deactivation.
+
+### 7.3 Roles & Permissions
+- **`GET /api/admin/roles`**: List system roles (`ADMINISTRATOR`, `BRANCH_OPS_HEAD`, `MAKER`, `RELATIONSHIP_MANAGER`, `COMPLIANCE_OFFICER`, etc.) with user counts and descriptions.
+- **`GET /api/admin/permissions`**: Categorized permission catalog grouped by 15 domains (`CUSTOMERS`, `ACCOUNTS`, `LOANS`, `PRODUCTS`, `SERVICE`, `OPPORTUNITIES`, `TASKS`, `ANALYTICS`, `COPILOT`, `OPERATIONS`, `INTEGRATIONS`, `DOCUMENTS`, `ONBOARDING`, `GOVERNANCE`, `ADMIN`).
+
+### 7.4 Resource Scopes
+- **`GET /api/admin/scopes`**: Aggregated access scopes by branch, department, RM portfolio, customer, and organization.
+
+### 7.5 Session Management
+- **`GET /api/admin/sessions`**: List active sessions with masked tokens, user metadata, IP address, user agent, and expiration.
+- **`DELETE /api/admin/sessions/:id`**: Revoke a specific active browser session with audit tracking.
+- **`DELETE /api/admin/sessions/user/:userId`**: Revoke all active sessions for a target user across all devices.
+
+### 7.6 Security Events & Login Activity
+- **`GET /api/admin/security-events`**: Paginated security telemetry (`AUTH_FAILURE`, `AUTHORIZATION_FAILURE`, `IDOR_ATTEMPT`, `RATE_LIMIT`, `CSRF_FAILURE`, `SUSPICIOUS_SESSION`). Supports `type`, `severity`, `limit`, `offset`.
+- **`GET /api/admin/security-events/:id`**: Detailed security event drawer metadata with sanitized evidence.
+- **`GET /api/admin/login-activity`**: Authentication logs (`SUCCESS`, `FAILURE`, `LOGOUT`, `LOCKOUT`, `SESSION_EXPIRED`).
+
+### 7.7 AI & Copilot Governance
+- **`GET /api/admin/ai-governance`**: Safe Gemini configuration state (`CONFIGURED` / `AVAILABLE` / `MISSING`), model name, fallback state, tool breakdown, and action proposals vs confirmations. Zero API key disclosure.
+
+### 7.8 Integration Administration
+- **`GET /api/admin/integrations`**: Integration summary reflecting Phase 38 registry, health status, and failure counts.
+
+### 7.9 Notifications & SLA Policies
+- **`GET /api/admin/notifications`**: Notification categories, delivery policies, and deduplication rules.
+- **`GET /api/admin/sla-policies`**: Configured SLA thresholds across Service, Task, Document, KYC, Approval, Operations, and Journey.
+
+### 7.10 Feature Flags
+- **`GET /api/admin/feature-flags`**: List governed feature flags (`COPILOT_ENABLED`, `INTEGRATIONS_ENABLED`, etc.) with environment, rollout scope, and owner.
+- **`PATCH /api/admin/feature-flags/:key`**: Toggle or configure feature flag.
+  - **Body**: `{ "enabled": true, "reason": "Enabling Copilot for staging validation" }`
+  - **Invariant**: Strictly blocks attempts to disable security controls (`SECURITY_CONTROLS_CANNOT_BE_DISABLED_BY_FEATURE_FLAGS`).
+
+### 7.11 System Configuration & Database Health
+- **`GET /api/admin/system-config`**: Safe platform configuration metadata (environment, versions, build, migration state). Zero raw environment variables.
+- **`GET /api/admin/database-health`**: Database connection latency, pool status, and migration state. No arbitrary SQL execution permitted.
+
+### 7.12 Background Jobs
+- **`GET /api/admin/jobs`**: Operational status of scheduled workers, batch settlement queues, and maintenance listeners.
+
+### 7.13 Maintenance Mode
+- **`GET /api/admin/maintenance`**: Maintenance mode status, start time, expected duration, and reason.
+- **`POST /api/admin/maintenance`**: Toggle platform maintenance mode with audit logging. Preserves administrator access to prevent lockout.
+
+### 7.14 Tamper-Evident Audit Center
+- **`GET /api/admin/audit`**: Enterprise audit log stream with pagination, filters, and SHA-256 hashes.
+- **`POST /api/admin/audit/verify-integrity`**: On-demand SHA-256 hash chaining verification across consecutive records.
+
+### 7.15 Governance Exceptions
+- **`GET /api/admin/governance-exceptions`**: Open and historical governance violations and anomalies.
+
 
 

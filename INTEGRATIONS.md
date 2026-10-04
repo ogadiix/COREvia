@@ -137,3 +137,12 @@ COREvia bundles 5 production-grade synthetic simulators with deterministic banki
 - **Signal Center**: Critical infrastructure failures raise institutional risk signals.
 - **Global Search**: Integration IDs, endpoints, and webhooks are indexed with strict RBAC filtering.
 - **Banking Copilot**: Exposes 6 read-only deterministic tools (`getIntegrations`, `getIntegration`, `getIntegrationHealth`, `getIntegrationEvents`, `getIntegrationFailures`, `getWebhookDeliveries`). Mutations, secret rotations, and HTTP dispatch remain strictly human-controlled.
+
+---
+
+## 7. Enterprise Administration & Governance Center Bridge (Phase 39)
+
+Phase 39 introduces dedicated integration administration visibility inside the `/admin` control plane:
+- **Unified Health & Failure Telemetry**: `/admin` provides high-level observability over active integrations, simulator states, failing endpoints, and circuit breaker status without duplicating the integration engine.
+- **Bi-directional Navigation**: Seamless deep links connect administrative overviews to the granular `/integrations` gateway workspace.
+- **Copilot Admin Read Access**: The `getIntegrationStatus` Copilot tool empowers administrators to retrieve consolidated integration telemetry while strictly barring autonomous mutations or secret modifications.

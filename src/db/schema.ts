@@ -2971,4 +2971,75 @@ export const integrationCredentials = pgTable(
   })
 );
 
+// ====================================================
+// PHASE 39: ENTERPRISE ADMINISTRATION & GOVERNANCE
+// ====================================================
+
+// 1. Governed Feature Flags
+export const featureFlags = pgTable(
+  'feature_flags',
+  {
+    id: serial('id').primaryKey(),
+    flagKey: text('flag_key').notNull().unique(), // e.g. COPILOT_ENABLED
+    name: text('name').notNull(),
+    description: text('description').notNull(),
+    enabled: boolean('enabled').notNull().default(false),
+    environment: text('environment').notNull().default('ALL'), // ALL, DEVELOPMENT, STAGING, PRODUCTION
+    rolloutScope: text('rollout_scope').notNull().default('ALL'), // ALL, INTERNAL_TESTERS, PILOT_BRANCHES, SYSTEM_ADMINS
+    owner: text('owner').notNull().default('SYSTEM_ADMIN'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    ffKeyIdx: uniqueIndex('idx_ff_flag_key').on(table.flagKey),
+    ffEnabledIdx: index('idx_ff_enabled').on(table.enabled),
+  })
+);
+
+// 2. Security Events (Authentication, Authorization, IDOR, Tamper, Secret attempts)
+export const securityEvents = pgTable(
+  'security_events',
+  {
+    id: serial('id').primaryKey(),
+    eventId: text('event_id').notNull().unique(), // e.g. SEC-2026-00101
+    type: text('type').notNull(), // AUTH_FAILURE, AUTHORIZATION_FAILURE, IDOR_ATTEMPT, CSRF_FAILURE, RATE_LIMIT, INVALID_INPUT, SECRET_ACCESS_ATTEMPT, SUSPICIOUS_SESSION, WEBHOOK_SIGNATURE_FAILURE, INTEGRATION_AUTH_FAILURE
+    severity: text('severity').notNull().default('MEDIUM'), // LOW, MEDIUM, HIGH, CRITICAL
+    actorId: text('actor_id'), // User UID or synthetic actor or ANONYMOUS
+    actorName: text('actor_name'),
+    targetResource: text('target_resource').notNull(), // e.g. /admin/users/100, role:ADMINISTRATOR, secret:GEMINI_API_KEY
+    requestId: text('request_id'),
+    sourceIp: text('source_ip').default('127.0.0.1'),
+    source: text('source').notNull().default('COREvia Security Guard'),
+    outcome: text('outcome').notNull().default('BLOCKED'), // BLOCKED, DENIED, FLAGGED, CHALLENGED
+    evidenceMetadata: jsonb('evidence_metadata'),
+    timestamp: timestamp('timestamp').defaultNow().notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    secEventIdIdx: uniqueIndex('idx_sec_event_id').on(table.eventId),
+    secTypeIdx: index('idx_sec_type').on(table.type),
+    secSeverityIdx: index('idx_sec_severity').on(table.severity),
+    secActorIdx: index('idx_sec_actor_id').on(table.actorId),
+    secTimeIdx: index('idx_sec_timestamp').on(table.timestamp),
+  })
+);
+
+// 3. System Settings (Maintenance mode, configuration overrides, system governance)
+export const systemSettings = pgTable(
+  'system_settings',
+  {
+    id: serial('id').primaryKey(),
+    settingKey: text('setting_key').notNull().unique(), // e.g. MAINTENANCE_MODE
+    settingValue: jsonb('setting_value').notNull(),
+    updatedBy: text('updated_by').notNull().default('SYSTEM'),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    sysKeyIdx: uniqueIndex('idx_sys_setting_key').on(table.settingKey),
+  })
+);
+
+
 

@@ -1062,6 +1062,24 @@ export async function seedDatabase() {
     throw err;
   }
 
+  // Phase 38 Enterprise Integration & API Gateway Seed
+  try {
+    const { seedIntegrationData } = await import('./seedIntegrations.ts');
+    await seedIntegrationData();
+  } catch (err) {
+    console.error('Failed to seed Integration Gateway Data:', err);
+    throw err;
+  }
+
+  // Phase 39 Enterprise Administration & Governance Center Seed
+  try {
+    const { seedAdminData } = await import('./seedAdmin.ts');
+    await seedAdminData();
+  } catch (err) {
+    console.error('Failed to seed Admin & Governance Data:', err);
+    throw err;
+  }
+
   console.log('--- COREvia PostgreSQL Database Seeding Completed Successfully ---');
 }
 

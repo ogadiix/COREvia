@@ -84,9 +84,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccessRedirect }) => {
     setErrorCode('');
 
     try {
-      console.log('[LoginPage] Calling login api with:', identifier.trim());
       const res = await login({ email: identifier.trim(), password: password });
-      console.log('[LoginPage] Login API resolved. Response:', res);
       
       setAuthStatus('success');
 
@@ -100,7 +98,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccessRedirect }) => {
         console.warn('localStorage is not available');
       }
 
-      console.log('[LoginPage] Triggering onSuccessRedirect...');
       if (onSuccessRedirect) {
         onSuccessRedirect();
       }

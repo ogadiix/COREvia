@@ -31,6 +31,7 @@ import {
   ShieldCheck,
   Activity,
   PieChart,
+  ShieldAlert,
 } from 'lucide-react';
 import { ModuleType } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -68,6 +69,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const { user, hasPermission, hasRole } = useAuth();
 
   const sections: NavSection[] = [
+    {
+      title: 'Enterprise Showcase',
+      items: [
+        {
+          id: 'showcase',
+          label: 'Platform Showcase',
+          icon: <Sparkles className="w-4 h-4 text-amber-400" />,
+          shortcut: '',
+        },
+      ],
+    },
     {
       title: 'Core Operations',
       items: [
@@ -297,6 +309,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: <Network className="w-4 h-4 text-indigo-400" />,
           shortcut: '',
           requiredRoles: ['ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS'],
+        },
+        {
+          id: 'admin',
+          label: 'Enterprise Admin',
+          icon: <ShieldAlert className="w-4 h-4 text-rose-400" />,
+          shortcut: '',
+          requiredRoles: ['ADMINISTRATOR'],
         },
       ],
     },

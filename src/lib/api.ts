@@ -2077,6 +2077,164 @@ export const bankingApi = {
       body: JSON.stringify({ name, permissions }),
     });
   },
+
+  // ==========================================
+  // PHASE 39: ENTERPRISE ADMINISTRATION & GOVERNANCE
+  // ==========================================
+  async getAdminOverview() {
+    return await request<{ success: boolean; data: any }>('/admin/overview');
+  },
+
+  async getAdminUsers(params?: { search?: string; status?: string; role?: string; department?: string; limit?: number; offset?: number }) {
+    const cleanParams: Record<string, string> = {};
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') cleanParams[k] = String(v);
+      });
+    }
+    const qs = Object.keys(cleanParams).length > 0 ? `?${new URLSearchParams(cleanParams).toString()}` : '';
+    return await request<{ success: boolean; data: any[]; total: number }>(`/admin/users${qs}`);
+  },
+
+  async getAdminUserDetail(userId: number) {
+    return await request<{ success: boolean; data: any }>(`/admin/users/${userId}`);
+  },
+
+  async updateAdminUserStatus(userId: number, status: string, reason: string, confirmation: boolean = true) {
+    return await request<{ success: boolean; message: string }>(`/admin/users/${userId}/status`, {
+      method: 'POST',
+      body: JSON.stringify({ status, reason, confirmation }),
+    });
+  },
+
+  async resetAdminUserAccess(userId: number, reason: string, confirmation: boolean = true) {
+    return await request<{ success: boolean; message: string }>(`/admin/users/${userId}/reset-access`, {
+      method: 'POST',
+      body: JSON.stringify({ reason, confirmation }),
+    });
+  },
+
+  async getAdminRoles() {
+    return await request<{ success: boolean; data: any[] }>('/admin/roles');
+  },
+
+  async getAdminPermissions() {
+    return await request<{ success: boolean; data: any[] }>('/admin/permissions');
+  },
+
+  async getAdminSessions() {
+    return await request<{ success: boolean; data: any[] }>('/admin/sessions');
+  },
+
+  async revokeAdminSession(sessionId: number, reason: string, confirmation: boolean = true) {
+    return await request<{ success: boolean; message: string }>(`/admin/sessions/${sessionId}/revoke`, {
+      method: 'POST',
+      body: JSON.stringify({ reason, confirmation }),
+    });
+  },
+
+  async revokeAllAdminSessionsForUser(userId: number, reason: string, confirmation: boolean = true) {
+    return await request<{ success: boolean; count: number; message: string }>(`/admin/users/${userId}/revoke-sessions`, {
+      method: 'POST',
+      body: JSON.stringify({ reason, confirmation }),
+    });
+  },
+
+  async getAdminLoginActivity(limit?: number) {
+    const qs = limit ? `?limit=${limit}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/admin/login-activity${qs}`);
+  },
+
+  async getAdminSecurityEvents(params?: { type?: string; severity?: string; limit?: number }) {
+    const cleanParams: Record<string, string> = {};
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') cleanParams[k] = String(v);
+      });
+    }
+    const qs = Object.keys(cleanParams).length > 0 ? `?${new URLSearchParams(cleanParams).toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/admin/security-events${qs}`);
+  },
+
+  async getAdminSecurityEventDetail(eventId: string) {
+    return await request<{ success: boolean; data: any }>(`/admin/security-events/${encodeURIComponent(eventId)}`);
+  },
+
+  async getAdminAiGovernance() {
+    return await request<{ success: boolean; data: any }>('/admin/ai-governance');
+  },
+
+  async getAdminIntegrationsSummary() {
+    return await request<{ success: boolean; data: any[] }>('/admin/integrations');
+  },
+
+  async getAdminNotifications() {
+    return await request<{ success: boolean; data: any[] }>('/admin/notifications');
+  },
+
+  async getAdminSla() {
+    return await request<{ success: boolean; data: any[] }>('/admin/sla');
+  },
+
+  async getAdminFeatureFlags() {
+    return await request<{ success: boolean; data: any[] }>('/admin/feature-flags');
+  },
+
+  async toggleAdminFeatureFlag(flagKey: string, enabled: boolean, reason: string, confirmation: boolean = true) {
+    return await request<{ success: boolean; flag: any; message: string }>(`/admin/feature-flags/${encodeURIComponent(flagKey)}/toggle`, {
+      method: 'POST',
+      body: JSON.stringify({ enabled, reason, confirmation }),
+    });
+  },
+
+  async getAdminSystemConfig() {
+    return await request<{ success: boolean; data: any }>('/admin/system-config');
+  },
+
+  async getAdminDatabaseHealth() {
+    return await request<{ success: boolean; data: any }>('/admin/database-health');
+  },
+
+  async getAdminBackgroundJobs() {
+    return await request<{ success: boolean; data: any[] }>('/admin/jobs');
+  },
+
+  async getAdminMaintenanceMode() {
+    return await request<{ success: boolean; data: any }>('/admin/maintenance');
+  },
+
+  async setAdminMaintenanceMode(active: boolean, reason: string, expectedDurationMinutes?: number, confirmation: boolean = true) {
+    return await request<{ success: boolean; config: any; message: string }>('/admin/maintenance', {
+      method: 'POST',
+      body: JSON.stringify({ active, reason, expectedDurationMinutes, confirmation }),
+    });
+  },
+
+  async getAdminGovernanceExceptions(params?: { status?: string; severity?: string; limit?: number }) {
+    const cleanParams: Record<string, string> = {};
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') cleanParams[k] = String(v);
+      });
+    }
+    const qs = Object.keys(cleanParams).length > 0 ? `?${new URLSearchParams(cleanParams).toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/admin/governance-exceptions${qs}`);
+  },
+
+  async getAdminAuditTrail(params?: { actorId?: string; action?: string; outcome?: string; limit?: number }) {
+    const cleanParams: Record<string, string> = {};
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') cleanParams[k] = String(v);
+      });
+    }
+    const qs = Object.keys(cleanParams).length > 0 ? `?${new URLSearchParams(cleanParams).toString()}` : '';
+    return await request<{ success: boolean; data: any[] }>(`/admin/audit${qs}`);
+  },
+
+  async verifyAdminAuditIntegrity() {
+    return await request<{ success: boolean; data: any }>('/admin/audit/verify-integrity');
+  },
 };
 
 export const api = bankingApi;

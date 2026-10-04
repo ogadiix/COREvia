@@ -3279,3 +3279,10 @@ apiRouter.use('/portfolio-intelligence', portfolioIntelligenceRouter);
 import { integrationRouter } from './integrationRoutes.ts';
 apiRouter.use('/integrations', integrationRouter);
 
+// ==========================================
+// PHASE 39: ENTERPRISE ADMINISTRATION & GOVERNANCE
+// ==========================================
+import { adminRouter } from './adminRoutes.ts';
+apiRouter.use('/admin', adminRouter);
+
+

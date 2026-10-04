@@ -124,3 +124,18 @@ Copilot provides strictly read-only, RBAC-governed operational telemetry:
 - `getOperationalTasks`
 - `getOperationalEvents`
 Copilot is strictly prohibited from mutating or approving operational records autonomously.
+
+---
+
+## 6. Enterprise Administration & System Operations (Phase 39)
+
+### 6.1 Centralized Control Plane (`/admin`)
+Phase 39 consolidates platform operations, user lifecycle governance, session management, and system health into a dedicated administrative control plane accessible strictly by the `ADMINISTRATOR` role.
+
+### 6.2 Administrative Operations Capabilities
+- **User Lifecycle Governance**: Roster management, department assignments, and controlled status transitions (`ACTIVE`, `INACTIVE`, `LOCKED`, `SUSPENDED`). Deactivation triggers an immediate session purge across all active devices.
+- **Session Administration**: Inspection of active sessions, metadata (IP, user agent, expiration), and single/user-wide session revocation with full audit logging.
+- **Security & Authorization Failures**: Real-time visibility into `AUTH_FAILURE`, `AUTHORIZATION_FAILURE`, `IDOR_ATTEMPT`, `RATE_LIMIT`, and `CSRF_FAILURE` with sanitized evidence metadata.
+- **Governed Feature Flags**: Centralized management of platform feature flags across environments (`development`, `staging`, `production`) with an ironclad rule prohibiting the disabling of security controls.
+- **Platform Health & Latency**: Real-time database latency checks, migration state, environment classification, and build metadata.
+- **Maintenance Mode Controls**: Governed activation of maintenance mode with recorded justification, actor, and estimated duration, ensuring administrators retain control-plane access without lockout risk.

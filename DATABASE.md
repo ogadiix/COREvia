@@ -69,3 +69,70 @@ Maps individual customers and corporate entities into relationship groups with e
 - `service_cases`: Service desk dispute tickets and SLA monitoring.
 - `customer_journeys`: Phase 33 orchestrated customer lifecycle journeys.
 - `interactions`: Customer touchpoint history and interaction notes.
+
+---
+
+## 4. Phase 39 Schema: Enterprise Administration & Governance Center
+
+### 4.1 Table: `feature_flags`
+Stores governed feature flags across deployment environments without allowing security control bypass.
+
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | `SERIAL` | `PRIMARY KEY` | Primary key identifier |
+| `flag_key` | `TEXT` | `NOT NULL UNIQUE` | Unique flag string (e.g. `COPILOT_ENABLED`) |
+| `name` | `TEXT` | `NOT NULL` | Human-readable flag title |
+| `description` | `TEXT` | `NULLABLE` | Explanation of operational scope |
+| `enabled` | `BOOLEAN` | `NOT NULL DEFAULT false` | Whether feature flag is currently active |
+| `environment` | `TEXT` | `NOT NULL DEFAULT 'development'` | Target tier (`development`, `staging`, `production`) |
+| `rollout_scope` | `TEXT` | `NOT NULL DEFAULT 'GLOBAL'` | `GLOBAL`, `BRANCH`, `PILOT`, `ADMIN_ONLY` |
+| `owner` | `TEXT` | `NULLABLE` | Engineering or Product owner |
+| `metadata` | `JSONB` | `NULLABLE` | Parameter constraints or telemetry tags |
+| `created_at` | `TIMESTAMP` | `NOT NULL DEFAULT NOW()` | Record creation timestamp |
+| `updated_at` | `TIMESTAMP` | `NOT NULL DEFAULT NOW()` | Last modification timestamp |
+
+**Indexes**:
+- `idx_feature_flags_key`: `flag_key`
+- `idx_feature_flags_env`: `environment`
+
+---
+
+### 4.2 Table: `security_events`
+Tracks security alerts, IDOR attempts, authorization denials, and authentication anomalies with data minimization.
+
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | `SERIAL` | `PRIMARY KEY` | Primary key identifier |
+| `event_id` | `TEXT` | `NOT NULL UNIQUE` | Business event code (`SEC-2026-0001`) |
+| `event_type` | `TEXT` | `NOT NULL` | Category (`AUTH_FAILURE`, `AUTHORIZATION_FAILURE`, `IDOR_ATTEMPT`, etc.) |
+| `severity` | `TEXT` | `NOT NULL` | `LOW`, `MEDIUM`, `HIGH`, `CRITICAL` |
+| `actor_id` | `TEXT` | `NULLABLE` | Identified user ID or `ANONYMOUS` |
+| `target_resource` | `TEXT` | `NULLABLE` | Target URI or entity |
+| `request_id` | `TEXT` | `NULLABLE` | Correlation identifier |
+| `ip_address` | `TEXT` | `NULLABLE` | Sanitized client IP |
+| `user_agent` | `TEXT` | `NULLABLE` | Originating client user agent |
+| `outcome` | `TEXT` | `NOT NULL` | `BLOCKED`, `FLAGGED`, `CHALLENGED` |
+| `evidence_metadata` | `JSONB` | `NULLABLE` | Non-sensitive context (zero passwords, keys, or tokens) |
+| `created_at` | `TIMESTAMP` | `NOT NULL DEFAULT NOW()` | Event timestamp |
+
+**Indexes**:
+- `idx_security_events_type`: `event_type`
+- `idx_security_events_severity`: `severity`
+- `idx_security_events_actor`: `actor_id`
+
+---
+
+### 4.3 Table: `system_settings`
+Key-value store for controlled platform settings, maintenance mode state, and system metadata.
+
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | `SERIAL` | `PRIMARY KEY` | Primary key identifier |
+| `setting_key` | `TEXT` | `NOT NULL UNIQUE` | Unique setting key (`maintenance_mode`, etc.) |
+| `value` | `JSONB` | `NOT NULL` | Strongly typed configuration JSON |
+| `description` | `TEXT` | `NULLABLE` | Setting documentation |
+| `updated_by` | `TEXT` | `NULLABLE` | Actor ID of modifying administrator |
+| `updated_at` | `TIMESTAMP` | `NOT NULL DEFAULT NOW()` | Modification timestamp |
+
+**Indexes**:
+- `idx_system_settings_key`: `setting_key`

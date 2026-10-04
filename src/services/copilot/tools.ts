@@ -25,6 +25,7 @@ import { governanceService } from '../governance.service.ts';
 import { operationsService } from '../operations.service.ts';
 import { portfolioIntelligenceService } from '../portfolioIntelligence.service.ts';
 import { integrationService } from '../integrations/integration.service.ts';
+import { adminService } from '../admin/admin.service.ts';
 import { pendingActionService } from './pendingActions.ts';
 import { CopilotSource } from './types.ts';
 import { auditRepository } from '../../repositories/audit.repository.ts';
@@ -1337,6 +1338,50 @@ export const COPILOT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         webhookId: { type: Type.STRING, description: 'Optional webhook ID filter' },
         status: { type: Type.STRING, description: 'Optional status filter (DELIVERED, RETRYING, EXHAUSTED)' },
       },
+    },
+  },
+  {
+    name: 'getAdminOverview',
+    description: 'Get high-level administrative metrics: active users, sessions, security events, feature flags, and jobs.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getUsers',
+    description: 'Query administrative user roster with roles, department, and status.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        search: { type: Type.STRING, description: 'Optional search keyword for user name or employee ID' },
+        status: { type: Type.STRING, description: 'Optional user status filter (ACTIVE, INACTIVE, LOCKED, SUSPENDED)' },
+        role: { type: Type.STRING, description: 'Optional role code filter' },
+      },
+    },
+  },
+  {
+    name: 'getIntegrationStatus',
+    description: 'Query status, health, and failure counts of all enterprise integration adapters.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getFeatureFlags',
+    description: 'Query governed feature flags, their enabled states, environment, and owners.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
+    },
+  },
+  {
+    name: 'getJobStatus',
+    description: 'Query background system operations, queues, execution durations, and retry counts.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {},
     },
   },
 ];
@@ -4827,6 +4872,127 @@ export async function executeCopilotTool(
             limitations: ['Deliveries bound to 3 maximum retry attempts.'],
           },
           deliveries,
+        },
+        sources,
+      };
+    }
+
+    case 'getAdminOverview': {
+      const overview = await adminService.getAdminOverview();
+      sources.push({
+        type: 'ADMIN' as any,
+        id: 'ADMIN-OVERVIEW',
+        label: 'Enterprise Admin Control Plane',
+        link: '/admin',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Active Users: ${overview.activeUsers} (Total: ${overview.totalUsers})`,
+              `Active Sessions: ${overview.activeSessions}`,
+              `Security Events: ${overview.securityEvents}`,
+              `Enabled Feature Flags: ${overview.enabledFeatureFlags} of ${overview.totalFeatureFlags}`,
+              `Running Background Jobs: ${overview.runningJobs}`,
+            ],
+            limitations: ['Administrative control plane metrics are real-time and governed by strict RBAC.'],
+          },
+          overview,
+        },
+        sources,
+      };
+    }
+
+    case 'getUsers': {
+      const result = await adminService.getUsers(args);
+      sources.push({
+        type: 'ADMIN' as any,
+        id: 'ADMIN-USERS',
+        label: 'Enterprise User Administration',
+        link: '/admin?tab=users',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [`Retrieved ${result.users.length} banking user accounts (Total: ${result.total})`],
+            limitations: ['Sensitive credential hashes and tokens are strictly suppressed.'],
+          },
+          users: result.users,
+          total: result.total,
+        },
+        sources,
+      };
+    }
+
+    case 'getIntegrationStatus': {
+      const summary = await adminService.getIntegrationsSummary();
+      sources.push({
+        type: 'INTEGRATIONS' as any,
+        id: 'ADMIN-INTEGRATIONS',
+        label: 'API Gateway & Enterprise Adapters',
+        link: '/integrations',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Configured Adapters: ${summary.length}`,
+              `Degraded/Failing Adapters: ${summary.filter((i) => i.failureCount > 0).length}`,
+            ],
+            limitations: ['Integration simulators operate in synthetic test mode.'],
+          },
+          integrations: summary,
+        },
+        sources,
+      };
+    }
+
+    case 'getFeatureFlags': {
+      const flags = await adminService.getFeatureFlags();
+      sources.push({
+        type: 'ADMIN' as any,
+        id: 'ADMIN-FEATURE-FLAGS',
+        label: 'Governed Feature Flags',
+        link: '/admin?tab=feature-flags',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Total Flags: ${flags.length}`,
+              `Enabled Flags: ${flags.filter((f) => f.enabled).length}`,
+            ],
+            limitations: ['Feature flags can never disable authentication, authorization, or audit logging.'],
+          },
+          flags,
+        },
+        sources,
+      };
+    }
+
+    case 'getJobStatus': {
+      const jobs = await adminService.getBackgroundJobs();
+      sources.push({
+        type: 'ADMIN' as any,
+        id: 'ADMIN-JOBS',
+        label: 'Background Job Queues',
+        link: '/admin?tab=jobs',
+      });
+      return {
+        data: {
+          classification: {
+            type: 'DETERMINISTIC',
+            facts: [
+              `Background Operations: ${jobs.length}`,
+              `Currently Running: ${jobs.filter((j) => j.status === 'RUNNING').length}`,
+            ],
+            limitations: ['Job queue operates internal health checks and operational escalations.'],
+          },
+          jobs,
         },
         sources,
       };

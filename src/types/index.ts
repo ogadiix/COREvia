@@ -28,11 +28,14 @@ export type ModuleType =
   | 'governance'
   | 'operations'
   | 'portfolio-intelligence'
-  | 'integrations';
+  | 'integrations'
+  | 'admin'
+  | 'showcase';
 
 export * from './operations.types';
 export * from './portfolioIntelligence.types';
 export * from './integration.types';
+export * from './admin.types';
 
 export type AccountType = 'SAVINGS' | 'CURRENT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT' | 'SALARY' | 'PREMIUM_SAVINGS';
 

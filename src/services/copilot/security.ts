@@ -310,7 +310,38 @@ export const copilotSecurity = {
       }
     }
 
-    // 6. Customer Scoping checks
+    // 6. Enterprise Administration & Control Plane tools RBAC checks (Phase 39)
+    const adminTools = [
+      'getAdminOverview',
+      'getUsers',
+      'getIntegrationStatus',
+      'getFeatureFlags',
+      'getJobStatus',
+    ];
+
+    if (adminTools.includes(toolName)) {
+      const isAllowed = user.role === 'ADMINISTRATOR' || user.permissions?.includes('admin:all');
+      if (!isAllowed) {
+        await auditRepository.createLog({
+          actorId: user.employeeId || String(user.id),
+          actorName: user.name,
+          action: 'COPILOT_TOOL_UNAUTHORIZED',
+          resourceType: 'COPILOT_ADMIN_TOOL',
+          resourceId: toolName,
+          requestId,
+          outcome: 'DENIED',
+          metadata: { reason: 'UNAUTHORIZED_ADMIN_CONTROL_PLANE_ACCESS', userRole: user.role },
+        });
+
+        throw new BankingError(
+          'FORBIDDEN',
+          `Role '${user.role}' is not authorized to access administrative control plane tools via Copilot.`,
+          403
+        );
+      }
+    }
+
+    // 7. Customer Scoping checks
     if (args?.customerId) {
       await resourceAuth.authorizeCustomer(user, args.customerId, 'COPILOT_TOOL', requestId);
     } else if (args?.entityId && args?.entityType === 'CUSTOMER') {

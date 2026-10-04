@@ -86,19 +86,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Login handler
   const login = async (credentials: { email: string; password: string }) => {
-    console.log('[AuthContext] login started');
     setSessionExpired(false);
     setShowInactivityWarning(false);
     lastActivityRef.current = Date.now();
     try {
       const res = await bankingApi.login(credentials);
-      console.log('[AuthContext] login res:', res);
       if (res && res.user) {
-        console.log('[AuthContext] Setting user from res.user:', res.user);
         setUser(res.user);
       } else {
         const meRes = await bankingApi.getMe();
-        console.log('[AuthContext] Setting user from getMe:', meRes.user);
         setUser(meRes.user);
       }
       lastActivityRef.current = Date.now();
