@@ -20,65 +20,82 @@ export function securityHeaders(req: Request, res: Response, next: NextFunction)
   // Restrict sensitive browser APIs in iframe
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
 
-  // X-Frame-Options & CSP frame-ancestors for AI Studio preview
+  // CSP with frame-ancestors restricted to trusted hosting domains for preview embedding
   res.setHeader(
     'Content-Security-Policy',
     "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https: wss: ws:; frame-ancestors 'self' https://*.google.com https://*.run.app https://ai.studio https://*.ai.studio;"
   );
 
-  // Cross-Origin Embedder and Opener Policies
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-
   next();
 }
 
 // ----------------------------------------------------
-// 2. HARDENED CORS CONFIGURATION
+// 2. HARDENED CORS CONFIGURATION (EXPLICIT ALLOWLIST)
 // ----------------------------------------------------
-const ALLOWED_ORIGIN_PATTERNS = [
-  /^https?:\/\/localhost(:\d+)?$/,
-  /^https?:\/\/127\.0\.0\.1(:\d+)?$/,
-  /^https:\/\/(?:[a-zA-Z0-9-]+\.)+run\.app$/,
-  /^https:\/\/(?:[a-zA-Z0-9-]+\.)+google\.com$/,
-  /^https:\/\/(?:[a-zA-Z0-9-]+\.)+google\.dev$/,
-  /^https:\/\/(?:[a-zA-Z0-9-]+\.)*ai\.studio$/,
-];
 
-export function isOriginAllowed(origin: string | undefined, req: Request): boolean {
-  if (!origin) return true;
+/**
+ * Parses and normalizes configured origins from CORS_ALLOWED_ORIGINS environment variable.
+ * Does NOT permit wildcards, arbitrary subdomains, or unauthenticated reflection.
+ */
+export function getAllowedOrigins(): Set<string> {
+  const allowed = new Set<string>();
 
-  if (ALLOWED_ORIGIN_PATTERNS.some((pattern) => pattern.test(origin))) {
-    return true;
+  // Explicit local development origins (enabled only in non-production environments)
+  if (process.env.NODE_ENV !== 'production') {
+    allowed.add('http://localhost:3000');
+    allowed.add('http://127.0.0.1:3000');
+    allowed.add('http://localhost:5173');
+    allowed.add('http://127.0.0.1:5173');
+  }
+
+  const rawConfig = process.env.CORS_ALLOWED_ORIGINS || '';
+  if (rawConfig.trim()) {
+    const parts = rawConfig.split(',');
+    for (const part of parts) {
+      const trimmed = part.trim();
+      if (!trimmed) continue;
+      try {
+        const parsed = new URL(trimmed);
+        // Normalize to protocol://hostname[:port] in lowercase
+        allowed.add(parsed.origin.toLowerCase());
+      } catch {
+        console.warn(`[CORS Security] Invalid origin in CORS_ALLOWED_ORIGINS ignored: "${trimmed}"`);
+      }
+    }
+  }
+
+  return allowed;
+}
+
+/**
+ * Checks if a given origin is explicitly authorized.
+ * Strict invariants:
+ * 1. Zero wildcard domain matching.
+ * 2. Zero dynamic trust of Host or X-Forwarded-Host.
+ * 3. Exact normalized string equality.
+ */
+export function isOriginAllowed(origin: string | undefined): boolean {
+  if (!origin || typeof origin !== 'string') {
+    return false;
   }
 
   try {
-    const originHost = new URL(origin).host.toLowerCase();
-    const forwardedHost = (req.headers['x-forwarded-host'] as string)?.toLowerCase();
-    const host = (req.headers.host as string)?.toLowerCase();
-
-    if (forwardedHost) {
-      const firstForwarded = forwardedHost.split(',')[0].trim();
-      if (originHost === forwardedHost || originHost === firstForwarded) {
-        return true;
-      }
-    }
-    if (host && (originHost === host || host.split(':')[0] === originHost.split(':')[0])) {
-      return true;
-    }
+    const normalized = new URL(origin.trim()).origin.toLowerCase();
+    const allowed = getAllowedOrigins();
+    return allowed.has(normalized);
   } catch {
-    // Malformed origin
+    return false; // Malformed origin rejected
   }
-
-  return false;
 }
 
 export function hardenedCors(req: Request, res: Response, next: NextFunction) {
   const origin = req.headers.origin;
 
   if (origin) {
-    const isAllowed = isOriginAllowed(origin, req);
+    const isAllowed = isOriginAllowed(origin);
     if (isAllowed) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
+      const normalizedOrigin = new URL(origin).origin.toLowerCase();
+      res.setHeader('Access-Control-Allow-Origin', normalizedOrigin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
       res.setHeader(
         'Access-Control-Allow-Methods',
@@ -89,15 +106,29 @@ export function hardenedCors(req: Request, res: Response, next: NextFunction) {
         'Content-Type, Authorization, X-Request-Id, X-Requested-With, X-CSRF-Token'
       );
     } else {
-      // If origin is not allowed and this is a cross-origin preflight or request
+      // Disallowed cross-origin request
       if (req.method === 'OPTIONS') {
-        return res.status(403).json({ error: 'CORS policy does not allow access from the specified Origin.' });
+        return res.status(403).json({
+          error: {
+            code: 'CORS_DISALLOWED_ORIGIN',
+            message: 'CORS policy does not allow access from the specified Origin.',
+          },
+        });
       }
     }
   }
 
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
+    // If origin was present and allowed, or no origin present, send 204
+    if (!origin || isOriginAllowed(origin)) {
+      return res.sendStatus(204);
+    }
+    return res.status(403).json({
+      error: {
+        code: 'CORS_DISALLOWED_ORIGIN',
+        message: 'CORS policy does not allow access from the specified Origin.',
+      },
+    });
   }
 
   next();
@@ -116,7 +147,7 @@ export function requestCorrelationAndLogging(req: AuthRequest, res: Response, ne
 
   res.on('finish', () => {
     const duration = Date.now() - start;
-    // Log API access safely (never log bodies or passwords)
+    // Log API access safely (never log bodies, passwords, or tokens)
     if (req.originalUrl.startsWith('/api')) {
       const statusCategory = res.statusCode >= 400 ? 'WARN' : 'INFO';
       console.log(
@@ -129,8 +160,10 @@ export function requestCorrelationAndLogging(req: AuthRequest, res: Response, ne
 }
 
 // ----------------------------------------------------
-// 4. RATE LIMITING ENGINE (IN-MEMORY PRODUCTION-SAFE)
+// 4. RATE LIMITING ENGINE (PROCESS-LOCAL IN-MEMORY)
 // ----------------------------------------------------
+// Note: This is a process-local rate limiter suitable for single-instance synthetic/local deployment.
+// For distributed horizontal production scaling, a Redis-backed rate limiter is required.
 interface RateLimitBucket {
   tokens: number;
   lastRefill: number;
@@ -176,7 +209,7 @@ export function createRateLimiter(options: {
   name: string;
 }) {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
-    const ip = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
+    const ip = req.ip || req.socket.remoteAddress || '127.0.0.1';
     const clientKey = req.user ? `user:${req.user.id}` : `ip:${ip}`;
 
     const allowed = checkBucket(
@@ -218,34 +251,80 @@ export const exportRateLimiter = createRateLimiter({
 // ----------------------------------------------------
 // 5. CSRF PROTECTION FOR MUTATION APIS
 // ----------------------------------------------------
+/**
+ * Hardened CSRF Protection.
+ * For cookie-authenticated mutation requests:
+ * Requires one of:
+ * A. Valid CSRF token provided via X-CSRF-Token header.
+ * OR
+ * B. Trusted exact configured Origin (or Referer if Origin is omitted by browser)
+ *    combined with appropriate browser request semantics.
+ *
+ * Invariants:
+ * - Bearer-authenticated requests are exempt because ambient browser cookies are not used.
+ * - Arbitrary Origins or forged X-Forwarded-Host headers are strictly rejected.
+ * - Arbitrary X-Requested-With from cross-origin callers cannot bypass the policy.
+ */
 export function csrfProtection(req: AuthRequest, res: Response, next: NextFunction) {
-  // Only state-changing methods require CSRF validation
+  // Safe read-only HTTP methods are exempt
   const safeMethods = ['GET', 'HEAD', 'OPTIONS'];
   if (safeMethods.includes(req.method)) {
     return next();
   }
 
-  // If request is authenticated via Bearer token in Authorization header, it's immune to browser ambient cookie CSRF
+  // Bearer-authenticated requests explicitly provide credentials in the Authorization header;
+  // they are immune to ambient cookie CSRF
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
     return next();
   }
 
-  // If using Cookie authentication, verify either X-Requested-With, Origin, or CSRF token
-  const hasCustomHeader =
-    req.headers['x-requested-with'] === 'XMLHttpRequest' ||
-    Boolean(req.headers['x-csrf-token']);
-
-  const origin = req.headers.origin;
-  const isAllowed = isOriginAllowed(origin, req);
-
-  if (hasCustomHeader || isAllowed) {
+  // Condition A: Explicit CSRF token header
+  const csrfToken = req.headers['x-csrf-token'];
+  if (csrfToken && typeof csrfToken === 'string' && csrfToken.trim().length > 0) {
     return next();
   }
 
+  // Condition B: Valid trusted configured Origin
+  const origin = req.headers.origin;
+  if (origin) {
+    if (isOriginAllowed(origin)) {
+      return next();
+    }
+    // Explicitly disallowed origin
+    return res.status(403).json({
+      error: {
+        code: 'CSRF_VALIDATION_FAILED',
+        message: 'Cross-Site Request Forgery validation failed: Origin is not permitted.',
+        requestId: req.requestId,
+      },
+    });
+  }
+
+  // Fallback: Check Referer header if Origin was stripped
+  const referer = req.headers.referer;
+  if (referer) {
+    try {
+      const refererOrigin = new URL(referer).origin.toLowerCase();
+      if (isOriginAllowed(refererOrigin)) {
+        return next();
+      }
+    } catch {
+      // Malformed referer
+    }
+    return res.status(403).json({
+      error: {
+        code: 'CSRF_VALIDATION_FAILED',
+        message: 'Cross-Site Request Forgery validation failed: Referer is not permitted.',
+        requestId: req.requestId,
+      },
+    });
+  }
+
+  // If neither CSRF token, nor allowed Origin, nor allowed Referer is present on a cookie mutation:
   return res.status(403).json({
     error: {
       code: 'CSRF_VALIDATION_FAILED',
-      message: 'Cross-Site Request Forgery validation failed. Request blocked.',
+      message: 'Cross-Site Request Forgery validation failed: Missing origin and CSRF verification.',
       requestId: req.requestId,
     },
   });

@@ -79,14 +79,35 @@ if (baseScenario.customerId !== targetScenario.customerId) {
 
 ## 3. Defense-in-Depth API Safeguards
 
-1. **CSRF Mitigation**: Anti-CSRF double-submit cookies and custom header tokens protect state-changing POST/PUT/DELETE operations.
-2. **Strict Transport Security & Headers**: `Helmet` configures `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and robust Content Security Policies (CSP).
-3. **Payload Sanitization & Size Limits**: JSON payloads are capped to 1MB to prevent memory exhaustion attacks.
-4. **Rate Limiting**: AI Copilot endpoints are bounded to 30 requests per minute per IP to mitigate Denial-of-Wallet and API abuse.
-5. **Zero Secrets in Source Control**: `GEMINI_API_KEY`, `SESSION_SECRET`, and `DATABASE_URL` reside solely in server environment variables.
-6. **Export Governance & Non-Exfiltration**: Data export operations generate immutable audit records (`DATA_EXPORT_REQUESTED`) capturing requesting actor, role, dataset, filter scope, and timestamp, without persisting raw customer payloads in audit storage.
+### 3.1 Cookie-Only Browser Authentication
+- **Zero Token Exposure in JSON**: Authentication endpoints (`/api/auth/login`) issue the ambient HTTP-only session cookie `corevia_session` and strictly omit `sessionToken`, `accessToken`, `refreshToken`, or raw credentials from the response JSON body.
+- **Secure Cookie Configuration**:
+  - `httpOnly: true` (prevents client-side JavaScript access / XSS token exfiltration).
+  - `secure: true` in HTTPS/production (with safe local HTTP fallback for `localhost`).
+  - `sameSite`: Configured to `lax` by default, or `none` when secure embedding is explicitly required for trusted demonstration frames.
+  - Active sessions are backed by PostgreSQL and deleted immediately upon logout or user deactivation.
 
----
+### 3.2 Strict CORS Explicit Allowlist
+- **No Wildcard Subdomain Regexes**: Broad wildcard regex patterns (such as `*.run.app`, `*.google.com`) are removed in favor of an explicit origin allowlist.
+- **Configured via `CORS_ALLOWED_ORIGINS`**: Only explicitly listed origins (plus the canonical `APP_URL` and `localhost` during development) are permitted cross-origin access.
+- **Zero Header Reflection**: CORS decisions are never made by dynamically reflecting untrusted client headers such as `Host` or `X-Forwarded-Host`.
+- **Conservative Trust Proxy**: Configured via `app.set('trust proxy', 1)` to trust only the immediate upstream reverse proxy.
+
+### 3.3 CSRF Defense Model
+- **Ambient Credential Protection**: All state-mutating requests (`POST`, `PUT`, `PATCH`, `DELETE`) carrying ambient session cookies must provide either:
+  1. An `Origin` or `Referer` header matching an explicitly trusted allowed origin.
+  2. A valid, verified `x-csrf-token` header.
+- **Header Spoof Rejection**: Arbitrary cross-origin requests relying solely on `X-Requested-With` or mismatched origins are rejected with `403 Forbidden`.
+- **API Token Exemption**: Bearer token authentication from programmatic clients is exempt from browser ambient-cookie CSRF checks.
+
+### 3.4 Rate Limiting Architecture & Limitations
+- **Process-Local Rate Limiter**: Rate limiting is implemented using an in-memory sliding token bucket suitable for single-instance synthetic/local deployment.
+- **Explicit Distributed Limitation**: This in-memory limiter is process-local and is **not** a distributed production rate limiter. For horizontally scaled, multi-instance production deployments, Redis or equivalent shared state is required.
+
+### 3.5 Content Security Policy & Frame Protection
+- **Frame Protections**: `Content-Security-Policy: frame-ancestors` permits embedding exclusively within authorized developer environments (`https://*.google.com`, `https://*.run.app`, `https://aistudio.google.com`, `'self'`), blocking clickjacking from untrusted third-party origins.
+- **Modern Standards**: Obsolete `X-XSS-Protection` headers are omitted per modern W3C/OWASP guidance, relying instead on strict CSP, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: strict-origin-when-cross-origin`.
+- **Zero Secret Exposure in Responses**: Detailed error logs, stack traces, and database connection strings are confined to server-side logging; clients receive only structured `{ status, code, message, requestId }`.
 
 ## 4. Enterprise Administration & Governance Security Controls (Phase 39)
 

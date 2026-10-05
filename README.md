@@ -125,7 +125,7 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 ### 15. 🛡️ Trust & Governance Center (Phase 35)
 - **Centralized Enterprise Governance Workspace (`/governance`)**: Unified observability and control layer providing compliance users, administrators, and security officers with transparent visibility across AI governance, Agent governance, Decision governance, Data governance, Access governance, Security, Approvals, and Exceptions.
 - **Cryptographic SHA-256 Tamper-Evident Chaining**: Enhanced `audit_logs` table with `previous_hash` and `record_hash` forming an immutable cryptographic audit chain with real-time chain verification (`VERIFIED_IMMUTABLE`).
-- **AI Governance & Zero Secret Exposure**: Safe Gemini configuration metadata monitoring (Model: `gemini-2.5-flash`, Key Status: Configured/Missing) with absolute guarantee that API keys and session secrets are never exposed in responses.
+- **AI Governance & Zero Secret Exposure**: Safe Gemini configuration metadata monitoring (Model: `gemini-3.8-flash`, Key Status: Configured/Missing) with absolute guarantee that API keys and session secrets are never exposed in responses.
 - **Source Classification Architecture**: Explicitly delineates between `DETERMINISTIC`, `AI_GENERATED`, `HYBRID`, and `SYSTEM_RULE` operations, ensuring rule-based calculations are never misrepresented as "AI decisions".
 - **Governance Exceptions Management**: Full lifecycle tracking (`OPEN` → `UNDER_REVIEW` → `RESOLVED` / `DISMISSED`) with assigned officer workflows, audit mutations, and automatic notifications on high/critical anomalies.
 - **Canonical Intelligence Lineage**: End-to-end provenance graph linking customer master data, interaction records, service tickets, CORE Score, Relationship Intelligence, Next Best Action, Decision Trace, Agent Plan, and human action to the tamper-evident audit trail.
@@ -150,7 +150,7 @@ From front-office branch operations and KYC/KYB onboarding to back-office maker-
 - **Platform Architecture Flow Visualizer**: 4-layer institutional flow visualizer displaying clear separation across Presentation Layer (React 19 + TypeScript + Vite), Gateway & RBAC (Express 4 + Helmet + CSRF), Banking Engines (Deterministic Core Logic, Decision Trace, Controlled Agent), and Data & AI Services (PostgreSQL 16 + Server-Side Gemini AI Proxy).
 - **Deterministic Canonical Customer Story**: 10-step lifecycle journey centered on Rahul Sharma (`CUS-10482`, ID: 1): Customer Master Record → Health & CORE Score Movement → Dispute Signal Ingestion → Evidence Evaluation → Decision Trace Lineage → Strategy Simulator What-If Sandbox → Controlled Banking Agent Two-Stage Plan → Maker-Checker Dual-Control Approval → Core Operations Execution → Tamper-Evident SHA-256 Audit Trail.
 - **Universal Action Traceability Grid**: Enterprise compliance matrix mapping every meaningful platform action across ORIGIN, EVIDENCE, DECISION, EXECUTION, OUTCOME, and AUDIT, proving zero synthetic disconnected UI states.
-- **Comprehensive Master Regression Harness**: Verified with **15 Test Suites and 331 Tests (100% Passing)** natively against PostgreSQL in ~1.9s.
+- **Comprehensive Master Regression Harness**: Verified with **15 Test Suites and 336 Assertions (100% Passing)** natively against PostgreSQL in ~2.5s.
 
 ---
 
@@ -269,7 +269,7 @@ docker-compose down
 | `npm run build` | Builds production client via Vite and bundles Node server |
 | `npm run start` | Runs compiled production server (`dist/server.cjs`) |
 | `npm run lint` | Runs TypeScript compilation type-checking without emitting |
-| `npm run test` | Executes 15 backend test suites (331 total tests, 100% passing) |
+| `npm run test` | Executes 15 backend test suites (336 total assertions, 100% passing) |
 | `npm run db:generate`| Generates migration SQL files with Drizzle Kit |
 | `npm run db:migrate` | Applies database schema migrations |
 | `npm run db:seed` | Seeds synthetic banking data (disabled in production) |

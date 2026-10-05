@@ -96,15 +96,11 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 }
 
 export const bankingApi = {
-  // Authentication
   async login(credentials: { email: string; password: string }) {
-    const res = await request<{ status: string; sessionToken: string; user: any }>('/auth/login', {
+    const res = await request<{ status: string; message: string; expiresAt: string; user: any }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
-    if (res.sessionToken) {
-      setSessionToken(res.sessionToken);
-    }
     return res;
   },
 

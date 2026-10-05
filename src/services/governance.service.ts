@@ -199,7 +199,7 @@ export const governanceService = {
   // -------------------------------------------------------------
   async getAIGovernance(user: SafeUser): Promise<AIGovernanceDTO> {
     const isGeminiConfigured = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.length > 5);
-    const configuredModel = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+    const configuredModel = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 
     const metrics = await governanceRepository.getOverviewMetrics();
 

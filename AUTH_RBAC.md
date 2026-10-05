@@ -1,9 +1,12 @@
 # COREvia Enterprise Authentication & RBAC Policy
 
 ## 1. Authentication Architecture
-- **Session Authentication**: Cookie-backed HTTP-only sessions signed with server secret.
-- **CSRF Protection**: Double-submit cookie with `X-CSRF-Token` validation on state-altering requests.
-- **Identity Isolation**: User identities (`actorId`, `name`, `role`, `department`, `branchId`) are attached to `req.user`.
+- **Cookie-Only Browser Authentication**: Login endpoints (`/api/auth/login`) set the ambient HTTP-only session cookie `corevia_session`. The JSON response returns exclusively safe user profile data and expiration timestamps; raw session credentials, access tokens, and refresh tokens are strictly withheld from JavaScript.
+- **Session Lifecycle & PostgreSQL Store**: Active sessions are persisted in the PostgreSQL `sessions` table. Calling `/api/auth/logout` explicitly deletes the active session record from the database and clears the client cookie.
+- **Atomic Session Purge on Status Mutation**: Transitioning any user account to `INACTIVE`, `LOCKED`, or `SUSPENDED` initiates an atomic database transaction that updates the user record, purges all active session rows for that user, and writes an audit log.
+- **Self-Deactivation Anti-Lockout**: Administrators cannot mutate their own account status to `INACTIVE`, `LOCKED`, or `SUSPENDED` (`ADMIN_CANNOT_DEACTIVATE_SELF`), preventing administrative lockout.
+- **CSRF Defense Model**: Browser requests with ambient cookies performing state mutations (`POST`, `PUT`, `PATCH`, `DELETE`) require a valid `x-csrf-token` header or an exact match against trusted origins in `CORS_ALLOWED_ORIGINS` / `APP_URL`. Programmatic Bearer tokens are exempt.
+- **Identity Isolation**: User identities (`actorId`, `name`, `role`, `department`, `branchId`) are resolved securely from the server session and attached to `req.user`.
 
 ---
 

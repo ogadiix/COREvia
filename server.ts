@@ -27,13 +27,18 @@ import { seedAdminData } from './src/db/seedAdmin.ts';
 
 async function startServer() {
   // Validate required configuration before starting
-  validateEnvironment();
+  const envResult = validateEnvironment();
+  if (!envResult.valid && process.env.NODE_ENV === 'production') {
+    console.error('CRITICAL: Server startup aborted due to invalid production configuration.');
+    process.exit(1);
+  }
 
   const app = express();
   const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-  // Disable server identification header
+  // Disable server identification header & configure conservative single-hop trust proxy
   app.disable('x-powered-by');
+  app.set('trust proxy', 1);
 
   // Security Headers & Hardened CORS
   app.use(securityHeaders);

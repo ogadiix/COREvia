@@ -104,7 +104,7 @@ export async function seedGovernanceExceptions(): Promise<void> {
       resolvedAt: new Date(Date.now() - 3600000 * 10),
       resolution: 'Deterministic rules returned verified RBI regulatory guidance. Fallback telemetry verified normal operation.',
       metadata: {
-        modelConfigured: 'gemini-2.5-flash',
+        modelConfigured: 'gemini-3.8-flash',
         fallbackEngine: 'institutional_engine',
         queryType: 'CRR_SLR_INQUIRY',
         latencyMs: 4120,

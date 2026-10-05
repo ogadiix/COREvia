@@ -217,7 +217,7 @@ export interface AdminAiGovernanceDTO {
   model: string;
   configurationState: string;
   fallbackState: string;
-  lastAiRequest?: string;
+  lastAiRequest?: string | null;
   aiErrorCount: number;
   copilotSessions?: number;
   copilotSessionsCount?: number;
@@ -231,6 +231,7 @@ export interface AdminAiGovernanceDTO {
   rejectedActionsCount?: number;
   sourceClassifications: { classification: string; count: number; percentage: number }[];
   classificationsBreakdown?: Record<string, number>;
+  dataSource?: 'DATABASE_DERIVED' | 'SYNTHETIC_DEMO' | 'NOT_AVAILABLE';
 }
 
 export interface AdminIntegrationSummaryDTO {

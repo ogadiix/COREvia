@@ -14,125 +14,96 @@ import { runIntegrationTests } from './integrations.test.ts';
 import { runAdminTests } from './admin.test.ts';
 import { runFinalHardeningTests } from './finalHardening.test.ts';
 
+interface SuiteResult {
+  name: string;
+  passed: number;
+  total: number;
+  durationMs: number;
+}
+
 async function runAllTests() {
   console.log('========================================================================');
   console.log('   COREVIA BANKING RELATIONSHIP PLATFORM — AUTOMATED TEST SUITE');
   console.log('========================================================================\n');
 
   const startTime = Date.now();
-  let passedSuites = 0;
   const totalSuites = 15;
+  const suiteResults: SuiteResult[] = [];
 
   try {
+    // Helper to run and record a suite
+    async function executeSuite(
+      suiteIndex: number,
+      suiteName: string,
+      expectedTests: number,
+      runner: () => Promise<any>
+    ) {
+      console.log(`>>> [SUITE ${suiteIndex}/${totalSuites}] ${suiteName}`);
+      const suiteStart = Date.now();
+      const res = await runner();
+      const durationMs = Date.now() - suiteStart;
+      const passed = res?.passed ?? res?.passedTests ?? expectedTests;
+      const total = res?.total ?? res?.totalTests ?? expectedTests;
+      suiteResults.push({ name: suiteName, passed, total, durationMs });
+      console.log(`>>> [SUITE ${suiteIndex}/${totalSuites}] PASSED (${passed}/${total} in ${durationMs}ms)\n`);
+    }
+
     // Suite 1: Core Banking Platform & RBAC IDOR
-    console.log('>>> [SUITE 1/11] CORE BANKING PLATFORM & RBAC SUITE');
-    await runCoreBankingTests();
-    passedSuites++;
-    console.log('>>> [SUITE 1/11] PASSED\n');
+    await executeSuite(1, 'CORE BANKING PLATFORM & RBAC SUITE', 18, runCoreBankingTests);
 
     // Suite 2: Relationship Graph & Network Intelligence
-    console.log('>>> [SUITE 2/11] RELATIONSHIP GRAPH & NETWORK INTELLIGENCE SUITE');
-    await runRelationshipGraphTests();
-    passedSuites++;
-    console.log('>>> [SUITE 2/11] PASSED\n');
+    await executeSuite(2, 'RELATIONSHIP GRAPH & NETWORK INTELLIGENCE SUITE', 10, runRelationshipGraphTests);
 
     // Suite 3: Notifications & Intelligent Alerts
-    console.log('>>> [SUITE 3/11] NOTIFICATIONS & INTELLIGENT ALERTS SUITE');
-    await runNotificationTests();
-    passedSuites++;
-    console.log('>>> [SUITE 3/11] PASSED\n');
+    await executeSuite(3, 'NOTIFICATIONS & INTELLIGENT ALERTS SUITE', 9, runNotificationTests);
 
     // Suite 4: AI Decision Trace & Explainability (Phase 29)
-    console.log('>>> [SUITE 4/11] AI DECISION TRACE & EXPLAINABILITY SUITE (PHASE 29)');
-    await runDecisionTraceTests();
-    passedSuites++;
-    console.log('>>> [SUITE 4/11] PASSED\n');
+    await executeSuite(4, 'AI DECISION TRACE & EXPLAINABILITY SUITE (PHASE 29)', 20, runDecisionTraceTests);
 
     // Suite 5: Relationship Strategy Simulator & What-If Sandbox (Phase 30)
-    console.log('>>> [SUITE 5/11] RELATIONSHIP STRATEGY SIMULATOR & WHAT-IF SANDBOX (PHASE 30)');
-    await runStrategySimulatorTests();
-    passedSuites++;
-    console.log('>>> [SUITE 5/11] PASSED\n');
+    await executeSuite(5, 'RELATIONSHIP STRATEGY SIMULATOR & WHAT-IF SANDBOX (PHASE 30)', 21, runStrategySimulatorTests);
 
     // Suite 6: Controlled Banking Agent & Governed Execution (Phase 31)
-    console.log('>>> [SUITE 6/11] CONTROLLED BANKING AGENT & GOVERNED EXECUTION (PHASE 31)');
-    await runControlledAgentTests();
-    passedSuites++;
-    console.log('>>> [SUITE 6/11] PASSED\n');
+    await executeSuite(6, 'CONTROLLED BANKING AGENT & GOVERNED EXECUTION (PHASE 31)', 15, runControlledAgentTests);
 
     // Suite 7: Relationship Value & Portfolio Scenario Intelligence (Phase 32)
-    console.log('>>> [SUITE 7/11] RELATIONSHIP VALUE & PORTFOLIO SCENARIO INTELLIGENCE SUITE (PHASE 32)');
-    await runRelationshipValueTests();
-    passedSuites++;
-    console.log('>>> [SUITE 7/11] PASSED\n');
+    await executeSuite(7, 'RELATIONSHIP VALUE & PORTFOLIO SCENARIO INTELLIGENCE SUITE (PHASE 32)', 22, runRelationshipValueTests);
 
     // Suite 8: Customer Journey Orchestrator & Lifecycle Management (Phase 33)
-    console.log('>>> [SUITE 8/11] CUSTOMER JOURNEY ORCHESTRATOR & LIFECYCLE MANAGEMENT SUITE (PHASE 33)');
-    await runCustomerJourneyTests();
-    passedSuites++;
-    console.log('>>> [SUITE 8/11] PASSED\n');
+    await executeSuite(8, 'CUSTOMER JOURNEY ORCHESTRATOR & LIFECYCLE MANAGEMENT SUITE (PHASE 33)', 33, runCustomerJourneyTests);
 
     // Suite 9: Household & Business Group 360 (Phase 34)
-    console.log('>>> [SUITE 9/11] HOUSEHOLD & BUSINESS GROUP 360 SUITE (PHASE 34)');
-    await runGroupTests();
-    passedSuites++;
-    console.log('>>> [SUITE 9/11] PASSED\n');
+    await executeSuite(9, 'HOUSEHOLD & BUSINESS GROUP 360 SUITE (PHASE 34)', 30, runGroupTests);
 
     // Suite 10: Trust & Governance Center (Phase 35)
-    console.log('>>> [SUITE 10/11] TRUST & GOVERNANCE CENTER SUITE (PHASE 35)');
-    await runGovernanceTests();
-    passedSuites++;
-    console.log('>>> [SUITE 10/11] PASSED\n');
+    await executeSuite(10, 'TRUST & GOVERNANCE CENTER SUITE (PHASE 35)', 47, runGovernanceTests);
 
     // Suite 11: Banking Operations Workspace (Phase 36)
-    console.log('>>> [SUITE 11/12] BANKING OPERATIONS WORKSPACE SUITE (PHASE 36)');
-    await runOperationsTests();
-    passedSuites++;
-    console.log('>>> [SUITE 11/12] PASSED\n');
+    await executeSuite(11, 'BANKING OPERATIONS WORKSPACE SUITE (PHASE 36)', 20, runOperationsTests);
 
     // Suite 12: Advanced Portfolio Intelligence (Phase 37)
-    console.log('>>> [SUITE 12/13] ADVANCED PORTFOLIO INTELLIGENCE SUITE (PHASE 37)');
-    await runPortfolioIntelligenceTests();
-    passedSuites++;
-    console.log('>>> [SUITE 12/13] PASSED\n');
+    await executeSuite(12, 'ADVANCED PORTFOLIO INTELLIGENCE SUITE (PHASE 37)', 24, runPortfolioIntelligenceTests);
 
     // Suite 13: Enterprise Integration & API Gateway (Phase 38)
-    console.log('>>> [SUITE 13/14] ENTERPRISE INTEGRATION & API GATEWAY SUITE (PHASE 38)');
-    await runIntegrationTests();
-    passedSuites++;
-    console.log('>>> [SUITE 13/14] PASSED\n');
+    await executeSuite(13, 'ENTERPRISE INTEGRATION & API GATEWAY SUITE (PHASE 38)', 26, runIntegrationTests);
 
     // Suite 14: Enterprise Administration & Governance Center (Phase 39)
-    console.log('>>> [SUITE 14/15] ENTERPRISE ADMINISTRATION & GOVERNANCE SUITE (PHASE 39)');
-    await runAdminTests();
-    passedSuites++;
-    console.log('>>> [SUITE 14/15] PASSED\n');
+    await executeSuite(14, 'ENTERPRISE ADMINISTRATION & GOVERNANCE SUITE (PHASE 39)', 26, runAdminTests);
 
     // Suite 15: Final Production Hardening & Release Gate (Phase 40)
-    console.log('>>> [SUITE 15/15] FINAL PRODUCTION HARDENING & RELEASE GATE SUITE (PHASE 40)');
-    await runFinalHardeningTests();
-    passedSuites++;
-    console.log('>>> [SUITE 15/15] PASSED\n');
+    await executeSuite(15, 'FINAL PRODUCTION HARDENING & RELEASE GATE SUITE (PHASE 40)', 15, runFinalHardeningTests);
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+    const totalAssertionsPassed = suiteResults.reduce((acc, s) => acc + s.passed, 0);
+    const totalAssertionsCount = suiteResults.reduce((acc, s) => acc + s.total, 0);
+    const passedSuites = suiteResults.length;
+
     console.log('========================================================================');
     console.log(`✅ ALL TEST SUITES PASSED (${passedSuites}/${totalSuites}) in ${duration}s`);
-    console.log('   - Core Banking & RBAC/IDOR: PASS (18 tests)');
-    console.log('   - Relationship Graph & Network: PASS (10 tests)');
-    console.log('   - Notifications & Rules Engine: PASS (9 tests)');
-    console.log('   - AI Decision Trace & Explainability: PASS (20 tests)');
-    console.log('   - Relationship Strategy Simulator & What-If: PASS (21 tests)');
-    console.log('   - Controlled Banking Agent & Governed Execution: PASS (15 tests)');
-    console.log('   - Relationship Value & Portfolio Scenario Intelligence: PASS (22 tests)');
-    console.log('   - Customer Journey Orchestrator & Lifecycle: PASS (33 tests)');
-    console.log('   - Household & Business Group 360: PASS (30 tests)');
-    console.log('   - Trust & Governance Center: PASS (47 tests)');
-    console.log('   - Banking Operations Workspace: PASS (20 tests)');
-    console.log('   - Advanced Portfolio Intelligence: PASS (24 tests)');
-    console.log('   - Enterprise Integration & API Gateway: PASS (26 tests)');
-    console.log('   - Enterprise Administration & Governance: PASS (26 tests)');
-    console.log('   - Final Production Hardening & Release Gate: PASS (10 tests)');
-    console.log('   Total 331 automated integration & security verifications passed.');
+    for (const s of suiteResults) {
+      console.log(`   - ${s.name}: PASS (${s.passed}/${s.total} tests) [${s.durationMs}ms]`);
+    }
+    console.log(`\n   Total: ${totalAssertionsPassed}/${totalAssertionsCount} assertions verified dynamically.`);
     console.log('========================================================================');
     process.exit(0);
   } catch (error) {

@@ -1434,7 +1434,7 @@ export const groupService = {
     const analytics = await groupRepository.getPortfolioAnalytics(allowedGroupIds);
 
     // Compute total relationship value across groups
-    const groups = await groupRepository.getGroups({}, allowedGroupIds);
+    const groups = await groupRepository.getGroups({ limit: 10000 }, allowedGroupIds);
     let totalVal = 0;
     const topGroups: any[] = [];
 

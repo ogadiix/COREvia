@@ -166,6 +166,25 @@ export const authService = {
       };
     }
 
+    if (user.status === 'LOCKED') {
+      await db.insert(auditLogs).values({
+        actorId: user.employeeId,
+        actorName: user.name,
+        action: 'LOGIN_FAILURE',
+        resourceType: 'AUTH_SESSION',
+        resourceId: 'NONE',
+        requestId: reqId,
+        outcome: 'DENIED',
+        metadata: JSON.stringify({ reason: 'ACCOUNT_LOCKED', ipAddress }),
+      });
+
+      return {
+        success: false,
+        statusCode: 403,
+        message: 'Account has been locked by Bank Security. Please contact Security Operations.',
+      };
+    }
+
     // 4. Create Secure Session in PostgreSQL
     const sessionToken = crypto.randomBytes(32).toString('hex');
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours

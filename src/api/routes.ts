@@ -203,10 +203,13 @@ apiRouter.post('/auth/login', async (req, res) => {
 
     // Set secure HTTP-only cookie
     const isProduction = process.env.NODE_ENV === 'production';
+    const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    const useSecureCookie = isProduction || isHttps;
+
     res.cookie('corevia_session', result.sessionToken, {
       httpOnly: true,
-      secure: true, // Always true for HTTPS/iframes in AI Studio
-      sameSite: 'none', // Must be 'none' to work inside cross-origin AI Studio iframe
+      secure: useSecureCookie,
+      sameSite: useSecureCookie ? 'none' : 'lax',
       maxAge: 24 * 60 * 60 * 1000,
       path: '/',
     });
@@ -214,7 +217,6 @@ apiRouter.post('/auth/login', async (req, res) => {
     return res.status(200).json({
       status: 'SUCCESS',
       message: 'Authentication successful',
-      sessionToken: result.sessionToken,
       expiresAt: result.expiresAt,
       user: result.user,
     });
@@ -263,11 +265,20 @@ apiRouter.post('/auth/logout', async (req: AuthRequest, res) => {
     );
   }
 
-  res.clearCookie('corevia_session', { path: '/', sameSite: 'none', secure: true });
-  return res.json({
-    status: 'SUCCESS',
-    message: 'Session invalidated and logged out successfully.',
-  });
+    const isProduction = process.env.NODE_ENV === 'production';
+    const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    const useSecureCookie = isProduction || isHttps;
+
+    res.clearCookie('corevia_session', {
+      path: '/',
+      sameSite: useSecureCookie ? 'none' : 'lax',
+      secure: useSecureCookie,
+      httpOnly: true,
+    });
+    return res.json({
+      status: 'SUCCESS',
+      message: 'Session invalidated and logged out successfully.',
+    });
 });
 
 /**

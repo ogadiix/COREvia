@@ -10,30 +10,30 @@ The test suite runs with zero external mocks on native Node.js + TypeScript (`ts
 npm test
 ```
 
-Current Test Status: **15 Test Suites, 331 Tests, 100% Passing**.
+Current Test Status: **15 Test Suites, 336 Assertions, 100% Passing**.
 
 ---
 
 ## 2. Test Suites Summary
 
-| Suite # | Test File | Domain / Focus Area | Test Count |
+| Suite # | Test File | Domain / Focus Area | Assertions |
 |---|---|---|---|
-| 1 | `coreBanking.test.ts` | CASA, Term Deposits, Lending, Maker-Checker Dual Control | 24 |
-| 2 | `decisionTrace.test.ts` | AI Decision Trace, Lineage, Evidence, Cross-Customer IDOR Defense | 22 |
-| 3 | `strategySimulator.test.ts` | What-If Simulation Sandbox, Sequential Pipeline, Staleness | 25 |
-| 4 | `controlledAgent.test.ts` | Controlled Banking Agent, Propose-Approve-Execute, Human Gate | 21 |
-| 5 | `relationshipValue.test.ts` | Multidimensional Value Intelligence, Trajectory, Scenarios | 22 |
-| 6 | `journey.test.ts` | Customer Journey Orchestrator, Lifecycle State Machine, SLAs | 24 |
-| 7 | `group.test.ts` | Household & Business Group 360, Member Privacy Masking, Dual Auth | 23 |
-| 8 | `governance.test.ts` | Trust & Governance Center, Cryptographic SHA-256 Chaining, Exceptions | 25 |
-| 9 | `operations.test.ts` | Operational Escalations, SLA Monitoring, Incident Workflows | 20 |
-| 10 | `notification.test.ts` | Notification Engine, Deduplication, Preference Filtering | 18 |
-| 11 | `relationshipGraph.test.ts` | Graph Intelligence, Bounded BFS Traversal, Node Scoring | 22 |
-| 12 | `portfolioIntelligence.test.ts` | Portfolio Analytics, Branch Scoping, Risk Aggregation | 21 |
-| 13 | `integrations.test.ts` | Integration Registry, Circuit Breakers, Webhooks, Idempotency | 27 |
+| 1 | `coreBanking.test.ts` | CASA, Term Deposits, Lending, Maker-Checker Dual Control | 18 |
+| 2 | `relationshipGraph.test.ts` | Graph Intelligence, Bounded BFS Traversal, Node Scoring | 10 |
+| 3 | `notification.test.ts` | Notification Engine, Deduplication, Preference Filtering | 9 |
+| 4 | `decisionTrace.test.ts` | AI Decision Trace, Lineage, Evidence, Cross-Customer IDOR Defense | 20 |
+| 5 | `strategySimulator.test.ts` | What-If Simulation Sandbox, Sequential Pipeline, Staleness | 21 |
+| 6 | `controlledAgent.test.ts` | Controlled Banking Agent, Propose-Approve-Execute, Human Gate | 15 |
+| 7 | `relationshipValue.test.ts` | Multidimensional Value Intelligence, Trajectory, Scenarios | 22 |
+| 8 | `journey.test.ts` | Customer Journey Orchestrator, Lifecycle State Machine, SLAs | 33 |
+| 9 | `group.test.ts` | Household & Business Group 360, Member Privacy Masking, Dual Auth | 30 |
+| 10 | `governance.test.ts` | Trust & Governance Center, Cryptographic SHA-256 Chaining, Exceptions | 47 |
+| 11 | `operations.test.ts` | Operational Escalations, SLA Monitoring, Incident Workflows | 20 |
+| 12 | `portfolioIntelligence.test.ts` | Portfolio Analytics, Branch Scoping, Risk Aggregation | 24 |
+| 13 | `integrations.test.ts` | Integration Registry, Circuit Breakers, Webhooks, Idempotency | 26 |
 | 14 | `admin.test.ts` | Enterprise Administration & Governance Center | 26 |
-| 15 | `finalHardening.test.ts` | **Phase 40: Final Hardening, Showcase Verification & Release Gate** | **10** |
-| **Total** | | | **331** |
+| 15 | `finalHardening.test.ts` | **Phase 40: Final Hardening, Security Remediation & Release Gate** | **15** |
+| **Total** | | | **336** |
 
 ---
 
@@ -70,20 +70,25 @@ Suite 14 comprehensively tests the institutional administrative control plane ac
 
 ---
 
-## 4. Suite 15: Final Hardening, Showcase & Release Gate (`finalHardening.test.ts`)
+## 4. Suite 15: Final Hardening, Security Remediation & Release Gate (`finalHardening.test.ts`)
 
-Suite 15 validates the end-to-end coherence, security boundaries, and determinism across the unified platform:
+Suite 15 validates end-to-end coherence, strict security boundaries, authentication hardening, and environmental determinism across 15 comprehensive tests:
 
 1. **Canonical Customer Coherence**: Confirms Rahul Sharma (`CUS-10482`, ID: 1) maintains accounts, loans, opportunities, cases, and documents without synthetic orphan state.
-2. **Deterministic End-to-End Trace Lineage**: Validates the complete chain from Signal -> Decision Trace -> Strategy Simulator -> Controlled Agent Plan -> Audit.
-3. **Database Integrity & Idempotent Seeding**: Asserts zero duplicate customer codes or collision errors across repeated seed runs.
-4. **Non-Admin Ingress Shielding**: Rejects non-administrator requests to administrative control planes (`/api/admin/overview`) with `403 Forbidden`.
-5. **IDOR & Resource Scope Isolation**: Blocks unauthorized relationship managers from accessing out-of-portfolio customer records.
-6. **Gemini AI Security & Context Isolation**: Confirms `GEMINI_API_KEY` is completely server-side and never leaked in client configs or tool outputs.
-7. **Controlled Banking Agent Two-Stage Gate**: Enforces that high-impact banking mutations cannot execute without explicit human approval.
-8. **Integration Gateway & Circuit Breakers**: Verifies synthetic adapters fail safely without claiming real banking infrastructure connectivity.
-9. **Tamper-Evident Audit Verification**: Validates real SHA-256 cryptographic chaining across system mutations.
-10. **Application Health & Readiness**: Verifies `/api/health` returns valid uptime, memory metrics, and live PostgreSQL latency.
+2. **Deterministic End-to-End Action Traceability**: Validates the complete chain from Signal -> Decision Trace -> Strategy Simulator -> Controlled Agent Plan -> Audit.
+3. **Admin Self-Protection Against Status Mutation**: Strictly enforces `ADMIN_CANNOT_DEACTIVATE_SELF` preventing an admin from self-deactivating, suspending, or locking out.
+4. **Unknown User Status Update Rejection**: Ensures updating status of non-existent users throws `404 Not Found`.
+5. **Feature Flag Anti-Bypass Invariant**: Verifies feature flags cannot disable authentication, authorization, or audit logging.
+6. **Zero Secret Exposure & Database-Derived AI Telemetry**: Confirms `GEMINI_API_KEY`, `SESSION_SECRET`, and `DATABASE_URL` are strictly shielded; verifies AI metrics derive from database sessions/plans (`dataSource: 'DATABASE_DERIVED'`).
+7. **Tamper-Evident SHA-256 Audit Chaining**: Validates cryptographic hash chaining across system mutations.
+8. **Integration Gateway & Circuit Breakers**: Verifies synthetic banking adapters fail safely with circuit breaker protection without claiming real banking infrastructure connectivity.
+9. **Controlled Banking Agent Two-Stage Gate**: Enforces that high-impact banking mutations cannot execute without explicit human approval.
+10. **Real Session Purge Integration Test (12-Step)**: Validates that deactivating or suspending a user atomically terminates and purges all active session rows from PostgreSQL, sets `isActive: false`, creates audit records, and leaves no residual sessions.
+11. **Strict CORS Explicit Allowlist**: Verifies exact-origin matching via `getAllowedOrigins()`; verifies localhost allowed, arbitrary malicious origins and malformed URLs rejected.
+12. **CSRF Protection Verification**: Confirms safe GET requests succeed, Bearer token requests pass, CSRF token header requests pass, trusted Origin requests pass, while cross-origin malicious requests and unverified mutations are rejected with `403 Forbidden`.
+13. **Centralized Environment Validation**: Tests `validateEnvironment` to ensure required variables in production are enforced, warnings are emitted for optional variables, and safe error summaries are produced without deep `process.exit()`.
+14. **Non-Existent Session Revocation**: Verifies gracefully handling revocation of non-existent sessions with appropriate error codes.
+15. **Database Health Check & Latency Ping**: Tests live PostgreSQL connectivity (`SELECT 1`) returning valid latency metrics.
 
 ---
 
