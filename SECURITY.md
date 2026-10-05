@@ -131,3 +131,12 @@ if (baseScenario.customerId !== targetScenario.customerId) {
 ### 4.6 Maintenance Mode Invariant
 - Activating maintenance mode stores structured metadata in `system_settings` (reason, actor, start, estimated end). Administrators retain unhindered access to the `/admin` control plane to prevent lockout.
 
+---
+
+## 5. Synthetic Banking Environment & Scope of Operation
+
+- **Synthetic Environment**: COREvia is an institutional core banking relationship management demonstration and architectural platform.
+- **Zero Real Banking Connectivity**: Deploying this application does **not** establish connectivity to real banking networks, payment clearing switches (UPI, IMPS, NEFT, RTGS), UIDAI/cKYC registries, or credit bureaus.
+- **Synthetic Data Isolation**: All customer profiles (such as Rahul Sharma `CUS-10482`), accounts, transactions, and credit facilities reside strictly on a synthetic Indian banking dataset.
+- **Human-in-the-Loop Gate**: Controlled AI actions always enforce human confirmation and maker-checker approvals before any database state mutation.
+

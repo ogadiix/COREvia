@@ -246,6 +246,33 @@ http://localhost:3000
 
 ---
 
+## 🎬 20-Step Canonical Demonstration Walkthrough
+
+Follow this governed sequence to experience the full breadth of COREvia using real platform routes:
+
+1. **Authentication**: Navigate to `/login` — authenticate as Administrator (`admin@corevia.bank.in`) or RM (`rahul.rm@corevia.bank.in`).
+2. **Enterprise Dashboard**: View `/` — inspect high-level portfolio KPIs, live pending approvals, and institutional notifications.
+3. **Global Search**: Press `Cmd + K` (or `Ctrl + K`) — search for customer code `CUS-10482`, household `HH-10482`, or company name.
+4. **Customer 360 Profile**: Open `/customers/1` — explore Rahul Sharma's unified CASA, term deposits, and lending accounts.
+5. **Relationship Health**: Select `/customers/1?tab=health` — review relationship longevity, churn risk indicators, and engagement trends.
+6. **CORE Score**: Select `/customers/1?tab=core-score` — inspect multidimensional scoring across Capital, Operations, Relationship, and Ecosystem.
+7. **Relationship Intelligence**: Select `/customers/1?tab=intelligence` — examine deterministic next-best actions and relationship momentum.
+8. **Opportunity Radar**: Select `/customers/1?tab=radar` — explore cross-sell radar signals (e.g. Wealth Management, FX hedging).
+9. **Signal Center**: Select `/customers/1?tab=signals` — review real-time dispute signals and automated compliance triggers.
+10. **Relationship Graph**: Select `/customers/1?tab=graph` — explore bounded BFS relationship topology linking family members and corporate entities.
+11. **Relationship Twin**: Select `/customers/1?tab=twin` — visualize dynamic event-driven twin state evolution over time.
+12. **Relationship Reviews**: Select `/customers/1?tab=reviews` — review scheduled and completed periodic relationship reviews.
+13. **Contextual Copilot**: Open the Copilot drawer — query *"Explain the primary drivers behind Rahul Sharma's current CORE score"*.
+14. **Human-Confirmed Action**: Review an autonomous recovery plan or simulated strategy action requiring explicit officer confirmation.
+15. **Tamper-Evident Audit Trail**: Open `/governance` (Audit Explorer tab) — verify the SHA-256 cryptographic chain of the recorded action.
+16. **Decision & Journey Outcomes**: Inspect completed customer lifecycle milestones and evidence links in `/journeys`.
+17. **Portfolio Intelligence**: Open `/portfolio` — evaluate segment risk aggregation and branch-level performance metrics.
+18. **Banking Operations**: Open `/operations` — review maker-checker dual authorization queues and reconciliation variances.
+19. **Administration & Governance**: Open `/admin` and `/governance` — inspect safe AI configuration and live database health telemetry.
+20. **Executive Analytics**: Open `/analytics` — review platform-wide financial liquidity and regulatory compliance reports.
+
+---
+
 ## 🐳 Docker Deployment
 
 Run the complete stack (COREvia Node app + PostgreSQL database) using Docker Compose:
