@@ -124,12 +124,12 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
         )}
 
         {/* Drawer Tabs */}
-        <div className="flex border-b border-slate-200 px-6 bg-slate-50">
+        <div className="flex border-b border-slate-200 px-6 bg-slate-50 overflow-x-auto whitespace-nowrap">
           {(['overview', 'config', 'health', 'credentials'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`py-3 px-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-colors cursor-pointer ${
+              className={`py-3 px-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTab === tab
                   ? 'border-indigo-600 text-indigo-600'
                   : 'border-transparent text-slate-500 hover:text-slate-800'

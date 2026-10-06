@@ -709,7 +709,7 @@ export const AdminWorkspace: React.FC = () => {
           </div>
 
           {/* Compact Institutional Table */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                 <tr>
@@ -835,7 +835,7 @@ export const AdminWorkspace: React.FC = () => {
                 Read-Only Inspection (Client Escalation Forbidden)
               </span>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+            <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                   <tr>
@@ -948,7 +948,7 @@ export const AdminWorkspace: React.FC = () => {
             </span>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                 <tr>
@@ -1026,7 +1026,7 @@ export const AdminWorkspace: React.FC = () => {
             <span className="text-[10px] text-slate-400">IDOR, Auth, and Secret Violation Interceptions</span>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                 <tr>
@@ -1196,7 +1196,7 @@ export const AdminWorkspace: React.FC = () => {
             </a>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                 <tr>
@@ -1276,7 +1276,7 @@ export const AdminWorkspace: React.FC = () => {
             <span className="text-[10px] text-slate-400">Configured across 6 banking operations domains</span>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                 <tr>
@@ -1327,7 +1327,7 @@ export const AdminWorkspace: React.FC = () => {
             Feature flags may be used to disable modular capabilities, but can NEVER be used to bypass authentication, authorization, or audit logging.
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                 <tr>
@@ -1446,7 +1446,7 @@ export const AdminWorkspace: React.FC = () => {
             <span className="text-[10px] text-slate-400">Scheduled SLA monitors and telemetry pollers</span>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                 <tr>
@@ -1509,7 +1509,7 @@ export const AdminWorkspace: React.FC = () => {
             <span className="text-[10px] text-slate-500 font-mono">Immutable Forensic Log</span>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                 <tr>

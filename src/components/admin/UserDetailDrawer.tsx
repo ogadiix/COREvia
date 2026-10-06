@@ -131,7 +131,7 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-800 px-5 bg-slate-950/30 text-xs">
+        <div className="flex border-b border-slate-800 px-5 bg-slate-950/30 text-xs overflow-x-auto whitespace-nowrap">
           {[
             { id: 'IDENTITY', label: 'Identity & Employment' },
             { id: 'PERMISSIONS', label: 'Effective Permissions' },
@@ -142,7 +142,7 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`py-3 px-3 border-b-2 font-medium transition ${
+              className={`py-3 px-3 border-b-2 font-medium transition whitespace-nowrap shrink-0 ${
                 activeTab === tab.id
                   ? 'border-indigo-500 text-indigo-400'
                   : 'border-transparent text-slate-400 hover:text-slate-200'

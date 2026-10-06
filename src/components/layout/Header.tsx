@@ -64,6 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
 
   // Poll unread notification count
   useEffect(() => {
@@ -118,7 +119,9 @@ export const Header: React.FC<HeaderProps> = ({
   // Click outside to close search dropdown
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      const clickedDesktop = dropdownRef.current && dropdownRef.current.contains(e.target as Node);
+      const clickedMobile = mobileSearchContainerRef.current && mobileSearchContainerRef.current.contains(e.target as Node);
+      if (!clickedDesktop && !clickedMobile) {
         setShowDropdown(false);
       }
     };
@@ -133,31 +136,300 @@ export const Header: React.FC<HeaderProps> = ({
       onSelectSearchResult(type, id);
     }
   };
+
+  const renderSearchResultsList = () => {
+    if (!searchResults) return null;
+    return (
+      <>
+        {/* 1. Accounts Category */}
+        <div>
+          <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <WalletCards className="w-3 h-3 text-slate-500" />
+              Accounts ({searchResults.accounts.length})
+            </span>
+          </div>
+          {searchResults.accounts.length === 0 ? (
+            <div className="px-3 py-2 text-slate-400 italic text-[11px]">No matching accounts</div>
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {searchResults.accounts.map((acc: any) => (
+                <div
+                  key={acc.id}
+                  onClick={() => handleItemClick('account', acc.accountNumber)}
+                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                >
+                  <div>
+                    <div className="font-mono font-bold text-slate-900 flex items-center gap-1.5">
+                      <span>{acc.accountNumber}</span>
+                      <span className="text-[10px] font-sans px-1.5 py-0.2 bg-slate-200 text-slate-700 rounded-xs font-normal">
+                        {acc.accountType}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-slate-600 mt-0.5">
+                      {acc.customerName} • CIF: {acc.cifNumber}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-mono font-bold text-slate-900">
+                      {formatINR(parseFloat(acc.availableBalance || '0'))}
+                    </div>
+                    <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowDropdown(false);
+                          window.location.href = `/relationship-graph?entityType=ACCOUNT&entityId=${acc.accountNumber}`;
+                        }}
+                        title="View in Relationship Graph"
+                        className="text-[10px] text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium"
+                      >
+                        <GitFork className="w-2.5 h-2.5" />
+                        <span>Graph</span>
+                      </button>
+                      <div className="text-[10px] text-emerald-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>View Account</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 2. Loans Category */}
+        <div>
+          <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <Landmark className="w-3 h-3 text-slate-500" />
+              Loans ({searchResults.loans.length})
+            </span>
+          </div>
+          {searchResults.loans.length === 0 ? (
+            <div className="px-3 py-2 text-slate-400 italic text-[11px]">No matching credit facilities</div>
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {searchResults.loans.map((loan: any) => (
+                <div
+                  key={loan.id}
+                  onClick={() => handleItemClick('loan', loan.loanAccountNumber)}
+                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                >
+                  <div>
+                    <div className="font-mono font-bold text-slate-900 flex items-center gap-1.5">
+                      <span>{loan.loanAccountNumber}</span>
+                      <span className="text-[10px] font-sans px-1.5 py-0.2 bg-amber-100 text-amber-800 rounded-xs font-normal">
+                        {String(loan.loanType).replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-slate-600 mt-0.5">
+                      {loan.borrowerName || loan.customerName} • CIF: {loan.cifNumber}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-mono font-bold text-amber-900">
+                      {formatINR(parseFloat(loan.outstandingPrincipal || '0'))}
+                    </div>
+                    <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowDropdown(false);
+                          window.location.href = `/relationship-graph?entityType=LOAN&entityId=${loan.loanAccountNumber}`;
+                        }}
+                        title="View in Relationship Graph"
+                        className="text-[10px] text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium"
+                      >
+                        <GitFork className="w-2.5 h-2.5" />
+                        <span>Graph</span>
+                      </button>
+                      <div className="text-[10px] text-amber-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>View Facility</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 3. Customers Category */}
+        <div>
+          <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <User className="w-3 h-3 text-slate-500" />
+              Customers ({searchResults.customers.length})
+            </span>
+          </div>
+          {searchResults.customers.length === 0 ? (
+            <div className="px-3 py-2 text-slate-400 italic text-[11px]">No matching customers</div>
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {searchResults.customers.map((cust: any) => (
+                <div
+                  key={cust.id}
+                  onClick={() => handleItemClick('customer', cust.cifNumber)}
+                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                >
+                  <div>
+                    <div className="font-semibold text-slate-900">
+                      {cust.name}
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-mono">
+                      CIF: {cust.cifNumber} • PAN: {cust.panNumber}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-mono font-semibold text-slate-800">
+                      {cust.totalRelationshipValue ? formatINR(parseFloat(cust.totalRelationshipValue)) : 'TRV Active'}
+                    </div>
+                    <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowDropdown(false);
+                          window.location.href = `/relationship-graph?customerId=${cust.cifNumber || cust.id}`;
+                        }}
+                        title="View in Relationship Graph"
+                        className="text-[10px] text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium"
+                      >
+                        <GitFork className="w-2.5 h-2.5" />
+                        <span>Graph</span>
+                      </button>
+                      <div className="text-[10px] text-blue-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>View 360</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 4. Journeys Category */}
+        {searchResults.journeys && searchResults.journeys.length > 0 && (
+          <div>
+            <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Milestone className="w-3 h-3 text-indigo-500" />
+                Lifecycle Journeys ({searchResults.journeys.length})
+              </span>
+            </div>
+            <div className="divide-y divide-slate-100">
+              {searchResults.journeys.map((j: any) => (
+                <div
+                  key={j.id}
+                  onClick={() => {
+                    setShowDropdown(false);
+                    window.location.href = `/journeys?id=${j.id}`;
+                  }}
+                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                >
+                  <div>
+                    <div className="font-semibold text-slate-900">{j.name}</div>
+                    <div className="text-[11px] text-slate-500 font-mono">
+                      {j.journeyCode} • {j.customerName || `Customer #${j.customerId}`}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span
+                      className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                        j.status === 'COMPLETED'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : j.status === 'BLOCKED'
+                          ? 'bg-rose-100 text-rose-800'
+                          : 'bg-blue-100 text-blue-800'
+                      }`}
+                    >
+                      {j.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 5. Relationship Groups & Households Category */}
+        {searchResults.groups && searchResults.groups.length > 0 && (
+          <div>
+            <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Users2 className="w-3 h-3 text-cyan-600" />
+                Relationship Groups ({searchResults.groups.length})
+              </span>
+            </div>
+            <div className="divide-y divide-slate-100">
+              {searchResults.groups.map((g: any) => (
+                <div
+                  key={g.id || g.groupId}
+                  onClick={() => {
+                    setShowDropdown(false);
+                    if (onNavigatePath) {
+                      onNavigatePath(`/group/${g.groupId}`);
+                    } else {
+                      window.location.href = `/group/${g.groupId}`;
+                    }
+                  }}
+                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                >
+                  <div>
+                    <div className="font-semibold text-slate-900">{g.displayName || g.name}</div>
+                    <div className="text-[11px] text-slate-500 font-mono">
+                      {g.groupId} • {g.groupType}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span
+                      className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                        g.groupType === 'HOUSEHOLD'
+                          ? 'bg-purple-100 text-purple-800'
+                          : 'bg-cyan-100 text-cyan-800'
+                      }`}
+                    >
+                      {g.groupType}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </>
+    );
+  };
+
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-2xs">
+    <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-2xs w-full max-w-full">
       {/* Topmost Institution & Regulatory Tier */}
-      <div className="bg-[#0b1626] text-slate-300 px-4 py-1.5 flex flex-wrap items-center justify-between text-xs border-b border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-white font-semibold tracking-wider uppercase text-[11px]">
+      <div className="bg-[#0b1626] text-slate-300 px-3 sm:px-4 py-1.5 flex items-center justify-between text-xs border-b border-slate-800 overflow-hidden">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-1.5 text-white font-semibold tracking-wider uppercase text-[11px] shrink-0">
             <Building2 className="w-3.5 h-3.5 text-amber-400" />
             <span>COREvia CBS</span>
-            <span className="text-slate-400 font-normal">|</span>
-            <span className="text-slate-300 text-[10px] font-normal tracking-normal">
+            <span className="hidden sm:inline text-slate-400 font-normal">|</span>
+            <span className="hidden sm:inline text-slate-300 text-[10px] font-normal tracking-normal truncate">
               Scheduled Commercial Bank
             </span>
           </div>
-          <span className="hidden md:inline-flex items-center gap-1 text-[11px] text-slate-400 border-l border-slate-700 pl-3">
+          <span className="hidden md:inline-flex items-center gap-1 text-[11px] text-slate-400 border-l border-slate-700 pl-3 shrink-0">
             <ShieldCheck className="w-3 h-3 text-emerald-400" />
             <span>RBI Lic: {BANK_META.rbiLicense}</span>
           </span>
         </div>
 
-        <div className="flex items-center gap-4 text-[11px] font-mono">
+        <div className="flex items-center gap-2 sm:gap-4 text-[11px] font-mono shrink-0">
           <div className="flex items-center gap-1.5 text-slate-300">
             <Calendar className="w-3 h-3 text-slate-400" />
             <span>{BANK_META.activeBusinessDate}</span>
-            <span className="text-slate-500">•</span>
-            <span className="text-emerald-400 font-sans text-[10px] font-medium uppercase px-1 bg-emerald-950/80 border border-emerald-800 rounded-xs">
+            <span className="text-slate-500 hidden sm:inline">•</span>
+            <span className="text-emerald-400 font-sans text-[10px] font-medium uppercase px-1 bg-emerald-950/80 border border-emerald-800 rounded-xs hidden sm:inline">
               BOD Done
             </span>
           </div>
@@ -197,7 +469,7 @@ export const Header: React.FC<HeaderProps> = ({
               <h1 className="font-semibold text-slate-900 text-xs sm:text-sm tracking-tight truncate">
                 {BANK_META.currentBranch.name}
               </h1>
-              <span className="font-mono text-[10px] sm:text-xs px-1.5 py-0.2 bg-slate-100 text-slate-600 border border-slate-200 rounded-xs shrink-0 hidden xs:inline">
+              <span className="font-mono text-[10px] sm:text-xs px-1.5 py-0.2 bg-slate-100 text-slate-600 border border-slate-200 rounded-xs shrink-0 hidden sm:inline">
                 {BANK_META.currentBranch.ifsc}
               </span>
             </div>
@@ -237,270 +509,10 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            {/* Categorized Search Results Dropdown per exact specification:
-                "Searching should return structured results categorized by entity type: Accounts, Loans, Customers" */}
+            {/* Categorized Search Results Dropdown per exact specification */}
             {showDropdown && searchResults && (
               <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-slate-300 rounded shadow-xl max-h-96 overflow-y-auto z-50 text-xs divide-y divide-slate-200">
-                {/* 1. Accounts Category */}
-                <div>
-                  <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <WalletCards className="w-3 h-3 text-slate-500" />
-                      Accounts ({searchResults.accounts.length})
-                    </span>
-                  </div>
-                  {searchResults.accounts.length === 0 ? (
-                    <div className="px-3 py-2 text-slate-400 italic text-[11px]">No matching accounts</div>
-                  ) : (
-                    <div className="divide-y divide-slate-100">
-                      {searchResults.accounts.map((acc: any) => (
-                        <div
-                          key={acc.id}
-                          onClick={() => handleItemClick('account', acc.accountNumber)}
-                          className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
-                        >
-                          <div>
-                            <div className="font-mono font-bold text-slate-900 flex items-center gap-1.5">
-                              <span>{acc.accountNumber}</span>
-                              <span className="text-[10px] font-sans px-1.5 py-0.2 bg-slate-200 text-slate-700 rounded-xs font-normal">
-                                {acc.accountType}
-                              </span>
-                            </div>
-                            <div className="text-[11px] text-slate-600 mt-0.5">
-                              {acc.customerName} • CIF: {acc.cifNumber}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-mono font-bold text-slate-900">
-                              {formatINR(parseFloat(acc.availableBalance || '0'))}
-                            </div>
-                            <div className="flex items-center justify-end gap-1.5 mt-0.5">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setShowDropdown(false);
-                                  window.location.href = `/relationship-graph?entityType=ACCOUNT&entityId=${acc.accountNumber}`;
-                                }}
-                                title="View in Relationship Graph"
-                                className="text-[10px] text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium"
-                              >
-                                <GitFork className="w-2.5 h-2.5" />
-                                <span>Graph</span>
-                              </button>
-                              <div className="text-[10px] text-emerald-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <span>View Account</span>
-                                <ArrowRight className="w-3 h-3" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 2. Loans Category */}
-                <div>
-                  <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <Landmark className="w-3 h-3 text-slate-500" />
-                      Loans ({searchResults.loans.length})
-                    </span>
-                  </div>
-                  {searchResults.loans.length === 0 ? (
-                    <div className="px-3 py-2 text-slate-400 italic text-[11px]">No matching credit facilities</div>
-                  ) : (
-                    <div className="divide-y divide-slate-100">
-                      {searchResults.loans.map((loan: any) => (
-                        <div
-                          key={loan.id}
-                          onClick={() => handleItemClick('loan', loan.loanAccountNumber)}
-                          className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
-                        >
-                          <div>
-                            <div className="font-mono font-bold text-slate-900 flex items-center gap-1.5">
-                              <span>{loan.loanAccountNumber}</span>
-                              <span className="text-[10px] font-sans px-1.5 py-0.2 bg-amber-100 text-amber-800 rounded-xs font-normal">
-                                {String(loan.loanType).replace(/_/g, ' ')}
-                              </span>
-                            </div>
-                            <div className="text-[11px] text-slate-600 mt-0.5">
-                              {loan.borrowerName || loan.customerName} • CIF: {loan.cifNumber}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-mono font-bold text-amber-900">
-                              {formatINR(parseFloat(loan.outstandingPrincipal || '0'))}
-                            </div>
-                            <div className="flex items-center justify-end gap-1.5 mt-0.5">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setShowDropdown(false);
-                                  window.location.href = `/relationship-graph?entityType=LOAN&entityId=${loan.loanAccountNumber}`;
-                                }}
-                                title="View in Relationship Graph"
-                                className="text-[10px] text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium"
-                              >
-                                <GitFork className="w-2.5 h-2.5" />
-                                <span>Graph</span>
-                              </button>
-                              <div className="text-[10px] text-amber-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <span>View Facility</span>
-                                <ArrowRight className="w-3 h-3" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 3. Customers Category */}
-                <div>
-                  <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <User className="w-3 h-3 text-slate-500" />
-                      Customers ({searchResults.customers.length})
-                    </span>
-                  </div>
-                  {searchResults.customers.length === 0 ? (
-                    <div className="px-3 py-2 text-slate-400 italic text-[11px]">No matching customers</div>
-                  ) : (
-                    <div className="divide-y divide-slate-100">
-                      {searchResults.customers.map((cust: any) => (
-                        <div
-                          key={cust.id}
-                          onClick={() => handleItemClick('customer', cust.cifNumber)}
-                          className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
-                        >
-                          <div>
-                            <div className="font-semibold text-slate-900">
-                              {cust.name}
-                            </div>
-                            <div className="text-[11px] text-slate-500 font-mono">
-                              CIF: {cust.cifNumber} • PAN: {cust.panNumber}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-mono font-semibold text-slate-800">
-                              {cust.totalRelationshipValue ? formatINR(parseFloat(cust.totalRelationshipValue)) : 'TRV Active'}
-                            </div>
-                            <div className="flex items-center justify-end gap-1.5 mt-0.5">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setShowDropdown(false);
-                                  window.location.href = `/relationship-graph?customerId=${cust.cifNumber || cust.id}`;
-                                }}
-                                title="View in Relationship Graph"
-                                className="text-[10px] text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium"
-                              >
-                                <GitFork className="w-2.5 h-2.5" />
-                                <span>Graph</span>
-                              </button>
-                              <div className="text-[10px] text-blue-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <span>View 360</span>
-                                <ArrowRight className="w-3 h-3" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 4. Journeys Category */}
-                {searchResults.journeys && searchResults.journeys.length > 0 && (
-                  <div>
-                    <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
-                      <span className="flex items-center gap-1.5">
-                        <Milestone className="w-3 h-3 text-indigo-500" />
-                        Lifecycle Journeys ({searchResults.journeys.length})
-                      </span>
-                    </div>
-                    <div className="divide-y divide-slate-100">
-                      {searchResults.journeys.map((j: any) => (
-                        <div
-                          key={j.id}
-                          onClick={() => {
-                            setShowDropdown(false);
-                            window.location.href = `/journeys?id=${j.id}`;
-                          }}
-                          className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
-                        >
-                          <div>
-                            <div className="font-semibold text-slate-900">{j.name}</div>
-                            <div className="text-[11px] text-slate-500 font-mono">
-                              {j.journeyCode} • {j.customerName || `Customer #${j.customerId}`}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <span
-                              className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                                j.status === 'COMPLETED'
-                                  ? 'bg-emerald-100 text-emerald-800'
-                                  : j.status === 'BLOCKED'
-                                  ? 'bg-rose-100 text-rose-800'
-                                  : 'bg-blue-100 text-blue-800'
-                              }`}
-                            >
-                              {j.status}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 5. Relationship Groups & Households Category */}
-                {searchResults.groups && searchResults.groups.length > 0 && (
-                  <div>
-                    <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
-                      <span className="flex items-center gap-1.5">
-                        <Users2 className="w-3 h-3 text-cyan-600" />
-                        Relationship Groups ({searchResults.groups.length})
-                      </span>
-                    </div>
-                    <div className="divide-y divide-slate-100">
-                      {searchResults.groups.map((g: any) => (
-                        <div
-                          key={g.id || g.groupId}
-                          onClick={() => {
-                            setShowDropdown(false);
-                            if (onNavigatePath) {
-                              onNavigatePath(`/group/${g.groupId}`);
-                            } else {
-                              window.location.href = `/group/${g.groupId}`;
-                            }
-                          }}
-                          className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
-                        >
-                          <div>
-                            <div className="font-semibold text-slate-900">{g.displayName || g.name}</div>
-                            <div className="text-[11px] text-slate-500 font-mono">
-                              {g.groupId} • {g.groupType}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <span
-                              className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                                g.groupType === 'HOUSEHOLD'
-                                  ? 'bg-purple-100 text-purple-800'
-                                  : 'bg-cyan-100 text-cyan-800'
-                              }`}
-                            >
-                              {g.groupType}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                {renderSearchResultsList()}
               </div>
             )}
           </div>
@@ -604,14 +616,19 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Search Row (Toggled on Small Screens) */}
       {isMobileSearchOpen && (
-        <div className="md:hidden px-3 py-2 bg-slate-100/90 border-t border-slate-200 relative">
+        <div ref={mobileSearchContainerRef} className="md:hidden px-3 py-2 bg-slate-100/90 border-t border-slate-200 relative">
           <div className="relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search Account, Customer, CIF, Loan..."
               value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
+              onChange={(e) => {
+                onSearchChange(e.target.value);
+                if (e.target.value.trim().length >= 2) {
+                  setShowDropdown(true);
+                }
+              }}
               onFocus={() => {
                 if (searchResults) setShowDropdown(true);
               }}
@@ -630,6 +647,13 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
           </div>
+
+          {/* Structured Results on Mobile */}
+          {showDropdown && searchResults && (
+            <div className="mt-2 bg-white border border-slate-300 rounded shadow-xl max-h-80 overflow-y-auto text-xs divide-y divide-slate-200">
+              {renderSearchResultsList()}
+            </div>
+          )}
         </div>
       )}
 

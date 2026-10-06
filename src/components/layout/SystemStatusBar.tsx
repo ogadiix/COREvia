@@ -10,16 +10,16 @@ export const SystemStatusBar: React.FC = () => {
   const timeFormatted = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 
   return (
-    <footer className="h-7 bg-slate-100 border-t border-slate-300 text-slate-600 px-4 flex items-center justify-between text-[11px] font-mono select-none shrink-0 z-30">
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1.5">
+    <footer className="h-7 bg-slate-100 border-t border-slate-300 text-slate-600 px-3 sm:px-4 flex items-center justify-between text-[11px] font-mono select-none shrink-0 z-30 overflow-hidden w-full max-w-full">
+      <div className="flex items-center gap-2 sm:gap-4 min-w-0 truncate">
+        <div className="flex items-center gap-1.5 shrink-0">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span className="font-sans font-medium text-slate-800">CBS ONLINE</span>
         </div>
-        <span className="text-slate-300">|</span>
-        <div className="flex items-center gap-1">
-          <Database className="w-3 h-3 text-slate-500" />
-          <span>FIN-DB PRIMARY (SYDNEY-MUM-SYNC)</span>
+        <span className="text-slate-300 hidden sm:inline">|</span>
+        <div className="hidden sm:flex items-center gap-1 truncate">
+          <Database className="w-3 h-3 text-slate-500 shrink-0" />
+          <span className="truncate">FIN-DB PRIMARY</span>
         </div>
         <span className="text-slate-300 hidden md:inline">|</span>
         <div className="hidden md:flex items-center gap-1">
@@ -33,27 +33,27 @@ export const SystemStatusBar: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4 shrink-0">
         {user && (
           <>
             <div className="flex items-center gap-1 text-slate-700" title="Workstation Session Auto-Lock Countdown">
               <Lock className="w-3 h-3 text-slate-500" />
-              <span>TERMINAL IDLE: <strong className="text-slate-900 font-bold">{timeFormatted}</strong></span>
+              <span>IDLE: <strong className="text-slate-900 font-bold">{timeFormatted}</strong></span>
             </div>
             <span className="text-slate-300">|</span>
           </>
         )}
         <div className="flex items-center gap-1 text-emerald-800">
           <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-          <span>RBI RTGS: OPEN</span>
-        </div>
-        <span className="text-slate-300">|</span>
-        <div className="hidden sm:flex items-center gap-1">
-          <Shield className="w-3 h-3 text-slate-500" />
-          <span>256-BIT HSM SIGNED</span>
+          <span>RTGS: OPEN</span>
         </div>
         <span className="text-slate-300 hidden sm:inline">|</span>
-        <span className="text-slate-500">v26.4.1-REL</span>
+        <div className="hidden sm:flex items-center gap-1">
+          <Shield className="w-3 h-3 text-slate-500" />
+          <span>256-BIT HSM</span>
+        </div>
+        <span className="text-slate-300 hidden md:inline">|</span>
+        <span className="text-slate-500 hidden md:inline">v26.4.1-REL</span>
       </div>
     </footer>
   );

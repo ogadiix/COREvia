@@ -334,7 +334,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <aside
         className={`bg-slate-900 text-slate-300 flex flex-col shrink-0 border-r border-slate-800 select-none z-50 transition-all duration-200 ease-in-out ${
           isMobileOpen
-            ? 'fixed inset-y-0 left-0 w-72 shadow-2xl flex h-full'
+            ? 'fixed inset-y-0 left-0 w-72 max-w-[85vw] shadow-2xl flex h-full'
             : 'hidden lg:flex w-64 min-h-[calc(100vh-80px)]'
         }`}
       >

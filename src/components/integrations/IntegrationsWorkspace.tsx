@@ -387,7 +387,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                     View all events →
                   </button>
                 </div>
-                <div className="border border-slate-200 rounded-lg overflow-hidden">
+                <div className="border border-slate-200 rounded-lg overflow-x-auto">
                   <table className="w-full text-xs text-left">
                     <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
                       <tr>
@@ -440,7 +440,7 @@ export const IntegrationsWorkspace: React.FC = () => {
           {/* TAB 2: INTEGRATIONS TABLE */}
           {activeTab === 'integrations' && (
             <div className="space-y-4">
-              <div className="border border-slate-200 rounded-lg overflow-hidden">
+              <div className="border border-slate-200 rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
                   <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
                     <tr>
@@ -518,7 +518,7 @@ export const IntegrationsWorkspace: React.FC = () => {
           {/* TAB 3: ENDPOINTS REGISTRY */}
           {activeTab === 'endpoints' && (
             <div className="space-y-4">
-              <div className="border border-slate-200 rounded-lg overflow-hidden">
+              <div className="border border-slate-200 rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
                   <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
                     <tr>
@@ -590,7 +590,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                 </button>
               </div>
 
-              <div className="border border-slate-200 rounded-lg overflow-hidden">
+              <div className="border border-slate-200 rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
                   <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
                     <tr>
@@ -646,7 +646,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                 <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
                   Recent Webhook Delivery Attempts
                 </h3>
-                <div className="border border-slate-200 rounded-lg overflow-hidden">
+                <div className="border border-slate-200 rounded-lg overflow-x-auto">
                   <table className="w-full text-xs text-left">
                     <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
                       <tr>
@@ -707,7 +707,7 @@ export const IntegrationsWorkspace: React.FC = () => {
           {/* TAB 5: EVENTS STREAM */}
           {activeTab === 'events' && (
             <div className="space-y-4">
-              <div className="border border-slate-200 rounded-lg overflow-hidden">
+              <div className="border border-slate-200 rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
                   <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
                     <tr>
@@ -770,7 +770,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                 </span>
               </div>
 
-              <div className="border border-slate-200 rounded-lg overflow-hidden">
+              <div className="border border-slate-200 rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
                   <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
                     <tr>

@@ -924,9 +924,9 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                       </p>
                     ) : (
                       <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
-                        {coreScore.scoreChanges.map((sc) => (
+                        {coreScore.scoreChanges.map((sc, idx) => (
                           <div
-                            key={sc.customerId}
+                            key={`${sc.customerId}-${idx}`}
                             onClick={() => handleSelectCustomer(sc.customerId)}
                             className="p-2.5 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer text-xs space-y-1"
                           >
@@ -1235,8 +1235,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                       </div>
                     </div>
                     <div className="space-y-1.5 max-h-[300px] overflow-y-auto">
-                      {signalData.recentSignals.map((sig) => (
-                        <div key={sig.id} className="p-2 rounded bg-slate-950/50 border border-slate-800 text-xs">
+                      {signalData.recentSignals.map((sig, idx) => (
+                        <div key={`${sig.id}-${idx}`} className="p-2 rounded bg-slate-950/50 border border-slate-800 text-xs">
                           <span className="font-semibold text-slate-200 block truncate">{sig.headline}</span>
                           <span className="text-[10px] text-slate-400">{sig.customerName}</span>
                         </div>
@@ -1264,8 +1264,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      {actionOutcomes.recentTraces.slice(0, 5).map((t) => (
-                        <div key={t.id} className="p-2 rounded bg-slate-950/40 border border-slate-800 text-xs">
+                      {actionOutcomes.recentTraces.slice(0, 5).map((t, idx) => (
+                        <div key={`${t.id}-${idx}`} className="p-2 rounded bg-slate-950/40 border border-slate-800 text-xs">
                           <div className="flex items-center justify-between">
                             <span className="font-medium text-slate-300 truncate">{t.actionTitle}</span>
                             <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400">
@@ -1297,9 +1297,9 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                   </p>
                 ) : (
                   <div className="space-y-2 max-h-[460px] overflow-y-auto pr-1">
-                    {whatChanged.map((chg) => (
+                    {whatChanged.map((chg, idx) => (
                       <div
-                        key={chg.id}
+                        key={`${chg.id}-${idx}`}
                         onClick={() => handleSelectCustomer(chg.customerId)}
                         className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer text-xs space-y-1"
                       >
@@ -1328,8 +1328,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                   <span className="text-[11px] text-slate-500">Live Relationship Event Stream</span>
                 </div>
                 <div className="space-y-2 max-h-[460px] overflow-y-auto pr-1">
-                  {changelog.map((ev) => (
-                    <div key={ev.id} className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 text-xs space-y-1">
+                  {changelog.map((ev, idx) => (
+                    <div key={`${ev.id}-${idx}`} className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 text-xs space-y-1">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-slate-200">{ev.title}</span>
                         <span className="text-[10px] text-slate-500 font-mono">

@@ -810,7 +810,7 @@ function BankingWorkplace() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col text-slate-900 font-sans selection:bg-slate-200">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col text-slate-900 font-sans selection:bg-slate-200 w-full max-w-full overflow-x-hidden">
       {/* Institutional Topmost Header */}
       <Header
         pendingAuthorizationsCount={pendingAuthorizations.length}
@@ -825,7 +825,7 @@ function BankingWorkplace() {
       />
 
       {/* Primary Layout: Sidebar + Main Workplace */}
-      <div className="flex-1 flex overflow-hidden min-w-0">
+      <div className="flex-1 flex overflow-hidden min-w-0 w-full max-w-full">
         <Sidebar
           activeModule={activeModule}
           onSelectModule={handleSelectModule}
@@ -835,7 +835,7 @@ function BankingWorkplace() {
         />
 
         {/* Main Work Area */}
-        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 bg-[#f8fafc] min-w-0">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 bg-[#f8fafc] min-w-0 max-w-full">
           <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 min-w-0 w-full">
             {activeModule === 'dashboard' && (
               <DashboardModule
