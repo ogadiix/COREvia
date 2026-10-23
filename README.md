@@ -310,6 +310,7 @@ docker-compose down
 - **Strict Server-Side AI**: Gemini API keys never reach the client; queries are validated, sanitized, rate-limited, and executed server-side.
 - **Defense in Depth**: Role-Based Access Control (Admin, Maker, Checker, Officer, Auditor) with IDOR prevention, CSRF mitigation, payload caps, and DTO allowlisting.
 - **Disaster Recovery**: See [DISASTER_RECOVERY.md](DISASTER_RECOVERY.md) and [OPERATIONS.md](OPERATIONS.md) for production operational runbooks.
+- **System Architecture & UML**: See [UML.md](UML.md) for comprehensive UML diagrams, component layers, domain models, sequence interactions, and state machines.
 
 ---
 
