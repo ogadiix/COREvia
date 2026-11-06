@@ -40,8 +40,11 @@ import { bankingApi } from '../../lib/api.ts';
 import { IntegrationDetailDrawer } from './IntegrationDetailDrawer.tsx';
 import { SimulatorTestModal } from './SimulatorTestModal.tsx';
 import { NewWebhookModal } from './NewWebhookModal.tsx';
+import { EmptyState } from '../common/EmptyState';
+import { useToast } from '../common/Toast';
 
 export const IntegrationsWorkspace: React.FC = () => {
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState<
     'overview' | 'integrations' | 'endpoints' | 'webhooks' | 'events' | 'failures' | 'health' | 'audit'
   >('overview');
@@ -125,11 +128,11 @@ export const IntegrationsWorkspace: React.FC = () => {
     try {
       const res = await bankingApi.retryWebhookDelivery(deliveryId);
       if (res.success) {
-        alert(`Delivery ${deliveryId} retried successfully (Attempt #${res.data.attempt})`);
+        toast.success(`Delivery ${deliveryId} retried successfully (Attempt #${res.data.attempt})`);
         loadData();
       }
     } catch (err: any) {
-      alert(`Retry failed: ${err.message}`);
+      toast.error(`Retry failed: ${err.message}`);
     } finally {
       setRetryingDeliveryId(null);
     }
@@ -455,7 +458,19 @@ export const IntegrationsWorkspace: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200">
-                    {integrations.map((item) => (
+                    {integrations.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="py-10 text-center">
+                          <EmptyState
+                            compact
+                            icon={<Network className="w-5 h-5 text-indigo-600" />}
+                            title="No integrations found"
+                            description="No integration adapters match the active domain, mode, or status filters."
+                          />
+                        </td>
+                      </tr>
+                    ) : (
+                      integrations.map((item) => (
                       <tr key={item.integrationId} className="hover:bg-slate-50/80 transition-colors">
                         <td className="py-3 px-4">
                           <div className="font-bold text-slate-900">{item.name}</div>
@@ -508,7 +523,8 @@ export const IntegrationsWorkspace: React.FC = () => {
                           </div>
                         </td>
                       </tr>
-                    ))}
+                    ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -533,7 +549,19 @@ export const IntegrationsWorkspace: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 font-mono">
-                    {endpoints.map((ep) => (
+                    {endpoints.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="py-10 text-center font-sans">
+                          <EmptyState
+                            compact
+                            icon={<Code2 className="w-5 h-5 text-indigo-600" />}
+                            title="No gateway endpoints registered"
+                            description="API endpoints configured for external routing will appear here."
+                          />
+                        </td>
+                      </tr>
+                    ) : (
+                      endpoints.map((ep) => (
                       <tr key={ep.endpointId} className="hover:bg-slate-50">
                         <td className="py-3 px-4 font-bold text-slate-900">{ep.endpointId}</td>
                         <td className="py-3 px-4 text-slate-600">{ep.integrationId}</td>
@@ -567,7 +595,8 @@ export const IntegrationsWorkspace: React.FC = () => {
                           </span>
                         </td>
                       </tr>
-                    ))}
+                    ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -604,7 +633,19 @@ export const IntegrationsWorkspace: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 font-mono">
-                    {webhooks.map((wh) => (
+                    {webhooks.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="py-10 text-center font-sans">
+                          <EmptyState
+                            compact
+                            icon={<Webhook className="w-5 h-5 text-indigo-600" />}
+                            title="No active webhook subscriptions"
+                            description="Click 'Register Webhook' to add an outbound event subscription."
+                          />
+                        </td>
+                      </tr>
+                    ) : (
+                      webhooks.map((wh) => (
                       <tr key={wh.webhookId} className="hover:bg-slate-50">
                         <td className="py-3 px-4 font-bold text-slate-900">{wh.webhookId}</td>
                         <td className="py-3 px-4 text-slate-600">{wh.integrationId}</td>
@@ -624,10 +665,10 @@ export const IntegrationsWorkspace: React.FC = () => {
                                   testTriggeredBy: 'Operator',
                                   timestamp: new Date().toISOString(),
                                 });
-                                alert(`Synthetic webhook delivery triggered for ${wh.webhookId}`);
+                                toast.success(`Synthetic webhook delivery triggered for ${wh.webhookId}`);
                                 loadData();
                               } catch (e: any) {
-                                alert(`Test failed: ${e.message}`);
+                                toast.error(`Test failed: ${e.message}`);
                               }
                             }}
                             className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold rounded cursor-pointer"
@@ -636,7 +677,8 @@ export const IntegrationsWorkspace: React.FC = () => {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                    ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -661,7 +703,19 @@ export const IntegrationsWorkspace: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200 font-mono">
-                      {deliveries.map((del) => (
+                      {deliveries.length === 0 ? (
+                        <tr>
+                          <td colSpan={8} className="py-8 text-center font-sans">
+                            <EmptyState
+                              compact
+                              icon={<CheckCircle2 className="w-5 h-5 text-emerald-600" />}
+                              title="No webhook deliveries logged"
+                              description="Outbound webhook delivery attempts and retry logs will be recorded here."
+                            />
+                          </td>
+                        </tr>
+                      ) : (
+                        deliveries.map((del) => (
                         <tr key={del.deliveryId} className="hover:bg-slate-50">
                           <td className="py-2 px-4 font-bold text-slate-900">{del.deliveryId}</td>
                           <td className="py-2 px-4 text-slate-600">{del.webhookId}</td>
@@ -696,7 +750,8 @@ export const IntegrationsWorkspace: React.FC = () => {
                             )}
                           </td>
                         </tr>
-                      ))}
+                      ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -722,7 +777,19 @@ export const IntegrationsWorkspace: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 font-mono">
-                    {events.map((ev) => (
+                    {events.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="py-10 text-center font-sans">
+                          <EmptyState
+                            compact
+                            icon={<Activity className="w-5 h-5 text-indigo-600" />}
+                            title="No gateway events logged"
+                            description="Inbound and outbound integration telemetry will appear as traffic is processed."
+                          />
+                        </td>
+                      </tr>
+                    ) : (
+                      events.map((ev) => (
                       <tr key={ev.eventId} className="hover:bg-slate-50">
                         <td className="py-2.5 px-4 font-bold text-slate-900">{ev.eventId}</td>
                         <td className="py-2.5 px-4 text-slate-600">{ev.integrationId}</td>
@@ -753,7 +820,8 @@ export const IntegrationsWorkspace: React.FC = () => {
                           {new Date(ev.createdAt).toLocaleTimeString()}
                         </td>
                       </tr>
-                    ))}
+                    ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -807,8 +875,13 @@ export const IntegrationsWorkspace: React.FC = () => {
                     ))}
                     {failures.length === 0 && (
                       <tr>
-                        <td colSpan={7} className="py-8 text-center text-xs text-slate-400 font-sans">
-                          Zero active failures recorded. Gateway is operational.
+                        <td colSpan={7} className="py-8 text-center font-sans">
+                          <EmptyState
+                            compact
+                            icon={<CheckCircle2 className="w-5 h-5 text-emerald-600" />}
+                            title="Zero active gateway failures"
+                            description="All external and synthetic adapter channels are operational with 100% SLA."
+                          />
                         </td>
                       </tr>
                     )}
@@ -858,10 +931,10 @@ export const IntegrationsWorkspace: React.FC = () => {
                         onClick={async () => {
                           try {
                             const res = await bankingApi.testIntegrationConnection(item.integrationId);
-                            alert(`Health Check: ${res.data.status} (${res.data.latencyMs}ms)`);
+                            toast.success(`Health Check: ${res.data.status} (${res.data.latencyMs}ms)`);
                             loadData();
                           } catch (e: any) {
-                            alert(`Health check failed: ${e.message}`);
+                            toast.error(`Health check failed: ${e.message}`);
                           }
                         }}
                         className="w-full py-1.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold rounded font-sans cursor-pointer transition-colors"

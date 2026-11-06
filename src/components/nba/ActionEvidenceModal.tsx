@@ -64,7 +64,7 @@ export const ActionEvidenceModal: React.FC<ActionEvidenceModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Recommendation Explainability & Evidence"
-      maxWidth="max-w-2xl"
+      size="4xl"
     >
       <div className="space-y-5">
         {/* Top Header Card */}

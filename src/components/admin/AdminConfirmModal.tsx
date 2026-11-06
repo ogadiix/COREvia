@@ -3,7 +3,7 @@
  * Strict institutional confirmation for dangerous mutations.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AlertTriangle, ShieldAlert, CheckCircle, X } from 'lucide-react';
 
 interface AdminConfirmModalProps {
@@ -33,6 +33,18 @@ export const AdminConfirmModal: React.FC<AdminConfirmModalProps> = ({
   onConfirm,
   onCancel,
 }) => {
+  useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && !isLoading) {
+          onCancel();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, isLoading, onCancel]);
+
   if (!isOpen) return null;
 
   return (

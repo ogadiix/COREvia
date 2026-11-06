@@ -3,7 +3,7 @@
  * Comprehensive administrative view: identity, roles, effective permissions, scopes, sessions, and audit history.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   User,
@@ -38,6 +38,16 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({
   onRevokeAllSessionsClick,
 }) => {
   const [activeTab, setActiveTab] = useState<'IDENTITY' | 'PERMISSIONS' | 'SCOPES' | 'SESSIONS' | 'AUDIT'>('IDENTITY');
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   if (!detail) return null;
 

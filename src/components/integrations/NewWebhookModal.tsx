@@ -3,10 +3,11 @@
  * Configures a new enterprise webhook endpoint and displays the generated signing secret once.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Webhook, ShieldAlert, CheckCircle2, Copy } from 'lucide-react';
 import { IntegrationDTO } from '../../types/integration.types.ts';
 import { bankingApi } from '../../lib/api.ts';
+import { useToast } from '../common/Toast';
 
 interface NewWebhookModalProps {
   integrations: IntegrationDTO[];
@@ -31,12 +32,25 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
   onClose,
   onCreated,
 }) => {
+  const toast = useToast();
   const [integrationId, setIntegrationId] = useState(integrations[0]?.integrationId || 'INT-PAYMENTS');
   const [eventType, setEventType] = useState(EVENT_TYPES[0]);
   const [targetUrl, setTargetUrl] = useState('https://corevia.internal.bank/api/webhooks/listener');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdSecret, setCreatedSecret] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && !isSubmitting) {
+          onClose();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, isSubmitting, onClose]);
 
   if (!isOpen) return null;
 
@@ -51,10 +65,11 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
       });
       if (res.success) {
         setCreatedSecret(res.data.generatedSecret);
+        toast.success('Webhook endpoint created successfully.');
         onCreated();
       }
     } catch (err: any) {
-      alert(`Webhook creation failed: ${err.message}`);
+      toast.error(`Webhook creation failed: ${err.message}`);
     } finally {
       setIsSubmitting(false);
     }

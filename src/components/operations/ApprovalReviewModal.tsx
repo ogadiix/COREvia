@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   ShieldAlert,
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../common/Toast';
 import type { OperationalApprovalDTO } from '../../types/operations.types';
 
 interface ApprovalReviewModalProps {
@@ -31,11 +32,28 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
   onSuccess,
 }) => {
   const { user } = useAuth();
+  const toast = useToast();
   const [action, setAction] = useState<'APPROVE' | 'REJECT' | 'RETURN'>('APPROVE');
   const [checkerNotes, setCheckerNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmDialog, setConfirmDialog] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          if (confirmDialog) {
+            setConfirmDialog(false);
+          } else {
+            onClose();
+          }
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, confirmDialog, onClose]);
 
   if (!isOpen || !approval) return null;
 
@@ -53,13 +71,18 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
       const res = await api.actOnOperationalApproval(approval.id, action, checkerNotes);
       if (res && res.success) {
         setConfirmDialog(false);
+        toast.success(`Operational approval ${approval.approvalId} actioned: ${action}`);
         onSuccess();
         onClose();
       } else {
-        setError('Operational action failed. Please check permissions.');
+        const msg = 'Operational action failed. Please check permissions.';
+        setError(msg);
+        toast.error(msg);
       }
     } catch (err: any) {
-      setError(err?.message || 'Dual-control action rejected by server.');
+      const msg = err?.message || 'Dual-control action rejected by server.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   ModuleType,
   BankAccount,
@@ -68,6 +68,8 @@ import { AiBankingAssistantModal } from './components/ai/AiBankingAssistantModal
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginPage } from './components/auth/LoginPage';
 import { AccessRestrictedNotice } from './components/common/AccessRestrictedNotice';
+import { ToastProvider } from './components/common/Toast';
+import { MotionProvider } from './lib/motion';
 import { ShieldCheck, Sparkles, Bot } from 'lucide-react';
 
 const pathToModule: Record<string, ModuleType> = {
@@ -285,6 +287,28 @@ function BankingWorkplace() {
   const [isAiAssistantOpen, setIsAiAssistantOpen] = useState<boolean>(false);
   const [selectedAccount, setSelectedAccount] = useState<BankAccount | null>(null);
 
+  // Desktop Sidebar Rail Collapse State (Persisted)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.localStorage.getItem('corevia_sidebar_collapsed') === 'true';
+    }
+    return false;
+  });
+
+  const handleToggleSidebarCollapse = useCallback(() => {
+    setIsSidebarCollapsed((prev) => {
+      const next = !prev;
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.setItem('corevia_sidebar_collapsed', String(next));
+        }
+      } catch {
+        // Storage restricted
+      }
+      return next;
+    });
+  }, []);
+
   // Functional Keyboard Shortcuts (F1 - F8 standard in enterprise banking terminals)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -327,12 +351,15 @@ function BankingWorkplace() {
       } else if (e.key === 'F10') {
         e.preventDefault();
         toggleDrawer();
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        handleToggleSidebarCollapse();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [handleToggleSidebarCollapse]);
 
   // Filter accounts when global search is used
   const filteredAccountsForSearch = useMemo(() => {
@@ -813,6 +840,7 @@ function BankingWorkplace() {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col text-slate-900 font-sans selection:bg-slate-200 w-full max-w-full overflow-x-hidden">
       {/* Institutional Topmost Header */}
       <Header
+        activeModule={activeModule}
         pendingAuthorizationsCount={pendingAuthorizations.length}
         onOpenMakerChecker={() => handleSelectModule('maker-checker')}
         onOpenNewTransaction={() => setIsNewTxnModalOpen(true)}
@@ -822,6 +850,7 @@ function BankingWorkplace() {
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         onNavigatePath={handleNavigatePath}
+        onSelectModule={handleSelectModule}
       />
 
       {/* Primary Layout: Sidebar + Main Workplace */}
@@ -832,11 +861,13 @@ function BankingWorkplace() {
           pendingAuthorizationsCount={pendingAuthorizations.length}
           isMobileOpen={isMobileMenuOpen}
           onCloseMobile={() => setIsMobileMenuOpen(false)}
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapse={handleToggleSidebarCollapse}
         />
 
         {/* Main Work Area */}
         <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 bg-[#f8fafc] min-w-0 max-w-full">
-          <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 min-w-0 w-full">
+          <div key={activeModule} className="max-w-7xl mx-auto space-y-4 sm:space-y-6 min-w-0 w-full motion-fade-in">
             {activeModule === 'dashboard' && (
               <DashboardModule
                 metrics={metrics}
@@ -849,6 +880,11 @@ function BankingWorkplace() {
                 onNavigateToLending={() => setActiveModule('lending')}
                 onNavigateToTradeFinance={() => setActiveModule('trade-finance')}
                 onNavigateToCustomers={() => setActiveModule('customers')}
+                onNavigateToOpportunities={() => setActiveModule('opportunities')}
+                onNavigateToCases={() => setActiveModule('cases')}
+                onNavigateToTasks={() => setActiveModule('tasks')}
+                onNavigateToPortfolio={() => setActiveModule('portfolio-intelligence')}
+                onNavigateToIntelligence={() => setActiveModule('intelligence')}
                 onNavigateToNextBestActions={() => setActiveModule('next-best-actions')}
                 onNavigateToOpportunityRadar={() => setActiveModule('opportunity-radar')}
                 onOpenNewTransaction={() => setIsNewTxnModalOpen(true)}
@@ -1395,9 +1431,13 @@ function BankingWorkplace() {
 export default function App() {
   return (
     <AuthProvider>
-      <CopilotProvider>
-        <BankingWorkplace />
-      </CopilotProvider>
+      <MotionProvider>
+        <ToastProvider>
+          <CopilotProvider>
+            <BankingWorkplace />
+          </CopilotProvider>
+        </ToastProvider>
+      </MotionProvider>
     </AuthProvider>
   );
 }

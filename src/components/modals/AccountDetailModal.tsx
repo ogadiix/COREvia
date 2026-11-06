@@ -42,7 +42,7 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
       title={`Account Master Inquire — ${account.customerName}`}
       subtitle={`${account.schemeName} (${account.schemeCode})`}
       referenceId={account.accountNumber}
-      maxWidth="2xl"
+      maxWidth="4xl"
       footerActions={
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
@@ -126,8 +126,9 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
           </button>
         </div>
 
-        {activeTab === 'overview' && (
-          <div className="space-y-3">
+        <div key={activeTab} className="motion-fade-in pt-1">
+          {activeTab === 'overview' && (
+            <div className="space-y-3">
             {/* Balance Card */}
             <div className="bg-slate-50 border border-slate-200 rounded p-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div>
@@ -277,6 +278,7 @@ export const AccountDetailModal: React.FC<AccountDetailModalProps> = ({
             )}
           </div>
         )}
+        </div>
       </div>
     </Modal>
   );

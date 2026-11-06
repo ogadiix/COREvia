@@ -30,6 +30,7 @@ import {
 import { bankingApi } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
 import { ModuleType } from '../../types';
+import { EmptyState } from '../common/EmptyState';
 
 interface ShowcaseWorkspaceProps {
   onNavigate: (module: ModuleType) => void;
@@ -1034,7 +1035,19 @@ export const ShowcaseWorkspace: React.FC<ShowcaseWorkspaceProps> = ({ onNavigate
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/60 font-mono text-[11px]">
-                    {auditLogs.slice(0, 5).map((log, idx) => (
+                    {auditLogs.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="py-8 text-center font-sans">
+                          <EmptyState
+                            compact
+                            icon={<Lock className="w-5 h-5 text-amber-400" />}
+                            title="No audit records available"
+                            description="Audit trail logs will participate in SHA-256 chaining as operations execute."
+                          />
+                        </td>
+                      </tr>
+                    ) : (
+                      auditLogs.slice(0, 5).map((log, idx) => (
                       <tr key={log.id || idx} className="hover:bg-slate-900/40">
                         <td className="py-2.5 px-4 text-amber-400 font-semibold">{log.action || 'ADMIN_ACTION'}</td>
                         <td className="py-2.5 px-4 text-slate-300">{log.userId || log.actorId || 'USR-EMP-782194'}</td>
@@ -1042,7 +1055,8 @@ export const ShowcaseWorkspace: React.FC<ShowcaseWorkspaceProps> = ({ onNavigate
                         <td className="py-2.5 px-4 text-slate-500 truncate max-w-[140px]">{log.previousHash || '0000000000000000...'}</td>
                         <td className="py-2.5 px-4 text-emerald-400 truncate max-w-[140px]">{log.recordHash || 'e3d314c43bba5f5c...'}</td>
                       </tr>
-                    ))}
+                    ))
+                    )}
                   </tbody>
                 </table>
               </div>

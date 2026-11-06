@@ -5,6 +5,7 @@ import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { StatCard } from '../common/StatCard';
 import { Modal } from '../common/Modal';
+import { EmptyState } from '../common/EmptyState';
 import { formatINR } from '../../data/mockIndianBankingData';
 import { bankingApi } from '../../lib/api';
 import {
@@ -28,6 +29,8 @@ import {
   AlertCircle,
   Copy,
   Check,
+  X,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 interface AccountsModuleProps {
@@ -554,10 +557,21 @@ export const AccountsModule: React.FC<AccountsModuleProps> = ({
             <p className="text-sm font-medium">{error}</p>
           </div>
         ) : accountList.length === 0 ? (
-          <div className="py-16 text-center text-slate-500">
-            <Landmark className="w-8 h-8 mx-auto mb-2 text-slate-400" />
-            <p className="text-sm">No accounts found matching the search and filter criteria.</p>
-          </div>
+          <EmptyState
+            icon={<Landmark className="w-8 h-8 text-slate-400" />}
+            title="No accounts match criteria"
+            description="No bank accounts match the current search term, account type, or status filters."
+            actionLabel="Reset Filters"
+            onAction={() => {
+              setSearchTerm('');
+              setAccountTypeFilter('ALL');
+              setStatusFilter('ALL');
+              setBranchFilter('ALL');
+              setCurrentPage(1);
+              fetchAccounts();
+            }}
+            className="py-12 bg-white"
+          />
         ) : (
           <Table
             data={accountList}
@@ -622,7 +636,7 @@ export const AccountsModule: React.FC<AccountsModuleProps> = ({
             setSelectedAcc(null);
           }}
           title={`Account Ledger Detail: ${selectedAcc.schemeName || selectedAcc.accountNumber}`}
-          size="xl"
+          size="4xl"
         >
           <div className="space-y-6">
             {/* Required Header & Core Details:

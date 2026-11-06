@@ -40,6 +40,7 @@ import {
 import { RecordInteractionModal } from './RecordInteractionModal';
 import { InteractionDetailDrawer } from './InteractionDetailDrawer';
 import { CommunicationProfileWidget } from './CommunicationProfileWidget';
+import { EmptyState } from '../common/EmptyState';
 
 interface InteractionsModuleProps {
   initialCustomerId?: number;
@@ -326,8 +327,21 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-md focus:bg-white focus:ring-1 focus:ring-slate-900"
+              className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-300 rounded-md focus:bg-white focus:ring-1 focus:ring-slate-900"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch('');
+                  setPage(1);
+                }}
+                className="absolute right-2.5 top-3 text-slate-400 hover:text-slate-600 focus:outline-none"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
           {/* View Mode Toggle */}
@@ -492,19 +506,14 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
               <span className="text-slate-500 font-medium">Loading interaction records...</span>
             </div>
           ) : interactions.length === 0 ? (
-            <div className="p-12 text-center bg-white border border-slate-200 rounded-lg space-y-3">
-              <MessageSquare className="w-10 h-10 text-slate-300 mx-auto" />
-              <div className="font-bold text-slate-800 text-sm">No interactions matching criteria</div>
-              <p className="text-slate-500 max-w-sm mx-auto text-xs">
-                Try clearing active filters or record a new customer interaction to initiate the chronological log.
-              </p>
-              <button
-                onClick={() => setIsRecordModalOpen(true)}
-                className="px-4 py-2 bg-slate-900 text-white rounded-md font-medium hover:bg-slate-800 inline-flex items-center gap-1.5 shadow-2xs"
-              >
-                <Plus className="w-4 h-4" /> Record Touchpoint
-              </button>
-            </div>
+            <EmptyState
+              icon={<MessageSquare className="w-8 h-8 text-slate-400" />}
+              title="No interactions match criteria"
+              description="No customer communication records match the active channel, type, outcome, or search filters."
+              actionLabel="Record Touchpoint"
+              onAction={() => setIsRecordModalOpen(true)}
+              className="py-12 bg-white border border-slate-200 rounded-lg shadow-2xs"
+            />
           ) : viewMode === 'TIMELINE' ? (
             /* Timeline View */
             <div className="space-y-3">

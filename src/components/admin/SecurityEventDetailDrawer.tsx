@@ -4,7 +4,7 @@
  * Invariant: Never renders passwords, tokens, or private secrets.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, ShieldAlert, AlertTriangle, Clock, Server, CheckCircle2, Copy } from 'lucide-react';
 import { SecurityEventDTO } from '../../types/admin.types.ts';
 
@@ -17,6 +17,18 @@ export const SecurityEventDetailDrawer: React.FC<SecurityEventDetailDrawerProps>
   event,
   onClose,
 }) => {
+  useEffect(() => {
+    if (event) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [event, onClose]);
+
   if (!event) return null;
 
   const severityBadge = (severity: string) => {

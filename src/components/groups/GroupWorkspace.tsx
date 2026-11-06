@@ -48,6 +48,7 @@ import {
 import { api } from '../../lib/api.ts';
 import { useAuth } from '../../context/AuthContext.tsx';
 import { Button } from '../common/Button.tsx';
+import { useToast } from '../common/Toast';
 
 interface GroupWorkspaceProps {
   groupId: string;
@@ -78,6 +79,7 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
   onNavigateToJourney,
 }) => {
   const { user } = useAuth();
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [group, setGroup] = useState<RelationshipGroupDTO | null>(null);
   const [members, setMembers] = useState<GroupMemberDTO[]>([]);
@@ -181,10 +183,11 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
       if (res && res.success) {
         setIsHandoffModalOpen(false);
         setHandoffReason('');
+        toast.success('Group handoff submitted successfully.');
         loadAllData();
       }
     } catch (err: any) {
-      alert(`Handoff failed: ${err.message}`);
+      toast.error(`Handoff failed: ${err.message}`);
     } finally {
       setHandoffSubmitting(false);
     }
@@ -291,10 +294,11 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
           ownershipPercentage: '',
           isPrimary: false,
         });
+        toast.success('Member added successfully.');
         loadAllData();
       }
     } catch (err: any) {
-      alert(`Add member failed: ${err.message}`);
+      toast.error(`Add member failed: ${err.message}`);
     }
   };
 
@@ -1536,7 +1540,7 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                       variant="primary"
                       size="sm"
                       onClick={() => {
-                        alert('Plan submitted for human approval to Branch Operations Head.');
+                        toast.success('Plan submitted for human approval to Branch Operations Head.');
                         setIsAgentPlanOpen(false);
                       }}
                       className="bg-purple-700 hover:bg-purple-800 text-white"

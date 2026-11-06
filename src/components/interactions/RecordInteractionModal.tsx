@@ -20,6 +20,7 @@ import {
   InteractionSentiment,
   InteractionParticipant,
 } from '../../types';
+import { useToast } from '../common/Toast';
 
 interface RecordInteractionModalProps {
   isOpen: boolean;
@@ -43,8 +44,21 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
   initialCustomerId,
   initialCustomerName,
 }) => {
+  const toast = useToast();
   const [customersList, setCustomersList] = useState<CustomerOption[]>([]);
   const [loadingCustomers, setLoadingCustomers] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, onClose]);
 
   // Form State
   const [customerId, setCustomerId] = useState<number | ''>(initialCustomerId || '');
@@ -235,10 +249,13 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
         throw new Error(errorData.message || errorData.error || 'Failed to record interaction');
       }
 
+      toast.success('Customer interaction recorded successfully');
       onSuccess();
       onClose();
     } catch (err: any) {
-      setErrorMsg(err.message || 'An unexpected error occurred while logging the interaction.');
+      const msg = err.message || 'An unexpected error occurred while logging the interaction.';
+      setErrorMsg(msg);
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }

@@ -5,8 +5,10 @@ import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { StatCard } from '../common/StatCard';
 import { Modal } from '../common/Modal';
+import { EmptyState } from '../common/EmptyState';
 import { formatINR } from '../../data/mockIndianBankingData';
 import { bankingApi } from '../../lib/api';
+import { useToast } from '../common/Toast';
 import { NextBestActionCard } from '../nba/NextBestActionCard';
 import { ActionEvidenceModal } from '../nba/ActionEvidenceModal';
 import { DismissActionModal } from '../nba/DismissActionModal';
@@ -62,6 +64,8 @@ import {
   BarChart3,
   Milestone,
   Users2,
+  X,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { useCopilot } from '../../context/CopilotContext';
 import { RelationshipGraph } from '../graph/RelationshipGraph.tsx';
@@ -78,6 +82,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
   onRequestRiskOverride,
 }) => {
   const { openDrawer } = useCopilot();
+  const toast = useToast();
   const [customers, setCustomers] = useState<CustomerKYC[]>(initialCustomers);
   const [loadingList, setLoadingList] = useState<boolean>(false);
   const [selectedEntityFilter, setSelectedEntityFilter] = useState<string>('ALL');
@@ -287,9 +292,10 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
         // Refresh financial summary
         const updatedSummary = await bankingApi.getCustomerFinancialSummary(activeCustomer.cifNumber);
         setFinancialSummary(updatedSummary);
+        toast.success(`CORE score recalculated: ${res.data.coreScore || 'Updated'}`);
       }
     } catch (err: any) {
-      alert(err.message || 'Failed to recalculate CORE score');
+      toast.error(err.message || 'Failed to recalculate CORE score');
     } finally {
       setRecalculatingScore(false);
     }
@@ -302,8 +308,9 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
       await bankingApi.recalculateCustomerIntelligence(activeCustomer.cifNumber);
       const updatedBundle = await bankingApi.getCustomer360(activeCustomer.cifNumber);
       setDossier360(updatedBundle);
+      toast.success('Relationship intelligence signals refreshed.');
     } catch (err: any) {
-      console.error('Failed to recalculate customer signals:', err);
+      toast.error('Failed to recalculate customer signals.');
     } finally {
       setRecalculatingCustomerSignals(false);
     }
@@ -315,8 +322,10 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
     try {
       if (action360Type === 'ACKNOWLEDGE') {
         await bankingApi.acknowledgeIntelligence(action360Insight.id, action360Note);
+        toast.success('Intelligence signal acknowledged.');
       } else {
         await bankingApi.resolveIntelligence(action360Insight.id, action360Note);
+        toast.success('Intelligence signal resolved.');
       }
       setAction360Type(null);
       setAction360Insight(null);
@@ -324,7 +333,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
       const updatedBundle = await bankingApi.getCustomer360(activeCustomer.cifNumber);
       setDossier360(updatedBundle);
     } catch (err) {
-      console.error('Failed to update 360 insight status:', err);
+      toast.error('Failed to update 360 insight status.');
     } finally {
       setSubmitting360Action(false);
     }
@@ -336,7 +345,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
       setAvailableProducts(prods || []);
       setIsEnrollModalOpen(true);
     } catch (err: any) {
-      alert(err.message || 'Failed to fetch available products');
+      toast.error(err.message || 'Failed to fetch available products');
     }
   };
 
@@ -352,6 +361,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
       setIsEnrollModalOpen(false);
       setSelectedProductToEnroll(null);
       setSelectedAccountToLink(null);
+      toast.success('Customer enrolled in banking product successfully.');
       // Refresh financial summary & 360 bundle
       const [bundle, finSummary] = await Promise.all([
         bankingApi.getCustomer360(activeCustomer.cifNumber),
@@ -360,7 +370,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
       setDossier360(bundle);
       setFinancialSummary(finSummary);
     } catch (err: any) {
-      alert(err.message || 'Failed to enroll customer in banking product');
+      toast.error(err.message || 'Failed to enroll customer in banking product');
     } finally {
       setEnrolling(false);
     }
@@ -381,11 +391,12 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
       setShowLogInteraction(false);
       setInteractionSubject('');
       setInteractionSummary('');
+      toast.success('Relationship interaction logged successfully.');
       // Reload 360 data
       const updatedBundle = await bankingApi.getCustomer360(activeCustomer!.cifNumber);
       setDossier360(updatedBundle);
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message || 'Failed to record interaction.');
     } finally {
       setSubmittingInteraction(false);
     }
@@ -431,7 +442,14 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
       header: 'Customer / Corporate Entity',
       render: (c) => (
         <div className="max-w-[240px]">
-          <div className="font-semibold text-slate-900 truncate">{c.name}</div>
+          <div className="font-semibold text-slate-900 truncate flex items-center gap-1.5">
+            <span>{c.name}</span>
+            {(c.customerCode === 'CUS-10482' || c.name.includes('Rahul Sharma')) && (
+              <span className="text-[9px] px-1 py-0.2 bg-amber-100 text-amber-800 rounded font-normal font-sans border border-amber-200" title="Deterministic Demonstration Subject">
+                Demo
+              </span>
+            )}
+          </div>
           <div className="text-[11px] text-slate-500 truncate">{c.occupationOrSector}</div>
         </div>
       ),
@@ -582,7 +600,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
       </div>
 
       {/* Search & Filter Controls */}
-      <div className="bg-white border border-slate-200 rounded p-3 space-y-2">
+      <div className="bg-white border border-slate-200 rounded-sm p-3 space-y-2.5 shadow-2xs">
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
           <div className="sm:col-span-6 relative">
             <Search className="w-4 h-4 absolute left-2.5 top-2.5 text-slate-400" />
@@ -591,15 +609,25 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
               placeholder="Search by CIF, Name, PAN, cKYC, or GSTIN..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full pl-8 pr-8 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-500 text-slate-900 transition-colors"
             />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm('')}
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 focus:outline-none"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
           <div className="sm:col-span-3">
             <select
               value={selectedEntityFilter}
               onChange={(e) => setSelectedEntityFilter(e.target.value)}
-              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-500 text-slate-800"
             >
               <option value="ALL">All Constitutions</option>
               <option value="INDIVIDUAL">Individual (Retail)</option>
@@ -613,7 +641,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
             <select
               value={selectedRiskFilter}
               onChange={(e) => setSelectedRiskFilter(e.target.value)}
-              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-500 text-slate-800"
             >
               <option value="ALL">All Risk Ratings</option>
               <option value="LOW">Low Risk</option>
@@ -622,18 +650,64 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
             </select>
           </div>
         </div>
+
+        {/* Status / Active Filter summary */}
+        <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
+          <div className="text-[11px] font-mono text-slate-500 flex items-center gap-2">
+            <span>Showing <strong className="text-slate-800">{filteredCustomers.length}</strong> of {customers.length} CIF profiles</span>
+            {(searchTerm || selectedEntityFilter !== 'ALL' || selectedRiskFilter !== 'ALL') && (
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700">
+                <SlidersHorizontal className="w-2.5 h-2.5" />
+                Filtered
+              </span>
+            )}
+          </div>
+          {(searchTerm || selectedEntityFilter !== 'ALL' || selectedRiskFilter !== 'ALL') && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedEntityFilter('ALL');
+                setSelectedRiskFilter('ALL');
+              }}
+              className="text-xs text-brand-teal hover:underline font-medium"
+            >
+              Reset Filters
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Main Customers Table */}
-      <Table
-        columns={columns}
-        data={filteredCustomers}
-        keyExtractor={(c) => c.cifNumber}
-        onRowClick={(c) => {
-          setActiveCustomer(c);
-          setActive360Tab('KYC');
-        }}
-      />
+      {/* Main Customers Table or Empty State */}
+      {!loadingList && filteredCustomers.length === 0 ? (
+        <EmptyState
+          icon={<Search className="w-8 h-8 text-slate-400" />}
+          title="No customer profiles match criteria"
+          description={
+            searchTerm
+              ? `No registered CIFs matching "${searchTerm}". Try verifying the PAN, cKYC identifier or customer name.`
+              : 'No customer profiles match the selected constitution and risk criteria.'
+          }
+          actionLabel="Reset All Filters"
+          onAction={() => {
+            setSearchTerm('');
+            setSelectedEntityFilter('ALL');
+            setSelectedRiskFilter('ALL');
+          }}
+          className="border border-slate-200 rounded-sm bg-white p-8"
+        />
+      ) : (
+        <Table
+          columns={columns}
+          data={filteredCustomers}
+          isLoading={loadingList}
+          keyExtractor={(c) => c.cifNumber}
+          onRowClick={(c) => {
+            setActiveCustomer(c);
+            setActive360Tab('KYC');
+          }}
+        />
+      )}
 
       {/* Customer 360 Full Dossier Modal */}
       {activeCustomer && (
@@ -644,9 +718,13 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
             setShowLogInteraction(false);
           }}
           title={`Customer 360 Dossier — ${activeCustomer.name}`}
-          subtitle={`Central KYC Identifier: ${activeCustomer.cKycNumber} | CIF: ${activeCustomer.cifNumber}`}
+          subtitle={`Central KYC Identifier: ${activeCustomer.cKycNumber} | CIF: ${activeCustomer.cifNumber}${
+            activeCustomer.customerCode === 'CUS-10482' || activeCustomer.name.includes('Rahul Sharma')
+              ? ' | Deterministic Demonstration Subject · Grounded Demo Fixture'
+              : ''
+          }`}
           referenceId={activeCustomer.cifNumber}
-          maxWidth="2xl"
+          maxWidth="6xl"
           footerActions={
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">
@@ -702,6 +780,19 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
           }
         >
           <div className="space-y-3">
+            {/* DEMO FIXTURE NOTICE */}
+            {(activeCustomer.customerCode === 'CUS-10482' || activeCustomer.name.includes('Rahul Sharma')) && (
+              <div className="bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs px-3 py-1.5 rounded flex flex-wrap items-center justify-between gap-1">
+                <span className="flex items-center gap-1.5 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                  Deterministic Demonstration Subject · Grounded Demo Fixture
+                </span>
+                <span className="text-[10px] text-amber-300/80 font-mono">
+                  All customer telemetry & relationship metrics validated against PostgreSQL ledger
+                </span>
+              </div>
+            )}
+
             {/* COPILOT QUICK ACTIONS BAR */}
             <div className="bg-slate-900 border border-emerald-500/30 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 shadow-xs">
               <div className="flex items-center gap-2">
@@ -1057,7 +1148,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
                 Querying PostgreSQL Customer 360 Dossier...
               </div>
             ) : (
-              <>
+              <div key={active360Tab} className="motion-fade-in">
                 {/* 0. Relationship Value Profile Tab (Phase 32) */}
                 {active360Tab === 'VALUE' && (
                   <div className="space-y-4">
@@ -2324,7 +2415,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
                     <StrategySimulatorModule initialCustomerId={activeCustomer.id} />
                   </div>
                 )}
-              </>
+              </div>
             )}
           </div>
         </Modal>

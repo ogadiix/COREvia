@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   Phone,
@@ -41,6 +41,14 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
   const [updatingCommitmentId, setUpdatingCommitmentId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   if (!interaction) return null;
 
@@ -119,10 +127,16 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
   };
 
   return (
-    <div
-      id="interaction-detail-drawer"
-      className="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-white border-l border-slate-200 shadow-2xl flex flex-col text-xs"
-    >
+    <>
+      <div
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-2xs z-40 transition-opacity motion-fade-in"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div
+        id="interaction-detail-drawer"
+        className="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-white border-l border-slate-200 shadow-2xl flex flex-col text-xs motion-drawer motion-slide-in-right"
+      >
       {/* Header */}
       <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -470,5 +484,6 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
         </button>
       </div>
     </div>
+    </>
   );
 };

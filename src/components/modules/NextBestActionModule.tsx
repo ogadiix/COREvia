@@ -7,6 +7,7 @@ import { DismissActionModal } from '../nba/DismissActionModal';
 import { CreateTaskModal } from '../nba/CreateTaskModal';
 import { DecisionTracePanel } from '../decision-trace/DecisionTracePanel';
 import { Button } from '../common/Button';
+import { EmptyState } from '../common/EmptyState';
 import {
   Sparkles,
   RefreshCw,
@@ -18,6 +19,8 @@ import {
   CheckSquare,
   ShieldAlert,
   ArrowUpDown,
+  X,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 interface NextBestActionModuleProps {
@@ -148,8 +151,17 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by customer name, CIF, action title, or keywords..."
-              className="w-full text-xs pl-9 pr-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs pl-9 pr-8 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
           <Button type="submit" variant="secondary" size="sm">
             Search
@@ -238,20 +250,16 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           Loading prioritized recommendations...
         </div>
       ) : actions.length === 0 ? (
-        <div className="py-12 text-center text-xs text-slate-500 bg-white rounded-xl border border-slate-200 p-8 space-y-2">
-          <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
-          <div className="font-semibold text-slate-800 text-sm">No Next Best Actions match your current criteria</div>
-          <p className="text-slate-500 max-w-md mx-auto">
-            All customer relationships in this slice are operating nominally or have already been acted upon.
-          </p>
-          <div className="pt-2">
-            <Button variant="secondary" size="sm" onClick={handleRecalculateAll}>
-              Recalculate Recommendations
-            </Button>
-          </div>
-        </div>
+        <EmptyState
+          icon={<CheckCircle2 className="w-10 h-10 text-emerald-500" />}
+          title="No Next Best Actions match your current criteria"
+          description="All customer relationships in this slice are operating nominally or have already been acted upon."
+          actionLabel="Recalculate Recommendations"
+          onAction={handleRecalculateAll}
+          className="bg-white rounded-xl border border-slate-200 p-12 shadow-xs"
+        />
       ) : (
-        <div className="space-y-4">
+        <div className="motion-fade-in space-y-4">
           <div className="flex items-center justify-between text-xs text-slate-500 px-1">
             <span>Showing {actions.length} prioritized recommendations</span>
             <span className="font-mono text-[11px]">Sorted by Rank Score (Desc)</span>

@@ -7,6 +7,7 @@ import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { StatCard } from '../common/StatCard';
 import { Modal } from '../common/Modal';
+import { EmptyState } from '../common/EmptyState';
 import {
   Package,
   Search,
@@ -23,6 +24,7 @@ import {
   AlertCircle,
   Plus,
   RefreshCw,
+  X,
 } from 'lucide-react';
 
 interface ProductsModuleProps {
@@ -324,10 +326,18 @@ export const ProductsModule: React.FC<ProductsModuleProps> = ({ onNavigateToCust
             <p className="text-sm font-medium">{error}</p>
           </div>
         ) : products.length === 0 ? (
-          <div className="py-12 text-center text-slate-500">
-            <Package className="w-8 h-8 mx-auto mb-2 text-slate-400" />
-            <p className="text-sm">No banking products found matching the criteria.</p>
-          </div>
+          <EmptyState
+            icon={<Package className="w-8 h-8 text-slate-400" />}
+            title="No banking products found"
+            description="No products in the catalog match your search and category criteria."
+            actionLabel="Reset Category & Search"
+            onAction={() => {
+              setSearchTerm('');
+              setSelectedCategory('ALL');
+              setActiveOnly(false);
+            }}
+            className="py-12 bg-white"
+          />
         ) : (
           <Table
             data={products}
@@ -350,7 +360,7 @@ export const ProductsModule: React.FC<ProductsModuleProps> = ({ onNavigateToCust
             setSelectedProduct(null);
           }}
           title={`Product Specifications: ${selectedProduct.name}`}
-          size="lg"
+          size="3xl"
         >
           <div className="space-y-6">
             {/* Header info */}

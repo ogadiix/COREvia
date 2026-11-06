@@ -6,11 +6,9 @@ import {
   ShieldCheck,
   CheckCircle2,
   AlertCircle,
-  HelpCircle,
   Sparkles,
-  Link2,
 } from 'lucide-react';
-import { CopilotMessage, CopilotSourceItem } from '../../context/CopilotContext';
+import { CopilotMessage } from '../../context/CopilotContext';
 import { CopilotActionCard } from './CopilotActionCard';
 
 interface CopilotMessageItemProps {
@@ -31,11 +29,11 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
   const isUser = message.role === 'user';
   const isSystem = message.role === 'system';
 
-  // Helper to render markdown-like text cleanly without large external parser
+  // Helper to render markdown-like text cleanly
   const renderFormattedContent = (content: string) => {
     const lines = content.split('\n');
     return (
-      <div className="space-y-1.5 text-xs leading-relaxed text-slate-200">
+      <div className={`space-y-1.5 text-xs leading-relaxed ${isUser ? 'text-white' : 'text-[#172033]'}`}>
         {lines.map((line, idx) => {
           const trimmed = line.trim();
           if (!trimmed) {
@@ -44,7 +42,12 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
 
           if (trimmed.startsWith('### ')) {
             return (
-              <h4 key={idx} className="text-xs font-bold text-emerald-400 uppercase tracking-wider pt-1.5">
+              <h4
+                key={idx}
+                className={`text-xs font-bold uppercase tracking-wider pt-1.5 ${
+                  isUser ? 'text-white/90' : 'text-[#087F8C]'
+                }`}
+              >
                 {trimmed.replace('### ', '')}
               </h4>
             );
@@ -52,7 +55,12 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
 
           if (trimmed.startsWith('## ')) {
             return (
-              <h3 key={idx} className="text-sm font-bold text-white pt-2 pb-0.5">
+              <h3
+                key={idx}
+                className={`text-sm font-bold pt-2 pb-0.5 ${
+                  isUser ? 'text-white' : 'text-[#172033]'
+                }`}
+              >
                 {trimmed.replace('## ', '')}
               </h3>
             );
@@ -61,37 +69,43 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
           if (trimmed.startsWith('• ') || trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
             const itemText = trimmed.replace(/^[•\-\*]\s+/, '');
             return (
-              <div key={idx} className="flex items-start gap-2 pl-1">
-                <span className="text-emerald-400 mt-1 font-bold">•</span>
-                <div className="flex-1">{parseInlineStyles(itemText)}</div>
+              <div key={idx} className="flex items-start gap-2 pl-0.5">
+                <span className={`font-bold mt-0.5 shrink-0 ${isUser ? 'text-white/80' : 'text-[#087F8C]'}`}>•</span>
+                <div className="flex-1">{parseInlineStyles(itemText, isUser)}</div>
               </div>
             );
           }
 
           if (trimmed === '---') {
-            return <hr key={idx} className="my-2 border-slate-800" />;
+            return <hr key={idx} className={`my-2 ${isUser ? 'border-white/20' : 'border-[#E2E8F0]'}`} />;
           }
 
-          return <p key={idx}>{parseInlineStyles(line)}</p>;
+          return <p key={idx}>{parseInlineStyles(line, isUser)}</p>;
         })}
       </div>
     );
   };
 
-  const parseInlineStyles = (text: string) => {
-    // Basic inline bold and code replacement
+  const parseInlineStyles = (text: string, userMsg: boolean) => {
     const parts = text.split(/(\*\*.*?\*\*|\`.*?\`)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return (
-          <strong key={i} className="text-white font-semibold">
+          <strong key={i} className={`font-semibold ${userMsg ? 'text-white' : 'text-[#172033]'}`}>
             {part.slice(2, -2)}
           </strong>
         );
       }
       if (part.startsWith('`') && part.endsWith('`')) {
         return (
-          <code key={i} className="px-1 py-0.5 bg-slate-800 text-emerald-300 font-mono text-[11px] rounded">
+          <code
+            key={i}
+            className={`px-1 py-0.2 font-mono text-[11px] rounded-xs border ${
+              userMsg
+                ? 'bg-white/20 text-white border-white/30'
+                : 'bg-[#F1F5F9] text-[#087F8C] border-[#CBD5E1]'
+            }`}
+          >
             {part.slice(1, -1)}
           </code>
         );
@@ -103,34 +117,34 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
   const getSourceBadgeColor = (type: string) => {
     switch (type) {
       case 'CUSTOMER':
-        return 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+        return 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100';
       case 'CORE_SCORE':
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100';
       case 'INTELLIGENCE':
-        return 'bg-purple-500/10 text-purple-400 border-purple-500/30';
+        return 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100';
       case 'NBA':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+        return 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100';
       case 'OPPORTUNITY':
-        return 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30';
+        return 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100';
       case 'CASE':
-        return 'bg-rose-500/10 text-rose-400 border-rose-500/30';
+        return 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100';
       case 'TASK':
-        return 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30';
+        return 'bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100';
       default:
-        return 'bg-slate-800 text-slate-300 border-slate-700';
+        return 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200';
     }
   };
 
   return (
-    <div className={`flex gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+    <div className={`flex gap-2.5 ${isUser ? 'flex-row-reverse' : 'flex-row'} motion-fade-in`}>
       {/* Avatar */}
       <div
-        className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs ${
+        className={`w-7 h-7 rounded-sm flex items-center justify-center shrink-0 text-xs shadow-2xs ${
           isUser
-            ? 'bg-blue-600 text-white'
+            ? 'bg-[#087F8C] text-white'
             : isSystem
-            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-            : 'bg-emerald-600 text-white shadow-sm'
+            ? 'bg-[#FEF3C7] text-[#B45309] border border-[#FDE68A]'
+            : 'bg-[#0f1e36] text-white'
         }`}
       >
         {isUser ? <User className="w-3.5 h-3.5" /> : <Bot className="w-4 h-4" />}
@@ -138,25 +152,25 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
 
       {/* Bubble Content */}
       <div className={`flex-1 max-w-[88%] ${isUser ? 'items-end' : 'items-start'}`}>
-        <div className="flex items-center gap-2 mb-1 px-1">
-          <span className="text-[11px] font-medium text-slate-400">
-            {isUser ? 'Officer' : 'COREvia Banking Copilot'}
+        <div className={`flex items-center gap-2 mb-1 px-1 ${isUser ? 'justify-end' : 'justify-start'}`}>
+          <span className="text-[11px] font-semibold text-[#64748B]">
+            {isUser ? 'Officer Inquiry' : 'COREvia Banking Copilot'}
           </span>
-          <span className="text-[10px] text-slate-500">{message.timestamp}</span>
+          <span className="text-[10px] text-[#94A3B8] font-mono">{message.timestamp}</span>
           {!isUser && message.model && (
-            <span className="text-[9px] px-1.5 py-0.2 bg-slate-800 text-slate-400 rounded font-mono border border-slate-700/60">
+            <span className="text-[9px] px-1.5 py-0.2 bg-[#F1F5F9] text-[#475569] rounded-xs font-mono border border-[#CBD5E1]">
               {message.model}
             </span>
           )}
         </div>
 
         <div
-          className={`p-3.5 rounded-2xl ${
+          className={`p-3.5 rounded-lg shadow-2xs ${
             isUser
-              ? 'bg-blue-600 text-white rounded-tr-none'
+              ? 'bg-[#087F8C] text-white rounded-tr-none'
               : isSystem
-              ? 'bg-amber-500/10 border border-amber-500/20 rounded-tl-none text-amber-200'
-              : 'bg-slate-900 border border-slate-800/90 rounded-tl-none shadow-sm'
+              ? 'bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E] rounded-tl-none'
+              : 'bg-white border border-[#E2E8F0] text-[#172033] rounded-tl-none'
           }`}
         >
           {renderFormattedContent(message.content)}
@@ -176,39 +190,40 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
           {/* Action Result (if previously confirmed or cancelled) */}
           {message.actionResult && !message.pendingConfirmation && (
             <div
-              className={`mt-2.5 p-2.5 rounded-lg text-xs flex items-center gap-2 ${
+              className={`mt-2.5 p-2.5 rounded-xs text-xs flex items-center gap-2 ${
                 message.actionResult.status === 'CONFIRMED'
-                  ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
-                  : 'bg-slate-800/60 border border-slate-700 text-slate-400'
+                  ? 'bg-[#F0FDF4] border border-[#BBF7D0] text-[#14532D]'
+                  : 'bg-[#F8FAFC] border border-[#CBD5E1] text-[#64748B]'
               }`}
             >
               {message.actionResult.status === 'CONFIRMED' ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#16803C] shrink-0" />
               ) : (
-                <AlertCircle className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 text-[#94A3B8] shrink-0" />
               )}
-              <span>{message.actionResult.message}</span>
+              <span className="font-medium">{message.actionResult.message}</span>
             </div>
           )}
 
           {/* Grounding Sources Chips */}
           {message.sources && message.sources.length > 0 && (
-            <div className="mt-3 pt-2.5 border-t border-slate-800/80">
-              <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-1.5">
-                <ShieldCheck className="w-3 h-3 text-emerald-400" />
+            <div className="mt-3 pt-2.5 border-t border-[#E2E8F0]">
+              <div className="flex items-center gap-1.5 text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#16803C]" />
                 <span>Grounded CRM Sources ({message.sources.length})</span>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {message.sources.map((src, idx) => (
                   <button
                     key={idx}
+                    type="button"
                     onClick={() => src.link && onNavigate && onNavigate(src.link)}
-                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] border font-medium transition-colors ${getSourceBadgeColor(
+                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-xs text-[11px] border font-medium transition-colors cursor-pointer ${getSourceBadgeColor(
                       src.type
-                    )} hover:opacity-90`}
+                    )}`}
                   >
                     <span>{src.label}</span>
-                    {src.link && <ExternalLink className="w-2.5 h-2.5 opacity-60" />}
+                    {src.link && <ExternalLink className="w-2.5 h-2.5 opacity-60 shrink-0" />}
                   </button>
                 ))}
               </div>
@@ -218,17 +233,18 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
 
         {/* Suggested Next Actions */}
         {message.suggestedActions && message.suggestedActions.length > 0 && (
-          <div className="mt-2 pl-1">
-            <div className="text-[10px] text-slate-400 uppercase font-semibold tracking-wider mb-1 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-emerald-400" />
+          <div className="mt-2 pl-0.5">
+            <div className="text-[10px] text-[#64748B] uppercase font-semibold tracking-wider mb-1 flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#087F8C]" />
               <span>Suggested Follow-ups</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {message.suggestedActions.map((act, idx) => (
                 <button
                   key={idx}
+                  type="button"
                   onClick={() => onSelectAction(act)}
-                  className="px-2.5 py-1 bg-slate-800/80 hover:bg-slate-700/90 active:bg-slate-700 text-slate-300 hover:text-white text-[11px] rounded-lg border border-slate-700/60 transition-colors text-left"
+                  className="px-2.5 py-1 bg-white hover:bg-[#F1F5F9] active:bg-[#E2E8F0] text-[#334155] hover:text-[#172033] text-[11px] rounded-xs border border-[#CBD5E1] transition-colors text-left shadow-2xs cursor-pointer"
                 >
                   {act}
                 </button>

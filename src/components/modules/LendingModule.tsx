@@ -5,6 +5,7 @@ import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { StatCard } from '../common/StatCard';
 import { Modal } from '../common/Modal';
+import { EmptyState } from '../common/EmptyState';
 import { formatINR } from '../../data/mockIndianBankingData';
 import { bankingApi } from '../../lib/api';
 import {
@@ -26,6 +27,8 @@ import {
   AlertCircle,
   Building,
   Check,
+  X,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 interface LendingModuleProps {
@@ -525,10 +528,20 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
             <p className="text-sm font-medium">{error}</p>
           </div>
         ) : loanList.length === 0 ? (
-          <div className="py-16 text-center text-slate-500">
-            <Landmark className="w-8 h-8 mx-auto mb-2 text-slate-400" />
-            <p className="text-sm">No loan accounts found matching the search and filter criteria.</p>
-          </div>
+          <EmptyState
+            icon={<Landmark className="w-8 h-8 text-slate-400" />}
+            title="No loan accounts match criteria"
+            description="No lending facilities match the current search term, loan type, or asset classification."
+            actionLabel="Reset Filters"
+            onAction={() => {
+              setSearchTerm('');
+              setSelectedType('ALL');
+              setSelectedClassification('ALL');
+              setCurrentPage(1);
+              fetchLoans();
+            }}
+            className="py-12 bg-white"
+          />
         ) : (
           <Table
             data={loanList}
@@ -597,7 +610,7 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
             setActiveLoan(null);
           }}
           title={`Credit Facility Dossier: ${activeLoan.loanAccountNumber}`}
-          size="xl"
+          size="4xl"
         >
           <div className="space-y-6">
             {/* Core Header Card */}

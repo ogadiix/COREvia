@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   AlertTriangle,
@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../common/Toast';
 import type { OperationalExceptionDTO } from '../../types/operations.types';
 
 interface ExceptionDetailDrawerProps {
@@ -34,12 +35,29 @@ export const ExceptionDetailDrawer: React.FC<ExceptionDetailDrawerProps> = ({
   onNavigateCustomer,
 }) => {
   const { user } = useAuth();
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState<'details' | 'audit'>('details');
   const [resolutionNotes, setResolutionNotes] = useState('');
   const [ackNotes, setAckNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [actionConfirm, setActionConfirm] = useState<'ACK' | 'RESOLVE' | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          if (actionConfirm) {
+            setActionConfirm(null);
+          } else {
+            onClose();
+          }
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, actionConfirm, onClose]);
 
   if (!isOpen || !exception) return null;
 
@@ -87,13 +105,18 @@ export const ExceptionDetailDrawer: React.FC<ExceptionDetailDrawerProps> = ({
       );
       if (res && res.success) {
         setActionConfirm(null);
+        toast.success(`Exception ${exception.exceptionId} acknowledged successfully.`);
         onSuccess();
         onClose();
       } else {
-        setError('Failed to acknowledge exception.');
+        const msg = 'Failed to acknowledge exception.';
+        setError(msg);
+        toast.error(msg);
       }
     } catch (err: any) {
-      setError(err?.message || 'Server rejected acknowledgment.');
+      const msg = err?.message || 'Server rejected acknowledgment.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -110,13 +133,18 @@ export const ExceptionDetailDrawer: React.FC<ExceptionDetailDrawerProps> = ({
       const res = await api.resolveOperationalException(exception.id, resolutionNotes);
       if (res && res.success) {
         setActionConfirm(null);
+        toast.success(`Exception ${exception.exceptionId} resolved.`);
         onSuccess();
         onClose();
       } else {
-        setError('Failed to resolve exception.');
+        const msg = 'Failed to resolve exception.';
+        setError(msg);
+        toast.error(msg);
       }
     } catch (err: any) {
-      setError(err?.message || 'Server rejected resolution.');
+      const msg = err?.message || 'Server rejected resolution.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }

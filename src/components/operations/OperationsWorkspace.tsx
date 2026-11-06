@@ -36,6 +36,7 @@ import type {
 } from '../../types/operations.types';
 import { ApprovalReviewModal } from './ApprovalReviewModal';
 import { ExceptionDetailDrawer } from './ExceptionDetailDrawer';
+import { EmptyState } from '../common/EmptyState';
 
 type WorkspaceTab = 'approvals' | 'exceptions' | 'reconciliation' | 'workflows' | 'tasks' | 'events';
 
@@ -463,8 +464,13 @@ export const OperationsWorkspace: React.FC = () => {
               <tbody className="divide-y divide-[#E2E8F0]">
                 {filteredApprovals.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="py-12 text-center text-slate-500">
-                      No operational approvals found matching the active filters.
+                    <td colSpan={10} className="py-10 text-center">
+                      <EmptyState
+                        compact
+                        icon={<CheckCheck className="w-5 h-5 text-[#087F8C]" />}
+                        title="No operational approvals pending"
+                        description="All maker/checker transactions are up to date or no records match the active filter criteria."
+                      />
                     </td>
                   </tr>
                 ) : (
@@ -568,8 +574,13 @@ export const OperationsWorkspace: React.FC = () => {
               <tbody className="divide-y divide-[#E2E8F0]">
                 {filteredExceptions.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-12 text-center text-slate-500">
-                      No operational exceptions found matching the current criteria.
+                    <td colSpan={9} className="py-10 text-center">
+                      <EmptyState
+                        compact
+                        icon={<Shield className="w-5 h-5 text-emerald-600" />}
+                        title="Zero operational exceptions"
+                        description="No compliance, KYC, or ledger exceptions requiring remediation."
+                      />
                     </td>
                   </tr>
                 ) : (
@@ -669,8 +680,13 @@ export const OperationsWorkspace: React.FC = () => {
               <tbody className="divide-y divide-[#E2E8F0]">
                 {filteredReconciliations.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="py-12 text-center text-slate-500">
-                      No reconciliation records found matching criteria.
+                    <td colSpan={10} className="py-10 text-center">
+                      <EmptyState
+                        compact
+                        icon={<DollarSign className="w-5 h-5 text-[#087F8C]" />}
+                        title="No reconciliation variances"
+                        description="Ledger snapshots match expected sub-ledger accounts perfectly."
+                      />
                     </td>
                   </tr>
                 ) : (
@@ -753,8 +769,13 @@ export const OperationsWorkspace: React.FC = () => {
               <tbody className="divide-y divide-[#E2E8F0]">
                 {workflows.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-12 text-center text-slate-500">
-                      No failed workflows currently detected. All operational queues healthy.
+                    <td colSpan={9} className="py-10 text-center">
+                      <EmptyState
+                        compact
+                        icon={<CheckCircle2 className="w-5 h-5 text-emerald-600" />}
+                        title="All operational queues healthy"
+                        description="No failed workflows detected in automated batch processes."
+                      />
                     </td>
                   </tr>
                 ) : (
@@ -828,8 +849,13 @@ export const OperationsWorkspace: React.FC = () => {
               <tbody className="divide-y divide-[#E2E8F0]">
                 {tasks.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="py-12 text-center text-slate-500">
-                      No operational tasks pending action.
+                    <td colSpan={8} className="py-10 text-center">
+                      <EmptyState
+                        compact
+                        icon={<CheckSquare className="w-5 h-5 text-[#087F8C]" />}
+                        title="No operational tasks pending"
+                        description="All operational workflow assignments are completed."
+                      />
                     </td>
                   </tr>
                 ) : (
@@ -901,8 +927,13 @@ export const OperationsWorkspace: React.FC = () => {
               <tbody className="divide-y divide-[#E2E8F0]">
                 {events.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-12 text-center text-slate-500">
-                      No operational events recorded yet.
+                    <td colSpan={7} className="py-10 text-center">
+                      <EmptyState
+                        compact
+                        icon={<Activity className="w-5 h-5 text-slate-400" />}
+                        title="No operational events recorded"
+                        description="Telemetry logs will appear as operations are performed."
+                      />
                     </td>
                   </tr>
                 ) : (

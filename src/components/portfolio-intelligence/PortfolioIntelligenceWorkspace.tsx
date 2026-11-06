@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../common/Toast';
 import {
   PortfolioFilterParams,
   PortfolioOverviewDTO,
@@ -53,6 +54,7 @@ import {
 } from '../../types/portfolioIntelligence.types';
 import { MetricInfoModal } from './MetricInfoModal';
 import { CustomerPortfolioDrawer } from './CustomerPortfolioDrawer';
+import { EmptyState } from '../common/EmptyState';
 
 interface PortfolioIntelligenceWorkspaceProps {
   onNavigateToCustomer?: (customerId: number) => void;
@@ -78,6 +80,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
   onNavigateToModule,
 }) => {
   const { user } = useAuth();
+  const toast = useToast();
 
   // Active Tab
   const [activeTab, setActiveTab] = useState<TabType>('overview');
@@ -260,8 +263,9 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      toast.success('Portfolio CSV exported successfully.');
     } catch (err: any) {
-      alert(err?.message || 'Failed to export CSV. Please check permissions.');
+      toast.error(err?.message || 'Failed to export CSV. Please check permissions.');
     } finally {
       setIsExporting(false);
     }
@@ -792,27 +796,27 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <div className="space-y-2">
                   {healthDist.map((b) => (
                     <div
-                      key={b.bucketKey}
+                      key={b.state || (b as any).bucketKey || b.label}
                       onClick={() => setActiveTab('customers')}
                       className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer transition-colors"
                     >
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-semibold text-slate-200">{b.label}</span>
                         <div className="flex items-center space-x-2">
-                          <span className="font-bold text-slate-100 font-mono">{b.customerCount}</span>
+                          <span className="font-bold text-slate-100 font-mono">{b.count ?? (b as any).customerCount ?? 0}</span>
                           <span className="text-slate-400 font-mono">({b.percentage}%)</span>
                         </div>
                       </div>
                       <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
                         <div
                           className={`h-full rounded-full ${
-                            b.bucketKey === 'HEALTHY'
+                            (b.state || (b as any).bucketKey) === 'HEALTHY'
                               ? 'bg-emerald-500'
-                              : b.bucketKey === 'STABLE'
+                              : (b.state || (b as any).bucketKey) === 'STABLE'
                               ? 'bg-blue-500'
-                              : b.bucketKey === 'WATCH'
+                              : (b.state || (b as any).bucketKey) === 'WATCH'
                               ? 'bg-amber-500'
-                              : b.bucketKey === 'AT_RISK'
+                              : (b.state || (b as any).bucketKey) === 'AT_RISK'
                               ? 'bg-orange-500'
                               : 'bg-rose-500'
                           }`}
@@ -898,11 +902,11 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                   <h3 className="text-xs font-semibold text-slate-200">Authorized Relationship Health State</h3>
                   <div className="space-y-2.5">
                     {healthDist.map((b) => (
-                      <div key={b.bucketKey} className="p-3 rounded-lg bg-slate-950/50 border border-slate-800">
+                      <div key={b.state || (b as any).bucketKey || b.label} className="p-3 rounded-lg bg-slate-950/50 border border-slate-800">
                         <div className="flex items-center justify-between text-xs">
                           <span className="font-semibold text-slate-100">{b.label}</span>
                           <span className="font-mono text-slate-300">
-                            {b.customerCount} customers ({b.percentage}%)
+                            {b.count ?? (b as any).customerCount ?? 0} customers ({b.percentage}%)
                           </span>
                         </div>
                         <p className="text-[11px] text-slate-400 mt-1">{b.description}</p>
@@ -1385,9 +1389,9 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                   <span className="text-[11px] text-slate-500">Rules-based operational attention areas</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {focusAreas.map((fa) => (
+                  {focusAreas.map((fa, idx) => (
                     <div
-                      key={fa.id}
+                      key={fa.focusKey || fa.id || fa.title || `fa-${idx}`}
                       className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2 flex flex-col justify-between"
                     >
                       <div>
@@ -1535,8 +1539,12 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                   Loading customer records...
                 </div>
               ) : customerData.customers.length === 0 ? (
-                <div className="py-16 text-center text-slate-500 text-xs italic">
-                  No authorized customers matching the active filters.
+                <div className="py-12 bg-slate-950/40 rounded-xl border border-slate-800">
+                  <EmptyState
+                    icon={<Users className="w-5 h-5 text-slate-400" />}
+                    title="No matching customers found"
+                    description="No authorized customers match the active filters, score bands, or CIF query."
+                  />
                 </div>
               ) : (
                 <div className="overflow-x-auto">

@@ -3,6 +3,7 @@ import { bankingApi } from '../../lib/api.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Button } from '../common/Button.tsx';
 import { Modal } from '../common/Modal.tsx';
+import { EmptyState } from '../common/EmptyState.tsx';
 import { Table, Column } from '../common/Table.tsx';
 import { StatCard } from '../common/StatCard.tsx';
 import {
@@ -18,8 +19,11 @@ import {
   ShieldCheck,
   Send,
   Bot,
+  X,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { useCopilot } from '../../context/CopilotContext.tsx';
+import { useToast } from '../common/Toast';
 
 interface CaseItem {
   id: number;
@@ -40,6 +44,7 @@ interface CaseItem {
 
 export const CasesModule: React.FC = () => {
   const { openDrawer } = useCopilot();
+  const toast = useToast();
   const [cases, setCases] = useState<CaseItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -98,9 +103,10 @@ export const CasesModule: React.FC = () => {
     try {
       await bankingApi.addCaseComment(selectedCase.id, newComment.trim());
       setNewComment('');
+      toast.success('Case comment logged successfully.');
       loadCaseDetail(selectedCase.id);
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message || 'Failed to add comment.');
     } finally {
       setSubmittingComment(false);
     }
@@ -115,10 +121,11 @@ export const CasesModule: React.FC = () => {
       });
       setResolvingCase(false);
       setResolutionSummary('');
+      toast.success(`Case status transitioned to ${newStatus}`);
       loadCaseDetail(selectedCase.id);
       loadCases();
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message || 'Failed to update case status.');
     }
   };
 
@@ -271,8 +278,18 @@ export const CasesModule: React.FC = () => {
               placeholder="Search by case #, customer, subject..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full pl-8 pr-8 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch('')}
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 focus:outline-none"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
           <div className="sm:col-span-3">
@@ -303,17 +320,57 @@ export const CasesModule: React.FC = () => {
             </select>
           </div>
         </div>
+
+        {/* Filter Summary */}
+        <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
+          <div className="text-[11px] font-mono text-slate-500 flex items-center gap-2">
+            <span>Showing <strong className="text-slate-800">{filteredCases.length}</strong> of {cases.length} service cases</span>
+            {(search || statusFilter !== 'ALL' || priorityFilter !== 'ALL') && (
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700">
+                <SlidersHorizontal className="w-2.5 h-2.5" />
+                Filtered
+              </span>
+            )}
+          </div>
+          {(search || statusFilter !== 'ALL' || priorityFilter !== 'ALL') && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                setStatusFilter('ALL');
+                setPriorityFilter('ALL');
+              }}
+              className="text-xs text-brand-teal hover:underline font-medium"
+            >
+              Reset Filters
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Table */}
+      {/* Table or EmptyState */}
       {error ? (
         <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded text-xs">
           Error: {error}
         </div>
+      ) : !loading && filteredCases.length === 0 ? (
+        <EmptyState
+          icon={<LifeBuoy className="w-8 h-8 text-slate-400" />}
+          title="No service cases match criteria"
+          description="No customer grievances or support tickets match the current filters."
+          actionLabel="Reset Filters"
+          onAction={() => {
+            setSearch('');
+            setStatusFilter('ALL');
+            setPriorityFilter('ALL');
+          }}
+          className="border border-slate-200 rounded-sm bg-white p-8"
+        />
       ) : (
         <Table
           columns={columns}
           data={filteredCases}
+          isLoading={loading}
           keyExtractor={(c) => String(c.id)}
           onRowClick={handleOpenCase}
         />
@@ -330,7 +387,7 @@ export const CasesModule: React.FC = () => {
           title={`Case Dossier — ${selectedCase.caseNumber}`}
           subtitle={selectedCase.subject}
           referenceId={selectedCase.caseNumber}
-          maxWidth="2xl"
+          maxWidth="4xl"
           footerActions={
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">

@@ -3,8 +3,10 @@ import { bankingApi } from '../../lib/api.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Button } from '../common/Button.tsx';
 import { Modal } from '../common/Modal.tsx';
+import { EmptyState } from '../common/EmptyState.tsx';
 import { Table, Column } from '../common/Table.tsx';
 import { StatCard } from '../common/StatCard.tsx';
+import { useToast } from '../common/Toast';
 import {
   CheckSquare,
   Search,
@@ -16,6 +18,8 @@ import {
   CheckCircle2,
   AlertCircle,
   PhoneCall,
+  X,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 interface TaskItem {
@@ -34,6 +38,7 @@ interface TaskItem {
 }
 
 export const TasksModule: React.FC = () => {
+  const toast = useToast();
   const [tasks, setTasks] = useState<TaskItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -78,8 +83,9 @@ export const TasksModule: React.FC = () => {
       setTasks((prev) =>
         prev.map((t) => (t.id === task.id ? { ...t, status: nextStatus } : t))
       );
+      toast.success(`Task ${task.title} marked as ${nextStatus}`);
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message || 'Failed to update task status.');
     }
   };
 
@@ -98,9 +104,10 @@ export const TasksModule: React.FC = () => {
       setIsTaskModalOpen(false);
       setTitle('');
       setDescription('');
+      toast.success('Task created and linked successfully.');
       loadTasks();
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message || 'Failed to create task.');
     } finally {
       setSaving(false);
     }
@@ -120,9 +127,10 @@ export const TasksModule: React.FC = () => {
       setIsFollowupModalOpen(false);
       setTitle('');
       setDescription('');
+      toast.success('Follow-up scheduled successfully.');
       loadTasks();
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message || 'Failed to schedule follow-up.');
     } finally {
       setSaving(false);
     }
@@ -289,7 +297,7 @@ export const TasksModule: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white border border-slate-200 rounded p-3 space-y-2">
+      <div className="bg-white border border-slate-200 rounded p-3 space-y-2.5 shadow-2xs">
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
           <div className="sm:col-span-8 relative">
             <Search className="w-4 h-4 absolute left-2.5 top-2.5 text-slate-400" />
@@ -298,8 +306,18 @@ export const TasksModule: React.FC = () => {
               placeholder="Search tasks by title, customer, description..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full pl-8 pr-8 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch('')}
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 focus:outline-none"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
           <div className="sm:col-span-4">
@@ -315,17 +333,55 @@ export const TasksModule: React.FC = () => {
             </select>
           </div>
         </div>
+
+        {/* Filter Summary */}
+        <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
+          <div className="text-[11px] font-mono text-slate-500 flex items-center gap-2">
+            <span>Showing <strong className="text-slate-800">{filteredTasks.length}</strong> of {tasks.length} tasks</span>
+            {(search || statusFilter !== 'ALL') && (
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700">
+                <SlidersHorizontal className="w-2.5 h-2.5" />
+                Filtered
+              </span>
+            )}
+          </div>
+          {(search || statusFilter !== 'ALL') && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                setStatusFilter('ALL');
+              }}
+              className="text-xs text-brand-teal hover:underline font-medium"
+            >
+              Reset Filters
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Table */}
+      {/* Table or EmptyState */}
       {error ? (
         <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded text-xs">
           Error: {error}
         </div>
+      ) : !loading && filteredTasks.length === 0 ? (
+        <EmptyState
+          icon={<CheckSquare className="w-8 h-8 text-slate-400" />}
+          title="No tasks match criteria"
+          description="No relationship tasks or follow-ups match the current filter or search criteria."
+          actionLabel="Reset Filters"
+          onAction={() => {
+            setSearch('');
+            setStatusFilter('ALL');
+          }}
+          className="border border-slate-200 rounded-sm bg-white p-8"
+        />
       ) : (
         <Table
           columns={columns}
           data={filteredTasks}
+          isLoading={loading}
           keyExtractor={(t) => String(t.id)}
           onRowClick={(t) => handleToggleStatus(t)}
         />

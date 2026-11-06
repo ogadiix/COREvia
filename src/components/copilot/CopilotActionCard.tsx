@@ -3,15 +3,13 @@ import {
   ShieldAlert,
   CheckCircle2,
   XCircle,
-  Clock,
-  ArrowRight,
-  User,
   Calendar,
   AlertTriangle,
-  FileText,
   ExternalLink,
 } from 'lucide-react';
 import { PendingActionDetails } from '../../context/CopilotContext';
+import { Button } from '../common/Button';
+import { Badge } from '../common/Badge';
 
 interface CopilotActionCardProps {
   pendingAction: PendingActionDetails;
@@ -39,27 +37,40 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
 
   if (actionResult?.status === 'CONFIRMED') {
     return (
-      <div className="mt-3 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-        <div className="flex items-center gap-2 text-emerald-400 font-medium text-sm">
-          <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-emerald-400" />
+      <div className="mt-3 p-3.5 bg-[#F0FDF4] border border-[#BBF7D0] rounded-sm text-[#14532D] shadow-2xs motion-fade-in">
+        <div className="flex items-center gap-2 font-semibold text-xs text-[#16803C]">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-[#16803C]" />
           <span>Action Confirmed & Executed</span>
         </div>
-        <p className="mt-1 text-xs text-slate-300">
+        <p className="mt-1 text-xs text-[#166534]">
           {actionResult.message}
         </p>
         {actionResult.entityId && (
-          <div className="mt-2.5 flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-mono rounded-md">
+          <div className="mt-2.5 flex items-center gap-2">
+            <span className="font-mono text-[11px] px-2 py-0.5 bg-[#DCFCE7] text-[#15803D] rounded-xs border border-[#86EFAC]">
               Ref: {actionResult.entityId}
             </span>
             {onNavigate && actionResult.entityType === 'TASK' && (
-              <button
+              <Button
+                variant="ghost"
+                size="xs"
                 onClick={() => onNavigate('/tasks')}
-                className="inline-flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300 font-medium underline underline-offset-2"
+                icon={<ExternalLink className="w-3 h-3" />}
+                iconPosition="right"
               >
                 Open in Tasks
-                <ExternalLink className="w-3 h-3" />
-              </button>
+              </Button>
+            )}
+            {onNavigate && actionResult.entityType === 'CUSTOMER' && (
+              <Button
+                variant="ghost"
+                size="xs"
+                onClick={() => onNavigate('/customers')}
+                icon={<ExternalLink className="w-3 h-3" />}
+                iconPosition="right"
+              >
+                Open in Customers
+              </Button>
             )}
           </div>
         )}
@@ -69,8 +80,8 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
 
   if (actionResult?.status === 'CANCELLED') {
     return (
-      <div className="mt-3 p-3.5 bg-slate-800/60 border border-slate-700/50 rounded-xl text-slate-400 text-xs flex items-center gap-2">
-        <XCircle className="w-4 h-4 text-slate-400 flex-shrink-0" />
+      <div className="mt-3 p-3 bg-[#F8FAFC] border border-[#CBD5E1] rounded-sm text-[#64748B] text-xs flex items-center gap-2 motion-fade-in">
+        <XCircle className="w-4 h-4 text-[#94A3B8] shrink-0" />
         <span>Proposal cancelled. No database changes were made.</span>
       </div>
     );
@@ -79,7 +90,7 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
   const actionId = pendingAction.action_id || (pendingAction as any).actionId;
 
   const handleConfirm = async () => {
-    if (!actionId) return;
+    if (!actionId || isSubmitting) return;
     setIsSubmitting(true);
     try {
       await onConfirm(actionId, messageId);
@@ -89,7 +100,7 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
   };
 
   const handleCancel = async () => {
-    if (!actionId) return;
+    if (!actionId || isSubmitting) return;
     setIsSubmitting(true);
     try {
       await onCancel(actionId, messageId);
@@ -101,45 +112,45 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
   const details = pendingAction.details || {};
 
   return (
-    <div className="mt-3 border border-amber-500/30 bg-amber-500/5 rounded-xl p-4 transition-all">
+    <div className="mt-3 border-2 border-[#F59E0B] bg-[#FFFBEB] rounded-sm p-3.5 shadow-2xs motion-dialog-enter text-[#172033]">
       {/* Header Badge */}
-      <div className="flex items-center justify-between gap-2 mb-3">
+      <div className="flex items-center justify-between gap-2 mb-2.5">
         <div className="flex items-center gap-2">
-          <span className="p-1 bg-amber-500/20 text-amber-400 rounded-md">
+          <span className="p-1 bg-[#FEF3C7] text-[#B45309] rounded-xs border border-[#FDE68A]">
             <ShieldAlert className="w-4 h-4" />
           </span>
           <div>
-            <h4 className="text-xs font-semibold text-amber-300 uppercase tracking-wider">
-              Authorization Required
+            <h4 className="text-[11px] font-bold text-[#B45309] uppercase tracking-wider">
+              Dual-Control Authorization Required
             </h4>
-            <p className="text-xs font-medium text-slate-200">
+            <p className="text-xs font-semibold text-[#172033]">
               {pendingAction.title}
             </p>
           </div>
         </div>
-        <span className="px-2 py-0.5 text-[10px] font-mono uppercase bg-slate-800 text-slate-300 border border-slate-700 rounded-md">
+        <span className="px-2 py-0.5 text-[10px] font-mono uppercase bg-white text-[#475569] border border-[#CBD5E1] rounded-xs font-medium">
           {pendingAction.action_type}
         </span>
       </div>
 
       {/* Structured Details Box */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-lg p-3 text-xs space-y-2 mb-3">
+      <div className="bg-white border border-[#CBD5E1] rounded-sm p-3 text-xs space-y-2 mb-3 shadow-2xs">
         {details.customer && (
           <div className="flex items-start justify-between gap-4">
-            <span className="text-slate-400">Target Customer:</span>
-            <span className="text-slate-200 font-medium text-right">{details.customer}</span>
+            <span className="text-[#64748B]">Target Customer:</span>
+            <span className="text-[#172033] font-semibold text-right">{details.customer}</span>
           </div>
         )}
         {details.title && (
           <div className="flex items-start justify-between gap-4">
-            <span className="text-slate-400">Action / Subject:</span>
-            <span className="text-slate-200 font-medium text-right">{details.title}</span>
+            <span className="text-[#64748B]">Action / Subject:</span>
+            <span className="text-[#172033] font-medium text-right">{details.title}</span>
           </div>
         )}
         {details.dueDate && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-slate-400">Target Due Date:</span>
-            <span className="text-amber-400 font-mono font-medium flex items-center gap-1">
+            <span className="text-[#64748B]">Target Due Date:</span>
+            <span className="text-[#B45309] font-mono font-medium flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
               {details.dueDate}
             </span>
@@ -147,28 +158,37 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
         )}
         {details.priority && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-slate-400">Priority Level:</span>
-            <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-semibold rounded">
+            <span className="text-[#64748B]">Priority Level:</span>
+            <Badge
+              variant={
+                details.priority === 'CRITICAL'
+                  ? 'danger'
+                  : details.priority === 'HIGH'
+                  ? 'warning'
+                  : 'info'
+              }
+              size="sm"
+            >
               {details.priority}
-            </span>
+            </Badge>
           </div>
         )}
         {details.expectedValue && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-slate-400">Expected Value:</span>
-            <span className="text-emerald-400 font-semibold">{details.expectedValue}</span>
+            <span className="text-[#64748B]">Expected Value:</span>
+            <span className="text-[#16803C] font-semibold font-mono">{details.expectedValue}</span>
           </div>
         )}
         {details.description && (
-          <div className="pt-1.5 border-t border-slate-800 text-slate-300 italic">
+          <div className="pt-2 border-t border-[#E2E8F0] text-[#475569] italic">
             "{details.description}"
           </div>
         )}
       </div>
 
       {/* Security Statement */}
-      <div className="text-[11px] text-slate-400 mb-3 flex items-start gap-1.5">
-        <AlertTriangle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
+      <div className="text-[11px] text-[#78350F] mb-3 flex items-start gap-1.5 bg-[#FEF3C7]/60 p-2 rounded-xs border border-[#FDE68A]">
+        <AlertTriangle className="w-3.5 h-3.5 text-[#B45309] shrink-0 mt-0.5" />
         <span>
           Gemini Banking Copilot cannot perform mutations without explicit officer confirmation.
           Clicking confirm will commit this action to the PostgreSQL database with an immutable audit log.
@@ -176,22 +196,25 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-2 pt-1">
-        <button
+      <div className="flex items-center gap-2 pt-0.5">
+        <Button
+          variant="brand"
+          size="sm"
+          loading={isSubmitting}
           onClick={handleConfirm}
-          disabled={isSubmitting}
-          className="flex-1 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 text-white font-medium text-xs rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+          icon={<CheckCircle2 className="w-3.5 h-3.5" />}
+          className="flex-1"
         >
-          <CheckCircle2 className="w-4 h-4" />
           {isSubmitting ? 'Authorizing & Creating...' : 'Confirm & Create'}
-        </button>
-        <button
-          onClick={handleCancel}
+        </Button>
+        <Button
+          variant="secondary"
+          size="sm"
           disabled={isSubmitting}
-          className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 active:bg-slate-900 text-slate-300 text-xs font-medium rounded-lg transition-colors border border-slate-700"
+          onClick={handleCancel}
         >
-          Cancel
-        </button>
+          Cancel Proposal
+        </Button>
       </div>
     </div>
   );

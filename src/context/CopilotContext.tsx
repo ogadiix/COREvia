@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { useAuth } from './AuthContext';
+import { useToast } from '../components/common/Toast';
 
 export type CopilotContextType = 'GLOBAL' | 'CUSTOMER' | 'OPPORTUNITY' | 'CASE' | 'TASK';
 
@@ -102,6 +103,7 @@ I am your context-aware banking assistant, grounded in real-time Core Banking re
 
 export const CopilotProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { user } = useAuth();
+  const toast = useToast();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentContext, setCurrentContext] = useState<CopilotContextEntity>(DEFAULT_CONTEXT);
   const [conversationId, setConversationId] = useState<string>(() => `conv-${Date.now()}`);
@@ -275,8 +277,16 @@ ${data.message || 'Transaction committed to Core Banking database.'}
       };
 
       setMessages((prev) => [...prev, ackMsg]);
+      toast.success(data.message || 'Action confirmed and executed successfully.');
     } catch (err: any) {
-      alert(`Action confirmation error: ${err.message}`);
+      toast.error(`Action confirmation error: ${err.message || 'Operation failed'}`);
+      const errMsg: CopilotMessage = {
+        id: `err-${Date.now()}`,
+        role: 'system',
+        content: `**Action Confirmation Failed**: ${err.message || 'The requested action could not be confirmed. No database changes were made.'}`,
+        timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+      };
+      setMessages((prev) => [...prev, errMsg]);
     } finally {
       setIsLoading(false);
       setLoadingStep('');
@@ -307,8 +317,10 @@ ${data.message || 'Transaction committed to Core Banking database.'}
           return m;
         })
       );
+      toast.info('Proposal cancelled. No database changes were made.');
     } catch (err: any) {
       console.error('Action cancel failed:', err);
+      toast.error('Failed to register proposal cancellation.');
     }
   };
 

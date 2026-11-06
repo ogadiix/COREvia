@@ -41,6 +41,7 @@ import { useAuth } from '../../context/AuthContext';
 import { ModuleType } from '../../types';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
+import { EmptyState } from '../common/EmptyState';
 import { formatINR } from '../../data/mockIndianBankingData';
 import type { PortfolioRelationshipValueAnalyticsDTO } from '../../types/relationshipValue.types';
 
@@ -938,7 +939,18 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {filteredPortfolioCustomers.map((c: any) => (
+                      {filteredPortfolioCustomers.length === 0 ? (
+                        <tr>
+                          <td colSpan={10} className="py-8 text-center">
+                            <EmptyState
+                              compact
+                              title="No matching customers found"
+                              description="No relationship portfolio records match the applied search query or filters."
+                            />
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredPortfolioCustomers.map((c: any) => (
                         <tr key={c.id} className="hover:bg-slate-50 transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] font-semibold text-cyan-900">
                             {c.customerCode}
@@ -987,7 +999,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -1095,7 +1108,18 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {filteredHealthChanges.map((c: any) => (
+                      {filteredHealthChanges.length === 0 ? (
+                        <tr>
+                          <td colSpan={11} className="py-8 text-center">
+                            <EmptyState
+                              compact
+                              title="No health changes recorded"
+                              description="No customer health transitions match the applied search query or score filters."
+                            />
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredHealthChanges.map((c: any) => (
                         <tr key={c.id} className="hover:bg-slate-50 transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] font-semibold text-cyan-900">
                             {c.customerCode}
@@ -1132,7 +1156,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -1248,7 +1273,18 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {filteredOpps.map((o: any) => (
+                      {filteredOpps.length === 0 ? (
+                        <tr>
+                          <td colSpan={11} className="py-8 text-center">
+                            <EmptyState
+                              compact
+                              title="No matching opportunities"
+                              description="No commercial or wealth opportunities match the selected stage, size, or search criteria."
+                            />
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredOpps.map((o: any) => (
                         <tr key={o.id} className="hover:bg-slate-50 transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] text-slate-600">{o.opportunityCode}</td>
                           <td className="px-3 py-2 font-medium text-slate-900">{o.title}</td>
@@ -1273,7 +1309,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -1364,7 +1401,18 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {filteredCases.map((sc: any) => (
+                      {filteredCases.length === 0 ? (
+                        <tr>
+                          <td colSpan={9} className="py-8 text-center">
+                            <EmptyState
+                              compact
+                              title="No matching service cases"
+                              description="No service requests or operational tickets match the active SLA or search filter."
+                            />
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredCases.map((sc: any) => (
                         <tr key={sc.id} className="hover:bg-slate-50 transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] font-semibold text-cyan-900">{sc.caseNumber}</td>
                           <td className="px-3 py-2 font-medium text-slate-900">{sc.title}</td>
@@ -1400,7 +1448,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      ))
+                      )}
                     </tbody>
                   </table>
                 </div>

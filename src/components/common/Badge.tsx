@@ -6,14 +6,20 @@ export type BadgeVariant =
   | 'warning'
   | 'danger'
   | 'primary'
+  | 'brand'
+  | 'info'
   | 'outline';
 
-interface BadgeProps {
+export type BadgeSize = 'xs' | 'sm' | 'md';
+
+export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   children: React.ReactNode;
   variant?: BadgeVariant;
-  size?: 'sm' | 'md';
+  size?: BadgeSize;
   className?: string;
   icon?: React.ReactNode;
+  dot?: boolean;
+  interactive?: boolean;
 }
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -22,26 +28,54 @@ export const Badge: React.FC<BadgeProps> = ({
   size = 'md',
   className = '',
   icon,
+  dot = false,
+  interactive = false,
+  onClick,
+  ...props
 }) => {
   const variantStyles: Record<BadgeVariant, string> = {
-    neutral: 'bg-slate-100 text-slate-700 border-slate-300',
-    success: 'bg-emerald-50 text-emerald-800 border-emerald-300',
-    warning: 'bg-amber-50 text-amber-900 border-amber-300',
-    danger: 'bg-rose-50 text-rose-800 border-rose-300',
-    primary: 'bg-slate-900 text-white border-slate-900',
-    outline: 'bg-white text-slate-700 border-slate-300',
+    neutral: 'bg-[#F1F5F9] text-[#334155] border-[#CBD5E1]',
+    success: 'bg-[#f0fdf4] text-[#14532d] border-[#bbf7d0]',
+    warning: 'bg-[#fffbeb] text-[#78350f] border-[#fde68a]',
+    danger: 'bg-[#fef2f2] text-[#7f1d1d] border-[#fecaca]',
+    primary: 'bg-[#0f1e36] text-white border-[#0f1e36]',
+    brand: 'bg-[#f0fdfa] text-[#066974] border-[#99f6e4]',
+    info: 'bg-[#eff6ff] text-[#1e3a8a] border-[#bfdbfe]',
+    outline: 'bg-white text-[#475569] border-[#CBD5E1]',
   };
 
-  const sizeStyles = {
-    sm: 'text-[11px] px-2 py-0.5 font-medium tracking-tight',
-    md: 'text-xs px-2.5 py-1 font-medium tracking-tight',
+  const dotColors: Record<BadgeVariant, string> = {
+    neutral: 'bg-[#64748B]',
+    success: 'bg-[#16803C]',
+    warning: 'bg-[#B45309]',
+    danger: 'bg-[#B42318]',
+    primary: 'bg-white',
+    brand: 'bg-[#087F8C]',
+    info: 'bg-[#2563EB]',
+    outline: 'bg-[#64748B]',
+  };
+
+  const sizeStyles: Record<BadgeSize, string> = {
+    xs: 'text-[10px] px-1.5 py-0.2 rounded-xs font-medium tracking-tight',
+    sm: 'text-[11px] px-2 py-0.5 rounded-xs font-medium tracking-tight',
+    md: 'text-xs px-2.5 py-0.5 rounded-sm font-medium tracking-tight',
   };
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 border rounded-sm whitespace-nowrap ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      onClick={onClick}
+      className={`inline-flex items-center gap-1.5 border whitespace-nowrap select-none font-sans leading-none ${
+        interactive ? 'cursor-pointer hover:opacity-85 transition-opacity' : ''
+      } ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      {...props}
     >
-      {icon && <span className="shrink-0">{icon}</span>}
+      {dot && (
+        <span
+          className={`w-1.5 h-1.5 rounded-full shrink-0 ${dotColors[variant]}`}
+          aria-hidden="true"
+        />
+      )}
+      {icon && <span className="shrink-0 flex items-center">{icon}</span>}
       <span>{children}</span>
     </span>
   );

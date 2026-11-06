@@ -3,7 +3,7 @@
  * Slide-out drawer providing technical overview, endpoints, webhooks, health, credentials, and actions.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   Shield,
@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { IntegrationDTO, HealthCheckResult } from '../../types/integration.types.ts';
 import { bankingApi } from '../../lib/api.ts';
+import { useToast } from '../common/Toast';
 
 interface IntegrationDetailDrawerProps {
   integration: IntegrationDTO | null;
@@ -36,10 +37,23 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
   onRefresh,
   onOpenTestModal,
 }) => {
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState<'overview' | 'config' | 'health' | 'credentials'>('overview');
   const [isTestingHealth, setIsTestingHealth] = useState(false);
   const [healthResult, setHealthResult] = useState<HealthCheckResult | null>(null);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, onClose]);
 
   if (!isOpen || !integration) return null;
 
@@ -49,10 +63,11 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
       const res = await bankingApi.testIntegrationConnection(integration.integrationId);
       if (res.success) {
         setHealthResult(res.data);
+        toast.success(`Health Check: ${res.data.status} (${res.data.latencyMs}ms)`);
         onRefresh();
       }
     } catch (e: any) {
-      alert(`Health check failed: ${e.message}`);
+      toast.error(`Health check failed: ${e.message}`);
     } finally {
       setIsTestingHealth(false);
     }
@@ -65,9 +80,10 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
     setIsUpdatingStatus(true);
     try {
       await bankingApi.updateIntegrationStatus(integration.integrationId, nextStatus, 'Manual user toggle via drawer');
+      toast.success(`Integration status updated to ${nextStatus}`);
       onRefresh();
     } catch (e: any) {
-      alert(`Status update failed: ${e.message}`);
+      toast.error(`Status update failed: ${e.message}`);
     } finally {
       setIsUpdatingStatus(false);
     }

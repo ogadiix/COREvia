@@ -77,7 +77,7 @@ export const RadarEvidenceModal: React.FC<RadarEvidenceModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Evidence-Backed Opportunity Analysis"
-      maxWidth="max-w-4xl"
+      size="4xl"
     >
       <div className="space-y-6">
         {/* Header Summary */}

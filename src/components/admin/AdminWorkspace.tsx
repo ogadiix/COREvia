@@ -72,6 +72,8 @@ import {
 import { UserDetailDrawer } from './UserDetailDrawer.tsx';
 import { SecurityEventDetailDrawer } from './SecurityEventDetailDrawer.tsx';
 import { AdminConfirmModal } from './AdminConfirmModal.tsx';
+import { EmptyState } from '../common/EmptyState';
+import { useToast } from '../common/Toast';
 
 type AdminTab =
   | 'overview'
@@ -91,6 +93,7 @@ type AdminTab =
 
 export const AdminWorkspace: React.FC = () => {
   const { user } = useAuth();
+  const toast = useToast();
 
   // Active section
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
@@ -249,7 +252,7 @@ export const AdminWorkspace: React.FC = () => {
         setSelectedUserDetail(res.data);
       }
     } catch (err: any) {
-      alert(`Error loading user details: ${err.message}`);
+      toast.error(`Error loading user details: ${err.message}`);
     }
   };
 
@@ -270,12 +273,13 @@ export const AdminWorkspace: React.FC = () => {
         try {
           await api.updateAdminUserStatus(targetUser.id, targetStatus, `Administrative transition to ${targetStatus}`);
           setConfirmModalState((prev) => ({ ...prev, isOpen: false }));
+          toast.success(`User ${targetUser.name} status updated to ${targetStatus}`);
           await loadAllData();
           if (selectedUserDetail?.identity.id === targetUser.id) {
             await handleOpenUserDetail(targetUser.id);
           }
         } catch (err: any) {
-          alert(`Failed to update status: ${err.message}`);
+          toast.error(`Failed to update status: ${err.message}`);
         } finally {
           setModalExecuting(false);
         }
@@ -297,9 +301,10 @@ export const AdminWorkspace: React.FC = () => {
         try {
           await api.resetAdminUserAccess(targetUser.id, 'Administrative access credential reset');
           setConfirmModalState((prev) => ({ ...prev, isOpen: false }));
+          toast.success(`Access credentials reset for ${targetUser.name}`);
           await loadAllData();
         } catch (err: any) {
-          alert(`Failed to reset access: ${err.message}`);
+          toast.error(`Failed to reset access: ${err.message}`);
         } finally {
           setModalExecuting(false);
         }
@@ -321,12 +326,13 @@ export const AdminWorkspace: React.FC = () => {
         try {
           await api.revokeAdminSession(sessionId, 'Administrative manual session revocation');
           setConfirmModalState((prev) => ({ ...prev, isOpen: false }));
+          toast.success(`Session #${sessionId} revoked`);
           await loadAllData();
           if (selectedUserDetail) {
             await handleOpenUserDetail(selectedUserDetail.identity.id);
           }
         } catch (err: any) {
-          alert(`Failed to revoke session: ${err.message}`);
+          toast.error(`Failed to revoke session: ${err.message}`);
         } finally {
           setModalExecuting(false);
         }
@@ -348,12 +354,13 @@ export const AdminWorkspace: React.FC = () => {
         try {
           await api.revokeAllAdminSessionsForUser(userId, 'Administrative bulk session termination');
           setConfirmModalState((prev) => ({ ...prev, isOpen: false }));
+          toast.success(`All sessions terminated for ${userName}`);
           await loadAllData();
           if (selectedUserDetail) {
             await handleOpenUserDetail(userId);
           }
         } catch (err: any) {
-          alert(`Failed to revoke sessions: ${err.message}`);
+          toast.error(`Failed to revoke sessions: ${err.message}`);
         } finally {
           setModalExecuting(false);
         }
@@ -378,9 +385,10 @@ export const AdminWorkspace: React.FC = () => {
         try {
           await api.toggleAdminFeatureFlag(flag.flagKey, nextState, `Administrative toggle to ${nextState}`);
           setConfirmModalState((prev) => ({ ...prev, isOpen: false }));
+          toast.success(`Feature flag ${flag.flagKey} set to ${nextState ? 'ENABLED' : 'DISABLED'}`);
           await loadAllData();
         } catch (err: any) {
-          alert(`Failed to toggle feature flag: ${err.message}`);
+          toast.error(`Failed to toggle feature flag: ${err.message}`);
         } finally {
           setModalExecuting(false);
         }
@@ -409,9 +417,10 @@ export const AdminWorkspace: React.FC = () => {
             60
           );
           setConfirmModalState((prev) => ({ ...prev, isOpen: false }));
+          toast.success(`System maintenance mode ${nextState ? 'ACTIVATED' : 'DEACTIVATED'}`);
           await loadAllData();
         } catch (err: any) {
-          alert(`Failed to toggle maintenance mode: ${err.message}`);
+          toast.error(`Failed to toggle maintenance mode: ${err.message}`);
         } finally {
           setModalExecuting(false);
         }
@@ -723,7 +732,19 @@ export const AdminWorkspace: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
-                {filteredUsers.map((u) => (
+                {filteredUsers.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-10 text-center">
+                      <EmptyState
+                        compact
+                        icon={<Users className="w-5 h-5 text-indigo-400" />}
+                        title="No personnel accounts found"
+                        description="No provisioned users match the active search criteria or status filter."
+                      />
+                    </td>
+                  </tr>
+                ) : (
+                  filteredUsers.map((u) => (
                   <tr key={u.id} className="hover:bg-slate-800/30 transition">
                     <td className="py-3 px-4">
                       <div className="font-semibold text-slate-200">{u.name}</div>
@@ -787,7 +808,8 @@ export const AdminWorkspace: React.FC = () => {
                       </div>
                     </td>
                   </tr>
-                ))}
+                ))
+                )}
               </tbody>
             </table>
           </div>
@@ -879,7 +901,7 @@ export const AdminWorkspace: React.FC = () => {
                       </td>
                     </tr>
                   ))}
-                </tbody>
+              </tbody>
               </table>
             </div>
           </div>
@@ -1522,7 +1544,19 @@ export const AdminWorkspace: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
-                {filteredAuditLogs.map((a) => (
+                {filteredAuditLogs.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-10 text-center font-sans">
+                      <EmptyState
+                        compact
+                        icon={<FileCheck className="w-5 h-5 text-indigo-400" />}
+                        title="No audit log entries matching filters"
+                        description="Audit entries will be recorded with SHA-256 hash chaining as operations occur."
+                      />
+                    </td>
+                  </tr>
+                ) : (
+                  filteredAuditLogs.map((a) => (
                   <tr key={a.id} className="hover:bg-slate-800/30 transition">
                     <td className="py-3 px-4 text-slate-400 font-mono text-[11px]">
                       {new Date(a.timestamp).toLocaleString()}
@@ -1550,7 +1584,8 @@ export const AdminWorkspace: React.FC = () => {
                       {a.recordHash ? a.recordHash.substring(0, 24) + '...' : 'N/A'}
                     </td>
                   </tr>
-                ))}
+                ))
+                )}
               </tbody>
             </table>
           </div>

@@ -44,6 +44,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useCopilot } from '../../context/CopilotContext';
 import { RelationshipValueProfile } from '../relationship-value/RelationshipValueProfile';
 import { getSessionToken } from '../../lib/api';
+import { useToast } from '../common/Toast';
 
 interface RelationshipTwinModuleProps {
   initialCustomerId?: number;
@@ -58,6 +59,7 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
 }) => {
   const { user } = useAuth();
   const { openDrawer } = useCopilot();
+  const toast = useToast();
 
   const [selectedCustomerId, setSelectedCustomerId] = useState<number>(initialCustomerId);
   const [twinData, setTwinData] = useState<RelationshipTwinOverview | null>(null);
@@ -217,8 +219,9 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
       await fetchTwinData(selectedCustomerId);
       setIsSnapshotModalOpen(false);
       setSnapshotNotes('');
+      toast.success('Relationship snapshot saved successfully.');
     } catch (err: any) {
-      alert(err.message || 'Could not save snapshot');
+      toast.error(err.message || 'Could not save snapshot');
     } finally {
       setIsSavingSnapshot(false);
     }
@@ -242,8 +245,9 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
       if (!res.ok) throw new Error('Comparison failed');
       const diff = await res.json();
       setCompareResult(diff);
+      toast.success('Snapshot comparison computed.');
     } catch (err: any) {
-      alert(err.message || 'Comparison error');
+      toast.error(err.message || 'Comparison error');
     } finally {
       setIsComparing(false);
     }
@@ -269,8 +273,9 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
       await fetchTwinData(selectedCustomerId);
       setSelectedSignal(null);
       setSignalNotes('');
+      toast.success('Signal status updated.');
     } catch (err: any) {
-      alert(err.message || 'Error updating signal');
+      toast.error(err.message || 'Error updating signal');
     } finally {
       setIsUpdatingSignal(false);
     }
@@ -303,8 +308,9 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
       setIsActionModalOpen(false);
       setActionTitle('');
       setActionDescription('');
+      toast.success('Action trace committed.');
     } catch (err: any) {
-      alert(err.message || 'Error logging action');
+      toast.error(err.message || 'Error logging action');
     } finally {
       setIsLoggingAction(false);
     }
@@ -694,19 +700,20 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
         </button>
       </div>
 
-      {/* TAB: RELATIONSHIP VALUE PROFILE (Phase 32) */}
-      {activeTab === 'value' && (
-        <div className="space-y-4">
-          <RelationshipValueProfile
-            customerId={selectedCustomerId}
-            customerName={twinData?.customerName}
-            customerCode={twinData?.customerCode}
-            onSimulateStrategy={() => {
-              if (onNavigateToModule) onNavigateToModule('simulator');
-            }}
-          />
-        </div>
-      )}
+      <div key={activeTab} className="motion-fade-in space-y-4">
+        {/* TAB: RELATIONSHIP VALUE PROFILE (Phase 32) */}
+        {activeTab === 'value' && (
+          <div className="space-y-4">
+            <RelationshipValueProfile
+              customerId={selectedCustomerId}
+              customerName={twinData?.customerName}
+              customerCode={twinData?.customerCode}
+              onSimulateStrategy={() => {
+                if (onNavigateToModule) onNavigateToModule('simulator');
+              }}
+            />
+          </div>
+        )}
 
       {/* TAB 1: OVERVIEW & HEALTH PILLARS & BEFORE YOU ACT */}
       {activeTab === 'overview' && (
@@ -1214,6 +1221,7 @@ export const RelationshipTwinModule: React.FC<RelationshipTwinModuleProps> = ({
           </div>
         </div>
       )}
+      </div>
 
       {/* CAPTURE SNAPSHOT MODAL */}
       {isSnapshotModalOpen && (

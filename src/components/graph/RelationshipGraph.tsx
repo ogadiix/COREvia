@@ -37,6 +37,7 @@ import {
 } from 'lucide-react';
 import { bankingApi } from '../../lib/api.ts';
 import { formatINR } from '../../data/mockIndianBankingData.ts';
+import { useToast } from '../common/Toast';
 import {
   GraphNodeDTO,
   GraphEdgeDTO,
@@ -84,6 +85,7 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
   onOpenFullGraph,
   onNavigateToModule,
 }) => {
+  const toast = useToast();
   const [currentEntityType, setCurrentEntityType] = useState<string>(initialEntityType);
   const [currentEntityId, setCurrentEntityId] = useState<string | number>(initialEntityId);
   const [depth, setDepth] = useState<number>(compact ? 1 : 2);
@@ -229,6 +231,30 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
     return new Set(pathResult.edges.map((e) => e.id));
   }, [pathResult]);
 
+  // Connected nodes to currently selected node (spotlight topology)
+  const connectedNodeIds = useMemo(() => {
+    if (!selectedNode) return new Set<string>();
+    const set = new Set<string>();
+    for (const edge of filteredEdges) {
+      if (edge.source === selectedNode.id) set.add(edge.target);
+      if (edge.target === selectedNode.id) set.add(edge.source);
+    }
+    return set;
+  }, [selectedNode, filteredEdges]);
+
+  // Escape key to dismiss selection
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedNode(null);
+        setSelectedEdge(null);
+        setIsPathFinderOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Handle Find Path
   const handleFindPath = async () => {
     if (!pathTargetNodeId || !graphData) return;
@@ -245,7 +271,7 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
       );
       setPathResult(res);
     } catch (err: any) {
-      alert(err.message || 'Error finding path between entities');
+      toast.error(err.message || 'Error finding path between entities');
     } finally {
       setSearchingPath(false);
     }
@@ -615,10 +641,23 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
                 const isSelected = selectedEdge?.id === edge.id;
                 const isHovered =
                   hoveredNodeId === edge.source || hoveredNodeId === edge.target;
+                const isConnectedToSelected = Boolean(
+                  selectedNode && (edge.source === selectedNode.id || edge.target === selectedNode.id)
+                );
                 const isPathEdge = pathEdgeIds.has(edge.id);
+                const isDimmed = Boolean(
+                  selectedNode && !isConnectedToSelected && !isSelected && !isPathEdge
+                );
 
                 return (
-                  <g key={edge.id} className="cursor-pointer">
+                  <g
+                    key={edge.id}
+                    className="cursor-pointer"
+                    style={{
+                      opacity: isDimmed ? 0.25 : 1,
+                      transition: 'opacity 0.2s ease',
+                    }}
+                  >
                     <line
                       x1={sPos.x}
                       y1={sPos.y}
@@ -628,14 +667,18 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
                         isPathEdge
                           ? '#059669'
                           : isSelected
-                          ? '#4f46e5'
+                          ? '#087F8C'
+                          : isConnectedToSelected
+                          ? '#087F8C'
                           : isHovered
-                          ? '#6366f1'
+                          ? '#087F8C'
                           : '#cbd5e1'
                       }
-                      strokeWidth={isPathEdge ? 3.5 : isSelected ? 3 : isHovered ? 2 : 1.25}
+                      strokeWidth={
+                        isPathEdge ? 3.5 : isSelected ? 3 : isConnectedToSelected ? 2.5 : isHovered ? 2 : 1.25
+                      }
                       strokeDasharray={edge.status === 'INACTIVE' ? '4 3' : undefined}
-                      markerEnd={isPathEdge || isSelected ? 'url(#edge-arrow-active)' : 'url(#edge-arrow)'}
+                      markerEnd={isPathEdge || isSelected || isConnectedToSelected ? 'url(#edge-arrow-active)' : 'url(#edge-arrow)'}
                       onClick={() => {
                         setSelectedEdge(edge);
                         setSelectedNode(null);
@@ -667,8 +710,15 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
                 const Icon = cfg.icon;
                 const isRoot = node.isRoot;
                 const isSelected = selectedNode?.id === node.id;
+                const isConnected = connectedNodeIds.has(node.id);
                 const isPathNode = pathNodeIds.has(node.id);
                 const isPriority = node.operationalPriority === 'CRITICAL' || node.operationalPriority === 'HIGH';
+                const isDimmed = Boolean(
+                  selectedNode &&
+                  selectedNode.id !== node.id &&
+                  !isConnected &&
+                  !isPathNode
+                );
 
                 const width = isRoot ? 170 : 140;
                 const height = isRoot ? 54 : 44;
@@ -678,6 +728,10 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
                     key={node.id}
                     transform={`translate(${pos.x - width / 2}, ${pos.y - height / 2})`}
                     className="graph-interactive-node cursor-pointer group"
+                    style={{
+                      opacity: isDimmed ? 0.35 : 1,
+                      transition: 'opacity 0.2s ease, transform 0.2s ease',
+                    }}
                     onClick={() => {
                       setSelectedNode(node);
                       setSelectedEdge(null);
@@ -692,12 +746,14 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
                       rx={isRoot ? 8 : 6}
                       className={`${
                         isSelected
-                          ? 'fill-indigo-50 stroke-indigo-600 stroke-2 shadow-md'
+                          ? 'fill-teal-50 stroke-[#087F8C] stroke-2 shadow-md filter drop-shadow-sm'
                           : isPathNode
                           ? 'fill-emerald-50 stroke-emerald-600 stroke-2'
                           : isRoot
-                          ? 'fill-white stroke-slate-700 stroke-2 shadow-sm'
-                          : 'fill-white stroke-slate-300 stroke-1 hover:stroke-indigo-400 hover:shadow-xs'
+                          ? 'fill-white stroke-slate-800 stroke-2 shadow-sm'
+                          : isConnected
+                          ? 'fill-white stroke-[#087F8C] stroke-1.5 shadow-2xs'
+                          : 'fill-white stroke-slate-300 stroke-1 hover:stroke-[#087F8C] hover:shadow-xs'
                       } transition-all`}
                     />
 
@@ -714,7 +770,9 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
                           : isRoot
                           ? 'fill-slate-900'
                           : isSelected
-                          ? 'fill-indigo-600'
+                          ? 'fill-[#087F8C]'
+                          : isConnected
+                          ? 'fill-[#087F8C]'
                           : 'fill-slate-400'
                       }
                     />

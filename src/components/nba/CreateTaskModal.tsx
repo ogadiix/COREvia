@@ -94,11 +94,11 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         if (!loading) onClose();
       }}
       title="Create CRM Task from Recommendation"
-      maxWidth="max-w-lg"
+      size="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-lg text-xs text-indigo-900 flex items-start gap-2">
-          <CheckSquare className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+        <div className="p-3 bg-[#F0FDFA] border border-[#CCFBF1] rounded-sm text-xs text-[#0F766E] flex items-start gap-2">
+          <CheckSquare className="w-4 h-4 text-[#087F8C] shrink-0 mt-0.5" />
           <div>
             Converting this recommendation into a tracked institutional Task links it directly to
             the customer's relationship record and tracks execution metrics.
@@ -106,21 +106,21 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         </div>
 
         {error && (
-          <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-md text-xs text-rose-700 flex items-center gap-2">
+          <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-xs text-xs text-rose-700 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
             {error}
           </div>
         )}
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            Task Title <span className="text-rose-500">*</span>
+          <label className="block text-xs font-semibold text-[#172033] mb-1">
+            Task Title <span className="text-[#B42318]">*</span>
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full text-xs p-2 rounded-md border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+            className="w-full text-xs p-2 rounded-xs border border-[#CBD5E1] focus:outline-none focus:border-[#087F8C] focus:ring-1 focus:ring-[#087F8C] font-medium text-[#172033]"
             required
             disabled={loading}
           />
@@ -128,15 +128,15 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Due Date <span className="text-rose-500">*</span>
+            <label className="block text-xs font-semibold text-[#172033] mb-1">
+              Due Date <span className="text-[#B42318]">*</span>
             </label>
             <div className="relative">
               <input
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full text-xs p-2 rounded-md border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full text-xs p-2 rounded-xs border border-[#CBD5E1] focus:outline-none focus:border-[#087F8C] focus:ring-1 focus:ring-[#087F8C] text-[#172033]"
                 required
                 disabled={loading}
               />
@@ -144,13 +144,13 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Priority <span className="text-rose-500">*</span>
+            <label className="block text-xs font-semibold text-[#172033] mb-1">
+              Priority <span className="text-[#B42318]">*</span>
             </label>
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
-              className="w-full text-xs p-2 rounded-md border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+              className="w-full text-xs p-2 rounded-xs border border-[#CBD5E1] focus:outline-none focus:border-[#087F8C] focus:ring-1 focus:ring-[#087F8C] font-medium text-[#172033]"
               disabled={loading}
             >
               <option value="LOW">Low</option>
@@ -162,19 +162,19 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-semibold text-[#172033] mb-1">
             Task Description & Action Plan
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={4}
-            className="w-full text-xs p-2.5 rounded-md border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed font-sans"
+            className="w-full text-xs p-2.5 rounded-xs border border-[#CBD5E1] focus:outline-none focus:border-[#087F8C] focus:ring-1 focus:ring-[#087F8C] leading-relaxed font-sans text-[#172033]"
             disabled={loading}
           />
         </div>
 
-        <div className="pt-2 border-t border-slate-200 flex justify-end gap-2">
+        <div className="pt-2 border-t border-[#E2E8F0] flex justify-end gap-2">
           <Button
             type="button"
             variant="secondary"
@@ -186,9 +186,9 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
           </Button>
           <Button
             type="submit"
-            variant="primary"
+            variant="brand"
             size="sm"
-            disabled={loading}
+            loading={loading}
           >
             {loading ? 'Creating Task...' : 'Create & Link Task'}
           </Button>

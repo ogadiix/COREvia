@@ -22,6 +22,8 @@ import {
   Calendar,
   Sparkles,
   Compass,
+  X,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { bankingApi } from '../../lib/api';
 import { DecisionTracePanel } from '../decision-trace/DecisionTracePanel';
@@ -38,6 +40,7 @@ import {
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
+import { EmptyState } from '../common/EmptyState';
 import { formatINR } from '../../data/mockIndianBankingData';
 
 interface RelationshipIntelligenceModuleProps {
@@ -317,6 +320,88 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
         </div>
       </div>
 
+      {/* 2b. CORE Score Health & Deterministic Vectors Panel */}
+      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-2xs space-y-3">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-lg bg-teal-50 border border-teal-200 text-teal-800 flex flex-col items-center justify-center shrink-0 shadow-2xs">
+              <span className="font-mono text-[10px] font-semibold text-teal-600 tracking-wider">CORE</span>
+              <span className="font-mono text-lg font-bold text-teal-900 leading-none">84</span>
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-sm font-bold text-slate-900">CORE Score Intelligence & Churn Vector</h3>
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  HEALTHY RELATIONSHIP
+                </span>
+                <span className="text-[11px] font-mono text-slate-500">Churn Risk: 0.04 (Very Low)</span>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Deterministic multi-dimensional score grounded in financial balances, credit repayment, service desk SLA, and touchpoint cadence.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSelectedDecisionId('DT-20260928-00102')}
+              icon={<ShieldAlert className="w-3.5 h-3.5 text-indigo-600" />}
+            >
+              Explain CORE Vectors
+            </Button>
+          </div>
+        </div>
+
+        {/* 4 Vector Gauges */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+          <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70 space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-slate-600 font-medium">1. Financial Value (35%)</span>
+              <span className="font-mono font-bold text-emerald-700">88 / 100</span>
+            </div>
+            <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+              <div className="bg-emerald-600 h-1.5 rounded-full" style={{ width: '88%' }} />
+            </div>
+            <span className="text-[10px] text-slate-400 block">CASA velocity & high-margin deposits</span>
+          </div>
+
+          <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70 space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-slate-600 font-medium">2. Credit Integrity (25%)</span>
+              <span className="font-mono font-bold text-teal-700">92 / 100</span>
+            </div>
+            <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+              <div className="bg-teal-600 h-1.5 rounded-full" style={{ width: '92%' }} />
+            </div>
+            <span className="text-[10px] text-slate-400 block">Zero DPD · Standard asset rating</span>
+          </div>
+
+          <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70 space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-slate-600 font-medium">3. Service Health (20%)</span>
+              <span className="font-mono font-bold text-amber-700">76 / 100</span>
+            </div>
+            <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+              <div className="bg-amber-600 h-1.5 rounded-full" style={{ width: '76%' }} />
+            </div>
+            <span className="text-[10px] text-slate-400 block">1 active ticket near SLA warning</span>
+          </div>
+
+          <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70 space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-slate-600 font-medium">4. Engagement Cadence (20%)</span>
+              <span className="font-mono font-bold text-indigo-700">80 / 100</span>
+            </div>
+            <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+              <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: '80%' }} />
+            </div>
+            <span className="text-[10px] text-slate-400 block">Touchpoint recorded within last 14d</span>
+          </div>
+        </div>
+      </div>
+
       {/* 3. Filtering & Search Toolbar */}
       <div className="bg-white border border-slate-200 rounded-lg p-3.5 shadow-xs space-y-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -352,8 +437,17 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search customer, CIF, signal..."
-                className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 font-sans"
+                className="w-full pl-8 pr-8 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 font-sans"
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
             <Button type="submit" size="sm" variant="outline">
               Filter
@@ -427,18 +521,18 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
           <span>Evaluating Relationship Signals across PostgreSQL CRM Database...</span>
         </div>
       ) : insights.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-lg p-12 text-center text-xs text-slate-500 space-y-2 shadow-xs">
-          <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto" />
-          <div className="text-sm font-semibold text-slate-800">No Relationship Signals Found</div>
-          <p className="text-slate-500 max-w-md mx-auto">
-            {selectedStatus === 'ACTIVE'
+        <EmptyState
+          icon={<CheckCircle2 className="w-8 h-8 text-emerald-500" />}
+          title="No Relationship Signals Found"
+          description={
+            selectedStatus === 'ACTIVE'
               ? 'All observed customer accounts are operating within standard performance benchmarks with zero outstanding alerts.'
-              : 'No historical intelligence matches your selected status or filter criteria.'}
-          </p>
-          <Button size="sm" variant="outline" onClick={handleRecalculateAll} className="mt-2">
-            Run Deterministic Rules Check
-          </Button>
-        </div>
+              : 'No historical intelligence matches your selected status or filter criteria.'
+          }
+          actionLabel="Run Deterministic Rules Check"
+          onAction={handleRecalculateAll}
+          className="bg-white border border-slate-200 rounded-lg p-12 shadow-xs"
+        />
       ) : (
         <div className="space-y-3">
           {insights.map((ins) => {
@@ -666,7 +760,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             setSelectedInsight(null);
           }}
           title={`Explainable Evidence Audit — ${selectedInsight.title}`}
-          size="lg"
+          size="4xl"
         >
           <div className="space-y-4 text-xs">
             {/* Header meta */}
@@ -815,6 +909,18 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                 Detected At: <span className="font-mono text-slate-700">{new Date(selectedInsight.detectedAt).toLocaleString('en-IN')}</span>
               </div>
               <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    const traceId = selectedInsight.insightId || 'DT-20260928-00102';
+                    setIsEvidenceModalOpen(false);
+                    setSelectedDecisionId(traceId);
+                  }}
+                  icon={<ShieldAlert className="w-3.5 h-3.5 text-indigo-600" />}
+                >
+                  Explain Full Decision Trace
+                </Button>
                 <Button
                   size="sm"
                   variant="outline"

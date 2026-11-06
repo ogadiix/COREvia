@@ -28,6 +28,7 @@ import { bankingApi } from '../../lib/api';
 import { CustomerJourneyDTO, CustomerJourneyStepDTO, JourneyTimelineEventDTO, JourneyProgressDTO } from '../../types/journey.types';
 import { Button } from '../common/Button';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../common/Toast';
 
 interface CustomerJourneyWorkspaceProps {
   journeyId: string | number;
@@ -41,6 +42,7 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
   onNavigateToCustomer,
 }) => {
   const { user } = useAuth();
+  const toast = useToast();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [journey, setJourney] = useState<CustomerJourneyDTO | null>(null);
@@ -99,9 +101,10 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
       setActionSuccess(`Step status updated to ${newStatus}.`);
       setIsBlockModalOpen(false);
       setBlockerReason('');
+      toast.success(`Step status updated to ${newStatus}.`);
       await fetchJourney();
     } catch (err: any) {
-      alert(err?.message || 'Failed to update journey step.');
+      toast.error(err?.message || 'Failed to update journey step.');
     } finally {
       setActionLoading(false);
     }
@@ -119,9 +122,10 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
       setIsHandoffModalOpen(false);
       setHandoffReason('');
       setActionSuccess('Journey ownership transferred successfully.');
+      toast.success('Journey ownership transferred successfully.');
       await fetchJourney();
     } catch (err: any) {
-      alert(err?.message || 'Failed to handoff journey.');
+      toast.error(err?.message || 'Failed to handoff journey.');
     } finally {
       setActionLoading(false);
     }
@@ -138,10 +142,12 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
       });
       setIsEscalateModalOpen(false);
       setEscalationReason('');
-      setActionSuccess(`Journey escalated to ${res.decisionTraceId || 'Decision Trace'}.`);
+      const successMsg = `Journey escalated to ${res.decisionTraceId || 'Decision Trace'}.`;
+      setActionSuccess(successMsg);
+      toast.success(successMsg);
       await fetchJourney();
     } catch (err: any) {
-      alert(err?.message || 'Failed to escalate journey.');
+      toast.error(err?.message || 'Failed to escalate journey.');
     } finally {
       setActionLoading(false);
     }
@@ -158,9 +164,10 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
       });
       setIsOutcomeModalOpen(false);
       setActionSuccess('Journey outcome recorded successfully.');
+      toast.success('Journey outcome recorded successfully.');
       await fetchJourney();
     } catch (err: any) {
-      alert(err?.message || 'Failed to record journey outcome.');
+      toast.error(err?.message || 'Failed to record journey outcome.');
     } finally {
       setActionLoading(false);
     }

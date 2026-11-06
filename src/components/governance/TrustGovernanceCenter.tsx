@@ -30,6 +30,8 @@ import {
 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
+import { EmptyState } from '../common/EmptyState';
+import { useToast } from '../common/Toast';
 import type {
   GovernanceOverviewDTO,
   AIGovernanceDTO,
@@ -63,6 +65,7 @@ type TabKey =
 
 export const TrustGovernanceCenter: React.FC = () => {
   const { user } = useAuth();
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -157,9 +160,10 @@ export const TrustGovernanceCenter: React.FC = () => {
     try {
       setActionLoading(true);
       await api.acknowledgeGovernanceException(id);
+      toast.success(`Governance exception #${id} acknowledged.`);
       await loadData();
     } catch (err: any) {
-      alert(`Error acknowledging exception: ${err?.message}`);
+      toast.error(`Error acknowledging exception: ${err?.message}`);
     } finally {
       setActionLoading(false);
     }
@@ -172,17 +176,20 @@ export const TrustGovernanceCenter: React.FC = () => {
       if (actionType === 'assign') {
         const userId = parseInt(actionInput, 10) || user?.id || 1;
         await api.assignGovernanceException(selectedException.id, String(userId));
+        toast.success(`Exception assigned to user #${userId}`);
       } else if (actionType === 'resolve') {
         await api.resolveGovernanceException(selectedException.id, actionInput);
+        toast.success(`Exception #${selectedException.id} resolved.`);
       } else if (actionType === 'dismiss') {
         await api.dismissGovernanceException(selectedException.id, actionInput);
+        toast.success(`Exception #${selectedException.id} dismissed.`);
       }
       setSelectedException(null);
       setActionType(null);
       setActionInput('');
       await loadData();
     } catch (err: any) {
-      alert(`Error completing action: ${err?.message}`);
+      toast.error(`Error completing action: ${err?.message}`);
     } finally {
       setActionLoading(false);
     }
@@ -509,7 +516,19 @@ export const TrustGovernanceCenter: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800 font-mono">
-                  {auditData?.events?.map((ev: any) => {
+                  {(!auditData?.events || auditData.events.length === 0) ? (
+                    <tr>
+                      <td colSpan={8} className="py-12 text-center font-sans">
+                        <EmptyState
+                          compact
+                          icon={<FileCheck className="w-5 h-5 text-emerald-400" />}
+                          title="No audit events found"
+                          description="No cryptographic ledger records match the active action, module, or outcome filters."
+                        />
+                      </td>
+                    </tr>
+                  ) : (
+                    auditData.events.map((ev: any) => {
                     const isExpanded = expandedAuditId === ev.id;
                     return (
                       <React.Fragment key={ev.id}>
@@ -582,7 +601,8 @@ export const TrustGovernanceCenter: React.FC = () => {
                         )}
                       </React.Fragment>
                     );
-                  })}
+                  })
+                  )}
                 </tbody>
               </table>
             </div>
@@ -1174,7 +1194,19 @@ export const TrustGovernanceCenter: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
-                  {exceptions?.items?.map((ex) => (
+                  {(!exceptions?.items || exceptions.items.length === 0) ? (
+                    <tr>
+                      <td colSpan={7} className="py-12 text-center font-sans">
+                        <EmptyState
+                          compact
+                          icon={<ShieldCheck className="w-5 h-5 text-emerald-400" />}
+                          title="Zero active governance exceptions"
+                          description="No compliance, access, or algorithmic policy exceptions currently open."
+                        />
+                      </td>
+                    </tr>
+                  ) : (
+                    exceptions.items.map((ex) => (
                     <tr key={ex.id} className="hover:bg-slate-850/50">
                       <td className="p-2.5 font-bold text-emerald-400 whitespace-nowrap">{ex.exceptionId}</td>
                       <td className="p-2.5 text-slate-300">{ex.category}</td>
@@ -1244,7 +1276,8 @@ export const TrustGovernanceCenter: React.FC = () => {
                         )}
                       </td>
                     </tr>
-                  ))}
+                  ))
+                  )}
                 </tbody>
               </table>
             </div>
