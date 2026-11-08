@@ -60,17 +60,22 @@ export const Tabs: React.FC<TabsProps> = ({
   };
 
   const badgeVariantStyles: Record<string, string> = {
-    neutral: 'bg-[#F1F5F9] text-[#475569]',
-    brand: 'bg-[#087F8C]/15 text-[#066974]',
-    warning: 'bg-[#fffbeb] text-[#B45309]',
-    danger: 'bg-[#fef2f2] text-[#B42318]',
-    success: 'bg-[#f0fdf4] text-[#16803C]',
+    neutral:
+      'bg-[#EDF1F5] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB]',
+    brand:
+      'bg-[#F0FDFB] dark:bg-[#05211F] text-[#168C83] dark:text-[#2dd4c7]',
+    warning:
+      'bg-[#FEFCE8] dark:bg-[#341A04] text-[#B7791F] dark:text-[#F59E0B]',
+    danger:
+      'bg-[#FEF2F2] dark:bg-[#370B0B] text-[#B42318] dark:text-[#EF4444]',
+    success:
+      'bg-[#F0FDF4] dark:bg-[#062814] text-[#16803C] dark:text-[#22C55E]',
   };
 
   return (
     <div
       id={id}
-      className={`border-b border-[#CBD5E1] bg-white select-none ${className}`}
+      className={`border-b border-[#DCE3EA] dark:border-[#33485D] bg-white dark:bg-[#162638] select-none ${className}`}
     >
       <div
         ref={tabListRef}
@@ -97,8 +102,8 @@ export const Tabs: React.FC<TabsProps> = ({
                 onKeyDown={(e) => handleKeyDown(e, idx)}
                 className={`group inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xs font-medium text-xs whitespace-nowrap cursor-pointer transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed ${focusRingClass} ${
                   isActive
-                    ? 'bg-[#0f1e36] text-white shadow-2xs font-semibold'
-                    : 'text-[#475569] hover:text-[#172033] hover:bg-[#F1F5F9]'
+                    ? 'bg-[#142C45] dark:bg-[#168C83] text-white shadow-xs font-semibold'
+                    : 'text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#273444] dark:hover:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#192B3D]'
                 }`}
               >
                 {tab.icon && (
@@ -122,7 +127,7 @@ export const Tabs: React.FC<TabsProps> = ({
             );
           }
 
-          // Default 'line' variant with brand #087F8C indicator
+          // Default 'line' variant with brand #168C83 indicator
           return (
             <button
               key={tab.id}
@@ -139,14 +144,16 @@ export const Tabs: React.FC<TabsProps> = ({
                 size === 'sm' ? 'py-2 px-2.5 text-xs' : 'py-2.5 px-3.5 text-xs'
               } ${
                 isActive
-                  ? 'border-[#087F8C] text-[#066974] font-semibold'
-                  : 'border-transparent text-[#64748B] hover:text-[#172033] hover:border-[#CBD5E1]'
+                  ? 'border-[#168C83] text-[#168C83] dark:text-[#2dd4c7] font-semibold'
+                  : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#273444] dark:hover:text-[#E8EEF5] hover:border-[#DCE3EA] dark:hover:border-[#33485D]'
               }`}
             >
               {tab.icon && (
                 <span
                   className={`shrink-0 flex items-center [&>svg]:w-3.5 [&>svg]:h-3.5 ${
-                    isActive ? 'text-[#087F8C]' : 'text-[#64748B] group-hover:text-[#172033]'
+                    isActive
+                      ? 'text-[#168C83] dark:text-[#2dd4c7]'
+                      : 'text-[#8793A1] dark:text-[#8194A8] group-hover:text-[#273444] dark:group-hover:text-[#E8EEF5]'
                   }`}
                 >
                   {tab.icon}
@@ -157,7 +164,7 @@ export const Tabs: React.FC<TabsProps> = ({
                 <span
                   className={`ml-1 py-0.2 px-1.5 rounded-xs text-[10px] font-mono font-medium ${
                     isActive
-                      ? 'bg-[#087F8C]/15 text-[#066974]'
+                      ? 'bg-[#F0FDFB] dark:bg-[#05211F] text-[#168C83] dark:text-[#2dd4c7]'
                       : badgeVariantStyles[tab.badgeVariant || 'neutral']
                   }`}
                 >

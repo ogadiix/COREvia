@@ -85,7 +85,7 @@ export const CopilotDrawer: React.FC<CopilotDrawerProps> = ({ onNavigate }) => {
           role="dialog"
           aria-modal="true"
           aria-label="COREvia Banking Copilot"
-          className="w-full sm:w-[500px] md:w-[560px] max-w-full bg-[#F5F7FA] border-l border-[#CBD5E1] shadow-2xl flex flex-col h-full overflow-hidden motion-drawer-right"
+          className="w-full sm:w-[500px] md:w-[560px] max-w-full bg-[#F4F6F8] dark:bg-[#162638] border-l border-[#DCE3EA] dark:border-[#33485D] shadow-2xl flex flex-col h-full overflow-hidden motion-drawer-right"
         >
           <CopilotWorkspace
             isDrawer={true}

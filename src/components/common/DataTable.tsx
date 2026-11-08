@@ -4,12 +4,10 @@ import {
   ChevronDown,
   ChevronsUpDown,
   AlertCircle,
-  ChevronLeft,
-  ChevronRight,
 } from 'lucide-react';
 import { focusRingClass } from './tokens';
 import { Checkbox } from './Checkbox';
-import { Button } from './Button';
+import { Pagination } from './Pagination';
 
 export interface Column<T> {
   key: string;
@@ -121,12 +119,12 @@ export function DataTable<T>({
   return (
     <div
       id={id}
-      className={`border border-[#CBD5E1] rounded-sm bg-white shadow-2xs flex flex-col ${className}`}
+      className={`border border-[#DCE3EA] dark:border-[#33485D] rounded-sm bg-white dark:bg-[#162638] shadow-xs flex flex-col ${className}`}
     >
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse" aria-label={ariaLabel}>
           <thead>
-            <tr className="bg-[#F8FAFC] border-b border-[#CBD5E1] text-[#475569] font-semibold uppercase tracking-wider text-[11px] select-none">
+            <tr className="bg-[#F8FAFC] dark:bg-[#101C2A] border-b border-[#DCE3EA] dark:border-[#33485D] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase tracking-wider text-[11px] select-none">
               {selectable && (
                 <th scope="col" className={`${rowPadding} w-10 text-center`}>
                   <Checkbox
@@ -157,7 +155,9 @@ export function DataTable<T>({
                     }
                     onClick={isSortable && onSort ? () => onSort(col.key) : undefined}
                     className={`${rowPadding} ${
-                      isSortable && onSort ? 'cursor-pointer hover:bg-[#F1F5F9] transition-colors' : ''
+                      isSortable && onSort
+                        ? 'cursor-pointer hover:bg-[#EDF1F5] dark:hover:bg-[#192B3D] transition-colors'
+                        : ''
                     } ${
                       col.align === 'right'
                         ? 'text-right'
@@ -173,15 +173,15 @@ export function DataTable<T>({
                     >
                       <span>{col.header}</span>
                       {isSortable && onSort && (
-                        <span className="shrink-0 text-[#94A3B8]">
+                        <span className="shrink-0 text-[#8793A1] dark:text-[#8194A8]">
                           {isSorted ? (
                             sortOrder === 'asc' ? (
-                              <ChevronUp className="w-3.5 h-3.5 text-[#087F8C]" />
+                              <ChevronUp className="w-3.5 h-3.5 text-[#168C83] dark:text-[#2dd4c7]" />
                             ) : (
-                              <ChevronDown className="w-3.5 h-3.5 text-[#087F8C]" />
+                              <ChevronDown className="w-3.5 h-3.5 text-[#168C83] dark:text-[#2dd4c7]" />
                             )
                           ) : (
-                            <ChevronsUpDown className="w-3 h-3 text-[#CBD5E1] hover:text-[#64748B]" />
+                            <ChevronsUpDown className="w-3 h-3 text-[#DCE3EA] dark:text-[#33485D] hover:text-[#5D6B7B] dark:hover:text-[#A9BACB]" />
                           )}
                         </span>
                       )}
@@ -191,19 +191,19 @@ export function DataTable<T>({
               })}
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#E2E8F0] text-[#172033]">
+          <tbody className="divide-y divide-[#E8EEF4] dark:divide-[#26394C] text-[#273444] dark:text-[#E8EEF5]">
             {isLoading ? (
               Array.from({ length: loadingRowCount }).map((_, rIdx) => (
                 <tr key={`loading-row-${rIdx}`} className="animate-pulse">
                   {selectable && (
                     <td className={`${rowPadding} w-10 text-center`}>
-                      <div className="w-4 h-4 bg-[#E2E8F0] rounded-xs mx-auto" />
+                      <div className="w-4 h-4 bg-[#EDF1F5] dark:bg-[#192B3D] rounded-xs mx-auto" />
                     </td>
                   )}
                   {columns.map((col, cIdx) => (
                     <td key={`loading-col-${cIdx}`} className={rowPadding}>
                       <div
-                        className={`h-3.5 bg-[#E2E8F0] rounded-xs ${
+                        className={`h-3.5 bg-[#EDF1F5] dark:bg-[#192B3D] rounded-xs ${
                           cIdx === 0 ? 'w-24' : cIdx === 1 ? 'w-36' : 'w-16'
                         }`}
                       />
@@ -215,10 +215,10 @@ export function DataTable<T>({
               <tr>
                 <td
                   colSpan={columns.length + (selectable ? 1 : 0)}
-                  className="py-12 text-center text-[#64748B]"
+                  className="py-12 text-center text-[#5D6B7B] dark:text-[#A9BACB]"
                 >
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-[#F1F5F9] flex items-center justify-center text-[#94A3B8]">
+                    <div className="w-8 h-8 rounded-full bg-[#EDF1F5] dark:bg-[#101C2A] flex items-center justify-center text-[#8793A1] dark:text-[#8194A8]">
                       {emptyIcon || <AlertCircle className="w-4 h-4" />}
                     </div>
                     <span className="text-xs font-medium">{emptyMessage}</span>
@@ -253,13 +253,13 @@ export function DataTable<T>({
                     }
                     className={`transition-colors duration-100 ${
                       isSelected
-                        ? 'bg-[#f0fdfa] border-l-2 border-l-[#087F8C]'
+                        ? 'bg-[#F0FDFB] dark:bg-[#192B3D] border-l-2 border-l-[#168C83]'
                         : index % 2 === 1
-                        ? 'bg-[#F8FAFC]/60'
-                        : 'bg-white'
+                        ? 'bg-[#F8FAFC]/60 dark:bg-[#192B3D]/30'
+                        : 'bg-white dark:bg-[#162638]'
                     } ${
                       isClickable
-                        ? `cursor-pointer hover:bg-[#F1F5F9] ${focusRingClass}`
+                        ? `cursor-pointer hover:bg-[#EDF1F5] dark:hover:bg-[#20364B] ${focusRingClass}`
                         : ''
                     }`}
                   >
@@ -301,58 +301,16 @@ export function DataTable<T>({
 
       {/* Pagination Footer */}
       {pagination && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-2.5 border-t border-[#CBD5E1] bg-[#F8FAFC] text-xs text-[#64748B]">
-          <div className="flex items-center gap-2">
-            <span>
-              Showing <strong className="font-semibold text-[#172033]">{startItem}</strong>–
-              <strong className="font-semibold text-[#172033]">{endItem}</strong> of{' '}
-              <strong className="font-semibold text-[#172033]">{totalItems}</strong> records
-            </span>
-            {pagination.onPageSizeChange && pagination.pageSizeOptions && (
-              <div className="flex items-center gap-1.5 ml-3">
-                <span className="text-[11px] text-[#64748B]">Per page:</span>
-                <select
-                  value={pageSize}
-                  onChange={(e) => pagination.onPageSizeChange!(Number(e.target.value))}
-                  className="h-6 px-1.5 py-0 bg-white border border-[#CBD5E1] rounded-xs text-[11px] text-[#172033] focus:outline-none focus:border-[#087F8C]"
-                >
-                  {pagination.pageSizeOptions.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="xs"
-              disabled={currentPage <= 1}
-              onClick={() => pagination.onPageChange(currentPage - 1)}
-              icon={<ChevronLeft className="w-3.5 h-3.5" />}
-              aria-label="Previous page"
-            >
-              Prev
-            </Button>
-            <span className="px-2 py-0.5 font-mono text-[11px] text-[#172033] font-medium">
-              Page {currentPage} of {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="xs"
-              disabled={currentPage >= totalPages}
-              onClick={() => pagination.onPageChange(currentPage + 1)}
-              icon={<ChevronRight className="w-3.5 h-3.5" />}
-              iconPosition="right"
-              aria-label="Next page"
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          pageSize={pageSize}
+          pageSizeOptions={pagination.pageSizeOptions}
+          onPageChange={pagination.onPageChange}
+          onPageSizeChange={pagination.onPageSizeChange}
+          itemLabel="records"
+        />
       )}
     </div>
   );

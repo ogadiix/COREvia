@@ -8,6 +8,7 @@ export type BadgeVariant =
   | 'primary'
   | 'brand'
   | 'info'
+  | 'gold'
   | 'outline';
 
 export type BadgeSize = 'xs' | 'sm' | 'md';
@@ -34,25 +35,36 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   const variantStyles: Record<BadgeVariant, string> = {
-    neutral: 'bg-[#F1F5F9] text-[#334155] border-[#CBD5E1]',
-    success: 'bg-[#f0fdf4] text-[#14532d] border-[#bbf7d0]',
-    warning: 'bg-[#fffbeb] text-[#78350f] border-[#fde68a]',
-    danger: 'bg-[#fef2f2] text-[#7f1d1d] border-[#fecaca]',
-    primary: 'bg-[#0f1e36] text-white border-[#0f1e36]',
-    brand: 'bg-[#f0fdfa] text-[#066974] border-[#99f6e4]',
-    info: 'bg-[#eff6ff] text-[#1e3a8a] border-[#bfdbfe]',
-    outline: 'bg-white text-[#475569] border-[#CBD5E1]',
+    neutral:
+      'bg-[#EDF1F5] text-[#273444] border-[#DCE3EA] dark:bg-[#192B3D] dark:text-[#E8EEF5] dark:border-[#33485D]',
+    success:
+      'bg-[#F0FDF4] text-[#16803C] border-[#BBF7D0] dark:bg-[#062814] dark:text-[#22C55E] dark:border-[#15803D]',
+    warning:
+      'bg-[#FEFCE8] text-[#B7791F] border-[#FEF08A] dark:bg-[#341A04] dark:text-[#F59E0B] dark:border-[#B45309]',
+    danger:
+      'bg-[#FEF2F2] text-[#B42318] border-[#FECACA] dark:bg-[#370B0B] dark:text-[#EF4444] dark:border-[#B91C1C]',
+    primary:
+      'bg-[#142C45] text-white border-[#142C45] dark:bg-[#101C2A] dark:text-[#E8EEF5] dark:border-[#33485D]',
+    brand:
+      'bg-[#F0FDFB] text-[#168C83] border-[#CCFBF6] dark:bg-[#05211F] dark:text-[#2dd4c7] dark:border-[#168C83]/50',
+    gold:
+      'bg-[#FEF9E7] text-[#B7791F] border-[#F9E79F] dark:bg-[#2A2008] dark:text-[#D9A441] dark:border-[#D9A441]/40',
+    info:
+      'bg-[#EFF6FF] text-[#2563EB] border-[#BFDBFE] dark:bg-[#0D203F] dark:text-[#3B82F6] dark:border-[#1D4ED8]',
+    outline:
+      'bg-white text-[#5D6B7B] border-[#DCE3EA] dark:bg-[#162638] dark:text-[#A9BACB] dark:border-[#33485D]',
   };
 
   const dotColors: Record<BadgeVariant, string> = {
-    neutral: 'bg-[#64748B]',
-    success: 'bg-[#16803C]',
-    warning: 'bg-[#B45309]',
-    danger: 'bg-[#B42318]',
+    neutral: 'bg-[#5D6B7B] dark:bg-[#A9BACB]',
+    success: 'bg-[#16803C] dark:bg-[#22C55E]',
+    warning: 'bg-[#B7791F] dark:bg-[#F59E0B]',
+    danger: 'bg-[#B42318] dark:bg-[#EF4444]',
     primary: 'bg-white',
-    brand: 'bg-[#087F8C]',
-    info: 'bg-[#2563EB]',
-    outline: 'bg-[#64748B]',
+    brand: 'bg-[#168C83] dark:bg-[#2dd4c7]',
+    gold: 'bg-[#D9A441]',
+    info: 'bg-[#2563EB] dark:bg-[#3B82F6]',
+    outline: 'bg-[#5D6B7B] dark:bg-[#A9BACB]',
   };
 
   const sizeStyles: Record<BadgeSize, string> = {

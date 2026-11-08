@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -195,21 +196,24 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
     setIsAiModalOpen(true);
   };
 
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
   return (
-    <div className="bg-white border border-slate-200 rounded p-4 sm:p-5 shadow-xs space-y-4">
+    <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 sm:p-5 shadow-xs space-y-4">
       {/* Top Header & Institutional Badges */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-[#26394C]">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#E8EEF5]">
               Market Movements & Treasury Monitor
             </h3>
-            <span className="text-[10px] bg-slate-100 text-slate-600 font-mono px-1.5 py-0.5 rounded border border-slate-200">
+            <span className="text-[10px] bg-slate-100 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] font-mono px-1.5 py-0.5 rounded border border-slate-200 dark:border-[#33485D]">
               CCIL • RBI • AMFI
             </span>
           </div>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-[#8194A8]">
             Institutional surveillance for INR/USD exchange rates, sovereign bond yields, financial news headlines, and AMFI mutual funds/SIP trends.
           </p>
         </div>
@@ -218,13 +222,13 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
           {/* Ask AI Assistant Trigger */}
           <button
             onClick={() => openAiWithPrompt('')}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-[#0f1e36] to-slate-800 hover:from-slate-900 hover:to-slate-850 rounded border border-slate-700 shadow-2xs transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-[#142C45] to-slate-800 hover:from-slate-900 hover:to-slate-850 dark:from-[#101C2A] dark:to-[#162638] rounded border border-slate-700 dark:border-[#33485D] shadow-2xs transition-all cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
             <span>Ask AI Banking Copilot</span>
           </button>
 
-          <span className="text-[11px] font-mono text-slate-500 flex items-center gap-1">
+          <span className="text-[11px] font-mono text-slate-500 dark:text-[#8194A8] flex items-center gap-1">
             <Clock className="w-3 h-3 text-slate-400" />
             {lastRefreshedTime}
           </span>
@@ -232,7 +236,7 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
           <button
             onClick={() => loadData(true)}
             disabled={isLoading}
-            className="p-1.5 rounded border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 disabled:opacity-50 cursor-pointer transition-colors"
+            className="p-1.5 rounded border border-slate-200 dark:border-[#33485D] text-slate-600 dark:text-[#A9BACB] hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-[#192B3D] disabled:opacity-50 cursor-pointer transition-colors"
             title="Refresh All Benchmarks"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
@@ -241,7 +245,7 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
           {onNavigateToForex && (
             <button
               onClick={onNavigateToForex}
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-[#0f1e36] bg-slate-100 hover:bg-slate-200 rounded border border-slate-200 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-[#142C45] dark:text-[#2dd4bf] bg-slate-100 dark:bg-[#101C2A] hover:bg-slate-200 dark:hover:bg-[#192B3D] rounded border border-slate-200 dark:border-[#33485D] transition-colors cursor-pointer"
             >
               <span>Forex Desk</span>
               <ExternalLink className="w-3 h-3" />
@@ -260,21 +264,21 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
           }}
           className={`p-3 rounded border cursor-pointer transition-all ${
             mainTab === 'treasury_chart' && activeView === 'inr_usd'
-              ? 'border-[#0f1e36] bg-slate-50/80 shadow-xs'
-              : 'border-slate-200 hover:border-slate-300 bg-white'
+              ? 'border-[#168C83] bg-teal-50/50 dark:bg-[#101C2A] shadow-xs'
+              : 'border-slate-200 dark:border-[#33485D] hover:border-slate-300 dark:hover:border-[#168C83] bg-white dark:bg-[#162638]'
           }`}
         >
-          <div className="flex justify-between items-center text-[11px] text-slate-500">
-            <span className="font-semibold text-slate-700">USD / INR Spot</span>
-            <span className="font-mono text-[10px] bg-slate-200/60 px-1 py-0.2 rounded">FEDAI</span>
+          <div className="flex justify-between items-center text-[11px] text-slate-500 dark:text-[#8194A8]">
+            <span className="font-semibold text-slate-700 dark:text-[#E8EEF5]">USD / INR Spot</span>
+            <span className="font-mono text-[10px] bg-slate-200/60 dark:bg-[#192B3D] text-slate-700 dark:text-[#A9BACB] px-1 py-0.2 rounded">FEDAI</span>
           </div>
           <div className="mt-1 flex items-baseline justify-between">
-            <span className="font-mono text-lg font-bold text-slate-900">
+            <span className="font-mono text-lg font-bold text-slate-900 dark:text-[#E8EEF5]">
               ₹{currentUsdRate.toFixed(2)}
             </span>
             <span
               className={`text-xs font-mono font-medium flex items-center ${
-                isUsdUp ? 'text-rose-600' : 'text-emerald-600'
+                isUsdUp ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
               }`}
             >
               {isUsdUp ? <TrendingUp className="w-3 h-3 mr-0.5" /> : <TrendingDown className="w-3 h-3 mr-0.5" />}
@@ -282,7 +286,7 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
               {currentUsdChangePct}%
             </span>
           </div>
-          <div className="text-[10px] text-slate-500 font-mono mt-0.5 flex justify-between">
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono mt-0.5 flex justify-between">
             <span>RBI Ref: ₹{(Number(usdQuote?.rbiReferenceRate) || 83.94).toFixed(2)}</span>
             <span>Range: 83.88 - 84.02</span>
           </div>
@@ -296,24 +300,24 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
           }}
           className={`p-3 rounded border cursor-pointer transition-all ${
             mainTab === 'treasury_chart' && activeView === 'gsec_10y'
-              ? 'border-[#0f1e36] bg-slate-50/80 shadow-xs'
-              : 'border-slate-200 hover:border-slate-300 bg-white'
+              ? 'border-[#168C83] bg-teal-50/50 dark:bg-[#101C2A] shadow-xs'
+              : 'border-slate-200 dark:border-[#33485D] hover:border-slate-300 dark:hover:border-[#168C83] bg-white dark:bg-[#162638]'
           }`}
         >
-          <div className="flex justify-between items-center text-[11px] text-slate-500">
-            <span className="font-semibold text-slate-700">10Y Benchmark G-Sec</span>
-            <span className="font-mono text-[10px] bg-slate-200/60 px-1 py-0.2 rounded">7.18 GS 2033</span>
+          <div className="flex justify-between items-center text-[11px] text-slate-500 dark:text-[#8194A8]">
+            <span className="font-semibold text-slate-700 dark:text-[#E8EEF5]">10Y Benchmark G-Sec</span>
+            <span className="font-mono text-[10px] bg-slate-200/60 dark:bg-[#192B3D] text-slate-700 dark:text-[#A9BACB] px-1 py-0.2 rounded">7.18 GS 2033</span>
           </div>
           <div className="mt-1 flex items-baseline justify-between">
-            <span className="font-mono text-lg font-bold text-slate-900">
+            <span className="font-mono text-lg font-bold text-slate-900 dark:text-[#E8EEF5]">
               {current10YYield.toFixed(3)}%
             </span>
-            <span className="text-xs font-mono font-medium text-emerald-600 flex items-center">
+            <span className="text-xs font-mono font-medium text-emerald-600 dark:text-emerald-400 flex items-center">
               <TrendingDown className="w-3 h-3 mr-0.5" />
               -1.5 bps
             </span>
           </div>
-          <div className="text-[10px] text-slate-500 font-mono mt-0.5 flex justify-between">
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono mt-0.5 flex justify-between">
             <span>Price: ₹100.95</span>
             <span>Duration: 6.84 Yrs</span>
           </div>
@@ -324,26 +328,26 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
           onClick={() => setMainTab('mutual_funds_sip')}
           className={`p-3 rounded border cursor-pointer transition-all ${
             mainTab === 'mutual_funds_sip'
-              ? 'border-[#0f1e36] bg-slate-50/80 shadow-xs'
-              : 'border-slate-200 hover:border-slate-300 bg-white'
+              ? 'border-[#168C83] bg-teal-50/50 dark:bg-[#101C2A] shadow-xs'
+              : 'border-slate-200 dark:border-[#33485D] hover:border-slate-300 dark:hover:border-[#168C83] bg-white dark:bg-[#162638]'
           }`}
         >
-          <div className="flex justify-between items-center text-[11px] text-slate-500">
-            <span className="font-semibold text-slate-700">Monthly SIP Inflows</span>
-            <span className="font-mono text-[10px] bg-emerald-100 text-emerald-800 px-1 py-0.2 rounded font-medium">
+          <div className="flex justify-between items-center text-[11px] text-slate-500 dark:text-[#8194A8]">
+            <span className="font-semibold text-slate-700 dark:text-[#E8EEF5]">Monthly SIP Inflows</span>
+            <span className="font-mono text-[10px] bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 px-1 py-0.2 rounded font-medium">
               NEW RECORD
             </span>
           </div>
           <div className="mt-1 flex items-baseline justify-between">
-            <span className="font-mono text-lg font-bold text-emerald-700">
-              ₹32,297 <span className="text-xs font-normal text-slate-600">Cr</span>
+            <span className="font-mono text-lg font-bold text-emerald-700 dark:text-emerald-400">
+              ₹32,297 <span className="text-xs font-normal text-slate-600 dark:text-[#8194A8]">Cr</span>
             </span>
-            <span className="text-xs font-mono font-medium text-emerald-600 flex items-center">
+            <span className="text-xs font-mono font-medium text-emerald-600 dark:text-emerald-400 flex items-center">
               <TrendingUp className="w-3 h-3 mr-0.5" />
               +3.8% MoM
             </span>
           </div>
-          <div className="text-[10px] text-slate-500 font-mono mt-0.5 flex justify-between">
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono mt-0.5 flex justify-between">
             <span>Active Folios: 10.01 Cr</span>
             <span>SIP AUM: ₹18.61 L Cr</span>
           </div>
@@ -354,23 +358,23 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
           onClick={() => setMainTab('financial_news')}
           className={`p-3 rounded border cursor-pointer transition-all ${
             mainTab === 'financial_news'
-              ? 'border-[#0f1e36] bg-slate-50/80 shadow-xs'
-              : 'border-slate-200 hover:border-slate-300 bg-white'
+              ? 'border-[#168C83] bg-teal-50/50 dark:bg-[#101C2A] shadow-xs'
+              : 'border-slate-200 dark:border-[#33485D] hover:border-slate-300 dark:hover:border-[#168C83] bg-white dark:bg-[#162638]'
           }`}
         >
-          <div className="flex justify-between items-center text-[11px] text-slate-500">
-            <span className="font-semibold text-slate-700">RBI Repo / Liquidity</span>
-            <span className="font-mono text-[10px] bg-slate-200/60 px-1 py-0.2 rounded">MPC STANCE</span>
+          <div className="flex justify-between items-center text-[11px] text-slate-500 dark:text-[#8194A8]">
+            <span className="font-semibold text-slate-700 dark:text-[#E8EEF5]">RBI Repo / Liquidity</span>
+            <span className="font-mono text-[10px] bg-slate-200/60 dark:bg-[#192B3D] text-slate-700 dark:text-[#A9BACB] px-1 py-0.2 rounded">MPC STANCE</span>
           </div>
           <div className="mt-1 flex items-baseline justify-between">
-            <span className="font-mono text-lg font-bold text-slate-900">
+            <span className="font-mono text-lg font-bold text-slate-900 dark:text-[#E8EEF5]">
               6.50%
             </span>
-            <span className="text-xs font-mono text-amber-700">
+            <span className="text-xs font-mono text-amber-700 dark:text-amber-400">
               ₹1L Cr OMO Drain
             </span>
           </div>
-          <div className="text-[10px] text-slate-500 font-mono mt-0.5 flex justify-between">
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono mt-0.5 flex justify-between">
             <span>SDF: 6.25% | MSF: 6.75%</span>
             <span>View News Feed →</span>
           </div>
@@ -378,14 +382,14 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
       </div>
 
       {/* Main Feature Tabs Navigation */}
-      <div className="flex items-center justify-between border-b border-slate-200 overflow-x-auto no-scrollbar gap-2">
+      <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#26394C] overflow-x-auto no-scrollbar gap-2">
         <div className="flex items-center gap-1">
           <button
             onClick={() => setMainTab('treasury_chart')}
             className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
               mainTab === 'treasury_chart'
-                ? 'border-[#0f1e36] text-[#0f1e36] font-semibold'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-[#168C83] text-[#168C83] dark:text-[#2dd4bf] font-semibold'
+                : 'border-transparent text-slate-500 dark:text-[#8194A8] hover:text-slate-800 dark:hover:text-[#E8EEF5]'
             }`}
           >
             <TrendingUp className="w-3.5 h-3.5" />
@@ -396,13 +400,13 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
             onClick={() => setMainTab('financial_news')}
             className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
               mainTab === 'financial_news'
-                ? 'border-[#0f1e36] text-[#0f1e36] font-semibold'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-[#168C83] text-[#168C83] dark:text-[#2dd4bf] font-semibold'
+                : 'border-transparent text-slate-500 dark:text-[#8194A8] hover:text-slate-800 dark:hover:text-[#E8EEF5]'
             }`}
           >
             <Newspaper className="w-3.5 h-3.5" />
             <span>Daily Financial News Headlines</span>
-            <span className="text-[10px] bg-emerald-100 text-emerald-800 font-mono px-1 rounded">
+            <span className="text-[10px] bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 font-mono px-1 rounded">
               Live
             </span>
           </button>
@@ -411,8 +415,8 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
             onClick={() => setMainTab('currency_desk')}
             className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
               mainTab === 'currency_desk'
-                ? 'border-[#0f1e36] text-[#0f1e36] font-semibold'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-[#168C83] text-[#168C83] dark:text-[#2dd4bf] font-semibold'
+                : 'border-transparent text-slate-500 dark:text-[#8194A8] hover:text-slate-800 dark:hover:text-[#E8EEF5]'
             }`}
           >
             <Coins className="w-3.5 h-3.5" />
@@ -423,13 +427,13 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
             onClick={() => setMainTab('mutual_funds_sip')}
             className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
               mainTab === 'mutual_funds_sip'
-                ? 'border-[#0f1e36] text-[#0f1e36] font-semibold'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-[#168C83] text-[#168C83] dark:text-[#2dd4bf] font-semibold'
+                : 'border-transparent text-slate-500 dark:text-[#8194A8] hover:text-slate-800 dark:hover:text-[#E8EEF5]'
             }`}
           >
             <PiggyBank className="w-3.5 h-3.5" />
             <span>Mutual Funds & SIP Desk</span>
-            <span className="text-[10px] bg-slate-100 text-slate-600 font-mono px-1 rounded">
+            <span className="text-[10px] bg-slate-100 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] font-mono px-1 rounded border border-slate-200 dark:border-[#33485D]">
               AMFI Data
             </span>
           </button>
@@ -437,9 +441,9 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
 
         <button
           onClick={() => openAiWithPrompt('Analyze current Indian macro indicators and suggest treasury portfolio positioning')}
-          className="text-xs text-[#0f1e36] hover:underline font-medium cursor-pointer whitespace-nowrap flex items-center gap-1"
+          className="text-xs text-[#168C83] dark:text-[#2dd4bf] hover:underline font-medium cursor-pointer whitespace-nowrap flex items-center gap-1"
         >
-          <Sparkles className="w-3 h-3 text-emerald-600" />
+          <Sparkles className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
           <span>AI Macro Analysis</span>
         </button>
       </div>
@@ -449,13 +453,13 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
         <div className="space-y-3">
           {/* Sub-selectors */}
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="inline-flex rounded border border-slate-200 p-0.5 bg-slate-50 text-xs">
+            <div className="inline-flex rounded border border-slate-200 dark:border-[#33485D] p-0.5 bg-slate-50 dark:bg-[#101C2A] text-xs">
               <button
                 onClick={() => setActiveView('inr_usd')}
                 className={`px-2.5 py-1 rounded font-medium transition-colors cursor-pointer ${
                   activeView === 'inr_usd'
-                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-[#8194A8] hover:text-slate-900 dark:hover:text-[#E8EEF5]'
                 }`}
               >
                 INR / USD Exchange Rate
@@ -464,8 +468,8 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                 onClick={() => setActiveView('gsec_10y')}
                 className={`px-2.5 py-1 rounded font-medium transition-colors cursor-pointer ${
                   activeView === 'gsec_10y'
-                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-[#8194A8] hover:text-slate-900 dark:hover:text-[#E8EEF5]'
                 }`}
               >
                 10Y G-Sec Yield
@@ -474,8 +478,8 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                 onClick={() => setActiveView('yield_curve')}
                 className={`px-2.5 py-1 rounded font-medium transition-colors cursor-pointer ${
                   activeView === 'yield_curve'
-                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-[#8194A8] hover:text-slate-900 dark:hover:text-[#E8EEF5]'
                 }`}
               >
                 Sovereign Yield Curve (Tenors)
@@ -484,8 +488,8 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                 onClick={() => setActiveView('spread')}
                 className={`px-2.5 py-1 rounded font-medium transition-colors cursor-pointer ${
                   activeView === 'spread'
-                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-[#8194A8] hover:text-slate-900 dark:hover:text-[#E8EEF5]'
                 }`}
               >
                 IN-US Sovereign Spread
@@ -493,11 +497,11 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
             </div>
 
             {activeView !== 'yield_curve' && (
-              <div className="inline-flex rounded border border-slate-200 p-0.5 bg-slate-50 text-xs">
+              <div className="inline-flex rounded border border-slate-200 dark:border-[#33485D] p-0.5 bg-slate-50 dark:bg-[#101C2A] text-xs">
                 <button
                   onClick={() => setTimeframe('intraday')}
                   className={`px-2 py-0.5 rounded font-medium cursor-pointer transition-colors ${
-                    timeframe === 'intraday' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                    timeframe === 'intraday' ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-2xs font-semibold' : 'text-slate-600 dark:text-[#8194A8] hover:text-slate-900 dark:hover:text-[#E8EEF5]'
                   }`}
                 >
                   Intraday
@@ -505,7 +509,7 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                 <button
                   onClick={() => setTimeframe('7d')}
                   className={`px-2 py-0.5 rounded font-medium cursor-pointer transition-colors ${
-                    timeframe === '7d' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                    timeframe === '7d' ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-2xs font-semibold' : 'text-slate-600 dark:text-[#8194A8] hover:text-slate-900 dark:hover:text-[#E8EEF5]'
                   }`}
                 >
                   7 Days
@@ -513,7 +517,7 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                 <button
                   onClick={() => setTimeframe('30d')}
                   className={`px-2 py-0.5 rounded font-medium cursor-pointer transition-colors ${
-                    timeframe === '30d' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
+                    timeframe === '30d' ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-2xs font-semibold' : 'text-slate-600 dark:text-[#8194A8] hover:text-slate-900 dark:hover:text-[#E8EEF5]'
                   }`}
                 >
                   30 Days
@@ -533,20 +537,20 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                       <stop offset="95%" stopColor="#0f1e36" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                  <XAxis dataKey="time" tick={{ fontSize: 11, fill: '#64748b' }} tickLine={false} axisLine={{ stroke: '#cbd5e1' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#26394C' : '#e2e8f0'} vertical={false} />
+                  <XAxis dataKey="time" tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#64748b' }} tickLine={false} axisLine={{ stroke: isDark ? '#33485D' : '#cbd5e1' }} />
                   <YAxis
                     domain={['auto', 'auto']}
-                    tick={{ fontSize: 11, fill: '#64748b', fontFamily: 'monospace' }}
+                    tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#64748b', fontFamily: 'monospace' }}
                     tickFormatter={(v) => `₹${Number(v).toFixed(2)}`}
                     tickLine={false}
                     axisLine={false}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#0b1626',
+                      backgroundColor: isDark ? '#162638' : '#0b1626',
                       borderRadius: '4px',
-                      border: '1px solid #1e293b',
+                      border: `1px solid ${isDark ? '#33485D' : '#1e293b'}`,
                       color: '#fff',
                       fontSize: '12px',
                     }}
@@ -556,12 +560,12 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                   <Area
                     type="monotone"
                     dataKey="usdInr"
-                    stroke="#0f1e36"
+                    stroke="#168C83"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#usdInrGrad)"
                     dot={timeframe !== 'intraday'}
-                    activeDot={{ r: 4, stroke: '#0f1e36', strokeWidth: 2, fill: '#ffffff' }}
+                    activeDot={{ r: 4, stroke: '#168C83', strokeWidth: 2, fill: '#ffffff' }}
                   />
                 </AreaChart>
               ) : activeView === 'gsec_10y' ? (
@@ -710,8 +714,8 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                   onClick={() => setNewsCategory(cat.id)}
                   className={`px-2.5 py-1 rounded text-xs transition-colors cursor-pointer ${
                     newsCategory === cat.id
-                      ? 'bg-[#0f1e36] text-white font-medium shadow-2xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#168C83] text-white font-medium shadow-2xs'
+                      : 'bg-slate-100 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] hover:bg-slate-200 dark:hover:bg-[#192B3D] border border-transparent dark:border-[#33485D]'
                   }`}
                 >
                   {cat.label}
@@ -719,7 +723,7 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
               ))}
             </div>
 
-            <span className="text-[11px] text-slate-400 font-mono">
+            <span className="text-[11px] text-slate-400 dark:text-[#8194A8] font-mono">
               Live Sources: Mint • ET • AMFI • RBI FMD
             </span>
           </div>
@@ -729,55 +733,55 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
             {newsItems.map((item) => {
               const badgeStyle =
                 item.impactColor === 'emerald'
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
                   : item.impactColor === 'amber'
-                  ? 'bg-amber-50 text-amber-800 border-amber-200'
+                  ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800'
                   : item.impactColor === 'rose'
-                  ? 'bg-rose-50 text-rose-700 border-rose-200'
-                  : 'bg-slate-50 text-slate-700 border-slate-200';
+                  ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800'
+                  : 'bg-slate-50 dark:bg-[#162638] text-slate-700 dark:text-[#A9BACB] border-slate-200 dark:border-[#33485D]';
 
               return (
                 <div
                   key={item.id}
-                  className="bg-white border border-slate-200 hover:border-slate-300 rounded p-3.5 transition-all shadow-2xs space-y-2"
+                  className="bg-white dark:bg-[#101C2A] border border-slate-200 dark:border-[#26394C] hover:border-slate-300 dark:hover:border-[#33485D] rounded p-3.5 transition-all shadow-2xs space-y-2"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border ${badgeStyle}`}>
                         {item.impactTag}
                       </span>
-                      <span className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                      <span className="text-[11px] font-medium text-slate-500 dark:text-[#8194A8] bg-slate-100 dark:bg-[#162638] px-2 py-0.5 rounded">
                         {item.categoryLabel}
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono">
+                      <span className="text-[10px] text-slate-400 dark:text-[#8194A8] font-mono">
                         {item.source} • {item.publishedTime}
                       </span>
                     </div>
 
                     {item.statsHighlight && (
-                      <span className="text-xs font-mono font-semibold text-[#0f1e36] bg-slate-50 px-2 py-0.5 rounded border border-slate-200/80 self-start sm:self-auto">
+                      <span className="text-xs font-mono font-semibold text-[#142C45] dark:text-[#2dd4bf] bg-slate-50 dark:bg-[#162638] px-2 py-0.5 rounded border border-slate-200/80 dark:border-[#33485D] self-start sm:self-auto">
                         {item.statsHighlight}
                       </span>
                     )}
                   </div>
 
-                  <h4 className="text-xs sm:text-sm font-semibold text-slate-900 leading-snug">
+                  <h4 className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-[#E8EEF5] leading-snug">
                     {item.title}
                   </h4>
 
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-[#A9BACB] leading-relaxed">
                     {item.summary}
                   </p>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-                    <span className="text-[11px] text-slate-400">
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-[#26394C] text-xs">
+                    <span className="text-[11px] text-slate-400 dark:text-[#8194A8]">
                       Grounded in Live Financial News Search
                     </span>
                     <button
                       onClick={() => openAiWithPrompt(`Analyze this headline for bank operations: "${item.title}". Detail its regulatory and treasury implications.`)}
-                      className="inline-flex items-center gap-1 text-xs font-medium text-[#0f1e36] hover:text-blue-950 hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-[#168C83] dark:text-[#2dd4bf] hover:underline cursor-pointer"
                     >
-                      <Sparkles className="w-3 h-3 text-emerald-600" />
+                      <Sparkles className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                       <span>Ask AI Copilot to Analyze</span>
                     </button>
                   </div>
@@ -792,17 +796,17 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
       {mainTab === 'currency_desk' && (
         <div className="space-y-3">
           <div className="flex items-center justify-between pb-1">
-            <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-700 dark:text-[#E8EEF5] uppercase tracking-wider">
               Institutional FEDAI Card Rates & RBI Reference Benchmarks
             </span>
-            <span className="text-xs font-mono text-slate-500">
+            <span className="text-xs font-mono text-slate-500 dark:text-[#8194A8]">
               Interbank Spread: 18 - 25 bps
             </span>
           </div>
 
-          <div className="overflow-x-auto border border-slate-200 rounded">
+          <div className="overflow-x-auto border border-slate-200 dark:border-[#33485D] rounded">
             <table className="w-full text-xs text-left">
-              <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+              <thead className="bg-slate-50 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] font-semibold border-b border-slate-200 dark:border-[#26394C]">
                 <tr>
                   <th className="py-2.5 px-3">Currency Pair</th>
                   <th className="py-2.5 px-3 text-right">Spot Mid Rate</th>
@@ -813,45 +817,45 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                   <th className="py-2.5 px-3 text-center">AI Analysis</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-mono">
+              <tbody className="divide-y divide-slate-100 dark:divide-[#26394C] font-mono">
                 {(forexPayload?.quotes || []).map((q) => {
                   const isUp = (q.changePercent24h || 0) >= 0;
                   return (
-                    <tr key={q.baseCurrency} className="hover:bg-slate-50/80 transition-colors">
+                    <tr key={q.baseCurrency} className="hover:bg-slate-50/80 dark:hover:bg-[#192B3D] transition-colors">
                       <td className="py-2.5 px-3 font-sans">
                         <div className="flex items-center gap-2">
                           <span className="text-base">{q.flag}</span>
                           <div>
-                            <span className="font-bold text-slate-900">{q.pair}</span>
-                            <div className="text-[10px] text-slate-500 font-normal">{q.currencyName}</div>
+                            <span className="font-bold text-slate-900 dark:text-[#E8EEF5]">{q.pair}</span>
+                            <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-normal">{q.currencyName}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="py-2.5 px-3 text-right font-bold text-slate-900">
+                      <td className="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-[#E8EEF5]">
                         ₹{(Number(q.midRate) || 0).toFixed(4)}
                       </td>
                       <td className="py-2.5 px-3 text-right">
-                        <span className={`inline-flex items-center ${isUp ? 'text-rose-600' : 'text-emerald-600'}`}>
+                        <span className={`inline-flex items-center ${isUp ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                           {isUp ? '+' : ''}
                           {(Number(q.changePercent24h) || 0).toFixed(2)}%
                         </span>
                       </td>
-                      <td className="py-2.5 px-3 text-right text-blue-900 font-medium bg-blue-50/20">
+                      <td className="py-2.5 px-3 text-right text-blue-900 dark:text-blue-300 font-medium bg-blue-50/20 dark:bg-blue-950/20">
                         ₹{(Number(q.ttSellingRate) || 0).toFixed(4)}
                       </td>
-                      <td className="py-2.5 px-3 text-right text-emerald-900 font-medium bg-emerald-50/20">
+                      <td className="py-2.5 px-3 text-right text-emerald-900 dark:text-emerald-300 font-medium bg-emerald-50/20 dark:bg-emerald-950/20">
                         ₹{(Number(q.ttBuyingRate) || 0).toFixed(4)}
                       </td>
-                      <td className="py-2.5 px-3 text-right text-slate-600">
+                      <td className="py-2.5 px-3 text-right text-slate-600 dark:text-[#A9BACB]">
                         ₹{(Number(q.rbiReferenceRate) || 0).toFixed(4)}
                       </td>
                       <td className="py-2.5 px-3 text-center font-sans">
                         <button
                           onClick={() => openAiWithPrompt(`What are the key drivers for ${q.pair} and how does the current rate affect trade remittances under FEMA?`)}
-                          className="p-1 rounded hover:bg-slate-200 text-slate-600 hover:text-slate-900 cursor-pointer"
+                          className="p-1 rounded hover:bg-slate-200 dark:hover:bg-[#192B3D] text-slate-600 dark:text-[#A9BACB] hover:text-slate-900 dark:hover:text-white cursor-pointer"
                           title="Ask AI about currency"
                         >
-                          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                          <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         </button>
                       </td>
                     </tr>
@@ -862,9 +866,9 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
           </div>
 
           {/* GST Rule 32(2) & FEMA Notice */}
-          <div className="bg-slate-50 border border-slate-200 rounded p-3 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-slate-700">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+          <div className="bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded p-3 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-slate-700 dark:text-[#A9BACB]">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <span>
                 <strong>Statutory FX Advisory:</strong> GST under CGST Rule 32(2) applies in 3 slabs (1% up to ₹1L, 0.5% up to ₹10L, 0.1% above, max ₹60,000). Cash margin liens must be marked against customer CASA before issuing Trade LCs.
               </span>
@@ -872,7 +876,7 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
             {onNavigateToForex && (
               <button
                 onClick={onNavigateToForex}
-                className="text-xs font-semibold text-[#0f1e36] hover:underline cursor-pointer shrink-0"
+                className="text-xs font-semibold text-[#168C83] dark:text-[#2dd4bf] hover:underline cursor-pointer shrink-0"
               >
                 Open FX Calculator →
               </button>
@@ -886,61 +890,61 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
         <div className="space-y-4">
           {/* AMFI Industry Benchmark Snapshot */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
-            <div className="p-3 bg-slate-50 rounded border border-slate-200">
-              <div className="text-[11px] text-slate-500 font-medium">Monthly SIP Inflow</div>
-              <div className="text-lg font-bold font-mono text-emerald-700 mt-0.5">
+            <div className="p-3 bg-slate-50 dark:bg-[#101C2A] rounded border border-slate-200 dark:border-[#33485D]">
+              <div className="text-[11px] text-slate-500 dark:text-[#8194A8] font-medium">Monthly SIP Inflow</div>
+              <div className="text-lg font-bold font-mono text-emerald-700 dark:text-emerald-400 mt-0.5">
                 ₹{AMFI_LATEST_STATISTICS.monthlySipInflowInrCr.toLocaleString()} Cr
               </div>
-              <div className="text-[10px] text-slate-500 font-mono mt-0.5">
+              <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono mt-0.5">
                 All-Time High (+{AMFI_LATEST_STATISTICS.monthlyGrowthPercentage}% MoM)
               </div>
             </div>
 
-            <div className="p-3 bg-slate-50 rounded border border-slate-200">
-              <div className="text-[11px] text-slate-500 font-medium">Contributing SIP Accounts</div>
-              <div className="text-lg font-bold font-mono text-slate-900 mt-0.5">
+            <div className="p-3 bg-slate-50 dark:bg-[#101C2A] rounded border border-slate-200 dark:border-[#33485D]">
+              <div className="text-[11px] text-slate-500 dark:text-[#8194A8] font-medium">Contributing SIP Accounts</div>
+              <div className="text-lg font-bold font-mono text-slate-900 dark:text-[#E8EEF5] mt-0.5">
                 {AMFI_LATEST_STATISTICS.contributingSipAccountsCrore} Crore
               </div>
-              <div className="text-[10px] text-slate-500 font-mono mt-0.5">
+              <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono mt-0.5">
                 Crossed 10 Cr Milestone
               </div>
             </div>
 
-            <div className="p-3 bg-slate-50 rounded border border-slate-200">
-              <div className="text-[11px] text-slate-500 font-medium">Total SIP AUM</div>
-              <div className="text-lg font-bold font-mono text-slate-900 mt-0.5">
+            <div className="p-3 bg-slate-50 dark:bg-[#101C2A] rounded border border-slate-200 dark:border-[#33485D]">
+              <div className="text-[11px] text-slate-500 dark:text-[#8194A8] font-medium">Total SIP AUM</div>
+              <div className="text-lg font-bold font-mono text-slate-900 dark:text-[#E8EEF5] mt-0.5">
                 ₹{AMFI_LATEST_STATISTICS.sipAumInrLakhCr} Lakh Cr
               </div>
-              <div className="text-[10px] text-slate-500 font-mono mt-0.5">
+              <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono mt-0.5">
                 {AMFI_LATEST_STATISTICS.sipAumSharePercentage}% of Industry Assets
               </div>
             </div>
 
-            <div className="p-3 bg-slate-50 rounded border border-slate-200">
-              <div className="text-[11px] text-slate-500 font-medium">Net Equity Inflows</div>
-              <div className="text-lg font-bold font-mono text-emerald-700 mt-0.5">
+            <div className="p-3 bg-slate-50 dark:bg-[#101C2A] rounded border border-slate-200 dark:border-[#33485D]">
+              <div className="text-[11px] text-slate-500 dark:text-[#8194A8] font-medium">Net Equity Inflows</div>
+              <div className="text-lg font-bold font-mono text-emerald-700 dark:text-emerald-400 mt-0.5">
                 ₹{AMFI_LATEST_STATISTICS.equityInflowInrCr.toLocaleString()} Cr
               </div>
-              <div className="text-[10px] text-slate-500 font-mono mt-0.5">
+              <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono mt-0.5">
                 {AMFI_LATEST_STATISTICS.consecutivePositiveMonths} Consecutive Months
               </div>
             </div>
           </div>
 
           {/* Interactive SIP Compounding & Wealth Calculator */}
-          <div className="bg-slate-50/70 border border-slate-200 rounded p-4 space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+          <div className="bg-slate-50/70 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded p-4 space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-[#26394C]">
               <div className="flex items-center gap-2">
-                <Calculator className="w-4 h-4 text-[#0f1e36]" />
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                <Calculator className="w-4 h-4 text-[#168C83]" />
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#E8EEF5]">
                   Client SIP Compounding & Wealth Projection Engine
                 </h4>
               </div>
               <button
                 onClick={() => openAiWithPrompt(`Explain how rupee cost averaging in SIPs outperforms lump-sum investing during volatile markets with mathematical examples.`)}
-                className="inline-flex items-center gap-1 text-xs text-[#0f1e36] hover:underline font-medium cursor-pointer"
+                className="inline-flex items-center gap-1 text-xs text-[#168C83] dark:text-[#2dd4bf] hover:underline font-medium cursor-pointer"
               >
-                <Sparkles className="w-3 h-3 text-emerald-600" />
+                <Sparkles className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                 <span>Ask AI to Explain Compounding</span>
               </button>
             </div>
@@ -949,9 +953,9 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
               {/* Sliders / Inputs */}
               <div className="space-y-3 text-xs">
                 <div>
-                  <div className="flex justify-between items-center text-slate-700 mb-1">
+                  <div className="flex justify-between items-center text-slate-700 dark:text-[#A9BACB] mb-1">
                     <span>Monthly SIP Contribution:</span>
-                    <span className="font-mono font-bold text-slate-900">{formatINR(sipMonthly)}</span>
+                    <span className="font-mono font-bold text-slate-900 dark:text-[#E8EEF5]">{formatINR(sipMonthly)}</span>
                   </div>
                   <input
                     type="range"
@@ -960,9 +964,9 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                     step={1000}
                     value={sipMonthly}
                     onChange={(e) => setSipMonthly(Number(e.target.value))}
-                    className="w-full accent-[#0f1e36] cursor-pointer"
+                    className="w-full accent-[#168C83] cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <div className="flex justify-between text-[10px] text-slate-400 dark:text-[#8194A8] font-mono">
                     <span>₹1,000</span>
                     <span>₹50,000</span>
                     <span>₹1,00,000</span>
@@ -970,9 +974,9 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                 </div>
 
                 <div>
-                  <div className="flex justify-between items-center text-slate-700 mb-1">
+                  <div className="flex justify-between items-center text-slate-700 dark:text-[#A9BACB] mb-1">
                     <span>Investment Horizon (Tenure):</span>
-                    <span className="font-mono font-bold text-slate-900">{sipYears} Years ({sipYears * 12} Months)</span>
+                    <span className="font-mono font-bold text-slate-900 dark:text-[#E8EEF5]">{sipYears} Years ({sipYears * 12} Months)</span>
                   </div>
                   <input
                     type="range"
@@ -981,9 +985,9 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                     step={1}
                     value={sipYears}
                     onChange={(e) => setSipYears(Number(e.target.value))}
-                    className="w-full accent-[#0f1e36] cursor-pointer"
+                    className="w-full accent-[#168C83] cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <div className="flex justify-between text-[10px] text-slate-400 dark:text-[#8194A8] font-mono">
                     <span>1 Yr</span>
                     <span>15 Yrs</span>
                     <span>30 Yrs</span>
@@ -991,9 +995,9 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                 </div>
 
                 <div>
-                  <div className="flex justify-between items-center text-slate-700 mb-1">
+                  <div className="flex justify-between items-center text-slate-700 dark:text-[#A9BACB] mb-1">
                     <span>Expected Annual Return:</span>
-                    <span className="font-mono font-bold text-slate-900">{sipReturnRate}% p.a.</span>
+                    <span className="font-mono font-bold text-slate-900 dark:text-[#E8EEF5]">{sipReturnRate}% p.a.</span>
                   </div>
                   <input
                     type="range"
@@ -1013,50 +1017,50 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
               </div>
 
               {/* Computed Projections */}
-              <div className="md:col-span-2 bg-white rounded border border-slate-200 p-3.5 flex flex-col justify-between space-y-3">
+              <div className="md:col-span-2 bg-white dark:bg-[#162638] rounded border border-slate-200 dark:border-[#33485D] p-3.5 flex flex-col justify-between space-y-3">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-                  <div className="p-2.5 rounded bg-slate-50 border border-slate-100">
-                    <div className="text-slate-500 text-[11px]">Total Invested Capital</div>
-                    <div className="font-mono text-base font-bold text-slate-900 mt-1">
+                  <div className="p-2.5 rounded bg-slate-50 dark:bg-[#101C2A] border border-slate-100 dark:border-[#26394C]">
+                    <div className="text-slate-500 dark:text-[#8194A8] text-[11px]">Total Invested Capital</div>
+                    <div className="font-mono text-base font-bold text-slate-900 dark:text-[#E8EEF5] mt-1">
                       {formatINR(sipCalculation.totalInvestedAmount)}
                     </div>
-                    <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                    <div className="text-[10px] text-slate-400 dark:text-[#8194A8] font-mono mt-0.5">
                       {sipYears * 12} Installments
                     </div>
                   </div>
 
-                  <div className="p-2.5 rounded bg-emerald-50/60 border border-emerald-100">
-                    <div className="text-emerald-700 text-[11px] font-medium">Estimated Wealth Gain</div>
-                    <div className="font-mono text-base font-bold text-emerald-800 mt-1">
+                  <div className="p-2.5 rounded bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-800">
+                    <div className="text-emerald-700 dark:text-emerald-300 text-[11px] font-medium">Estimated Wealth Gain</div>
+                    <div className="font-mono text-base font-bold text-emerald-800 dark:text-emerald-400 mt-1">
                       +{formatINR(sipCalculation.estimatedWealthGain)}
                     </div>
-                    <div className="text-[10px] text-emerald-600 font-mono mt-0.5">
+                    <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">
                       Compounded Growth
                     </div>
                   </div>
 
-                  <div className="p-2.5 rounded bg-blue-50/60 border border-blue-100 col-span-2 sm:col-span-1">
-                    <div className="text-blue-700 text-[11px] font-medium">Projected Maturity Corpus</div>
-                    <div className="font-mono text-lg font-bold text-[#0f1e36] mt-1">
+                  <div className="p-2.5 rounded bg-teal-50/60 dark:bg-[#101C2A] border border-teal-100 dark:border-teal-800 col-span-2 sm:col-span-1">
+                    <div className="text-teal-700 dark:text-teal-300 text-[11px] font-medium">Projected Maturity Corpus</div>
+                    <div className="font-mono text-lg font-bold text-[#142C45] dark:text-[#2dd4bf] mt-1">
                       {formatINR(sipCalculation.estimatedFutureValue)}
                     </div>
-                    <div className="text-[10px] text-blue-600 font-mono mt-0.5">
+                    <div className="text-[10px] text-teal-600 dark:text-teal-400 font-mono mt-0.5">
                       {sipCalculation.wealthMultiplier}x Multiplier
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-[#8194A8] pt-2 border-t border-slate-100 dark:border-[#26394C]">
                   <span className="flex items-center gap-1 text-[11px]">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                     LTCG taxed at 12.5% on gains over ₹1.25 Lakh per financial year (Section 112A)
                   </span>
                   <button
                     onClick={() => openAiWithPrompt(`Generate a personalized wealth creation memo for a client investing ${formatINR(sipMonthly)}/month for ${sipYears} years at ${sipReturnRate}% return.`)}
-                    className="text-xs font-semibold text-[#0f1e36] hover:underline cursor-pointer flex items-center gap-1"
+                    className="text-xs font-semibold text-[#168C83] dark:text-[#2dd4bf] hover:underline cursor-pointer flex items-center gap-1"
                   >
                     <span>Generate Client Memo</span>
-                    <ArrowRight className="w-3 h-3" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -1065,12 +1069,12 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
 
           {/* AMFI Category Breakdown Table */}
           <div className="space-y-2">
-            <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-700 dark:text-[#E8EEF5] uppercase tracking-wider">
               AMFI Monthly Flow Breakdown by Mutual Fund Category (August 2026)
             </span>
-            <div className="overflow-x-auto border border-slate-200 rounded">
+            <div className="overflow-x-auto border border-slate-200 dark:border-[#33485D] rounded">
               <table className="w-full text-xs text-left">
-                <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                <thead className="bg-slate-50 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] font-semibold border-b border-slate-200 dark:border-[#26394C]">
                   <tr>
                     <th className="py-2 px-3">Fund Category</th>
                     <th className="py-2 px-3 text-right">Net Monthly Inflow (₹ Cr)</th>
@@ -1079,28 +1083,28 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
                     <th className="py-2 px-3 text-center">Consult AI</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-mono">
+                <tbody className="divide-y divide-slate-100 dark:divide-[#26394C] font-mono">
                   {AMFI_LATEST_STATISTICS.categoryBreakdown.map((cat) => (
-                    <tr key={cat.category} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-2 px-3 font-sans font-medium text-slate-900">
+                    <tr key={cat.category} className="hover:bg-slate-50/80 dark:hover:bg-[#192B3D] transition-colors">
+                      <td className="py-2 px-3 font-sans font-medium text-slate-900 dark:text-[#E8EEF5]">
                         {cat.category}
                       </td>
-                      <td className="py-2 px-3 text-right font-bold text-slate-800">
+                      <td className="py-2 px-3 text-right font-bold text-slate-800 dark:text-[#E8EEF5]">
                         ₹{cat.inflowCr.toLocaleString('en-IN', { maximumFractionDigits: 2 })} Cr
                       </td>
-                      <td className="py-2 px-3 text-right text-slate-600">
+                      <td className="py-2 px-3 text-right text-slate-600 dark:text-[#A9BACB]">
                         {cat.sharePct}%
                       </td>
-                      <td className="py-2 px-3 text-right font-semibold text-emerald-700">
+                      <td className="py-2 px-3 text-right font-semibold text-emerald-700 dark:text-emerald-400">
                         {cat.avg3YrReturn}% p.a.
                       </td>
                       <td className="py-2 px-3 text-center font-sans">
                         <button
                           onClick={() => openAiWithPrompt(`What are the risk factors and suitability guidelines for ${cat.category} under AMFI regulations?`)}
-                          className="p-1 rounded hover:bg-slate-200 text-slate-600 hover:text-slate-900 cursor-pointer"
+                          className="p-1 rounded hover:bg-slate-200 dark:hover:bg-[#192B3D] text-slate-600 dark:text-[#A9BACB] hover:text-slate-900 dark:hover:text-white cursor-pointer"
                           title="Consult AI about category"
                         >
-                          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                          <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         </button>
                       </td>
                     </tr>
@@ -1113,14 +1117,14 @@ export const MarketMovementsWidget: React.FC<MarketMovementsWidgetProps> = ({
       )}
 
       {/* Bottom Treasury Advisory & Regulatory Compliance Footer */}
-      <div className="bg-slate-50 border border-slate-200/80 rounded p-3 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-slate-700">
-          <Info className="w-4 h-4 text-[#0f1e36] shrink-0" />
+      <div className="bg-slate-50 dark:bg-[#101C2A] border border-slate-200/80 dark:border-[#33485D] rounded p-3 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-slate-700 dark:text-[#A9BACB]">
+          <Info className="w-4 h-4 text-[#168C83] dark:text-[#2dd4bf] shrink-0" />
           <span>
-            <strong className="text-slate-900">Treasury & Wealth Advisory:</strong> 10Y Benchmark at 7.040% offers +14 bps valuation cushion for AFS SLR portfolios. Mutual fund SIP inflows hit a historic ₹32,297 Cr across 10.01 Cr folios.
+            <strong className="text-slate-900 dark:text-[#E8EEF5]">Treasury & Wealth Advisory:</strong> 10Y Benchmark at 7.040% offers +14 bps valuation cushion for AFS SLR portfolios. Mutual fund SIP inflows hit a historic ₹32,297 Cr across 10.01 Cr folios.
           </span>
         </div>
-        <div className="flex items-center gap-2 font-mono text-[11px] text-slate-500 shrink-0">
+        <div className="flex items-center gap-2 font-mono text-[11px] text-slate-500 dark:text-[#8194A8] shrink-0">
           <span>1M Forward Prem: 1.68% p.a.</span>
           <span>•</span>
           <span>CTS Settlement: Normal</span>

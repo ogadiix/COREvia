@@ -24,11 +24,15 @@ import {
   ChevronDown,
   Check,
   ChevronRight,
+  Home,
+  Shield,
+  Layers,
 } from 'lucide-react';
 import { BANK_META, formatINR } from '../../data/mockIndianBankingData';
 import { Button } from '../common/Button';
 import { bankingApi } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
+import { ThemeSwitcher } from '../common/ThemeSwitcher';
 import { NotificationDrawer } from '../notifications/NotificationDrawer';
 import {
   useIndianBankingClock,
@@ -40,38 +44,47 @@ export const MODULE_METADATA: Record<
   string,
   { title: string; section: string; description?: string }
 > = {
+  // Core Operations & Clients
   dashboard: { title: 'Operations Cockpit', section: 'Core Operations' },
-  accounts: { title: 'CASA & Term Deposits', section: 'Core Operations' },
   customers: { title: 'Customer 360 & cKYC', section: 'Core Operations' },
+  accounts: { title: 'CASA & Term Deposits', section: 'Core Operations' },
   onboarding: { title: 'Digital Onboarding & KYC', section: 'Core Operations' },
   documents: { title: 'Document Intelligence Vault', section: 'Core Operations' },
-  products: { title: 'Banking Product Catalog', section: 'Core Operations' },
-  interactions: { title: 'Customer Interaction Hub', section: 'Relationship & CRM' },
-  cases: { title: 'Service Cases & Grievances', section: 'Relationship & CRM' },
-  opportunities: { title: 'Deals & Opportunities', section: 'Relationship & CRM' },
-  tasks: { title: 'Officer Tasks & Follow-ups', section: 'Relationship & CRM' },
-  intelligence: { title: 'Relationship Intelligence Engine', section: 'Relationship & CRM' },
-  'next-best-actions': { title: 'Next Best Actions', section: 'Relationship & CRM' },
-  'opportunity-radar': { title: 'Opportunity Radar', section: 'Relationship & CRM' },
-  'relationship-twin': { title: 'Relationship Digital Twin', section: 'Relationship & CRM' },
-  'relationship-graph': { title: 'Relationship Graph Intelligence', section: 'Relationship & CRM' },
-  'strategy-simulator': { title: 'Strategy Simulator & Sandbox', section: 'Relationship & CRM' },
-  agent: { title: 'Controlled Banking Agent', section: 'Relationship & CRM' },
-  journeys: { title: 'Customer Journey Orchestration', section: 'Relationship & CRM' },
-  groups: { title: 'Household & Groups 360', section: 'Relationship & CRM' },
-  copilot: { title: 'Banking Copilot', section: 'Relationship & CRM' },
-  analytics: { title: 'Management Intelligence', section: 'Relationship & CRM' },
-  'portfolio-intelligence': { title: 'Portfolio Intelligence & Risk', section: 'Relationship & CRM' },
-  lending: { title: 'Lending & Credit Advances', section: 'Credit & Assets' },
-  payments: { title: 'Payments Switch & CTS', section: 'Settlement & Global' },
-  'trade-finance': { title: 'Trade Finance & Forex', section: 'Settlement & Global' },
-  'maker-checker': { title: 'Maker-Checker Queue', section: 'Governance & Risk' },
-  'audit-regulatory': { title: 'Statutory Audit & Regulatory', section: 'Governance & Risk' },
-  governance: { title: 'Trust & Governance Center', section: 'Governance & Risk' },
-  operations: { title: 'Banking Operations Workspace', section: 'Governance & Risk' },
-  integrations: { title: 'Enterprise Integration & Gateway', section: 'Governance & Risk' },
-  admin: { title: 'Enterprise Administration', section: 'Governance & Risk' },
-  showcase: { title: 'Platform Architecture Showcase', section: 'Enterprise Showcase' },
+  products: { title: 'Banking Products Catalog', section: 'Core Operations' },
+
+  // Relationship Management
+  interactions: { title: 'Customer Interaction Hub', section: 'Relationship Management' },
+  opportunities: { title: 'Deals & Opportunities', section: 'Relationship Management' },
+  cases: { title: 'Service Cases & Grievances', section: 'Relationship Management' },
+  tasks: { title: 'Officer Tasks & Follow-ups', section: 'Relationship Management' },
+  groups: { title: 'Household & Groups 360', section: 'Relationship Management' },
+  journeys: { title: 'Customer Journey Orchestration', section: 'Relationship Management' },
+
+  // Relationship Intelligence
+  intelligence: { title: 'Relationship Intelligence (RI-v1)', section: 'Relationship Intelligence' },
+  'next-best-actions': { title: 'Next Best Actions', section: 'Relationship Intelligence' },
+  'opportunity-radar': { title: 'Opportunity Radar', section: 'Relationship Intelligence' },
+  'relationship-twin': { title: 'Relationship Digital Twin', section: 'Relationship Intelligence' },
+  'relationship-graph': { title: 'Relationship Graph Intelligence', section: 'Relationship Intelligence' },
+  'strategy-simulator': { title: 'Strategy Simulator & Sandbox', section: 'Relationship Intelligence' },
+  agent: { title: 'Controlled Banking Agent', section: 'Relationship Intelligence' },
+  copilot: { title: 'Banking Copilot', section: 'Relationship Intelligence' },
+  'portfolio-intelligence': { title: 'Portfolio Intelligence & Risk', section: 'Relationship Intelligence' },
+  analytics: { title: 'Management Intelligence', section: 'Relationship Intelligence' },
+
+  // Credit & Transactions
+  lending: { title: 'Lending & Credit Advances', section: 'Credit & Transactions' },
+  payments: { title: 'Payments Switch & CTS', section: 'Credit & Transactions' },
+  'trade-finance': { title: 'Trade Finance & Forex', section: 'Credit & Transactions' },
+
+  // Governance & Platform
+  'maker-checker': { title: 'Maker-Checker Queue', section: 'Governance & Platform' },
+  operations: { title: 'Banking Operations Workspace', section: 'Governance & Platform' },
+  governance: { title: 'Trust & Governance Center', section: 'Governance & Platform' },
+  'audit-regulatory': { title: 'Statutory Audit & Logs', section: 'Governance & Platform' },
+  integrations: { title: 'Enterprise Integration & Gateway', section: 'Governance & Platform' },
+  admin: { title: 'Enterprise Administration', section: 'Governance & Platform' },
+  showcase: { title: 'Platform Architecture Showcase', section: 'Governance & Platform' },
 };
 
 export interface HeaderProps {
@@ -259,37 +272,37 @@ export const Header: React.FC<HeaderProps> = ({
       <>
         {/* 1. Accounts Category */}
         <div>
-          <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+          <div className="px-3 py-1.5 bg-[#EDF1F5] dark:bg-[#101C2A] font-bold uppercase tracking-wider text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <WalletCards className="w-3 h-3 text-slate-500" />
+              <WalletCards className="w-3 h-3 text-[#168C83]" />
               Accounts ({searchResults.accounts.length})
             </span>
           </div>
           {searchResults.accounts.length === 0 ? (
-            <div className="px-3 py-2 text-slate-400 italic text-[11px]">
+            <div className="px-3 py-2 text-[#8793A1] dark:text-[#8194A8] italic text-[11px]">
               No matching accounts
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
               {searchResults.accounts.map((acc: any) => (
                 <div
                   key={acc.id}
                   onClick={() => handleItemClick('account', acc.accountNumber)}
-                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
                 >
                   <div>
-                    <div className="font-mono font-bold text-slate-900 flex items-center gap-1.5">
+                    <div className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
                       <span>{acc.accountNumber}</span>
-                      <span className="text-[10px] font-sans px-1.5 py-0.2 bg-slate-200 text-slate-700 rounded-xs font-normal">
+                      <span className="text-[10px] font-sans px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs font-normal">
                         {acc.accountType}
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-600 mt-0.5">
+                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5">
                       {acc.customerName} • CIF: {acc.cifNumber}
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-mono font-bold text-slate-900">
+                    <div className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5]">
                       {formatINR(parseFloat(acc.availableBalance || '0'))}
                     </div>
                     <div className="flex items-center justify-end gap-1.5 mt-0.5">
@@ -301,12 +314,12 @@ export const Header: React.FC<HeaderProps> = ({
                           )
                         }
                         title="View in Relationship Graph"
-                        className="text-[10px] text-teal-800 bg-teal-50 hover:bg-teal-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200"
+                        className="text-[10px] text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200 dark:border-teal-800"
                       >
-                        <GitFork className="w-2.5 h-2.5 text-teal-700" />
+                        <GitFork className="w-2.5 h-2.5 text-teal-700 dark:text-teal-400" />
                         <span>Graph</span>
                       </button>
-                      <div className="text-[10px] text-[#087F8C] font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="text-[10px] text-[#168C83] dark:text-[#2dd4bf] font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span>View</span>
                         <ArrowRight className="w-3 h-3" />
                       </div>
@@ -320,37 +333,37 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* 2. Loans Category */}
         <div>
-          <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+          <div className="px-3 py-1.5 bg-[#EDF1F5] dark:bg-[#101C2A] font-bold uppercase tracking-wider text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Landmark className="w-3 h-3 text-slate-500" />
+              <Landmark className="w-3 h-3 text-slate-500 dark:text-slate-400" />
               Loans ({searchResults.loans.length})
             </span>
           </div>
           {searchResults.loans.length === 0 ? (
-            <div className="px-3 py-2 text-slate-400 italic text-[11px]">
+            <div className="px-3 py-2 text-[#8793A1] dark:text-[#8194A8] italic text-[11px]">
               No matching credit facilities
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
               {searchResults.loans.map((loan: any) => (
                 <div
                   key={loan.id}
                   onClick={() => handleItemClick('loan', loan.loanAccountNumber)}
-                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
                 >
                   <div>
-                    <div className="font-mono font-bold text-slate-900 flex items-center gap-1.5">
+                    <div className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
                       <span>{loan.loanAccountNumber}</span>
-                      <span className="text-[10px] font-sans px-1.5 py-0.2 bg-amber-100 text-amber-800 rounded-xs font-normal">
+                      <span className="text-[10px] font-sans px-1.5 py-0.2 bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 rounded-xs font-normal">
                         {String(loan.loanType).replace(/_/g, ' ')}
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-600 mt-0.5">
+                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5">
                       {loan.borrowerName || loan.customerName} • CIF: {loan.cifNumber}
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-mono font-bold text-amber-900">
+                    <div className="font-mono font-bold text-amber-900 dark:text-amber-300">
                       {formatINR(parseFloat(loan.outstandingPrincipal || '0'))}
                     </div>
                     <div className="flex items-center justify-end gap-1.5 mt-0.5">
@@ -362,12 +375,12 @@ export const Header: React.FC<HeaderProps> = ({
                           )
                         }
                         title="View in Relationship Graph"
-                        className="text-[10px] text-teal-800 bg-teal-50 hover:bg-teal-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200"
+                        className="text-[10px] text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200 dark:border-teal-800"
                       >
-                        <GitFork className="w-2.5 h-2.5 text-teal-700" />
+                        <GitFork className="w-2.5 h-2.5 text-teal-700 dark:text-teal-400" />
                         <span>Graph</span>
                       </button>
-                      <div className="text-[10px] text-amber-700 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="text-[10px] text-amber-700 dark:text-amber-400 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span>View</span>
                         <ArrowRight className="w-3 h-3" />
                       </div>
@@ -381,32 +394,32 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* 3. Customers Category */}
         <div>
-          <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+          <div className="px-3 py-1.5 bg-[#EDF1F5] dark:bg-[#101C2A] font-bold uppercase tracking-wider text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <User className="w-3 h-3 text-slate-500" />
+              <User className="w-3 h-3 text-slate-500 dark:text-slate-400" />
               Customers ({searchResults.customers.length})
             </span>
           </div>
           {searchResults.customers.length === 0 ? (
-            <div className="px-3 py-2 text-slate-400 italic text-[11px]">
+            <div className="px-3 py-2 text-[#8793A1] dark:text-[#8194A8] italic text-[11px]">
               No matching customer profiles
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
               {searchResults.customers.map((c: any) => (
                 <div
                   key={c.id}
                   onClick={() => handleItemClick('customer', c.customerCode || c.id)}
-                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
                 >
                   <div>
-                    <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                    <div className="font-bold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
                       <span>{c.fullName}</span>
-                      <span className="font-mono text-[10px] px-1.5 py-0.2 bg-slate-200 text-slate-700 rounded-xs font-normal">
+                      <span className="font-mono text-[10px] px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs font-normal">
                         {c.customerCode}
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-600 mt-0.5 flex items-center gap-2">
+                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5 flex items-center gap-2">
                       <span className="font-mono">PAN: {c.panNumber || 'NA'}</span>
                       <span>•</span>
                       <span>{c.segment || 'Retail'}</span>
@@ -421,12 +434,12 @@ export const Header: React.FC<HeaderProps> = ({
                         )
                       }
                       title="View in Relationship Graph"
-                      className="text-[10px] text-teal-800 bg-teal-50 hover:bg-teal-100 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200"
+                      className="text-[10px] text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200 dark:border-teal-800"
                     >
-                      <GitFork className="w-2.5 h-2.5 text-teal-700" />
+                      <GitFork className="w-2.5 h-2.5 text-teal-700 dark:text-teal-400" />
                       <span>Graph</span>
                     </button>
-                    <div className="text-[10px] text-[#087F8C] font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="text-[10px] text-[#168C83] dark:text-[#2dd4bf] font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                       <span>Profile</span>
                       <ArrowRight className="w-3 h-3" />
                     </div>
@@ -440,27 +453,27 @@ export const Header: React.FC<HeaderProps> = ({
         {/* 4. Customer Journeys Category */}
         {searchResults.journeys && searchResults.journeys.length > 0 && (
           <div>
-            <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+            <div className="px-3 py-1.5 bg-[#EDF1F5] dark:bg-[#101C2A] font-bold uppercase tracking-wider text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <Milestone className="w-3 h-3 text-emerald-600" />
+                <Milestone className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                 Journeys ({searchResults.journeys.length})
               </span>
             </div>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
               {searchResults.journeys.map((j: any) => (
                 <div
                   key={j.id}
                   onClick={() => handleNavigateEntity(`/journeys?journeyId=${j.id}`)}
-                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
                 >
                   <div>
-                    <div className="font-semibold text-slate-900">{j.journeyName}</div>
-                    <div className="text-[11px] text-slate-500 font-mono">
+                    <div className="font-semibold text-[#273444] dark:text-[#E8EEF5]">{j.journeyName}</div>
+                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] font-mono">
                       {j.customerCode} • {j.journeyType}
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300">
                       {j.status}
                     </span>
                   </div>
@@ -473,24 +486,24 @@ export const Header: React.FC<HeaderProps> = ({
         {/* 5. Relationship Groups & Households Category */}
         {searchResults.groups && searchResults.groups.length > 0 && (
           <div>
-            <div className="px-3 py-1.5 bg-slate-100/80 font-bold uppercase tracking-wider text-[10px] text-slate-600 flex items-center justify-between">
+            <div className="px-3 py-1.5 bg-[#EDF1F5] dark:bg-[#101C2A] font-bold uppercase tracking-wider text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <Users2 className="w-3 h-3 text-cyan-600" />
+                <Users2 className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
                 Relationship Groups ({searchResults.groups.length})
               </span>
             </div>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
               {searchResults.groups.map((g: any) => (
                 <div
                   key={g.id || g.groupId}
                   onClick={() => handleNavigateEntity(`/group/${g.groupId}`)}
-                  className="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
                 >
                   <div>
-                    <div className="font-semibold text-slate-900">
+                    <div className="font-semibold text-[#273444] dark:text-[#E8EEF5]">
                       {g.displayName || g.name}
                     </div>
-                    <div className="text-[11px] text-slate-500 font-mono">
+                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] font-mono">
                       {g.groupId} • {g.groupType}
                     </div>
                   </div>
@@ -498,8 +511,8 @@ export const Header: React.FC<HeaderProps> = ({
                     <span
                       className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
                         g.groupType === 'HOUSEHOLD'
-                          ? 'bg-purple-100 text-purple-800'
-                          : 'bg-cyan-100 text-cyan-800'
+                          ? 'bg-purple-100 dark:bg-purple-950/40 text-purple-800 dark:text-purple-300'
+                          : 'bg-cyan-100 dark:bg-cyan-950/40 text-cyan-800 dark:text-cyan-300'
                       }`}
                     >
                       {g.groupType}
@@ -515,15 +528,15 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-[#CBD5E1] shadow-2xs w-full max-w-full select-none">
+    <header className="sticky top-0 z-40 bg-white dark:bg-[#101C2A] border-b border-[#DCE3EA] dark:border-[#33485D] shadow-2xs w-full max-w-full select-none">
       {/* ======================================================================
           TIER 1: Topmost Regulatory & Real-Time Indian Banking Center Tier
           ====================================================================== */}
-      <div className="bg-[#0f1e36] text-slate-300 px-3 sm:px-4 py-1.5 flex items-center justify-between text-xs border-b border-slate-800 overflow-hidden">
+      <div className="bg-[#142C45] dark:bg-[#101C2A] text-slate-300 px-3 sm:px-4 py-1.5 flex items-center justify-between text-xs border-b border-[#101C2A] dark:border-[#26394C] overflow-hidden">
         {/* Left: Branding & Regulatory Licensing */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <div className="flex items-center gap-1.5 text-white font-semibold tracking-wider uppercase text-[11px] shrink-0">
-            <span className="w-4 h-4 rounded-xs bg-[#087F8C] text-white flex items-center justify-center font-bold text-[9px] font-mono shadow-2xs">
+            <span className="w-4 h-4 rounded-xs bg-[#168C83] text-white flex items-center justify-center font-bold text-[9px] font-mono shadow-2xs">
               CV
             </span>
             <span className="tracking-tight font-bold">COREvia CBS</span>
@@ -533,7 +546,7 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </div>
 
-          <span className="hidden md:inline-flex items-center gap-1 text-[11px] text-slate-400 border-l border-slate-700 pl-2.5 shrink-0">
+          <span className="hidden md:inline-flex items-center gap-1 text-[11px] text-slate-400 border-l border-slate-700 dark:border-[#33485D] pl-2.5 shrink-0">
             <ShieldCheck className="w-3 h-3 text-emerald-400" />
             <span>RBI Lic: {BANK_META.rbiLicense}</span>
           </span>
@@ -542,16 +555,16 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Center/Right: Live Real-Time Clock & Selected Indian City */}
         <div className="flex items-center gap-2 sm:gap-3 text-[11px] font-mono shrink-0">
           {/* Real-Time Indian Standard Time (IST) Clock */}
-          <div className="flex items-center gap-1.5 text-slate-200 bg-slate-900/90 px-2 py-0.5 rounded-xs border border-slate-700/80">
+          <div className="flex items-center gap-1.5 text-slate-200 bg-slate-900/90 dark:bg-[#080F19] px-2 py-0.5 rounded-xs border border-slate-700/80 dark:border-[#26394C]">
             <Calendar className="w-3 h-3 text-teal-400" />
             <span className="hidden md:inline text-slate-400">{dayOfWeek},</span>
             <span className="font-medium text-slate-100">{dateFormatted}</span>
-            <span className="text-slate-600 hidden sm:inline">•</span>
+            <span className="text-slate-600 hidden sm:inline">&bull;</span>
             <Clock className="w-3 h-3 text-teal-400 hidden sm:inline" />
             <span className="font-bold text-teal-300 tabular-nums">
               {timeFormatted}
             </span>
-            <span className="text-[10px] text-slate-400 uppercase font-sans font-medium px-1 bg-slate-800 rounded-2xs">
+            <span className="text-[10px] text-slate-400 uppercase font-sans font-medium px-1 bg-slate-800 dark:bg-[#162638] rounded-2xs">
               IST
             </span>
           </div>
@@ -560,7 +573,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="relative" ref={cityDropdownRef}>
             <button
               onClick={() => setIsCityDropdownOpen((prev) => !prev)}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors cursor-pointer text-[11px] font-sans"
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs bg-slate-800/90 dark:bg-[#162638] hover:bg-slate-700 dark:hover:bg-[#192B3D] text-slate-200 hover:text-white border border-slate-700 dark:border-[#33485D] transition-colors cursor-pointer text-[11px] font-sans"
               title="Select Operating Indian Banking Center (Timezone strictly Asia/Kolkata)"
             >
               <MapPin className="w-3 h-3 text-[#2dd4bf] shrink-0" />
@@ -571,17 +584,17 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             {isCityDropdownOpen && (
-              <div className="absolute right-0 top-full mt-1 w-64 bg-white border border-[#CBD5E1] rounded-xs shadow-xl z-50 text-slate-900 py-1.5 motion-dropdown font-sans">
-                <div className="px-3 py-1.5 border-b border-[#E2E8F0] bg-[#F8FAFC]">
-                  <div className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider">
+              <div className="absolute right-0 top-full mt-1 w-64 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs shadow-xl z-50 text-[#273444] dark:text-[#E8EEF5] py-1.5 motion-dropdown font-sans">
+                <div className="px-3 py-1.5 border-b border-[#DCE3EA] dark:border-[#26394C] bg-[#F4F6F8] dark:bg-[#101C2A]">
+                  <div className="text-[10px] uppercase font-bold text-[#5D6B7B] dark:text-[#8194A8] tracking-wider">
                     Indian Banking Centers
                   </div>
-                  <div className="text-[11px] text-[#087F8C] font-mono mt-0.5 font-medium">
+                  <div className="text-[11px] text-[#168C83] dark:text-[#2dd4bf] font-mono mt-0.5 font-medium">
                     Timezone: Asia/Kolkata (IST • UTC+05:30)
                   </div>
                 </div>
 
-                <div className="max-h-60 overflow-y-auto divide-y divide-[#F1F5F9]">
+                <div className="max-h-60 overflow-y-auto divide-y divide-[#EDF1F5] dark:divide-[#26394C]">
                   {INDIAN_BANKING_CITIES.map((city) => {
                     const isSelected = city.id === selectedCity.id;
                     return (
@@ -591,27 +604,27 @@ export const Header: React.FC<HeaderProps> = ({
                           setSelectedCityId(city.id);
                           setIsCityDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-[#F8FAFC] transition-colors cursor-pointer ${
+                        className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] transition-colors cursor-pointer ${
                           isSelected
-                            ? 'bg-teal-50/70 text-[#066974] font-medium'
-                            : 'text-[#172033]'
+                            ? 'bg-teal-50/70 dark:bg-[#168C83]/20 text-[#168C83] dark:text-[#2dd4bf] font-medium'
+                            : 'text-[#273444] dark:text-[#E8EEF5]'
                         }`}
                       >
                         <div className="min-w-0 pr-2">
                           <div className="flex items-center gap-1.5">
                             <span className="font-semibold text-xs">{city.name}</span>
                             {city.isHeadOffice && (
-                              <span className="text-[9px] font-mono px-1 py-0.2 bg-[#087F8C]/15 text-[#066974] rounded-xs font-semibold">
+                              <span className="text-[9px] font-mono px-1 py-0.2 bg-[#168C83]/15 text-[#168C83] dark:text-[#2dd4bf] rounded-xs font-semibold">
                                 HQ
                               </span>
                             )}
                           </div>
-                          <div className="text-[10px] text-[#64748B] truncate mt-0.5">
+                          <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] truncate mt-0.5">
                             {city.branchName} • {city.circle}
                           </div>
                         </div>
                         {isSelected && (
-                          <Check className="w-3.5 h-3.5 text-[#087F8C] shrink-0" />
+                          <Check className="w-3.5 h-3.5 text-[#168C83] dark:text-[#2dd4bf] shrink-0" />
                         )}
                       </button>
                     );
@@ -622,14 +635,14 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Business Date Status & Terminal Identifier */}
-          <div className="hidden xl:flex items-center gap-2 text-slate-400 border-l border-slate-700 pl-2.5">
+          <div className="hidden xl:flex items-center gap-2 text-slate-400 border-l border-slate-700 dark:border-[#33485D] pl-2.5">
             <span className="text-emerald-400 font-sans text-[10px] font-medium uppercase px-1 bg-emerald-950/80 border border-emerald-800 rounded-xs">
               BOD Done
             </span>
             <span className="text-slate-300 font-mono text-[11px]">
               EOD: {BANK_META.eodScheduleTime}
             </span>
-            <span className="text-slate-500">•</span>
+            <span className="text-slate-500">&bull;</span>
             <span className="text-slate-300 font-mono text-[11px]">
               {BANK_META.systemTerminal.terminalId}
             </span>
@@ -640,20 +653,20 @@ export const Header: React.FC<HeaderProps> = ({
       {/* ======================================================================
           TIER 2: Operational Breadcrumbs, Global Search & Action Controls
           ====================================================================== */}
-      <div className="px-3 sm:px-4 py-2 flex items-center justify-between gap-2 sm:gap-4">
+      <div className="px-3 sm:px-4 py-2 flex items-center justify-between gap-2 sm:gap-4 bg-white dark:bg-[#101C2A]">
         {/* Left: Hamburger (Mobile) + Breadcrumbs & Page Title */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           {onToggleMobileMenu && (
             <button
               onClick={onToggleMobileMenu}
-              className="lg:hidden p-1.5 -ml-1 text-slate-700 hover:bg-slate-100 rounded-xs focus:outline-none cursor-pointer shrink-0 border border-[#CBD5E1]"
+              className="lg:hidden p-1.5 -ml-1 text-[#273444] dark:text-[#E8EEF5] hover:bg-[#F4F6F8] dark:hover:bg-[#162638] rounded-xs focus:outline-none cursor-pointer shrink-0 border border-[#DCE3EA] dark:border-[#33485D]"
               aria-label="Toggle navigation menu"
               title="Toggle Navigation Menu (Escape to close)"
             >
               {isMobileMenuOpen ? (
-                <X className="w-4 h-4 text-slate-900" />
+                <X className="w-4 h-4 text-[#273444] dark:text-white" />
               ) : (
-                <Menu className="w-4 h-4 text-slate-800" />
+                <Menu className="w-4 h-4 text-[#273444] dark:text-slate-200" />
               )}
             </button>
           )}
@@ -661,27 +674,28 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Institutional Breadcrumb & Page Title Container */}
           <div className="min-w-0">
             {/* Breadcrumb Path */}
-            <div className="flex items-center gap-1 text-[11px] text-[#64748B] font-medium leading-none mb-0.5 truncate">
+            <div className="flex items-center gap-1.5 text-[11px] text-[#5D6B7B] dark:text-[#8194A8] font-medium leading-none mb-0.5 truncate">
               <button
                 onClick={() => onSelectModule && onSelectModule('dashboard')}
-                className="hover:text-[#087F8C] transition-colors cursor-pointer text-[#475569] hover:underline"
+                className="hover:text-[#168C83] dark:hover:text-[#2dd4bf] transition-colors cursor-pointer text-[#5D6B7B] dark:text-[#A9BACB] flex items-center gap-1 hover:underline"
               >
-                COREvia
+                <Home className="w-3 h-3 text-[#168C83] dark:text-[#2dd4bf]" />
+                <span>COREvia</span>
               </button>
-              <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
-              <span className="text-[#64748B] truncate">{activeMeta.section}</span>
-              <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
-              <span className="text-[#087F8C] font-semibold truncate">
+              <ChevronRight className="w-3 h-3 text-[#8793A1] shrink-0" />
+              <span className="text-[#5D6B7B] dark:text-[#8194A8] truncate">{activeMeta.section}</span>
+              <ChevronRight className="w-3 h-3 text-[#8793A1] shrink-0" />
+              <span className="text-[#168C83] dark:text-[#2dd4bf] font-semibold truncate">
                 {activeMeta.title}
               </span>
             </div>
 
             {/* Active Page Header & Branch Context */}
             <div className="flex items-center gap-2">
-              <h1 className="font-bold text-[#172033] text-xs sm:text-sm tracking-tight truncate leading-tight">
+              <h1 className="font-bold text-[#273444] dark:text-[#E8EEF5] text-xs sm:text-sm tracking-tight truncate leading-tight">
                 {activeMeta.title}
               </h1>
-              <span className="font-mono text-[10px] px-1.5 py-0.2 bg-[#F1F5F9] text-[#475569] border border-[#CBD5E1] rounded-xs shrink-0 hidden sm:inline">
+              <span className="font-mono text-[10px] px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs shrink-0 hidden sm:inline">
                 {selectedCity.branchCode} • {selectedCity.ifsc}
               </span>
             </div>
@@ -692,9 +706,9 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex-1 max-w-md hidden md:block" ref={dropdownRef}>
           <div className="relative">
             {isSearching ? (
-              <RefreshCw className="w-3.5 h-3.5 text-[#087F8C] absolute left-2.5 top-1/2 -translate-y-1/2 animate-spin pointer-events-none" />
+              <RefreshCw className="w-3.5 h-3.5 text-[#168C83] absolute left-2.5 top-1/2 -translate-y-1/2 animate-spin pointer-events-none" />
             ) : (
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-3.5 h-3.5 text-[#8793A1] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             )}
             <input
               id="corevia-global-search"
@@ -705,7 +719,7 @@ export const Header: React.FC<HeaderProps> = ({
               onFocus={() => {
                 if (searchResults) setShowDropdown(true);
               }}
-              className="w-full pl-8 pr-14 py-1.5 text-xs bg-[#F8FAFC] border border-[#CBD5E1] rounded-sm text-[#172033] placeholder:text-[#64748B] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#087F8C] focus:border-[#087F8C] font-mono transition-colors"
+              className="w-full pl-8 pr-14 py-1.5 text-xs bg-[#F4F6F8] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm text-[#273444] dark:text-[#E8EEF5] placeholder:text-[#8793A1] dark:placeholder:text-[#8194A8] focus:bg-white dark:focus:bg-[#192B3D] focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83] font-mono transition-colors"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
               {searchQuery ? (
@@ -714,12 +728,13 @@ export const Header: React.FC<HeaderProps> = ({
                     onSearchChange('');
                     setShowDropdown(false);
                   }}
-                  className="text-slate-400 hover:text-slate-600 text-xs px-1"
+                  className="text-[#8793A1] hover:text-[#273444] dark:hover:text-[#E8EEF5] text-xs px-1 cursor-pointer"
+                  title="Clear search"
                 >
                   ×
                 </button>
               ) : (
-                <kbd className="hidden lg:inline-block font-mono text-[10px] text-[#94A3B8] bg-[#F1F5F9] px-1 py-0.2 rounded border border-[#CBD5E1]">
+                <kbd className="hidden lg:inline-block font-mono text-[10px] text-[#8793A1] dark:text-[#8194A8] bg-[#EDF1F5] dark:bg-[#101C2A] px-1 py-0.2 rounded border border-[#DCE3EA] dark:border-[#33485D]">
                   /
                 </kbd>
               )}
@@ -727,7 +742,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Categorized Search Results Dropdown */}
             {showDropdown && searchResults && (
-              <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-[#CBD5E1] rounded-sm shadow-xl max-h-96 overflow-y-auto z-50 text-xs divide-y divide-[#E2E8F0] motion-dropdown">
+              <div className="absolute left-0 right-0 top-full mt-1.5 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-xl max-h-96 overflow-y-auto z-50 text-xs divide-y divide-[#DCE3EA] dark:divide-[#26394C] motion-dropdown">
                 {renderSearchResultsList()}
               </div>
             )}
@@ -739,7 +754,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Mobile Search Toggle */}
           <button
             onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-            className="md:hidden p-1.5 rounded-sm text-slate-600 hover:bg-slate-100 border border-[#CBD5E1] cursor-pointer"
+            className="md:hidden p-1.5 rounded-sm text-[#5D6B7B] dark:text-[#A9BACB] hover:bg-[#F4F6F8] dark:hover:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] cursor-pointer"
             title="Search accounts, loans, customers"
           >
             <Search className="w-3.5 h-3.5" />
@@ -749,7 +764,7 @@ export const Header: React.FC<HeaderProps> = ({
           <Button
             size="sm"
             variant="outline"
-            icon={<PlusCircle className="w-3.5 h-3.5 text-[#087F8C]" />}
+            icon={<PlusCircle className="w-3.5 h-3.5 text-[#168C83]" />}
             onClick={onOpenNewTransaction}
             title="Create payment voucher or initiate transaction"
           >
@@ -762,8 +777,8 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={onOpenMakerChecker}
             className={`relative inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-sm text-xs font-medium border transition-colors cursor-pointer motion-interactive ${
               pendingAuthorizationsCount > 0
-                ? 'bg-amber-50 text-[#78350f] border-[#fde68a] hover:bg-amber-100'
-                : 'bg-[#F8FAFC] text-[#475569] border-[#CBD5E1] hover:bg-[#F1F5F9]'
+                ? 'bg-amber-50 dark:bg-amber-950/40 text-[#78350f] dark:text-amber-300 border-[#fde68a] dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/50'
+                : 'bg-[#F4F6F8] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] border-[#DCE3EA] dark:border-[#33485D] hover:bg-[#EDF1F5] dark:hover:bg-[#192B3D]'
             }`}
             title="Pending Maker-Checker Authorization Queue"
           >
@@ -771,7 +786,7 @@ export const Header: React.FC<HeaderProps> = ({
               className={`w-3.5 h-3.5 ${
                 pendingAuthorizationsCount > 0
                   ? 'text-[#B45309] animate-pulse'
-                  : 'text-slate-500'
+                  : 'text-[#8793A1] dark:text-slate-400'
               }`}
             />
             <span className="hidden md:inline">Queue</span>
@@ -779,7 +794,7 @@ export const Header: React.FC<HeaderProps> = ({
               className={`font-mono text-[10px] font-bold px-1.5 py-0.2 rounded-xs ${
                 pendingAuthorizationsCount > 0
                   ? 'bg-[#B45309] text-white'
-                  : 'bg-slate-200 text-slate-700'
+                  : 'bg-[#EDF1F5] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB]'
               }`}
             >
               {pendingAuthorizationsCount}
@@ -791,14 +806,14 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setIsNotificationsOpen(true)}
             className={`relative inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-sm text-xs font-medium border transition-colors cursor-pointer motion-interactive ${
               unreadNotificationsCount > 0
-                ? 'bg-rose-50 text-[#7f1d1d] border-[#fecaca] hover:bg-rose-100'
-                : 'bg-[#F8FAFC] text-[#475569] border-[#CBD5E1] hover:bg-[#F1F5F9]'
+                ? 'bg-rose-50 dark:bg-rose-950/40 text-[#7f1d1d] dark:text-rose-300 border-[#fecaca] dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/50'
+                : 'bg-[#F4F6F8] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] border-[#DCE3EA] dark:border-[#33485D] hover:bg-[#EDF1F5] dark:hover:bg-[#192B3D]'
             }`}
             title="Notifications & Intelligent Alerts"
           >
             <BellRing
               className={`w-3.5 h-3.5 ${
-                unreadNotificationsCount > 0 ? 'text-[#B42318]' : 'text-slate-500'
+                unreadNotificationsCount > 0 ? 'text-[#B42318]' : 'text-[#8793A1] dark:text-slate-400'
               }`}
             />
             <span className="hidden md:inline">Alerts</span>
@@ -809,26 +824,29 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
+          {/* Universal Theme Switcher (Light / Dark / System) */}
+          <ThemeSwitcher variant="compact" />
+
           {/* Officer ID Profile Dropdown */}
-          <div className="relative pl-1 sm:pl-2 border-l border-[#CBD5E1]" ref={profileDropdownRef}>
+          <div className="relative pl-1 sm:pl-2 border-l border-[#DCE3EA] dark:border-[#33485D]" ref={profileDropdownRef}>
             <button
               onClick={() => setIsProfileDropdownOpen((prev) => !prev)}
-              className="flex items-center gap-2 p-1 rounded-sm hover:bg-[#F8FAFC] border border-transparent hover:border-[#CBD5E1] transition-colors cursor-pointer"
+              className="flex items-center gap-2 p-1 rounded-sm hover:bg-[#F4F6F8] dark:hover:bg-[#162638] border border-transparent hover:border-[#DCE3EA] dark:border-[#33485D] transition-colors cursor-pointer"
               title="Workstation Officer Profile"
             >
-              <div className="w-7 h-7 rounded-sm bg-[#0f1e36] text-white flex items-center justify-center font-bold text-xs">
+              <div className="w-7 h-7 rounded-sm bg-[#142C45] dark:bg-[#162638] text-white flex items-center justify-center font-bold text-xs border border-transparent dark:border-[#33485D]">
                 <UserCheck className="w-4 h-4 text-teal-300" />
               </div>
               <div className="hidden lg:block text-left leading-tight">
-                <div className="text-xs font-semibold text-[#172033] flex items-center gap-1.5">
+                <div className="text-xs font-semibold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
                   <span className="truncate max-w-28">
                     {user?.name || BANK_META.systemTerminal.workstationUser}
                   </span>
-                  <span className="text-[9px] font-mono px-1 py-0.2 bg-[#087F8C]/15 text-[#066974] rounded-xs font-bold uppercase">
+                  <span className="text-[9px] font-mono px-1 py-0.2 bg-[#168C83]/15 text-[#168C83] dark:text-[#2dd4bf] rounded-xs font-bold uppercase">
                     {user?.roleName || 'Officer'}
                   </span>
                 </div>
-                <div className="text-[10px] text-[#64748B] font-mono truncate">
+                <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] font-mono truncate">
                   {user?.employeeId || BANK_META.systemTerminal.employeeId}
                 </div>
               </div>
@@ -836,37 +854,45 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             {isProfileDropdownOpen && (
-              <div className="absolute right-0 top-full mt-1 w-64 bg-white border border-[#CBD5E1] rounded-sm shadow-xl z-50 text-slate-900 py-2 motion-dropdown font-sans">
-                <div className="px-3 py-2 border-b border-[#E2E8F0] bg-[#F8FAFC]">
-                  <div className="font-bold text-xs text-[#172033]">
+              <div className="absolute right-0 top-full mt-1 w-64 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-xl z-50 text-[#273444] dark:text-[#E8EEF5] py-2 motion-dropdown font-sans">
+                <div className="px-3 py-2 border-b border-[#DCE3EA] dark:border-[#26394C] bg-[#F4F6F8] dark:bg-[#101C2A]">
+                  <div className="font-bold text-xs text-[#273444] dark:text-[#E8EEF5]">
                     {user?.name || BANK_META.systemTerminal.workstationUser}
                   </div>
-                  <div className="text-[11px] text-[#64748B] font-mono mt-0.5">
+                  <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] font-mono mt-0.5">
                     {user?.email || 'officer@corevia.bank'}
                   </div>
                   <div className="flex items-center gap-1.5 mt-1.5">
-                    <span className="text-[10px] font-mono px-1.5 py-0.2 bg-[#F1F5F9] text-[#475569] border border-[#CBD5E1] rounded-xs">
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs">
                       {user?.employeeId || 'EMP-782194'}
                     </span>
-                    <span className="text-[10px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded-xs">
+                    <span className="text-[10px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-1.5 py-0.2 rounded-xs">
                       Session Active
                     </span>
                   </div>
                 </div>
 
-                <div className="px-3 py-2 text-[11px] text-[#475569] space-y-1 border-b border-[#E2E8F0]">
+                <div className="px-3 py-2 text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] space-y-1 border-b border-[#DCE3EA] dark:border-[#26394C]">
                   <div className="flex justify-between">
-                    <span className="text-[#64748B]">Terminal ID:</span>
-                    <span className="font-mono font-medium text-[#172033]">
+                    <span className="text-[#5D6B7B] dark:text-[#8194A8]">Terminal ID:</span>
+                    <span className="font-mono font-medium text-[#273444] dark:text-[#E8EEF5]">
                       {BANK_META.systemTerminal.terminalId}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#64748B]">Operating Circle:</span>
-                    <span className="text-[#172033] font-medium truncate max-w-32">
+                    <span className="text-[#5D6B7B] dark:text-[#8194A8]">Operating Circle:</span>
+                    <span className="text-[#273444] dark:text-[#E8EEF5] font-medium truncate max-w-32">
                       {selectedCity.circle}
                     </span>
                   </div>
+                </div>
+
+                {/* Workstation Theme Preference Setting */}
+                <div className="px-3 py-2.5 border-b border-[#DCE3EA] dark:border-[#26394C] space-y-1.5">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-[#5D6B7B] dark:text-[#8194A8]">
+                    Theme Preference
+                  </div>
+                  <ThemeSwitcher variant="segmented" className="w-full justify-between" />
                 </div>
 
                 <div className="pt-1.5 px-2">
@@ -875,7 +901,7 @@ export const Header: React.FC<HeaderProps> = ({
                       setIsProfileDropdownOpen(false);
                       logout();
                     }}
-                    className="w-full inline-flex items-center gap-2 px-3 py-1.5 rounded-xs text-xs font-medium text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
+                    className="w-full inline-flex items-center gap-2 px-3 py-1.5 rounded-xs text-xs font-medium text-red-700 dark:text-rose-400 hover:bg-red-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
                   >
                     <LogOut className="w-3.5 h-3.5" />
                     <span>Sign Out of Terminal</span>
@@ -891,10 +917,10 @@ export const Header: React.FC<HeaderProps> = ({
       {isMobileSearchOpen && (
         <div
           ref={mobileSearchContainerRef}
-          className="md:hidden px-3 py-2 bg-[#F1F5F9] border-t border-[#CBD5E1] relative motion-fade-in"
+          className="md:hidden px-3 py-2 bg-[#EDF1F5] dark:bg-[#101C2A] border-t border-[#DCE3EA] dark:border-[#33485D] relative motion-fade-in"
         >
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-4 h-4 text-[#8793A1] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search Account, Customer, CIF, Loan..."
@@ -908,7 +934,7 @@ export const Header: React.FC<HeaderProps> = ({
               onFocus={() => {
                 if (searchResults) setShowDropdown(true);
               }}
-              className="w-full pl-8 pr-8 py-1.5 text-xs bg-white border border-[#CBD5E1] rounded-xs text-slate-900 placeholder:text-slate-400 font-mono focus:outline-none focus:ring-1 focus:ring-[#087F8C]"
+              className="w-full pl-8 pr-8 py-1.5 text-xs bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs text-[#273444] dark:text-[#E8EEF5] placeholder:text-[#8793A1] dark:placeholder:text-[#8194A8] font-mono focus:outline-none focus:ring-1 focus:ring-[#168C83]"
               autoFocus
             />
             {searchQuery && (
@@ -917,7 +943,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onSearchChange('');
                   setShowDropdown(false);
                 }}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8793A1] hover:text-[#273444] dark:hover:text-[#E8EEF5] text-xs cursor-pointer"
               >
                 ×
               </button>
@@ -925,7 +951,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {showDropdown && searchResults && (
-            <div className="mt-2 bg-white border border-[#CBD5E1] rounded-xs shadow-xl max-h-80 overflow-y-auto text-xs divide-y divide-[#E2E8F0] motion-dropdown">
+            <div className="mt-2 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs shadow-xl max-h-80 overflow-y-auto text-xs divide-y divide-[#DCE3EA] dark:divide-[#26394C] motion-dropdown">
               {renderSearchResultsList()}
             </div>
           )}

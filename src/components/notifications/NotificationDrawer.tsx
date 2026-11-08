@@ -276,12 +276,12 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
       />
 
       {/* Slide-over Drawer */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white border-l border-slate-300 shadow-2xl flex flex-col animate-slide-left">
+      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white dark:bg-[#162638] border-l border-slate-300 dark:border-[#33485D] shadow-2xl flex flex-col animate-slide-left">
         {/* Header */}
-        <div className="p-4 bg-[#0f1e36] text-white flex flex-col gap-3 shrink-0">
+        <div className="p-4 bg-[#142C45] dark:bg-[#101C2A] text-white flex flex-col gap-3 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="p-1.5 rounded bg-slate-800/80 border border-slate-700 text-amber-400">
+              <div className="p-1.5 rounded bg-slate-800/80 dark:bg-[#162638] border border-slate-700 dark:border-[#33485D] text-[#D9A441]">
                 <BellRing className="w-4 h-4" />
               </div>
               <div>
@@ -295,7 +295,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-slate-300 font-mono">
+                <p className="text-[11px] text-slate-300 dark:text-[#A9BACB] font-mono">
                   Institutional Alerts & Relationship Signals
                 </p>
               </div>
@@ -304,14 +304,14 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setIsPreferencesOpen(true)}
-                className="p-1.5 rounded text-slate-300 hover:text-white hover:bg-slate-800 cursor-pointer transition-colors"
+                className="p-1.5 rounded text-slate-300 dark:text-[#A9BACB] hover:text-white hover:bg-slate-800 dark:hover:bg-[#1C3045] cursor-pointer transition-colors"
                 title="Notification Preferences"
               >
                 <Settings className="w-4 h-4" />
               </button>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded text-slate-300 hover:text-white hover:bg-slate-800 cursor-pointer transition-colors"
+                className="p-1.5 rounded text-slate-300 dark:text-[#A9BACB] hover:text-white hover:bg-slate-800 dark:hover:bg-[#1C3045] cursor-pointer transition-colors"
                 title="Close"
               >
                 <X className="w-5 h-5" />
@@ -320,13 +320,13 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
           </div>
 
           {/* Quick Metrics Bar & Operational Controls */}
-          <div className="flex items-center justify-between pt-1 border-t border-slate-700/60 text-xs">
+          <div className="flex items-center justify-between pt-1 border-t border-slate-700/60 dark:border-[#26394C] text-xs">
             <div className="flex items-center gap-2 font-mono text-[11px]">
               <span className="text-rose-300 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
                 {summary.criticalCount} Critical
               </span>
-              <span className="text-slate-500">&bull;</span>
+              <span className="text-slate-500 dark:text-[#8194A8]">&bull;</span>
               <span className="text-amber-300 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                 {summary.warningCount} Warnings
@@ -337,7 +337,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               <button
                 onClick={handleSync}
                 disabled={isSyncing}
-                className="text-[11px] font-mono text-slate-300 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
+                className="text-[11px] font-mono text-slate-300 dark:text-[#A9BACB] hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
                 title="Scan operational queues for new alerts"
               >
                 <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin text-amber-400' : ''}`} />
@@ -345,11 +345,11 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               </button>
               {summary.unreadCount > 0 && (
                 <>
-                  <span className="text-slate-600">|</span>
+                  <span className="text-slate-600 dark:text-[#33485D]">|</span>
                   <button
                     onClick={handleMarkAllRead}
                     disabled={isLoading}
-                    className="text-[11px] font-mono text-slate-300 hover:text-amber-300 flex items-center gap-1 cursor-pointer transition-colors"
+                    className="text-[11px] font-mono text-slate-300 dark:text-[#A9BACB] hover:text-[#D9A441] flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     <CheckCheck className="w-3 h-3" />
                     <span>Read all</span>
@@ -361,7 +361,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
         </div>
 
         {/* Severity Tabs */}
-        <div className="px-3 pt-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
+        <div className="px-3 pt-2 bg-slate-50 dark:bg-[#101C2A] border-b border-slate-200 dark:border-[#26394C] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-1 text-xs">
             {(['ALL', 'UNREAD', 'CRITICAL', 'WARNINGS'] as TabType[]).map((tab) => (
               <button
@@ -369,8 +369,8 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                 onClick={() => setActiveTab(tab)}
                 className={`px-2.5 py-1.5 text-[11px] font-medium transition-colors border-b-2 cursor-pointer font-sans ${
                   activeTab === tab
-                    ? 'border-[#0f1e36] text-[#0f1e36] font-semibold'
-                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                    ? 'border-[#168C83] text-[#142C45] dark:text-[#E8EEF5] font-semibold'
+                    : 'border-transparent text-slate-500 dark:text-[#8194A8] hover:text-slate-800 dark:hover:text-[#E8EEF5]'
                 }`}
               >
                 {tab === 'ALL' && `All (${summary.totalCount})`}
@@ -383,16 +383,16 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
         </div>
 
         {/* Category Filter Pills */}
-        <div className="px-3 py-2 bg-white border-b border-slate-200 flex items-center gap-1.5 overflow-x-auto text-[11px] shrink-0 scrollbar-none">
-          <span className="text-slate-400 text-[10px] font-mono uppercase shrink-0">Category:</span>
+        <div className="px-3 py-2 bg-white dark:bg-[#162638] border-b border-slate-200 dark:border-[#26394C] flex items-center gap-1.5 overflow-x-auto text-[11px] shrink-0 scrollbar-none">
+          <span className="text-slate-400 dark:text-[#8194A8] text-[10px] font-mono uppercase shrink-0">Category:</span>
           {['ALL', 'SERVICE', 'TASK', 'OPPORTUNITY', 'RELATIONSHIP', 'OPERATIONAL'].map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase whitespace-nowrap transition-colors cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-slate-800 text-white font-semibold'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#142C45] dark:bg-[#168C83] text-white font-semibold'
+                  : 'bg-slate-100 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] hover:bg-slate-200 dark:hover:bg-[#1C3045]'
               }`}
             >
               {cat}
@@ -401,19 +401,19 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
         </div>
 
         {/* Notification List Container */}
-        <div className="flex-1 overflow-y-auto divide-y divide-slate-100 p-2 space-y-2">
+        <div className="flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-[#26394C] p-2 space-y-2 bg-[#F4F6F8] dark:bg-[#101C2A]">
           {isLoading && notifications.length === 0 ? (
-            <div className="py-16 text-center text-slate-400 font-mono text-xs">
-              <RefreshCw className="w-5 h-5 mx-auto mb-2 animate-spin text-slate-400" />
+            <div className="py-16 text-center text-slate-400 dark:text-[#8194A8] font-mono text-xs">
+              <RefreshCw className="w-5 h-5 mx-auto mb-2 animate-spin text-slate-400 dark:text-[#8194A8]" />
               Loading alerts...
             </div>
           ) : notifications.length === 0 ? (
             <div className="py-16 text-center px-4">
-              <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3 text-slate-400 border border-slate-200">
-                <Check className="w-5 h-5 text-emerald-600" />
+              <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#162638] flex items-center justify-center mx-auto mb-3 text-slate-400 dark:text-[#8194A8] border border-slate-200 dark:border-[#33485D]">
+                <Check className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
-              <p className="text-xs font-semibold text-slate-800 font-sans">No pending alerts</p>
-              <p className="text-[11px] text-slate-500 font-mono mt-1">
+              <p className="text-xs font-semibold text-slate-800 dark:text-[#E8EEF5] font-sans">No pending alerts</p>
+              <p className="text-[11px] text-slate-500 dark:text-[#A9BACB] font-mono mt-1">
                 {activeTab === 'UNREAD'
                   ? 'All notifications have been read.'
                   : activeTab === 'CRITICAL'
@@ -422,7 +422,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               </p>
               <button
                 onClick={handleSync}
-                className="mt-3 inline-flex items-center gap-1 text-xs text-blue-700 hover:underline font-mono"
+                className="mt-3 inline-flex items-center gap-1 text-xs text-[#168C83] dark:text-[#1B9D92] hover:underline font-mono"
               >
                 <RefreshCw className="w-3 h-3" />
                 Scan pipeline now
@@ -439,13 +439,13 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                   className={`p-3 rounded border transition-colors ${
                     isUnread
                       ? notif.severity === 'CRITICAL'
-                        ? 'bg-rose-50/40 border-rose-200'
+                        ? 'bg-rose-50/80 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800/50'
                         : notif.severity === 'WARNING'
-                        ? 'bg-amber-50/40 border-amber-200'
-                        : 'bg-blue-50/30 border-blue-200'
+                        ? 'bg-amber-50/80 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/50'
+                        : 'bg-blue-50/70 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/50'
                       : isAcknowledged
-                      ? 'bg-slate-50/80 border-slate-200 opacity-80'
-                      : 'bg-white border-slate-200 hover:border-slate-300'
+                      ? 'bg-slate-50/80 dark:bg-[#162638]/60 border-slate-200 dark:border-[#26394C] opacity-80'
+                      : 'bg-white dark:bg-[#162638] border-slate-200 dark:border-[#33485D] hover:border-slate-300 dark:hover:border-[#415C76]'
                   }`}
                 >
                   {/* Top Badges & Timestamp */}
@@ -454,36 +454,36 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                       {getSeverityBadge(notif.severity)}
                       {getCategoryBadge(notif.category)}
                       {isAcknowledged && (
-                        <span className="px-1.5 py-0.2 rounded text-[10px] font-mono uppercase bg-slate-200 text-slate-700 font-medium">
+                        <span className="px-1.5 py-0.2 rounded text-[10px] font-mono uppercase bg-slate-200 dark:bg-[#192B3D] text-slate-700 dark:text-[#A9BACB] font-medium border border-slate-300 dark:border-[#33485D]">
                           ACKNOWLEDGED
                         </span>
                       )}
                     </div>
-                    <span className="text-[10px] font-mono text-slate-400 whitespace-nowrap">
+                    <span className="text-[10px] font-mono text-slate-400 dark:text-[#8194A8] whitespace-nowrap">
                       {formatRelativeTime(notif.createdAt)}
                     </span>
                   </div>
 
                   {/* Title & Message */}
-                  <h4 className="text-xs font-semibold text-slate-900 font-sans leading-snug">
+                  <h4 className="text-xs font-semibold text-slate-900 dark:text-[#E8EEF5] font-sans leading-snug">
                     {notif.title}
                   </h4>
-                  <p className="text-[11px] text-slate-600 mt-1 leading-relaxed font-sans">
+                  <p className="text-[11px] text-slate-600 dark:text-[#A9BACB] mt-1 leading-relaxed font-sans">
                     {notif.message}
                   </p>
 
                   {/* Context Entities (Customer & Source Entity) */}
                   {(notif.customerName || notif.sourceEntityId) && (
-                    <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono text-slate-500">
+                    <div className="mt-2 pt-2 border-t border-slate-100 dark:border-[#26394C] flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-[#8194A8]">
                       {notif.customerName && (
-                        <span className="flex items-center gap-1 text-slate-700 truncate max-w-[200px]">
-                          <User className="w-3 h-3 text-slate-400 shrink-0" />
+                        <span className="flex items-center gap-1 text-slate-700 dark:text-[#E8EEF5] truncate max-w-[200px]">
+                          <User className="w-3 h-3 text-slate-400 dark:text-[#8194A8] shrink-0" />
                           <span className="truncate">{notif.customerName}</span>
-                          {notif.customerCode && <span className="text-slate-400 font-mono">({notif.customerCode})</span>}
+                          {notif.customerCode && <span className="text-slate-400 dark:text-[#8194A8] font-mono">({notif.customerCode})</span>}
                         </span>
                       )}
                       {notif.sourceEntityId && (
-                        <span className="text-slate-500 font-mono ml-auto">
+                        <span className="text-slate-500 dark:text-[#8194A8] font-mono ml-auto">
                           Ref: {notif.sourceEntityId}
                         </span>
                       )}
@@ -491,13 +491,13 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                   )}
 
                   {/* Action Buttons Bar */}
-                  <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-[#26394C] flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5">
                       {/* Deep Link Action */}
                       {notif.actionUrl && (
                         <button
                           onClick={() => handleActionClick(notif)}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded text-[11px] font-semibold bg-[#0f1e36] text-white hover:bg-slate-800 cursor-pointer transition-colors"
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded text-[11px] font-semibold bg-[#142C45] dark:bg-[#168C83] text-white hover:bg-slate-800 dark:hover:bg-[#1B9D92] cursor-pointer transition-colors"
                         >
                           <span>{notif.actionLabel || 'View Record'}</span>
                           <ChevronRight className="w-3 h-3" />
@@ -509,7 +509,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                         <button
                           onClick={() => handleAcknowledge(notif.id)}
                           disabled={actionInProgressId === notif.id}
-                          className="px-2 py-1 rounded text-[10px] font-mono font-medium bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 cursor-pointer transition-colors"
+                          className="px-2 py-1 rounded text-[10px] font-mono font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700/50 hover:bg-amber-100 dark:hover:bg-amber-900/60 cursor-pointer transition-colors"
                           title="Acknowledge alert and log review"
                         >
                           Acknowledge
@@ -517,13 +517,13 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                       )}
                     </div>
 
-                    <div className="flex items-center gap-1 text-slate-400">
+                    <div className="flex items-center gap-1 text-slate-400 dark:text-[#8194A8]">
                       {/* Mark Read Toggle */}
                       {isUnread && (
                         <button
                           onClick={() => handleMarkRead(notif.id)}
                           disabled={actionInProgressId === notif.id}
-                          className="p-1 rounded hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors"
+                          className="p-1 rounded hover:text-slate-700 dark:hover:text-[#E8EEF5] hover:bg-slate-100 dark:hover:bg-[#1C3045] cursor-pointer transition-colors"
                           title="Mark as read"
                         >
                           <Check className="w-3.5 h-3.5" />
@@ -534,7 +534,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                       <button
                         onClick={() => handleDismiss(notif.id)}
                         disabled={actionInProgressId === notif.id}
-                        className="p-1 rounded hover:text-rose-700 hover:bg-rose-50 cursor-pointer transition-colors"
+                        className="p-1 rounded hover:text-rose-700 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 cursor-pointer transition-colors"
                         title="Dismiss alert"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -548,7 +548,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
         </div>
 
         {/* Footer info */}
-        <div className="p-3 bg-slate-50 border-t border-slate-200 text-center text-[10px] font-mono text-slate-500 shrink-0">
+        <div className="p-3 bg-slate-50 dark:bg-[#101C2A] border-t border-slate-200 dark:border-[#26394C] text-center text-[10px] font-mono text-slate-500 dark:text-[#8194A8] shrink-0">
           COREvia Event-Driven Notification Engine &bull; Enterprise Banking Audit Active
         </div>
       </div>

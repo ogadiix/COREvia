@@ -346,9 +346,9 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
   };
 
   return (
-    <div className={`relative flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs ${compact ? 'h-[440px]' : 'h-[780px]'}`}>
+    <div className={`relative flex flex-col bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-xl overflow-hidden shadow-xs ${compact ? 'h-[440px]' : 'h-[780px]'}`}>
       {/* Top Toolbar */}
-      <div className="flex flex-wrap items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200 text-xs gap-3">
+      <div className="flex flex-wrap items-center justify-between px-4 py-2.5 bg-slate-50 dark:bg-[#101C2A] border-b border-slate-200 dark:border-[#26394C] text-xs gap-3">
         {/* Entity Info & Switcher */}
         <div className="flex items-center gap-2">
           <div className="p-1.5 bg-indigo-100 text-indigo-700 rounded-md">

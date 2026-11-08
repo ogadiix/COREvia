@@ -84,7 +84,6 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 export const useToast = (): ToastContextValue => {
   const context = useContext(ToastContext);
   if (!context) {
-    // Provide safe fallback if invoked outside ToastProvider
     return {
       toasts: [],
       addToast: () => '',
@@ -126,31 +125,23 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onDismiss }) =>
         {toasts.map((t) => {
           const typeConfig: Record<
             ToastType,
-            { bg: string; border: string; text: string; icon: React.ReactNode }
+            { border: string; icon: React.ReactNode }
           > = {
             success: {
-              bg: 'bg-white',
-              border: 'border-[#16803C]',
-              text: 'text-[#14532d]',
-              icon: <CheckCircle2 className="w-4 h-4 text-[#16803C] shrink-0" />,
+              border: 'border-l-[#16803C] dark:border-l-[#22C55E]',
+              icon: <CheckCircle2 className="w-4 h-4 text-[#16803C] dark:text-[#22C55E] shrink-0" />,
             },
             warning: {
-              bg: 'bg-white',
-              border: 'border-[#B45309]',
-              text: 'text-[#78350f]',
-              icon: <AlertTriangle className="w-4 h-4 text-[#B45309] shrink-0" />,
+              border: 'border-l-[#B7791F] dark:border-l-[#F59E0B]',
+              icon: <AlertTriangle className="w-4 h-4 text-[#B7791F] dark:text-[#F59E0B] shrink-0" />,
             },
             error: {
-              bg: 'bg-white',
-              border: 'border-[#B42318]',
-              text: 'text-[#7f1d1d]',
-              icon: <AlertCircle className="w-4 h-4 text-[#B42318] shrink-0" />,
+              border: 'border-l-[#B42318] dark:border-l-[#EF4444]',
+              icon: <AlertCircle className="w-4 h-4 text-[#B42318] dark:text-[#EF4444] shrink-0" />,
             },
             info: {
-              bg: 'bg-white',
-              border: 'border-[#2563EB]',
-              text: 'text-[#1e3a8a]',
-              icon: <Info className="w-4 h-4 text-[#2563EB] shrink-0" />,
+              border: 'border-l-[#2563EB] dark:border-l-[#3B82F6]',
+              icon: <Info className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6] shrink-0" />,
             },
           };
 
@@ -165,24 +156,24 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onDismiss }) =>
               initial="initial"
               animate="animate"
               exit="exit"
-              className={`pointer-events-auto rounded-sm border-l-4 ${cfg.border} border border-[#CBD5E1] bg-white p-3 shadow-lg flex items-start justify-between gap-3`}
+              className={`pointer-events-auto rounded-sm border-l-4 ${cfg.border} border border-[#DCE3EA] dark:border-[#33485D] bg-white dark:bg-[#162638] p-3 shadow-lg flex items-start justify-between gap-3`}
             >
               <div className="flex items-start gap-2.5 min-w-0">
                 <span className="mt-0.5">{cfg.icon}</span>
                 <div className="min-w-0 text-left">
                   {t.title && (
-                    <h5 className="text-xs font-bold text-[#172033] tracking-tight uppercase">
+                    <h5 className="text-xs font-bold text-[#273444] dark:text-[#E8EEF5] tracking-tight uppercase">
                       {t.title}
                     </h5>
                   )}
-                  <p className="text-xs text-[#475569] leading-snug break-words">
+                  <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] leading-snug break-words">
                     {t.message}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => onDismiss(t.id)}
-                className="text-[#94A3B8] hover:text-[#172033] p-0.5 rounded-xs transition-colors shrink-0"
+                className="text-[#8793A1] hover:text-[#273444] dark:text-[#8194A8] dark:hover:text-[#E8EEF5] p-0.5 rounded-xs transition-colors shrink-0 cursor-pointer"
                 aria-label="Dismiss notification"
               >
                 <X className="w-3.5 h-3.5" />
@@ -194,4 +185,3 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onDismiss }) =>
     </div>
   );
 };
-

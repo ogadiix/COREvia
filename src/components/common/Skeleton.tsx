@@ -25,7 +25,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   return (
     <div
       aria-hidden="true"
-      className={`bg-[#E2E8F0] motion-pulse-subtle ${roundedClasses[rounded]} ${className}`}
+      className={`bg-[#EDF1F5] dark:bg-[#192B3D] motion-pulse-subtle ${roundedClasses[rounded]} ${className}`}
       style={{
         width: width ?? '100%',
         height: height ?? '1rem',
@@ -66,7 +66,10 @@ export interface SkeletonCardProps {
 
 export const SkeletonCard: React.FC<SkeletonCardProps> = ({ className = '' }) => {
   return (
-    <div className={`p-4 bg-white border border-[#CBD5E1] rounded-sm shadow-2xs space-y-3 ${className}`} aria-hidden="true">
+    <div
+      className={`p-4 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-xs space-y-3 ${className}`}
+      aria-hidden="true"
+    >
       <div className="flex items-center justify-between">
         <Skeleton width="40%" height="14px" />
         <Skeleton width="20%" height="12px" />
@@ -76,4 +79,3 @@ export const SkeletonCard: React.FC<SkeletonCardProps> = ({ className = '' }) =>
     </div>
   );
 };
-

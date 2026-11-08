@@ -1,50 +1,161 @@
 /**
- * COREvia Institutional Design System 2.0 — Design Tokens
- * Philosophy: INSTITUTIONAL CLARITY + PREMIUM INTERACTION
+ * COREvia Institutional Design System — Design Tokens (v3.0)
+ * Philosophy: MODERN INSTITUTIONAL BANKING
+ * Dual-Theme Engine: LIGHT & DARK MODE
+ * Typography: Inter (Sans) & IBM Plex Mono (Mono)
  */
 
-export const colors = {
-  // Primary Institutional Brand
-  brand: {
-    DEFAULT: '#087F8C',
-    50: '#f0fdfa',
-    100: '#ccfbf1',
-    200: '#99f6e4',
-    300: '#5eead4',
-    400: '#2dd4bf',
-    500: '#087F8C',
-    600: '#066974',
-    700: '#05535c',
-    800: '#044148',
-    900: '#033238',
-    950: '#022024',
+export const brandColors = {
+  // Light Mode Palette
+  light: {
+    primaryNavy: '#142C45',
+    primaryTeal: '#168C83',
+    brandHover: '#1B9D92',
+    mutedGold: '#D9A441',
+    background: '#F4F6F8',
+    surface: '#FFFFFF',
+    secondarySurface: '#EDF1F5',
+    elevatedSurface: '#FFFFFF',
+    inputBackground: '#FFFFFF',
+    dropdownBackground: '#FFFFFF',
+    dialogBackground: '#FFFFFF',
+    drawerBackground: '#FFFFFF',
+    tableBackground: '#FFFFFF',
+    tableHeader: '#F8FAFC',
+    tableHover: '#F1F5F9',
+    primaryText: '#273444',
+    secondaryText: '#5D6B7B',
+    mutedText: '#8793A1',
+    border: '#DCE3EA',
+    subtleBorder: '#E8EEF4',
+    status: {
+      success: '#16803C',
+      successSubtle: '#F0FDF4',
+      successBorder: '#BBF7D0',
+      warning: '#B7791F',
+      warningSubtle: '#FEFCE8',
+      warningBorder: '#FEF08A',
+      danger: '#B42318',
+      dangerSubtle: '#FEF2F2',
+      dangerBorder: '#FECACA',
+      info: '#2563EB',
+      infoSubtle: '#EFF6FF',
+      infoBorder: '#BFDBFE',
+    },
   },
 
-  // Surfaces & Backgrounds
-  background: '#F5F7FA',
+  // Dark Mode Palette
+  dark: {
+    primaryNavy: '#142C45',
+    primaryTeal: '#168C83',
+    brandHover: '#1B9D92',
+    mutedGold: '#D9A441',
+    background: '#080F19',
+    sidebar: '#101C2A',
+    header: '#101C2A',
+    surface: '#162638',
+    secondarySurface: '#192B3D',
+    elevatedSurface: '#1C3045',
+    inputBackground: '#101C2A',
+    dropdownBackground: '#162638',
+    dialogBackground: '#162638',
+    drawerBackground: '#162638',
+    tableBackground: '#162638',
+    tableHeader: '#101C2A',
+    tableHover: '#20364B',
+    primaryText: '#E8EEF5',
+    secondaryText: '#A9BACB',
+    mutedText: '#8194A8',
+    border: '#33485D',
+    subtleBorder: '#26394C',
+    status: {
+      success: '#22C55E',
+      successSubtle: '#062814',
+      successBorder: '#15803D',
+      warning: '#F59E0B',
+      warningSubtle: '#341A04',
+      warningBorder: '#B45309',
+      danger: '#EF4444',
+      dangerSubtle: '#370B0B',
+      dangerBorder: '#B91C1C',
+      info: '#3B82F6',
+      infoSubtle: '#0D203F',
+      infoBorder: '#1D4ED8',
+    },
+  },
+} as const;
+
+export const semanticColors = {
+  success: {
+    light: brandColors.light.status.success,
+    lightSubtle: brandColors.light.status.successSubtle,
+    lightBorder: brandColors.light.status.successBorder,
+    dark: brandColors.dark.status.success,
+    darkSubtle: brandColors.dark.status.successSubtle,
+    darkBorder: brandColors.dark.status.successBorder,
+  },
+  warning: {
+    light: brandColors.light.status.warning,
+    lightSubtle: brandColors.light.status.warningSubtle,
+    lightBorder: brandColors.light.status.warningBorder,
+    dark: brandColors.dark.status.warning,
+    darkSubtle: brandColors.dark.status.warningSubtle,
+    darkBorder: brandColors.dark.status.warningBorder,
+  },
+  danger: {
+    light: brandColors.light.status.danger,
+    lightSubtle: brandColors.light.status.dangerSubtle,
+    lightBorder: brandColors.light.status.dangerBorder,
+    dark: brandColors.dark.status.danger,
+    darkSubtle: brandColors.dark.status.dangerSubtle,
+    darkBorder: brandColors.dark.status.dangerBorder,
+  },
+  info: {
+    light: brandColors.light.status.info,
+    lightSubtle: brandColors.light.status.infoSubtle,
+    lightBorder: brandColors.light.status.infoBorder,
+    dark: brandColors.dark.status.info,
+    darkSubtle: brandColors.dark.status.infoSubtle,
+    darkBorder: brandColors.dark.status.infoBorder,
+  },
+} as const;
+
+export const colors = {
+  brand: {
+    DEFAULT: '#168C83',
+    50: '#F0FDFB',
+    100: '#CCFBF6',
+    200: '#99F6ED',
+    300: '#5EEADF',
+    400: '#2DD4C7',
+    500: '#168C83',
+    600: '#137971',
+    700: '#10635D',
+    800: '#0D4E49',
+    900: '#0A3936',
+    950: '#05211F',
+    hover: '#1B9D92',
+    navy: '#142C45',
+    gold: '#D9A441',
+  },
+  background: '#F4F6F8',
   surface: {
     DEFAULT: '#FFFFFF',
-    secondary: '#F8FAFC',
-    sunken: '#F1F5F9',
+    secondary: '#EDF1F5',
+    sunken: '#E8EEF4',
   },
-
-  // Borders
   border: {
-    DEFAULT: '#E2E8F0',
-    subtle: '#E2E8F0',
-    strong: '#CBD5E1',
-    interactive: '#94A3B8',
+    DEFAULT: '#DCE3EA',
+    subtle: '#E8EEF4',
+    strong: '#DCE3EA',
+    interactive: '#168C83',
   },
-
-  // Typography
   text: {
-    primary: '#172033',
-    secondary: '#475569',
-    muted: '#64748B',
+    primary: '#273444',
+    secondary: '#5D6B7B',
+    muted: '#8793A1',
     inverted: '#FFFFFF',
   },
-
-  // Semantic Status Tints
   status: {
     success: {
       DEFAULT: '#16803C',
@@ -53,9 +164,9 @@ export const colors = {
       text: '#14532d',
     },
     warning: {
-      DEFAULT: '#B45309',
-      subtle: '#fffbeb',
-      border: '#fde68a',
+      DEFAULT: '#B7791F',
+      subtle: '#fefce8',
+      border: '#fef08a',
       text: '#78350f',
     },
     danger: {
@@ -71,15 +182,15 @@ export const colors = {
       text: '#1e3a8a',
     },
   },
-
-  // Institutional Navy Accent
   navy: {
-    DEFAULT: '#0f1e36',
-    hover: '#1b2e4b',
-    active: '#091322',
-    900: '#0f1e36',
-    950: '#0b1626',
+    DEFAULT: '#142C45',
+    hover: '#1b3858',
+    active: '#0c1c2e',
+    900: '#142C45',
+    950: '#101C2A',
   },
+  light: brandColors.light,
+  dark: brandColors.dark,
 } as const;
 
 export const typography = {
@@ -121,6 +232,7 @@ export const spacing = {
   8: '32px',
   10: '40px',
   12: '48px',
+  16: '64px',
 } as const;
 
 export const radii = {
@@ -140,6 +252,76 @@ export const shadows = {
   sm: '0 2px 4px -1px rgba(15, 23, 42, 0.06), 0 4px 6px -1px rgba(15, 23, 42, 0.04)',
   md: '0 4px 6px -2px rgba(15, 23, 42, 0.05), 0 10px 15px -3px rgba(15, 23, 42, 0.07)',
   lg: '0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 20px 25px -5px rgba(15, 23, 42, 0.1)',
+} as const;
+
+export const elevation = {
+  0: {
+    shadow: shadows.none,
+    lightSurface: brandColors.light.surface,
+    darkSurface: brandColors.dark.surface,
+  },
+  1: {
+    shadow: shadows['2xs'],
+    lightSurface: brandColors.light.surface,
+    darkSurface: brandColors.dark.surface,
+  },
+  2: {
+    shadow: shadows.xs,
+    lightSurface: brandColors.light.surface,
+    darkSurface: brandColors.dark.secondarySurface,
+  },
+  3: {
+    shadow: shadows.sm,
+    lightSurface: brandColors.light.surface,
+    darkSurface: brandColors.dark.elevatedSurface,
+  },
+  4: {
+    shadow: shadows.md,
+    lightSurface: brandColors.light.surface,
+    darkSurface: brandColors.dark.elevatedSurface,
+  },
+  5: {
+    shadow: shadows.lg,
+    lightSurface: brandColors.light.surface,
+    darkSurface: brandColors.dark.elevatedSurface,
+  },
+} as const;
+
+export const componentDimensions = {
+  button: {
+    xs: { height: '26px', paddingX: '8px', fontSize: '11px' },
+    sm: { height: '32px', paddingX: '12px', fontSize: '12px' },
+    md: { height: '36px', paddingX: '16px', fontSize: '13px' },
+    lg: { height: '40px', paddingX: '20px', fontSize: '14px' },
+  },
+  input: {
+    sm: { height: '28px', fontSize: '12px' },
+    md: { height: '34px', fontSize: '13px' },
+  },
+  table: {
+    rowCompact: '32px',
+    rowDefault: '40px',
+    rowRelaxed: '48px',
+  },
+  navigation: {
+    sidebarExpanded: '240px',
+    sidebarCollapsed: '64px',
+    headerTier1: '42px',
+    headerTier2: '40px',
+    systemStatusBar: '24px',
+  },
+  drawer: {
+    sm: '380px',
+    md: '480px',
+    lg: '560px',
+    xl: '680px',
+  },
+  dialog: {
+    sm: '400px',
+    md: '540px',
+    lg: '720px',
+    xl: '900px',
+  },
 } as const;
 
 export const zIndex = {
@@ -177,18 +359,26 @@ export const breakpoints = {
 } as const;
 
 export const focusRingClass =
-  'outline-none focus-visible:ring-2 focus-visible:ring-[#087F8C] focus-visible:ring-offset-1 focus-visible:ring-offset-white';
+  'outline-none focus-visible:ring-2 focus-visible:ring-[#168C83] focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#162638]';
+
+export const hoverTransitionClass =
+  'transition-colors duration-150 ease-out';
 
 export const tokens = {
+  brandColors,
+  semanticColors,
   colors,
   typography,
   spacing,
   radii,
   shadows,
+  elevation,
+  componentDimensions,
   zIndex,
   transitions,
   breakpoints,
   focusRingClass,
+  hoverTransitionClass,
 };
 
 export default tokens;

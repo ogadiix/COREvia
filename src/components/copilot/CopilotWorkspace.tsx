@@ -102,23 +102,23 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#F5F7FA] text-[#172033] overflow-hidden select-none">
+    <div className="flex flex-col h-full bg-[#F4F6F8] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] overflow-hidden select-none">
       {/* 1. Header Toolbar */}
-      <div className="px-4 py-3 bg-white border-b border-[#E2E8F0] flex items-center justify-between gap-3 shrink-0 shadow-2xs">
+      <div className="px-4 py-3 bg-white dark:bg-[#162638] border-b border-[#DCE3EA] dark:border-[#33485D] flex items-center justify-between gap-3 shrink-0 shadow-2xs">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="w-8 h-8 rounded-sm bg-[#087F8C] flex items-center justify-center text-white shadow-2xs shrink-0">
+          <div className="w-8 h-8 rounded-sm bg-[#168C83] flex items-center justify-center text-white shadow-2xs shrink-0">
             <Bot className="w-4 h-4" />
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-xs sm:text-sm font-bold text-[#172033] tracking-tight uppercase truncate">
+              <h2 className="text-xs sm:text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] tracking-tight uppercase truncate">
                 COREvia Banking Copilot
               </h2>
-              <span className="px-1.5 py-0.2 bg-[#F0FDFA] text-[#087F8C] text-[10px] font-mono rounded-xs border border-[#CCFBF1] shrink-0">
+              <span className="px-1.5 py-0.2 bg-[#168C83]/10 text-[#168C83] dark:text-[#1B9D92] text-[10px] font-mono rounded-xs border border-[#168C83]/20 shrink-0">
                 Phase 14 · Grounded
               </span>
             </div>
-            <p className="text-[11px] text-[#64748B] truncate">
+            <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] truncate">
               Authorized CRM Intelligence Assistant · Server-Side Gemini 3.8
             </p>
           </div>
@@ -138,7 +138,7 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
             <button
               onClick={onClose}
               title="Close drawer (Esc)"
-              className="p-1 text-[#64748B] hover:text-[#172033] hover:bg-[#F1F5F9] rounded-xs transition-colors cursor-pointer"
+              className="p-1 text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#1C3045] rounded-xs transition-colors cursor-pointer"
               aria-label="Close copilot"
             >
               <X className="w-4 h-4" />
@@ -148,10 +148,10 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
       </div>
 
       {/* 2. Context Indicator Bar */}
-      <div className="px-4 py-2 bg-[#F8FAFC] border-b border-[#E2E8F0] flex items-center justify-between gap-2 text-xs relative shrink-0">
+      <div className="px-4 py-2 bg-[#EDF1F5] dark:bg-[#162638] border-b border-[#DCE3EA] dark:border-[#33485D] flex items-center justify-between gap-2 text-xs relative shrink-0">
         <div className="flex items-center gap-2 min-w-0">
-          <span className="text-[11px] text-[#64748B] font-semibold uppercase tracking-wider flex items-center gap-1 shrink-0">
-            <Layers className="w-3.5 h-3.5 text-[#087F8C]" />
+          <span className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase tracking-wider flex items-center gap-1 shrink-0">
+            <Layers className="w-3.5 h-3.5 text-[#168C83]" />
             Active Context:
           </span>
 
@@ -160,21 +160,21 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
               onClick={() => setShowContextDropdown((prev) => !prev)}
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xs text-xs font-medium border transition-colors cursor-pointer ${
                 currentContext.type === 'CUSTOMER'
-                  ? 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100'
-                  : 'bg-white border-[#CBD5E1] text-[#172033] hover:bg-[#F1F5F9]'
+                  ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700/50 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50'
+                  : 'bg-white dark:bg-[#192B3D] border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#20364B]'
               }`}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#16803C] animate-pulse" />
               <span className="truncate max-w-[200px]">
                 {currentContext.label || 'Global Portfolio'}
               </span>
-              <ChevronDown className="w-3 h-3 text-[#64748B] ml-0.5 shrink-0" />
+              <ChevronDown className="w-3 h-3 text-[#5D6B7B] dark:text-[#A9BACB] ml-0.5 shrink-0" />
             </button>
 
             {/* Context Dropdown */}
             {showContextDropdown && (
-              <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-[#CBD5E1] rounded-sm shadow-lg z-30 py-1.5 motion-dropdown text-left">
-                <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-[#64748B] border-b border-[#E2E8F0]">
+              <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-lg z-30 py-1.5 motion-dropdown text-left">
+                <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#26394C]">
                   Switch Active Entity
                 </div>
                 <button
@@ -182,25 +182,25 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
                     clearCopilotContext();
                     setShowContextDropdown(false);
                   }}
-                  className="w-full px-3 py-2 text-left text-xs text-[#172033] hover:bg-[#F8FAFC] flex items-center justify-between cursor-pointer"
+                  className="w-full px-3 py-2 text-left text-xs text-[#273444] dark:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#1C3045] flex items-center justify-between cursor-pointer"
                 >
                   <span>Global Portfolio (No Entity)</span>
                   {currentContext.type === 'GLOBAL' && <span className="text-[#16803C] font-bold">✓</span>}
                 </button>
-                <div className="px-3 py-1 text-[10px] uppercase font-bold text-[#64748B] pt-1.5 border-t border-[#E2E8F0]">
+                <div className="px-3 py-1 text-[10px] uppercase font-bold text-[#5D6B7B] dark:text-[#A9BACB] pt-1.5 border-t border-[#DCE3EA] dark:border-[#26394C]">
                   Customers
                 </div>
                 {PRESET_CUSTOMERS.map((c) => (
                   <button
                     key={c.id}
                     onClick={() => handleSelectPresetCustomer(c)}
-                    className="w-full px-3 py-1.5 text-left text-xs text-[#172033] hover:bg-[#F8FAFC] flex items-center justify-between group cursor-pointer"
+                    className="w-full px-3 py-1.5 text-left text-xs text-[#273444] dark:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#1C3045] flex items-center justify-between group cursor-pointer"
                   >
                     <div>
-                      <div className="font-semibold text-[#172033] group-hover:text-[#087F8C]">
+                      <div className="font-semibold text-[#273444] dark:text-[#E8EEF5] group-hover:text-[#168C83] dark:group-hover:text-[#1B9D92]">
                         {c.name}
                       </div>
-                      <div className="text-[10px] text-[#64748B] font-mono">{c.code} · {c.relationship}</div>
+                      <div className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-mono">{c.code} · {c.relationship}</div>
                     </div>
                     {currentContext.id === c.id && <span className="text-[#16803C] font-bold">✓</span>}
                   </button>
@@ -213,7 +213,7 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
         {currentContext.type !== 'GLOBAL' && (
           <button
             onClick={clearCopilotContext}
-            className="text-[11px] text-[#087F8C] hover:text-[#066974] underline underline-offset-2 shrink-0 cursor-pointer font-medium"
+            className="text-[11px] text-[#168C83] dark:text-[#1B9D92] hover:underline underline-offset-2 shrink-0 cursor-pointer font-medium"
           >
             Clear Context
           </button>
@@ -234,15 +234,15 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
         ))}
 
         {isLoading && (
-          <div className="flex items-center gap-3 p-3.5 bg-white border border-[#CBD5E1] rounded-lg shadow-2xs max-w-[85%] motion-fade-in">
-            <div className="w-7 h-7 rounded-sm bg-[#F0FDFA] border border-[#CCFBF1] flex items-center justify-center text-[#087F8C] shrink-0">
-              <Loader2 className="w-4 h-4 animate-spin text-[#087F8C]" />
+          <div className="flex items-center gap-3 p-3.5 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg shadow-2xs max-w-[85%] motion-fade-in">
+            <div className="w-7 h-7 rounded-sm bg-[#168C83]/10 border border-[#168C83]/20 flex items-center justify-center text-[#168C83] shrink-0">
+              <Loader2 className="w-4 h-4 animate-spin text-[#168C83]" />
             </div>
             <div>
-              <div className="text-xs font-semibold text-[#172033]">
+              <div className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">
                 {loadingStep || 'Querying Core Banking data...'}
               </div>
-              <div className="text-[10px] text-[#64748B]">
+              <div className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB]">
                 Executing verified CRM tools under officer authorization
               </div>
             </div>
@@ -254,9 +254,9 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
 
       {/* 4. Quick Prompts Drawer (if fewer than 4 messages) */}
       {messages.length <= 2 && (
-        <div className="px-4 py-2 bg-white border-t border-[#E2E8F0] shrink-0">
-          <div className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-[#087F8C]" />
+        <div className="px-4 py-2 bg-white dark:bg-[#162638] border-t border-[#DCE3EA] dark:border-[#33485D] shrink-0">
+          <div className="text-[10px] font-bold text-[#5D6B7B] dark:text-[#A9BACB] uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <Sparkles className="w-3 h-3 text-[#168C83]" />
             Suggested Questions
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -264,7 +264,7 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
               <button
                 key={idx}
                 onClick={() => sendMessage(qp.query)}
-                className="px-2.5 py-1 bg-[#F8FAFC] hover:bg-[#F1F5F9] active:bg-[#E2E8F0] text-[#334155] hover:text-[#172033] text-[11px] rounded-xs border border-[#CBD5E1] transition-colors cursor-pointer shadow-2xs"
+                className="px-2.5 py-1 bg-[#F4F6F8] dark:bg-[#192B3D] hover:bg-[#EDF1F5] dark:hover:bg-[#20364B] active:bg-[#DCE3EA] text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#273444] dark:hover:text-[#E8EEF5] text-[11px] rounded-xs border border-[#DCE3EA] dark:border-[#33485D] transition-colors cursor-pointer shadow-2xs"
               >
                 {qp.label}
               </button>
@@ -274,8 +274,8 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
       )}
 
       {/* 5. Input Bar */}
-      <div className="p-3 bg-white border-t border-[#CBD5E1] shrink-0">
-        <div className="rounded-sm border border-[#CBD5E1] bg-[#F8FAFC] focus-within:bg-white focus-within:border-[#087F8C] focus-within:ring-1 focus-within:ring-[#087F8C] transition-all shadow-2xs">
+      <div className="p-3 bg-white dark:bg-[#162638] border-t border-[#DCE3EA] dark:border-[#33485D] shrink-0">
+        <div className="rounded-sm border border-[#DCE3EA] dark:border-[#33485D] bg-[#F4F6F8] dark:bg-[#101C2A] focus-within:bg-white dark:focus-within:bg-[#162638] focus-within:border-[#168C83] focus-within:ring-1 focus-within:ring-[#168C83] transition-all shadow-2xs">
           <textarea
             ref={textareaRef}
             rows={2}
@@ -287,16 +287,16 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
                 ? `Ask Copilot about ${currentContext.label}... (e.g. "What should I do next?", "Create follow-up")`
                 : 'Ask Copilot about customer portfolio, CORE score drivers, service cases, or next actions...'
             }
-            className="w-full px-3 py-2 bg-transparent text-xs text-[#172033] placeholder:text-[#94A3B8] focus:outline-none resize-none leading-relaxed"
+            className="w-full px-3 py-2 bg-transparent text-xs text-[#273444] dark:text-[#E8EEF5] placeholder:text-[#8793A1] dark:placeholder:text-[#8194A8] focus:outline-none resize-none leading-relaxed"
           />
 
-          <div className="flex items-center justify-between px-3 py-1.5 border-t border-[#E2E8F0] text-[11px] text-[#64748B]">
+          <div className="flex items-center justify-between px-3 py-1.5 border-t border-[#DCE3EA] dark:border-[#26394C] text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">
             <div className="flex items-center gap-2">
               <span className="hidden sm:inline">
-                Press <kbd className="px-1 py-0.5 bg-[#F1F5F9] text-[#475569] border border-[#CBD5E1] rounded-xs font-mono text-[10px]">Enter</kbd> to send
+                Press <kbd className="px-1 py-0.5 bg-[#EDF1F5] dark:bg-[#192B3D] text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs font-mono text-[10px]">Enter</kbd> to send
               </span>
               {currentContext.type !== 'GLOBAL' && (
-                <span className="inline-flex items-center gap-1 text-[10px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded-xs border border-blue-200 font-medium">
+                <span className="inline-flex items-center gap-1 text-[10px] text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-xs border border-blue-200 dark:border-blue-700 font-medium">
                   <User className="w-2.5 h-2.5" />
                   {currentContext.label}
                 </span>

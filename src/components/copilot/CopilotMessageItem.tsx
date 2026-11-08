@@ -33,7 +33,7 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
   const renderFormattedContent = (content: string) => {
     const lines = content.split('\n');
     return (
-      <div className={`space-y-1.5 text-xs leading-relaxed ${isUser ? 'text-white' : 'text-[#172033]'}`}>
+      <div className={`space-y-1.5 text-xs leading-relaxed ${isUser ? 'text-white' : 'text-[#273444] dark:text-[#E8EEF5]'}`}>
         {lines.map((line, idx) => {
           const trimmed = line.trim();
           if (!trimmed) {
@@ -45,7 +45,7 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
               <h4
                 key={idx}
                 className={`text-xs font-bold uppercase tracking-wider pt-1.5 ${
-                  isUser ? 'text-white/90' : 'text-[#087F8C]'
+                  isUser ? 'text-white/90' : 'text-[#168C83] dark:text-[#1B9D92]'
                 }`}
               >
                 {trimmed.replace('### ', '')}
@@ -58,7 +58,7 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
               <h3
                 key={idx}
                 className={`text-sm font-bold pt-2 pb-0.5 ${
-                  isUser ? 'text-white' : 'text-[#172033]'
+                  isUser ? 'text-white' : 'text-[#142C45] dark:text-[#E8EEF5]'
                 }`}
               >
                 {trimmed.replace('## ', '')}
@@ -70,14 +70,14 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
             const itemText = trimmed.replace(/^[•\-\*]\s+/, '');
             return (
               <div key={idx} className="flex items-start gap-2 pl-0.5">
-                <span className={`font-bold mt-0.5 shrink-0 ${isUser ? 'text-white/80' : 'text-[#087F8C]'}`}>•</span>
+                <span className={`font-bold mt-0.5 shrink-0 ${isUser ? 'text-white/80' : 'text-[#168C83] dark:text-[#1B9D92]'}`}>•</span>
                 <div className="flex-1">{parseInlineStyles(itemText, isUser)}</div>
               </div>
             );
           }
 
           if (trimmed === '---') {
-            return <hr key={idx} className={`my-2 ${isUser ? 'border-white/20' : 'border-[#E2E8F0]'}`} />;
+            return <hr key={idx} className={`my-2 ${isUser ? 'border-white/20' : 'border-[#DCE3EA] dark:border-[#33485D]'}`} />;
           }
 
           return <p key={idx}>{parseInlineStyles(line, isUser)}</p>;
@@ -91,7 +91,7 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return (
-          <strong key={i} className={`font-semibold ${userMsg ? 'text-white' : 'text-[#172033]'}`}>
+          <strong key={i} className={`font-semibold ${userMsg ? 'text-white' : 'text-[#142C45] dark:text-[#E8EEF5]'}`}>
             {part.slice(2, -2)}
           </strong>
         );
@@ -103,7 +103,7 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
             className={`px-1 py-0.2 font-mono text-[11px] rounded-xs border ${
               userMsg
                 ? 'bg-white/20 text-white border-white/30'
-                : 'bg-[#F1F5F9] text-[#087F8C] border-[#CBD5E1]'
+                : 'bg-[#EDF1F5] dark:bg-[#101C2A] text-[#168C83] dark:text-[#1B9D92] border-[#DCE3EA] dark:border-[#33485D]'
             }`}
           >
             {part.slice(1, -1)}
@@ -141,10 +141,10 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
       <div
         className={`w-7 h-7 rounded-sm flex items-center justify-center shrink-0 text-xs shadow-2xs ${
           isUser
-            ? 'bg-[#087F8C] text-white'
+            ? 'bg-[#168C83] text-white'
             : isSystem
-            ? 'bg-[#FEF3C7] text-[#B45309] border border-[#FDE68A]'
-            : 'bg-[#0f1e36] text-white'
+            ? 'bg-[#FEF3C7] dark:bg-amber-950/60 text-[#B45309] dark:text-amber-300 border border-[#FDE68A] dark:border-amber-700/50'
+            : 'bg-[#142C45] dark:bg-[#101C2A] text-white border border-[#DCE3EA]/20 dark:border-[#33485D]'
         }`}
       >
         {isUser ? <User className="w-3.5 h-3.5" /> : <Bot className="w-4 h-4" />}
@@ -153,12 +153,12 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
       {/* Bubble Content */}
       <div className={`flex-1 max-w-[88%] ${isUser ? 'items-end' : 'items-start'}`}>
         <div className={`flex items-center gap-2 mb-1 px-1 ${isUser ? 'justify-end' : 'justify-start'}`}>
-          <span className="text-[11px] font-semibold text-[#64748B]">
+          <span className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#A9BACB]">
             {isUser ? 'Officer Inquiry' : 'COREvia Banking Copilot'}
           </span>
-          <span className="text-[10px] text-[#94A3B8] font-mono">{message.timestamp}</span>
+          <span className="text-[10px] text-[#8793A1] dark:text-[#8194A8] font-mono">{message.timestamp}</span>
           {!isUser && message.model && (
-            <span className="text-[9px] px-1.5 py-0.2 bg-[#F1F5F9] text-[#475569] rounded-xs font-mono border border-[#CBD5E1]">
+            <span className="text-[9px] px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs font-mono border border-[#DCE3EA] dark:border-[#33485D]">
               {message.model}
             </span>
           )}
@@ -167,10 +167,10 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
         <div
           className={`p-3.5 rounded-lg shadow-2xs ${
             isUser
-              ? 'bg-[#087F8C] text-white rounded-tr-none'
+              ? 'bg-[#142C45] dark:bg-[#168C83] text-white rounded-tr-none'
               : isSystem
-              ? 'bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E] rounded-tl-none'
-              : 'bg-white border border-[#E2E8F0] text-[#172033] rounded-tl-none'
+              ? 'bg-[#FFFBEB] dark:bg-amber-950/30 border border-[#FDE68A] dark:border-amber-700/50 text-[#92400E] dark:text-amber-200 rounded-tl-none'
+              : 'bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded-tl-none'
           }`}
         >
           {renderFormattedContent(message.content)}
@@ -192,14 +192,14 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
             <div
               className={`mt-2.5 p-2.5 rounded-xs text-xs flex items-center gap-2 ${
                 message.actionResult.status === 'CONFIRMED'
-                  ? 'bg-[#F0FDF4] border border-[#BBF7D0] text-[#14532D]'
-                  : 'bg-[#F8FAFC] border border-[#CBD5E1] text-[#64748B]'
+                  ? 'bg-[#F0FDF4] dark:bg-emerald-950/30 border border-[#BBF7D0] dark:border-emerald-700/50 text-[#14532D] dark:text-emerald-300'
+                  : 'bg-[#F8FAFC] dark:bg-[#192B3D] border border-[#CBD5E1] dark:border-[#33485D] text-[#64748B] dark:text-[#A9BACB]'
               }`}
             >
               {message.actionResult.status === 'CONFIRMED' ? (
                 <CheckCircle2 className="w-4 h-4 text-[#16803C] shrink-0" />
               ) : (
-                <AlertCircle className="w-4 h-4 text-[#94A3B8] shrink-0" />
+                <AlertCircle className="w-4 h-4 text-[#8793A1] dark:text-[#8194A8] shrink-0" />
               )}
               <span className="font-medium">{message.actionResult.message}</span>
             </div>
@@ -207,8 +207,8 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
 
           {/* Grounding Sources Chips */}
           {message.sources && message.sources.length > 0 && (
-            <div className="mt-3 pt-2.5 border-t border-[#E2E8F0]">
-              <div className="flex items-center gap-1.5 text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-1.5">
+            <div className="mt-3 pt-2.5 border-t border-[#DCE3EA] dark:border-[#26394C]">
+              <div className="flex items-center gap-1.5 text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] uppercase tracking-wider font-semibold mb-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#16803C]" />
                 <span>Grounded CRM Sources ({message.sources.length})</span>
               </div>
@@ -234,8 +234,8 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
         {/* Suggested Next Actions */}
         {message.suggestedActions && message.suggestedActions.length > 0 && (
           <div className="mt-2 pl-0.5">
-            <div className="text-[10px] text-[#64748B] uppercase font-semibold tracking-wider mb-1 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#087F8C]" />
+            <div className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] uppercase font-semibold tracking-wider mb-1 flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#168C83]" />
               <span>Suggested Follow-ups</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -244,7 +244,7 @@ export const CopilotMessageItem: React.FC<CopilotMessageItemProps> = ({
                   key={idx}
                   type="button"
                   onClick={() => onSelectAction(act)}
-                  className="px-2.5 py-1 bg-white hover:bg-[#F1F5F9] active:bg-[#E2E8F0] text-[#334155] hover:text-[#172033] text-[11px] rounded-xs border border-[#CBD5E1] transition-colors text-left shadow-2xs cursor-pointer"
+                  className="px-2.5 py-1 bg-white dark:bg-[#192B3D] hover:bg-[#EDF1F5] dark:hover:bg-[#20364B] active:bg-[#DCE3EA] text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#273444] dark:hover:text-[#E8EEF5] text-[11px] rounded-xs border border-[#DCE3EA] dark:border-[#33485D] transition-colors text-left shadow-2xs cursor-pointer"
                 >
                   {act}
                 </button>

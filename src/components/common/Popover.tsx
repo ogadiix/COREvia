@@ -78,7 +78,7 @@ export const Popover: React.FC<PopoverProps> = ({
           id={popoverId}
           role="dialog"
           style={{ zIndex: zIndex.popover }}
-          className={`absolute top-full mt-1.5 p-3 bg-white border border-[#CBD5E1] rounded-sm shadow-md animate-in fade-in duration-100 ${alignClasses[align]} ${className}`}
+          className={`absolute top-full mt-1.5 p-3 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-md animate-in fade-in duration-100 text-[#273444] dark:text-[#E8EEF5] ${alignClasses[align]} ${className}`}
         >
           {content}
         </div>
@@ -86,4 +86,3 @@ export const Popover: React.FC<PopoverProps> = ({
     </div>
   );
 };
-

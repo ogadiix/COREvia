@@ -74,6 +74,8 @@ import { SecurityEventDetailDrawer } from './SecurityEventDetailDrawer.tsx';
 import { AdminConfirmModal } from './AdminConfirmModal.tsx';
 import { EmptyState } from '../common/EmptyState';
 import { useToast } from '../common/Toast';
+import { ThemeSwitcher } from '../common/ThemeSwitcher';
+import { useTheme } from '../../context/ThemeContext';
 
 type AdminTab =
   | 'overview'
@@ -1421,6 +1423,37 @@ export const AdminWorkspace: React.FC = () => {
               <span className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Application Version</span>
               <div className="text-sm font-bold text-slate-200">{systemConfig.applicationVersion}</div>
               <span className="text-[10px] text-slate-400 font-mono">{systemConfig.buildVersion}</span>
+            </div>
+          </div>
+
+          {/* Workstation Theme & Visual Ergonomics Preference Panel */}
+          <div className="p-5 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl space-y-3 shadow-2xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h4 className="font-semibold text-[#142C45] dark:text-[#E8EEF5] text-sm flex items-center gap-2">
+                  <Sliders className="w-4 h-4 text-[#168C83]" />
+                  Workstation Theme & Visual Ergonomics Preference
+                </h4>
+                <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mt-0.5">
+                  Institutional color presentation engine with automatic OS synchronization, dark surface hierarchy, and WCAG AA contrast.
+                </p>
+              </div>
+              <ThemeSwitcher variant="segmented" />
+            </div>
+
+            <div className="pt-2 border-t border-[#E8EEF4] dark:border-[#26394C] grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px]">
+              <div className="p-2.5 rounded-sm bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#26394C]">
+                <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5] mb-0.5">Light Mode</div>
+                <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8]">#F4F6F8 canvas, #FFFFFF cards, #142C45 navy header</div>
+              </div>
+              <div className="p-2.5 rounded-sm bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#26394C]">
+                <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5] mb-0.5">Dark Mode</div>
+                <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8]">#080F19 canvas, #162638 cards, #101C2A header</div>
+              </div>
+              <div className="p-2.5 rounded-sm bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#26394C]">
+                <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5] mb-0.5">System Mode</div>
+                <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8]">Dynamically syncs with OS color-scheme preference</div>
+              </div>
             </div>
           </div>
 

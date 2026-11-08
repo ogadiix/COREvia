@@ -114,7 +114,7 @@ export const Dialog: React.FC<DialogProps> = ({
     <div
       id={id}
       style={{ zIndex: zIndex.modal }}
-      className="fixed inset-0 flex items-center justify-center p-3 sm:p-4 bg-slate-950/50 backdrop-blur-[1px] motion-fade-in select-none overflow-y-auto"
+      className="fixed inset-0 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 dark:bg-black/75 backdrop-blur-[1px] motion-fade-in select-none overflow-y-auto"
     >
       {/* Backdrop */}
       <div
@@ -130,33 +130,33 @@ export const Dialog: React.FC<DialogProps> = ({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={subtitle ? descId : undefined}
-        className={`relative z-10 w-full ${sizeClasses[effectiveSize]} bg-white border border-[#CBD5E1] rounded-sm shadow-lg flex flex-col max-h-[92vh] overflow-hidden my-auto motion-dialog-enter`}
+        className={`relative z-10 w-full ${sizeClasses[effectiveSize]} bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-xl flex flex-col max-h-[92vh] overflow-hidden my-auto motion-dialog-enter text-[#273444] dark:text-[#E8EEF5]`}
       >
         {/* Institutional Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC]">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[#DCE3EA] dark:border-[#26394C] bg-[#F8FAFC] dark:bg-[#101C2A]">
           <div className="min-w-0 pr-3">
             <div className="flex items-center gap-2">
               <h2
                 id={titleId}
-                className="text-xs sm:text-sm font-bold text-[#172033] tracking-tight uppercase truncate font-sans"
+                className="text-xs sm:text-sm font-bold text-[#273444] dark:text-[#E8EEF5] tracking-tight uppercase truncate font-sans"
               >
                 {title}
               </h2>
               {referenceId && (
-                <span className="font-mono text-[10px] px-1.5 py-0.2 bg-[#F1F5F9] text-[#475569] rounded-xs border border-[#CBD5E1] shrink-0">
+                <span className="font-mono text-[10px] px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#192B3D] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs border border-[#DCE3EA] dark:border-[#33485D] shrink-0">
                   {referenceId}
                 </span>
               )}
             </div>
             {subtitle && (
-              <p id={descId} className="text-[11px] text-[#64748B] mt-0.5 truncate">
+              <p id={descId} className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5 truncate">
                 {subtitle}
               </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-[#64748B] hover:text-[#172033] p-1 rounded-xs hover:bg-[#E2E8F0] transition-colors shrink-0 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#087F8C]"
+            className="text-[#8793A1] hover:text-[#273444] dark:text-[#8194A8] dark:hover:text-[#E8EEF5] p-1 rounded-xs hover:bg-[#EDF1F5] dark:hover:bg-[#192B3D] transition-colors shrink-0 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#168C83]"
             aria-label="Close dialog"
           >
             <X className="w-4 h-4" />
@@ -164,13 +164,13 @@ export const Dialog: React.FC<DialogProps> = ({
         </div>
 
         {/* Content Body */}
-        <div className="p-4 sm:p-5 overflow-y-auto text-xs text-[#172033] space-y-3">
+        <div className="p-4 sm:p-5 overflow-y-auto text-xs text-[#273444] dark:text-[#E8EEF5] space-y-3">
           {children}
         </div>
 
         {/* Footer Actions */}
         {footerActions && (
-          <div className="flex items-center justify-end gap-2 px-4 py-2.5 border-t border-[#E2E8F0] bg-[#F8FAFC]">
+          <div className="flex items-center justify-end gap-2 px-4 py-2.5 border-t border-[#DCE3EA] dark:border-[#26394C] bg-[#F8FAFC] dark:bg-[#101C2A]">
             {footerActions}
           </div>
         )}
@@ -182,4 +182,3 @@ export const Dialog: React.FC<DialogProps> = ({
 // Modal alias
 export const Modal = Dialog;
 export type { DialogProps as ModalProps };
-

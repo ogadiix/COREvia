@@ -73,13 +73,18 @@ export const Dropdown: React.FC<DropdownProps> = ({
           id={menuId}
           role="menu"
           style={{ zIndex: zIndex.dropdown }}
-          className={`absolute top-full mt-1 min-w-44 py-1 bg-white border border-[#CBD5E1] rounded-xs shadow-md motion-dropdown ${
+          className={`absolute top-full mt-1 min-w-44 py-1 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs shadow-md motion-dropdown text-[#273444] dark:text-[#E8EEF5] ${
             align === 'right' ? 'right-0' : 'left-0'
           } ${className}`}
         >
           {items.map((item, idx) => {
             if (item.divider) {
-              return <div key={`divider-${idx}`} className="my-1 border-t border-[#E2E8F0]" />;
+              return (
+                <div
+                  key={`divider-${idx}`}
+                  className="my-1 border-t border-[#DCE3EA] dark:border-[#26394C]"
+                />
+              );
             }
 
             return (
@@ -95,12 +100,12 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 }}
                 className={`w-full text-left px-3 py-1.5 text-xs flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${focusRingClass} ${
                   item.isDanger
-                    ? 'text-[#B42318] hover:bg-[#fef2f2]'
-                    : 'text-[#172033] hover:bg-[#F8FAFC]'
+                    ? 'text-[#B42318] dark:text-[#EF4444] hover:bg-[#FEF2F2] dark:hover:bg-[#370B0B]'
+                    : 'text-[#273444] dark:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#192B3D]'
                 }`}
               >
                 {item.icon && (
-                  <span className="shrink-0 text-[#64748B] [&>svg]:w-3.5 [&>svg]:h-3.5">
+                  <span className="shrink-0 flex items-center [&>svg]:w-3.5 [&>svg]:h-3.5">
                     {item.icon}
                   </span>
                 )}
@@ -113,4 +118,3 @@ export const Dropdown: React.FC<DropdownProps> = ({
     </div>
   );
 };
-

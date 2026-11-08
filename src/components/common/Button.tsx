@@ -38,22 +38,22 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // Institutional enterprise styles
+    // Institutional enterprise styles with dual-theme support
     const variantClasses: Record<ButtonVariant, string> = {
       primary:
-        'bg-[#0f1e36] text-white hover:bg-[#1b2e4b] active:bg-[#091322] border border-[#0f1e36] shadow-2xs font-medium',
+        'bg-[#142C45] text-white hover:bg-[#101C2A] active:bg-[#0c1c2e] border border-[#142C45] dark:bg-[#168C83] dark:text-white dark:hover:bg-[#1B9D92] dark:active:bg-[#137971] dark:border-[#168C83] shadow-xs font-medium',
       brand:
-        'bg-[#087F8C] text-white hover:bg-[#066974] active:bg-[#05535c] border border-[#087F8C] shadow-2xs font-medium',
+        'bg-[#168C83] text-white hover:bg-[#1B9D92] active:bg-[#137971] border border-[#168C83] dark:bg-[#168C83] dark:text-white dark:hover:bg-[#1B9D92] dark:border-[#168C83] shadow-xs font-medium',
       secondary:
-        'bg-[#F8FAFC] text-[#172033] hover:bg-[#E2E8F0] active:bg-[#CBD5E1] border border-[#CBD5E1] font-medium',
+        'bg-[#EDF1F5] text-[#273444] hover:bg-[#DCE3EA] active:bg-[#CBD5E1] border border-[#DCE3EA] dark:bg-[#192B3D] dark:text-[#E8EEF5] dark:hover:bg-[#20364B] dark:active:bg-[#162638] dark:border-[#33485D] font-medium',
       outline:
-        'bg-white text-[#475569] hover:text-[#172033] hover:bg-[#F8FAFC] active:bg-[#F1F5F9] border border-[#CBD5E1] shadow-2xs font-medium',
+        'bg-white text-[#5D6B7B] hover:text-[#273444] hover:bg-[#EDF1F5] active:bg-[#DCE3EA] border border-[#DCE3EA] dark:bg-[#162638] dark:text-[#A9BACB] dark:hover:text-[#E8EEF5] dark:hover:bg-[#192B3D] dark:border-[#33485D] shadow-2xs font-medium',
       danger:
-        'bg-[#B42318] text-white hover:bg-[#911d13] active:bg-[#72170f] border border-[#B42318] shadow-2xs font-medium',
+        'bg-[#B42318] text-white hover:bg-[#911d13] active:bg-[#72170f] border border-[#B42318] dark:bg-[#EF4444] dark:hover:bg-[#DC2626] dark:border-[#EF4444] shadow-xs font-medium',
       success:
-        'bg-[#16803C] text-white hover:bg-[#126b32] active:bg-[#0e5427] border border-[#16803C] shadow-2xs font-medium',
+        'bg-[#16803C] text-white hover:bg-[#126b32] active:bg-[#0e5427] border border-[#16803C] dark:bg-[#22C55E] dark:hover:bg-[#16A34A] dark:border-[#22C55E] shadow-xs font-medium',
       ghost:
-        'bg-transparent text-[#475569] hover:text-[#172033] hover:bg-[#F1F5F9] active:bg-[#E2E8F0] border border-transparent font-medium',
+        'bg-transparent text-[#5D6B7B] hover:text-[#273444] hover:bg-[#EDF1F5] active:bg-[#DCE3EA] border border-transparent dark:text-[#A9BACB] dark:hover:text-[#E8EEF5] dark:hover:bg-[#192B3D] font-medium',
     };
 
     // Compact enterprise density
@@ -101,11 +101,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
         {!loading && icon && iconPosition === 'left' && (
-          <span className="shrink-0 flex items-center justify-center">{icon}</span>
+          <span className="shrink-0 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">
+            {icon}
+          </span>
         )}
-        {children && <span>{children}</span>}
+        <span>{children}</span>
         {!loading && icon && iconPosition === 'right' && (
-          <span className="shrink-0 flex items-center justify-center">{icon}</span>
+          <span className="shrink-0 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">
+            {icon}
+          </span>
         )}
       </button>
     );

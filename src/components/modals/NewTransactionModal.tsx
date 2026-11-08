@@ -194,13 +194,13 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
 
           {/* Source Account Selection */}
           <div>
-            <label className="block font-semibold text-slate-800 mb-1">
+            <label className="block font-semibold text-slate-800 dark:text-[#E8EEF5] mb-1">
               Remitter (Source CASA Account)
             </label>
             <select
               value={sourceAccount}
               onChange={(e) => setSourceAccount(e.target.value)}
-              className="w-full p-2 bg-slate-50 border border-slate-300 rounded font-mono text-xs focus:bg-white focus:outline-hidden focus:ring-1 focus:ring-slate-400"
+              className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-800 dark:text-[#E8EEF5] rounded font-mono text-xs focus:bg-white dark:focus:bg-[#162638] focus:outline-hidden focus:ring-1 focus:ring-slate-400"
             >
               {accounts
                 .filter((a) => a.accountType === 'CURRENT' || a.accountType === 'SAVINGS')
@@ -211,7 +211,7 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                 ))}
             </select>
             {selectedAcc && (
-              <div className="mt-1 text-[11px] text-slate-500 font-mono">
+              <div className="mt-1 text-[11px] text-slate-500 dark:text-[#8194A8] font-mono">
                 Available: {formatINR(selectedAcc.availableBalance)} • Status: {selectedAcc.status} • Branch: {selectedAcc.branchName}
               </div>
             )}
@@ -220,13 +220,13 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
           {/* Payment Rail & Amount */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-slate-800 mb-1">
+              <label className="block font-semibold text-slate-800 dark:text-[#E8EEF5] mb-1">
                 Payment Rail / Clearing Channel
               </label>
               <select
                 value={rail}
                 onChange={(e) => setRail(e.target.value as PaymentRail)}
-                className="w-full p-2 bg-slate-50 border border-slate-300 rounded text-xs focus:bg-white focus:outline-hidden focus:ring-1 focus:ring-slate-400"
+                className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-800 dark:text-[#E8EEF5] rounded text-xs focus:bg-white dark:focus:bg-[#162638] focus:outline-hidden focus:ring-1 focus:ring-slate-400"
               >
                 <option value="RTGS">RTGS (High Value Real-Time Gross)</option>
                 <option value="NEFT">NEFT (National Electronic Fund Transfer)</option>
@@ -235,7 +235,7 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
             </div>
 
             <div>
-              <label className="block font-semibold text-slate-800 mb-1">
+              <label className="block font-semibold text-slate-800 dark:text-[#E8EEF5] mb-1">
                 Amount (INR)
               </label>
               <input
@@ -243,12 +243,12 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                 value={amountInput}
                 onChange={(e) => setAmountInput(e.target.value)}
                 placeholder="e.g. 65000000"
-                className="w-full p-2 bg-slate-50 border border-slate-300 rounded font-mono text-xs focus:bg-white focus:outline-hidden focus:ring-1 focus:ring-slate-400 font-semibold"
+                className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-800 dark:text-[#E8EEF5] rounded font-mono text-xs focus:bg-white dark:focus:bg-[#162638] focus:outline-hidden focus:ring-1 focus:ring-slate-400 font-semibold"
               />
-              <div className="mt-0.5 text-[11px] text-slate-500 font-mono flex items-center justify-between">
+              <div className="mt-0.5 text-[11px] text-slate-500 dark:text-[#8194A8] font-mono flex items-center justify-between">
                 <span>In words: {formatINR(parsedAmount)}</span>
                 {requiresBiometric && (
-                  <span className="text-rose-700 font-semibold flex items-center gap-0.5">
+                  <span className="text-rose-700 dark:text-rose-400 font-semibold flex items-center gap-0.5">
                     <Lock className="w-3 h-3" /> Biometric Step-Up Active
                   </span>
                 )}
@@ -257,8 +257,8 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
           </div>
 
           {/* Quick Amount Testing Presets */}
-          <div className="flex flex-wrap items-center gap-1.5 pt-0.5 bg-slate-50 p-2 rounded border border-slate-200">
-            <span className="text-[10px] font-semibold text-slate-500">Security Test Presets:</span>
+          <div className="flex flex-wrap items-center gap-1.5 pt-0.5 bg-slate-50 dark:bg-[#101C2A] p-2 rounded border border-slate-200 dark:border-[#33485D]">
+            <span className="text-[10px] font-semibold text-slate-500 dark:text-[#8194A8]">Security Test Presets:</span>
             {[
               { label: '₹50 Lakhs (Standard)', val: 5000000 },
               { label: '₹1.50 Cr (Dual Control)', val: 15000000 },
@@ -271,8 +271,8 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                 onClick={() => setAmountInput(String(preset.val))}
                 className={`px-2 py-0.5 text-[10px] font-mono rounded border transition-colors cursor-pointer ${
                   parsedAmount === preset.val
-                    ? 'border-slate-900 bg-slate-900 text-white font-bold'
-                    : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-100'
+                    ? 'border-[#168C83] bg-[#142C45] dark:bg-[#168C83] text-white font-bold'
+                    : 'border-slate-300 dark:border-[#33485D] bg-white dark:bg-[#192B3D] text-slate-700 dark:text-[#A9BACB] hover:bg-slate-100 dark:hover:bg-[#20364B]'
                 }`}
               >
                 {preset.label}
@@ -281,49 +281,49 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
           </div>
 
           {/* Beneficiary Details */}
-          <div className="border border-slate-200 rounded p-3 bg-slate-50/50 space-y-2.5">
-            <div className="font-semibold text-slate-800 uppercase text-[10px] tracking-wider">
+          <div className="border border-slate-200 dark:border-[#33485D] rounded p-3 bg-slate-50/50 dark:bg-[#192B3D]/50 space-y-2.5">
+            <div className="font-semibold text-slate-800 dark:text-[#E8EEF5] uppercase text-[10px] tracking-wider">
               Beneficiary (Destination) Specifications
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div>
-                <label className="block text-[11px] text-slate-600 mb-0.5">Beneficiary Name</label>
+                <label className="block text-[11px] text-slate-600 dark:text-[#A9BACB] mb-0.5">Beneficiary Name</label>
                 <input
                   type="text"
                   value={destName}
                   onChange={(e) => setDestName(e.target.value)}
-                  className="w-full p-1.5 bg-white border border-slate-300 rounded text-xs"
+                  className="w-full p-1.5 bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-800 dark:text-[#E8EEF5] rounded text-xs"
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-600 mb-0.5">Beneficiary Account Number</label>
+                <label className="block text-[11px] text-slate-600 dark:text-[#A9BACB] mb-0.5">Beneficiary Account Number</label>
                 <input
                   type="text"
                   value={destAccount}
                   onChange={(e) => setDestAccount(e.target.value)}
-                  className="w-full p-1.5 bg-white border border-slate-300 rounded font-mono text-xs"
+                  className="w-full p-1.5 bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-800 dark:text-[#E8EEF5] rounded font-mono text-xs"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div>
-                <label className="block text-[11px] text-slate-600 mb-0.5">Destination Bank IFSC Code</label>
+                <label className="block text-[11px] text-slate-600 dark:text-[#A9BACB] mb-0.5">Destination Bank IFSC Code</label>
                 <input
                   type="text"
                   value={destBankIfsc}
                   onChange={(e) => setDestBankIfsc(e.target.value.toUpperCase())}
-                  className="w-full p-1.5 bg-white border border-slate-300 rounded font-mono text-xs uppercase"
+                  className="w-full p-1.5 bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-800 dark:text-[#E8EEF5] rounded font-mono text-xs uppercase"
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-600 mb-0.5">Payment Narration / Purpose</label>
+                <label className="block text-[11px] text-slate-600 dark:text-[#A9BACB] mb-0.5">Payment Narration / Purpose</label>
                 <input
                   type="text"
                   value={narration}
                   onChange={(e) => setNarration(e.target.value)}
-                  className="w-full p-1.5 bg-white border border-slate-300 rounded text-xs"
+                  className="w-full p-1.5 bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-800 dark:text-[#E8EEF5] rounded text-xs"
                 />
               </div>
             </div>

@@ -112,45 +112,45 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
   const details = pendingAction.details || {};
 
   return (
-    <div className="mt-3 border-2 border-[#F59E0B] bg-[#FFFBEB] rounded-sm p-3.5 shadow-2xs motion-dialog-enter text-[#172033]">
+    <div className="mt-3 border-2 border-[#D9A441] bg-[#FFFBEB] dark:bg-[#1C3045] rounded-sm p-3.5 shadow-2xs motion-dialog-enter text-[#172033] dark:text-[#E8EEF5]">
       {/* Header Badge */}
       <div className="flex items-center justify-between gap-2 mb-2.5">
         <div className="flex items-center gap-2">
-          <span className="p-1 bg-[#FEF3C7] text-[#B45309] rounded-xs border border-[#FDE68A]">
+          <span className="p-1 bg-[#FEF3C7] dark:bg-amber-950/60 text-[#B45309] dark:text-amber-300 rounded-xs border border-[#FDE68A] dark:border-amber-700/50">
             <ShieldAlert className="w-4 h-4" />
           </span>
           <div>
-            <h4 className="text-[11px] font-bold text-[#B45309] uppercase tracking-wider">
+            <h4 className="text-[11px] font-bold text-[#B45309] dark:text-amber-300 uppercase tracking-wider">
               Dual-Control Authorization Required
             </h4>
-            <p className="text-xs font-semibold text-[#172033]">
+            <p className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">
               {pendingAction.title}
             </p>
           </div>
         </div>
-        <span className="px-2 py-0.5 text-[10px] font-mono uppercase bg-white text-[#475569] border border-[#CBD5E1] rounded-xs font-medium">
+        <span className="px-2 py-0.5 text-[10px] font-mono uppercase bg-white dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs font-medium">
           {pendingAction.action_type}
         </span>
       </div>
 
       {/* Structured Details Box */}
-      <div className="bg-white border border-[#CBD5E1] rounded-sm p-3 text-xs space-y-2 mb-3 shadow-2xs">
+      <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm p-3 text-xs space-y-2 mb-3 shadow-2xs">
         {details.customer && (
           <div className="flex items-start justify-between gap-4">
-            <span className="text-[#64748B]">Target Customer:</span>
-            <span className="text-[#172033] font-semibold text-right">{details.customer}</span>
+            <span className="text-[#5D6B7B] dark:text-[#A9BACB]">Target Customer:</span>
+            <span className="text-[#142C45] dark:text-[#E8EEF5] font-semibold text-right">{details.customer}</span>
           </div>
         )}
         {details.title && (
           <div className="flex items-start justify-between gap-4">
-            <span className="text-[#64748B]">Action / Subject:</span>
-            <span className="text-[#172033] font-medium text-right">{details.title}</span>
+            <span className="text-[#5D6B7B] dark:text-[#A9BACB]">Action / Subject:</span>
+            <span className="text-[#142C45] dark:text-[#E8EEF5] font-medium text-right">{details.title}</span>
           </div>
         )}
         {details.dueDate && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-[#64748B]">Target Due Date:</span>
-            <span className="text-[#B45309] font-mono font-medium flex items-center gap-1">
+            <span className="text-[#5D6B7B] dark:text-[#A9BACB]">Target Due Date:</span>
+            <span className="text-[#B45309] dark:text-amber-300 font-mono font-medium flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
               {details.dueDate}
             </span>
@@ -158,7 +158,7 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
         )}
         {details.priority && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-[#64748B]">Priority Level:</span>
+            <span className="text-[#5D6B7B] dark:text-[#A9BACB]">Priority Level:</span>
             <Badge
               variant={
                 details.priority === 'CRITICAL'
@@ -175,20 +175,20 @@ export const CopilotActionCard: React.FC<CopilotActionCardProps> = ({
         )}
         {details.expectedValue && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-[#64748B]">Expected Value:</span>
-            <span className="text-[#16803C] font-semibold font-mono">{details.expectedValue}</span>
+            <span className="text-[#5D6B7B] dark:text-[#A9BACB]">Expected Value:</span>
+            <span className="text-[#16803C] dark:text-emerald-400 font-semibold font-mono">{details.expectedValue}</span>
           </div>
         )}
         {details.description && (
-          <div className="pt-2 border-t border-[#E2E8F0] text-[#475569] italic">
+          <div className="pt-2 border-t border-[#DCE3EA] dark:border-[#26394C] text-[#5D6B7B] dark:text-[#A9BACB] italic">
             "{details.description}"
           </div>
         )}
       </div>
 
       {/* Security Statement */}
-      <div className="text-[11px] text-[#78350F] mb-3 flex items-start gap-1.5 bg-[#FEF3C7]/60 p-2 rounded-xs border border-[#FDE68A]">
-        <AlertTriangle className="w-3.5 h-3.5 text-[#B45309] shrink-0 mt-0.5" />
+      <div className="text-[11px] text-[#78350F] dark:text-amber-200 mb-3 flex items-start gap-1.5 bg-[#FEF3C7]/60 dark:bg-amber-950/40 p-2 rounded-xs border border-[#FDE68A] dark:border-amber-700/50">
+        <AlertTriangle className="w-3.5 h-3.5 text-[#B45309] dark:text-amber-400 shrink-0 mt-0.5" />
         <span>
           Gemini Banking Copilot cannot perform mutations without explicit officer confirmation.
           Clicking confirm will commit this action to the PostgreSQL database with an immutable audit log.

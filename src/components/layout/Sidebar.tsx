@@ -33,10 +33,14 @@ import {
   ShieldAlert,
   ChevronLeft,
   ChevronRight,
+  LogOut,
+  Building2,
+  Layers,
 } from 'lucide-react';
 import { ModuleType } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { Tooltip } from '../common/Tooltip';
+import { BANK_META } from '../../data/mockIndianBankingData';
 
 export interface SidebarProps {
   activeModule: ModuleType;
@@ -52,7 +56,7 @@ export interface NavItem {
   id: ModuleType;
   label: string;
   icon: React.ReactNode;
-  shortcut: string;
+  shortcut?: string;
   badge?: number;
   requiredPermission?: string;
   requiredRoles?: string[];
@@ -72,7 +76,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isCollapsed = false,
   onToggleCollapse,
 }) => {
-  const { hasPermission, hasRole } = useAuth();
+  const { hasPermission, hasRole, user, logout } = useAuth();
 
   // Escape key closes mobile navigation drawer
   useEffect(() => {
@@ -88,18 +92,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isMobileOpen, onCloseMobile]);
 
+  // Real banking business workflows navigation sections
   const sections: NavSection[] = [
-    {
-      title: 'Enterprise Showcase',
-      items: [
-        {
-          id: 'showcase',
-          label: 'Platform Showcase',
-          icon: <Sparkles className="w-4 h-4 text-amber-400" />,
-          shortcut: '',
-        },
-      ],
-    },
     {
       title: 'Core Operations',
       items: [
@@ -111,75 +105,85 @@ export const Sidebar: React.FC<SidebarProps> = ({
           requiredPermission: 'dashboard:view',
         },
         {
-          id: 'accounts',
-          label: 'CASA & Term Deposits',
-          icon: <WalletCards className="w-4 h-4" />,
-          shortcut: 'F2',
-          requiredPermission: 'accounts:read',
-        },
-        {
           id: 'customers',
           label: 'Customer 360 & cKYC',
           icon: <Users2 className="w-4 h-4" />,
-          shortcut: 'F3',
+          shortcut: 'F2',
           requiredPermission: 'customers:read',
         },
         {
+          id: 'accounts',
+          label: 'CASA & Term Deposits',
+          icon: <WalletCards className="w-4 h-4" />,
+          shortcut: 'F3',
+          requiredPermission: 'accounts:read',
+        },
+        {
           id: 'onboarding',
-          label: 'Onboarding & KYC',
+          label: 'Digital Onboarding & KYC',
           icon: <UserCheck className="w-4 h-4" />,
-          shortcut: 'F4',
+          requiredPermission: 'customers:read',
         },
         {
           id: 'documents',
-          label: 'Document Intelligence',
-          icon: <FileText className="w-4 h-4 text-amber-400" />,
-          shortcut: 'F5',
+          label: 'Document Intelligence Vault',
+          icon: <FileText className="w-4 h-4" />,
           requiredPermission: 'customers:read',
         },
         {
           id: 'products',
-          label: 'Banking Products',
+          label: 'Banking Products Catalog',
           icon: <Package className="w-4 h-4" />,
-          shortcut: '',
         },
       ],
     },
     {
-      title: 'Relationship & CRM',
+      title: 'Relationship Management',
       items: [
         {
           id: 'interactions',
-          label: 'Interactions',
+          label: 'Customer Interaction Hub',
           icon: <MessageSquare className="w-4 h-4" />,
-          shortcut: 'F6',
           requiredPermission: 'customers:read',
-        },
-        {
-          id: 'cases',
-          label: 'Service Cases & Grievances',
-          icon: <LifeBuoy className="w-4 h-4" />,
-          shortcut: '',
-          requiredPermission: 'cases:manage',
         },
         {
           id: 'opportunities',
           label: 'Deals & Opportunities',
           icon: <TrendingUp className="w-4 h-4" />,
-          shortcut: '',
           requiredPermission: 'opportunities:manage',
+        },
+        {
+          id: 'cases',
+          label: 'Service Cases & Grievances',
+          icon: <LifeBuoy className="w-4 h-4" />,
+          requiredPermission: 'cases:manage',
         },
         {
           id: 'tasks',
           label: 'Officer Tasks & Follow-ups',
           icon: <CheckSquare className="w-4 h-4" />,
-          shortcut: '',
         },
         {
+          id: 'groups',
+          label: 'Household & Groups 360',
+          icon: <Users2 className="w-4 h-4" />,
+          requiredPermission: 'customers:read',
+        },
+        {
+          id: 'journeys',
+          label: 'Customer Journeys',
+          icon: <Milestone className="w-4 h-4" />,
+          requiredPermission: 'customers:read',
+        },
+      ],
+    },
+    {
+      title: 'Relationship Intelligence',
+      items: [
+        {
           id: 'intelligence',
-          label: 'Relationship Intelligence',
+          label: 'Relationship Intelligence (RI-v1)',
           icon: <BrainCircuit className="w-4 h-4" />,
-          shortcut: 'F7',
           requiredPermission: 'intelligence:read',
         },
         {
@@ -199,82 +203,58 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {
           id: 'relationship-twin',
           label: 'Relationship Digital Twin',
-          icon: <Network className="w-4 h-4 text-violet-400" />,
-          shortcut: 'F12',
+          icon: <Network className="w-4 h-4" />,
           requiredPermission: 'intelligence:read',
         },
         {
           id: 'relationship-graph',
-          label: 'Relationship Graph',
-          icon: <GitFork className="w-4 h-4 text-indigo-400" />,
-          shortcut: '',
+          label: 'Relationship Graph Intelligence',
+          icon: <GitFork className="w-4 h-4" />,
           requiredPermission: 'customers:read',
         },
         {
           id: 'strategy-simulator',
-          label: 'Strategy Simulator',
-          icon: <Compass className="w-4 h-4 text-amber-400" />,
-          shortcut: '',
+          label: 'Strategy Simulator & Sandbox',
+          icon: <Compass className="w-4 h-4" />,
           requiredPermission: 'customers:read',
         },
         {
           id: 'agent',
           label: 'Controlled Banking Agent',
-          icon: <Cpu className="w-4 h-4 text-purple-400" />,
-          shortcut: '',
-          requiredPermission: 'customers:read',
-        },
-        {
-          id: 'journeys',
-          label: 'Customer Journeys',
-          icon: <Milestone className="w-4 h-4 text-emerald-400" />,
-          shortcut: '',
-          requiredPermission: 'customers:read',
-        },
-        {
-          id: 'groups',
-          label: 'Household & Groups 360',
-          icon: <Users2 className="w-4 h-4 text-cyan-400" />,
-          shortcut: '',
+          icon: <Cpu className="w-4 h-4" />,
           requiredPermission: 'customers:read',
         },
         {
           id: 'copilot',
           label: 'Banking Copilot',
-          icon: <Bot className="w-4 h-4 text-emerald-400" />,
+          icon: <Bot className="w-4 h-4" />,
           shortcut: 'F10',
+        },
+        {
+          id: 'portfolio-intelligence',
+          label: 'Portfolio Intelligence & Risk',
+          icon: <PieChart className="w-4 h-4" />,
+          requiredPermission: 'portfolio:view',
         },
         {
           id: 'analytics',
           label: 'Management Intelligence',
-          icon: <BarChart3 className="w-4 h-4 text-cyan-400" />,
+          icon: <BarChart3 className="w-4 h-4" />,
           shortcut: 'F11',
           requiredPermission: 'analytics:read',
-        },
-        {
-          id: 'portfolio-intelligence',
-          label: 'Portfolio Intelligence',
-          icon: <PieChart className="w-4 h-4 text-blue-400" />,
-          shortcut: '',
-          requiredPermission: 'portfolio:view',
         },
       ],
     },
     {
-      title: 'Credit & Assets',
+      title: 'Credit & Transactions',
       items: [
         {
           id: 'lending',
-          label: 'Lending & Advances',
+          label: 'Lending & Credit Advances',
           icon: <Landmark className="w-4 h-4" />,
           shortcut: 'F4',
           requiredPermission: 'loans:read',
         },
-      ],
-    },
-    {
-      title: 'Settlement & Global',
-      items: [
         {
           id: 'payments',
           label: 'Payments Switch & CTS',
@@ -292,7 +272,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
-      title: 'Governance & Risk',
+      title: 'Governance & Platform',
       items: [
         {
           id: 'maker-checker',
@@ -302,32 +282,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           badge: pendingAuthorizationsCount,
         },
         {
-          id: 'audit-regulatory',
-          label: 'Audit & Regulatory',
-          icon: <FileSpreadsheet className="w-4 h-4" />,
-          shortcut: 'F8',
-          requiredPermission: 'audit:read',
-          requiredRoles: ['ADMINISTRATOR', 'BRANCH_MANAGER', 'OPERATIONS', 'ANALYST'],
-        },
-        {
-          id: 'governance',
-          label: 'Trust & Governance',
-          icon: <ShieldCheck className="w-4 h-4 text-emerald-400" />,
-          shortcut: 'F12',
-          requiredRoles: [
-            'ADMINISTRATOR',
-            'COMPLIANCE_OFFICER',
-            'BRANCH_OPS_HEAD',
-            'RELATIONSHIP_MANAGER',
-            'AUDITOR',
-            'BRANCH_MANAGER',
-          ],
-        },
-        {
           id: 'operations',
-          label: 'Banking Operations',
-          icon: <Activity className="w-4 h-4 text-cyan-400" />,
-          shortcut: '',
+          label: 'Banking Operations Workspace',
+          icon: <Activity className="w-4 h-4" />,
           requiredRoles: [
             'ADMINISTRATOR',
             'COMPLIANCE_OFFICER',
@@ -340,10 +297,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ],
         },
         {
+          id: 'governance',
+          label: 'Trust & Governance Center',
+          icon: <ShieldCheck className="w-4 h-4" />,
+          requiredRoles: [
+            'ADMINISTRATOR',
+            'COMPLIANCE_OFFICER',
+            'BRANCH_OPS_HEAD',
+            'RELATIONSHIP_MANAGER',
+            'AUDITOR',
+            'BRANCH_MANAGER',
+          ],
+        },
+        {
+          id: 'audit-regulatory',
+          label: 'Statutory Audit & Logs',
+          icon: <FileSpreadsheet className="w-4 h-4" />,
+          requiredPermission: 'audit:read',
+          requiredRoles: ['ADMINISTRATOR', 'BRANCH_MANAGER', 'OPERATIONS', 'ANALYST'],
+        },
+        {
           id: 'integrations',
-          label: 'Integration & Gateway',
-          icon: <Network className="w-4 h-4 text-indigo-400" />,
-          shortcut: '',
+          label: 'Enterprise Integration & Gateway',
+          icon: <Network className="w-4 h-4" />,
           requiredRoles: [
             'ADMINISTRATOR',
             'COMPLIANCE_OFFICER',
@@ -356,10 +332,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
         },
         {
           id: 'admin',
-          label: 'Enterprise Admin',
-          icon: <ShieldAlert className="w-4 h-4 text-rose-400" />,
-          shortcut: '',
+          label: 'Enterprise Administration',
+          icon: <ShieldAlert className="w-4 h-4" />,
           requiredRoles: ['ADMINISTRATOR'],
+        },
+        {
+          id: 'showcase',
+          label: 'Platform Architecture Showcase',
+          icon: <Sparkles className="w-4 h-4" />,
         },
       ],
     },
@@ -379,26 +359,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
           if (onCloseMobile) onCloseMobile();
         }}
         disabled={!isPermitted}
-        aria-label={item.label}
+        data-module={item.id}
+        aria-label={`${item.label} (${item.id})`}
         aria-current={isActive ? 'page' : undefined}
-        className={`w-full flex items-center ${
-          isCollapsedMode ? 'justify-center p-2.5' : 'justify-between px-3 py-2'
-        } text-xs rounded-xs group cursor-pointer transition-colors duration-120 motion-interactive ${
+        className={`w-full relative flex items-center ${
+          isCollapsedMode ? 'justify-center p-2.5 h-10' : 'justify-between px-3 py-2 min-h-9'
+        } text-xs rounded-sm group cursor-pointer transition-all duration-150 motion-interactive ${
           isActive
-            ? 'bg-slate-800 text-white font-semibold border-l-3 border-[#087F8C]'
+            ? 'bg-[#0c1c2e] dark:bg-[#162638] text-white font-semibold border-l-3 border-[#168C83] dark:border-[#2dd4bf] shadow-xs'
             : isPermitted
-            ? 'text-slate-300 hover:bg-slate-800/60 hover:text-white border-l-3 border-transparent'
-            : 'text-slate-500 opacity-60 cursor-not-allowed border-l-3 border-transparent'
+            ? 'text-slate-300 dark:text-[#A9BACB] hover:bg-[#0c1c2e]/60 dark:hover:bg-[#162638]/70 hover:text-white border-l-3 border-transparent'
+            : 'text-slate-500 dark:text-slate-600 opacity-60 cursor-not-allowed border-l-3 border-transparent'
         }`}
       >
         <div className={`flex items-center ${isCollapsedMode ? 'justify-center' : 'gap-2.5 min-w-0'}`}>
           <span
-            className={`shrink-0 ${
+            className={`shrink-0 transition-colors ${
               isActive
                 ? 'text-[#2dd4bf]'
                 : isPermitted
-                ? 'text-slate-400 group-hover:text-slate-200'
-                : 'text-slate-500'
+                ? 'text-slate-400 dark:text-[#8194A8] group-hover:text-slate-200 dark:group-hover:text-white'
+                : 'text-slate-500 dark:text-slate-600'
             }`}
           >
             {item.icon}
@@ -409,17 +390,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {!isCollapsedMode && (
           <div className="flex items-center gap-1.5 shrink-0">
             {!isPermitted && (
-              <span title="Requires role entitlement elevation">
-                <Lock className="w-3 h-3 text-slate-500" />
+              <span title="Restricted: Requires elevated role entitlement">
+                <Lock className="w-3 h-3 text-slate-500 dark:text-slate-600" />
               </span>
             )}
             {item.badge !== undefined && item.badge > 0 && (
-              <span className="font-mono text-[10px] font-bold bg-[#B45309] text-white px-1.5 py-0.2 rounded-xs">
+              <span className="font-mono text-[10px] font-bold bg-[#B45309] dark:bg-[#F59E0B] text-white dark:text-[#080F19] px-1.5 py-0.2 rounded-xs animate-pulse">
                 {item.badge}
               </span>
             )}
             {item.shortcut && (
-              <span className="hidden group-hover:inline-block font-mono text-[10px] text-slate-400 bg-slate-800 px-1 py-0.2 rounded-xs">
+              <span className="hidden group-hover:inline-block font-mono text-[10px] text-slate-400 dark:text-[#8194A8] bg-[#0c1c2e] dark:bg-[#080F19] px-1 py-0.2 rounded-xs border border-slate-700 dark:border-[#26394C]">
                 {item.shortcut}
               </span>
             )}
@@ -427,7 +408,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         )}
 
         {isCollapsedMode && item.badge !== undefined && item.badge > 0 && (
-          <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#B45309]" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#F59E0B] ring-2 ring-[#142C45] dark:ring-[#101C2A] animate-pulse" />
         )}
       </button>
     );
@@ -451,10 +432,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Mobile Drawer Overlay Backdrop */}
+      {/* Mobile Navigation Drawer Backdrop Overlay */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-40 lg:hidden motion-fade-in"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-40 lg:hidden motion-fade-in"
           onClick={onCloseMobile}
           aria-hidden="true"
         />
@@ -463,77 +444,99 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Main Sidebar Shell */}
       <aside
         aria-label="Banking Modules Navigation"
-        className={`bg-slate-900 text-slate-300 flex flex-col shrink-0 border-r border-slate-800 select-none z-50 transition-[width] duration-200 ease-in-out ${
+        className={`bg-[#142C45] dark:bg-[#101C2A] text-slate-300 dark:text-[#A9BACB] flex flex-col shrink-0 border-r border-[#101C2A] dark:border-[#33485D] select-none z-50 transition-[width] duration-200 ease-in-out ${
           isMobileOpen
             ? 'fixed inset-y-0 left-0 w-72 max-w-[85vw] shadow-2xl flex h-full motion-drawer-left'
-            : `hidden lg:flex ${isCollapsed ? 'w-16' : 'w-64'} min-h-[calc(100vh-80px)]`
+            : `hidden lg:flex ${isCollapsed ? 'w-18' : 'w-64'} min-h-[calc(100vh-80px)]`
         }`}
       >
-        {/* Mobile Header (Shown only on small screens) */}
-        <div className="lg:hidden flex items-center justify-between px-3.5 py-3 border-b border-slate-800 bg-[#0b1626] shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-[#087F8C] text-white flex items-center justify-center font-bold text-xs font-mono">
-              CV
-            </div>
-            <span className="font-bold text-xs text-white uppercase tracking-wider">
-              Banking Modules
-            </span>
-          </div>
-          {onCloseMobile && (
-            <button
-              onClick={onCloseMobile}
-              className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
-              title="Close navigation (Escape)"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+        {/* =====================================================================
+            1. SIDEBAR BRAND HEADER & COLLAPSE CONTROLLER
+            ===================================================================== */}
+        <div className="flex items-center justify-between px-3 py-3 border-b border-[#101C2A] dark:border-[#26394C] bg-[#0c1c2e] dark:bg-[#080F19] shrink-0">
+          {!isCollapsed || isMobileOpen ? (
+            <div className="flex items-center justify-between w-full min-w-0">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-7 h-7 rounded-sm bg-[#168C83] text-white flex items-center justify-center font-bold text-xs shadow-xs border border-[#168C83]/50 shrink-0">
+                  <Landmark className="w-4 h-4 text-[#D9A441]" />
+                </div>
+                <div className="min-w-0 leading-tight">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-sm text-white tracking-tight font-sans truncate">
+                      COREvia
+                    </span>
+                    <span className="text-[9px] font-mono font-semibold px-1 py-0.2 bg-[#168C83]/30 text-[#2dd4bf] rounded-xs border border-[#168C83]/40">
+                      CRM
+                    </span>
+                  </div>
+                  <span className="text-[9px] text-slate-400 dark:text-[#8194A8] font-mono tracking-wider uppercase block truncate">
+                    Scheduled Banking
+                  </span>
+                </div>
+              </div>
 
-        {/* Desktop Collapse / Expand Header Toolbar */}
-        <div className="hidden lg:flex items-center justify-between px-3 py-2.5 border-b border-slate-800 bg-[#0b1626] shrink-0">
-          {!isCollapsed ? (
-            <>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
-                Navigation Rail
-              </span>
-              {onToggleCollapse && (
+              {/* Mobile Close Button / Desktop Collapse Trigger */}
+              {isMobileOpen ? (
                 <button
-                  onClick={onToggleCollapse}
-                  className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer transition-colors"
-                  title="Collapse sidebar rail (Ctrl+B)"
-                  aria-label="Collapse sidebar rail"
+                  onClick={onCloseMobile}
+                  className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 dark:hover:bg-[#162638] cursor-pointer"
+                  title="Close navigation (Escape)"
+                  aria-label="Close navigation"
                 >
-                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <X className="w-4 h-4" />
                 </button>
+              ) : (
+                onToggleCollapse && (
+                  <button
+                    onClick={onToggleCollapse}
+                    className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 dark:hover:bg-[#162638] cursor-pointer transition-colors"
+                    title="Collapse sidebar rail (Ctrl+B)"
+                    aria-label="Collapse sidebar rail"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                )
               )}
-            </>
+            </div>
           ) : (
-            <div className="w-full flex justify-center">
+            /* Collapsed Mode Monogram & Expand Trigger */
+            <div className="w-full flex flex-col items-center gap-2">
+              <div
+                className="w-8 h-8 rounded-sm bg-[#168C83] text-white flex items-center justify-center font-bold text-xs shadow-xs border border-[#168C83]/50 cursor-pointer"
+                onClick={onToggleCollapse}
+                title="Expand navigation rail (Ctrl+B)"
+              >
+                <Landmark className="w-4 h-4 text-[#D9A441]" />
+              </div>
               {onToggleCollapse && (
                 <button
                   onClick={onToggleCollapse}
-                  className="p-1.5 rounded text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer transition-colors"
+                  className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 dark:hover:bg-[#162638] cursor-pointer transition-colors"
                   title="Expand sidebar rail (Ctrl+B)"
                   aria-label="Expand sidebar rail"
                 >
-                  <ChevronRight className="w-4 h-4 text-teal-400" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#2dd4bf]" />
                 </button>
               )}
             </div>
           )}
         </div>
 
-        {/* Navigation Sections */}
+        {/* =====================================================================
+            2. SCROLLABLE NAVIGATION SECTIONS
+            ===================================================================== */}
         <div className="flex-1 py-2 px-1.5 space-y-3 overflow-y-auto scrollbar-thin">
           {sections.map((section, sIdx) => (
-            <div key={section.title} className={isCollapsed ? 'space-y-0.5' : 'space-y-1'}>
-              {!isCollapsed ? (
-                <div className="px-2.5 pt-1 text-[10px] uppercase font-bold tracking-wider text-slate-400">
-                  {section.title}
+            <div key={section.title} className={isCollapsed && !isMobileOpen ? 'space-y-0.5' : 'space-y-1'}>
+              {!isCollapsed || isMobileOpen ? (
+                <div className="px-2.5 pt-1.5 text-[10px] uppercase font-bold tracking-wider text-[#D9A441] dark:text-[#D9A441] flex items-center justify-between">
+                  <span>{section.title}</span>
+                  <span className="text-[9px] font-mono text-slate-500 font-normal">
+                    {section.items.length}
+                  </span>
                 </div>
               ) : (
-                sIdx > 0 && <div className="my-1 border-t border-slate-800/80 mx-2" />
+                sIdx > 0 && <div className="my-1.5 border-t border-slate-700/60 dark:border-[#26394C] mx-2" />
               )}
               <div className="space-y-0.5">
                 {section.items.map((item) =>
@@ -544,17 +547,90 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ))}
         </div>
 
-        {/* Desktop Bottom Status Pill */}
-        {!isCollapsed ? (
-          <div className="hidden lg:flex items-center justify-between px-3 py-2 border-t border-slate-800 bg-[#0b1626] text-[11px] text-slate-400">
-            <span className="truncate">COREvia v2.0</span>
-            <span className="font-mono text-[10px] text-teal-400">IST READY</span>
-          </div>
-        ) : (
-          <div className="hidden lg:flex justify-center py-2 border-t border-slate-800 bg-[#0b1626] text-[10px] font-mono text-teal-400">
-            •
-          </div>
-        )}
+        {/* =====================================================================
+            3. BUILT-IN OFFICER PROFILE & TELEMETRY FOOTER
+            ===================================================================== */}
+        <div className="p-2 border-t border-[#101C2A] dark:border-[#26394C] bg-[#0c1c2e] dark:bg-[#080F19] shrink-0">
+          {!isCollapsed || isMobileOpen ? (
+            <div className="flex items-center justify-between gap-2 p-1.5 rounded-sm bg-[#142C45]/80 dark:bg-[#101C2A] border border-slate-700/60 dark:border-[#26394C]">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="relative shrink-0">
+                  <div className="w-8 h-8 rounded-sm bg-[#168C83] text-white flex items-center justify-center font-bold text-xs font-mono">
+                    {user?.name
+                      ? user.name
+                          .split(' ')
+                          .map((n) => n[0])
+                          .slice(0, 2)
+                          .join('')
+                          .toUpperCase()
+                      : 'CV'}
+                  </div>
+                  <span
+                    className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-[#0c1c2e] dark:ring-[#080F19] animate-pulse"
+                    title="Terminal session online"
+                  />
+                </div>
+                <div className="min-w-0 leading-tight">
+                  <div className="text-xs font-semibold text-white truncate">
+                    {user?.name || BANK_META.systemTerminal.workstationUser}
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className="text-[9px] font-mono text-[#2dd4bf] truncate font-medium">
+                      {user?.employeeId || BANK_META.systemTerminal.employeeId}
+                    </span>
+                    <span className="text-slate-500 text-[8px]">&bull;</span>
+                    <span className="text-[9px] text-slate-300 dark:text-[#A9BACB] truncate">
+                      {user?.roleName || 'Officer'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => logout()}
+                className="p-1.5 rounded text-slate-400 hover:text-rose-400 hover:bg-slate-800 dark:hover:bg-[#162638] transition-colors cursor-pointer shrink-0"
+                title="Sign out of banking workstation"
+                aria-label="Sign out of banking workstation"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            /* Collapsed Mode Officer Avatar */
+            <Tooltip
+              content={`${user?.name || 'Officer'} (${user?.employeeId || 'EMP'}) • ${user?.roleName || 'Active Session'}`}
+              position="right"
+              delayMs={50}
+            >
+              <div className="w-full flex justify-center py-1">
+                <div className="relative">
+                  <div className="w-8 h-8 rounded-sm bg-[#168C83] text-white flex items-center justify-center font-bold text-xs font-mono">
+                    {user?.name
+                      ? user.name
+                          .split(' ')
+                          .map((n) => n[0])
+                          .slice(0, 2)
+                          .join('')
+                          .toUpperCase()
+                      : 'CV'}
+                  </div>
+                  <span
+                    className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-[#0c1c2e] dark:ring-[#080F19] animate-pulse"
+                    title="Terminal session online"
+                  />
+                </div>
+              </div>
+            </Tooltip>
+          )}
+
+          {/* Sub-Footer System Classification */}
+          {!isCollapsed && !isMobileOpen && (
+            <div className="flex items-center justify-between pt-1.5 px-1 text-[9px] text-slate-400 dark:text-[#8194A8] font-mono">
+              <span>NODE: MUM-FORT-01</span>
+              <span className="text-emerald-400 font-semibold">IST ONLINE</span>
+            </div>
+          )}
+        </div>
       </aside>
     </>
   );

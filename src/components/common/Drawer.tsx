@@ -116,12 +116,12 @@ export const Drawer: React.FC<DrawerProps> = ({
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px] motion-fade-in"
+        className="absolute inset-0 bg-slate-950/50 dark:bg-black/70 backdrop-blur-[1px] motion-fade-in"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+      <div className={`fixed inset-y-0 ${position === 'right' ? 'right-0 pl-0 sm:pl-10' : 'left-0 pr-0 sm:pr-10'} max-w-full flex`}>
         {/* Slide-over Container */}
         <div
           ref={drawerRef}
@@ -129,33 +129,33 @@ export const Drawer: React.FC<DrawerProps> = ({
           aria-modal="true"
           aria-labelledby={titleId}
           aria-describedby={subtitle ? descId : undefined}
-          className={`relative ${positionClasses[position]} ${sizeClasses[size]} max-w-full bg-white border-l border-[#CBD5E1] shadow-2xl flex flex-col h-full overflow-hidden ${className}`}
+          className={`relative ${positionClasses[position]} ${sizeClasses[size]} max-w-full bg-white dark:bg-[#162638] border-l border-[#DCE3EA] dark:border-[#33485D] shadow-2xl flex flex-col h-full overflow-hidden text-[#273444] dark:text-[#E8EEF5] ${className}`}
         >
           {/* Institutional Header */}
-          <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC] shrink-0">
+          <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-[#DCE3EA] dark:border-[#26394C] bg-[#F8FAFC] dark:bg-[#101C2A] shrink-0">
             <div className="min-w-0 pr-2">
               <div className="flex items-center gap-2">
                 <h2
                   id={titleId}
-                  className="text-xs sm:text-sm font-bold text-[#172033] tracking-tight uppercase truncate font-sans"
+                  className="text-xs sm:text-sm font-bold text-[#273444] dark:text-[#E8EEF5] tracking-tight uppercase truncate font-sans"
                 >
                   {title}
                 </h2>
                 {referenceId && (
-                  <span className="font-mono text-[10px] px-1.5 py-0.2 bg-[#F1F5F9] text-[#475569] rounded-xs border border-[#CBD5E1] shrink-0">
+                  <span className="font-mono text-[10px] px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#192B3D] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs border border-[#DCE3EA] dark:border-[#33485D] shrink-0">
                     {referenceId}
                   </span>
                 )}
               </div>
               {subtitle && (
-                <p id={descId} className="text-[11px] text-[#64748B] mt-0.5 truncate">
+                <p id={descId} className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5 truncate">
                   {subtitle}
                 </p>
               )}
             </div>
             <button
               onClick={onClose}
-              className="text-[#64748B] hover:text-[#172033] p-1.5 rounded-xs hover:bg-[#E2E8F0] transition-colors shrink-0 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#087F8C]"
+              className="text-[#8793A1] hover:text-[#273444] dark:text-[#8194A8] dark:hover:text-[#E8EEF5] p-1.5 rounded-xs hover:bg-[#EDF1F5] dark:hover:bg-[#192B3D] transition-colors shrink-0 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#168C83]"
               aria-label="Close drawer"
             >
               <X className="w-4 h-4" />
@@ -163,13 +163,13 @@ export const Drawer: React.FC<DrawerProps> = ({
           </div>
 
           {/* Drawer Body */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-5 text-xs text-[#172033] space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-5 text-xs text-[#273444] dark:text-[#E8EEF5] space-y-4">
             {children}
           </div>
 
           {/* Footer Actions */}
           {footerActions && (
-            <div className="flex items-center justify-end gap-2 px-4 sm:px-5 py-3 border-t border-[#E2E8F0] bg-[#F8FAFC] shrink-0">
+            <div className="flex items-center justify-end gap-2 px-4 sm:px-5 py-3 border-t border-[#DCE3EA] dark:border-[#26394C] bg-[#F8FAFC] dark:bg-[#101C2A] shrink-0">
               {footerActions}
             </div>
           )}
@@ -178,4 +178,3 @@ export const Drawer: React.FC<DrawerProps> = ({
     </div>
   );
 };
-

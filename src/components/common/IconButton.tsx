@@ -29,17 +29,17 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ) => {
     const variantClasses: Record<IconButtonVariant, string> = {
       ghost:
-        'bg-transparent text-[#64748B] hover:text-[#172033] hover:bg-[#F1F5F9] active:bg-[#E2E8F0] border border-transparent',
+        'bg-transparent text-[#5D6B7B] hover:text-[#273444] hover:bg-[#EDF1F5] active:bg-[#DCE3EA] border border-transparent dark:text-[#A9BACB] dark:hover:text-[#E8EEF5] dark:hover:bg-[#192B3D]',
       outline:
-        'bg-white text-[#475569] hover:text-[#172033] hover:bg-[#F8FAFC] active:bg-[#F1F5F9] border border-[#CBD5E1] shadow-2xs',
+        'bg-white text-[#5D6B7B] hover:text-[#273444] hover:bg-[#EDF1F5] active:bg-[#DCE3EA] border border-[#DCE3EA] shadow-2xs dark:bg-[#162638] dark:text-[#A9BACB] dark:hover:text-[#E8EEF5] dark:hover:bg-[#192B3D] dark:border-[#33485D]',
       secondary:
-        'bg-[#F8FAFC] text-[#475569] hover:text-[#172033] hover:bg-[#E2E8F0] active:bg-[#CBD5E1] border border-[#CBD5E1]',
+        'bg-[#EDF1F5] text-[#5D6B7B] hover:text-[#273444] hover:bg-[#DCE3EA] active:bg-[#CBD5E1] border border-[#DCE3EA] dark:bg-[#192B3D] dark:text-[#A9BACB] dark:hover:text-[#E8EEF5] dark:hover:bg-[#20364B] dark:border-[#33485D]',
       primary:
-        'bg-[#0f1e36] text-white hover:bg-[#1b2e4b] active:bg-[#091322] border border-[#0f1e36] shadow-2xs',
+        'bg-[#142C45] text-white hover:bg-[#101C2A] active:bg-[#0c1c2e] border border-[#142C45] shadow-xs dark:bg-[#168C83] dark:hover:bg-[#1B9D92] dark:border-[#168C83]',
       brand:
-        'bg-[#087F8C] text-white hover:bg-[#066974] active:bg-[#05535c] border border-[#087F8C] shadow-2xs',
+        'bg-[#168C83] text-white hover:bg-[#1B9D92] active:bg-[#137971] border border-[#168C83] shadow-xs dark:bg-[#168C83] dark:hover:bg-[#1B9D92] dark:border-[#168C83]',
       danger:
-        'bg-[#B42318] text-white hover:bg-[#911d13] active:bg-[#72170f] border border-[#B42318] shadow-2xs',
+        'bg-[#B42318] text-white hover:bg-[#911d13] active:bg-[#72170f] border border-[#B42318] shadow-xs dark:bg-[#EF4444] dark:hover:bg-[#DC2626] dark:border-[#EF4444]',
     };
 
     const sizeClasses: Record<IconButtonSize, string> = {
@@ -92,4 +92,3 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
 );
 
 IconButton.displayName = 'IconButton';
-

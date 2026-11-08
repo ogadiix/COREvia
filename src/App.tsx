@@ -66,6 +66,7 @@ import { AccountDetailModal } from './components/modals/AccountDetailModal';
 import { LienMarkModal } from './components/modals/LienMarkModal';
 import { AiBankingAssistantModal } from './components/ai/AiBankingAssistantModal';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { LoginPage } from './components/auth/LoginPage';
 import { AccessRestrictedNotice } from './components/common/AccessRestrictedNotice';
 import { ToastProvider } from './components/common/Toast';
@@ -837,7 +838,7 @@ function BankingWorkplace() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col text-slate-900 font-sans selection:bg-slate-200 w-full max-w-full overflow-x-hidden">
+    <div className="min-h-screen bg-[#F4F6F8] dark:bg-[#080F19] flex flex-col text-[#273444] dark:text-[#E8EEF5] font-sans selection:bg-[#168C83]/20 w-full max-w-full overflow-x-hidden">
       {/* Institutional Topmost Header */}
       <Header
         activeModule={activeModule}
@@ -866,7 +867,7 @@ function BankingWorkplace() {
         />
 
         {/* Main Work Area */}
-        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 bg-[#f8fafc] min-w-0 max-w-full">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 bg-[#F4F6F8] dark:bg-[#080F19] min-w-0 max-w-full">
           <div key={activeModule} className="max-w-7xl mx-auto space-y-4 sm:space-y-6 min-w-0 w-full motion-fade-in">
             {activeModule === 'dashboard' && (
               <DashboardModule
@@ -1404,15 +1405,15 @@ function BankingWorkplace() {
       {/* Floating Gemini Banking Copilot Launcher */}
       <button
         onClick={() => toggleDrawer()}
-        className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-full shadow-2xl border border-emerald-500/40 hover:border-emerald-500 transition-all hover:scale-105 cursor-pointer group"
+        className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5 px-4 py-2 bg-[#142C45] hover:bg-[#101C2A] dark:bg-[#162638] dark:hover:bg-[#1C3045] text-white rounded-full shadow-2xl border border-[#168C83]/50 hover:border-[#168C83] transition-all hover:scale-105 cursor-pointer group"
         title="Open COREvia Gemini Banking Copilot (F10)"
       >
-        <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/40 group-hover:bg-emerald-500/40 transition-colors">
-          <Bot className="w-3.5 h-3.5 text-emerald-400" />
+        <div className="w-6 h-6 rounded-full bg-[#168C83]/20 flex items-center justify-center border border-[#168C83]/40 group-hover:bg-[#168C83]/40 transition-colors">
+          <Bot className="w-3.5 h-3.5 text-[#168C83] dark:text-[#2dd4c7]" />
         </div>
         <div className="flex flex-col items-start leading-tight pr-1">
           <span className="text-xs font-semibold">Banking Copilot</span>
-          <span className="text-[9px] text-slate-400 font-mono">F10 · Phase 14</span>
+          <span className="text-[9px] text-slate-300 dark:text-[#8194A8] font-mono">F10 · Enterprise</span>
         </div>
       </button>
 
@@ -1430,15 +1431,17 @@ function BankingWorkplace() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <MotionProvider>
-        <ToastProvider>
-          <CopilotProvider>
-            <BankingWorkplace />
-          </CopilotProvider>
-        </ToastProvider>
-      </MotionProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <MotionProvider>
+          <ToastProvider>
+            <CopilotProvider>
+              <BankingWorkplace />
+            </CopilotProvider>
+          </ToastProvider>
+        </MotionProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

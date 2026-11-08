@@ -59,7 +59,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           id={tooltipId}
           role="tooltip"
           style={{ zIndex: zIndex.tooltip }}
-          className={`absolute pointer-events-none whitespace-nowrap px-2 py-1 bg-[#0f1e36] text-white text-[11px] font-sans font-medium rounded-xs shadow-md border border-slate-700 animate-in fade-in duration-100 ${positionClasses[position]} ${className}`}
+          className={`absolute pointer-events-none whitespace-nowrap px-2 py-1 bg-[#142C45] dark:bg-[#101C2A] text-white dark:text-[#E8EEF5] text-[11px] font-sans font-medium rounded-xs shadow-md border border-slate-700 dark:border-[#33485D] animate-in fade-in duration-100 ${positionClasses[position]} ${className}`}
         >
           {content}
         </div>
@@ -67,4 +67,3 @@ export const Tooltip: React.FC<TooltipProps> = ({
     </div>
   );
 };
-

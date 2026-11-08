@@ -9,6 +9,7 @@ export * from './Tooltip';
 export * from './Tabs';
 export * from './Card';
 export * from './DataTable';
+export * from './Pagination';
 export * from './Dialog';
 export * from './Drawer';
 export * from './Dropdown';
@@ -17,7 +18,9 @@ export * from './Skeleton';
 export * from './EmptyState';
 export * from './ErrorState';
 export * from './Toast';
+export * from './Notification';
 export * from './StatCard';
+export * from './ThemeSwitcher';
 export * from './AccessRestrictedNotice';
 export * from '../../lib/motion';
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 import {
   BarChart3,
   TrendingUp,
@@ -66,6 +67,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
   onNavigateToModule,
 }) => {
   const { user } = useAuth();
+  const { isDark } = useTheme();
   const [activeTab, setActiveTab] = useState<TabType>('overview');
 
   // Global Filter State
@@ -1628,11 +1630,18 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 <div className="h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={trendsData.trendPoints} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                      <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#64748b' }} />
-                      <YAxis domain={[50, 100]} tick={{ fontSize: 11, fill: '#64748b' }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#26394C' : '#E2E8F0'} />
+                      <XAxis dataKey="date" tick={{ fontSize: 11, fill: isDark ? '#A9BACB' : '#64748B' }} />
+                      <YAxis domain={[50, 100]} tick={{ fontSize: 11, fill: isDark ? '#A9BACB' : '#64748B' }} />
                       <RechartsTooltip
-                        contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', fontSize: '11px' }}
+                        contentStyle={{
+                          backgroundColor: isDark ? '#162638' : '#ffffff',
+                          borderColor: isDark ? '#33485D' : '#e2e8f0',
+                          color: isDark ? '#E8EEF5' : '#273444',
+                          fontSize: '11px',
+                          borderRadius: '4px',
+                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                        }}
                       />
                       <Legend wrapperStyle={{ fontSize: '11px' }} />
                       <Line

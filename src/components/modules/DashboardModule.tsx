@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 import {
   BankExecutiveMetrics,
   BankAccount,
@@ -24,7 +25,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   Building2,
-  FileCheck2,
   TrendingUp,
   Printer,
   Sparkles,
@@ -42,6 +42,13 @@ import {
   Layers,
   Filter,
   Check,
+  Clock,
+  Landmark,
+  Scale,
+  GitFork,
+  FileText,
+  UserCheck,
+  ExternalLink,
 } from 'lucide-react';
 import { TransactionReceiptModal } from '../modals/TransactionReceiptModal';
 import { MarketMovementsWidget } from '../dashboard/MarketMovementsWidget';
@@ -52,7 +59,6 @@ import {
   Area,
   BarChart,
   Bar,
-  LineChart,
   Line,
   XAxis,
   YAxis,
@@ -61,9 +67,8 @@ import {
   Legend,
   Cell,
 } from 'recharts';
-import { Skeleton, SkeletonCard } from '../common/Skeleton';
+import { SkeletonCard } from '../common/Skeleton';
 import { ErrorState } from '../common/ErrorState';
-import { EmptyState } from '../common/EmptyState';
 
 export interface DashboardModuleProps {
   metrics: BankExecutiveMetrics;
@@ -90,10 +95,10 @@ export interface DashboardModuleProps {
 }
 
 /**
- * Animated number transition component that triggers subtle visual feedback
- * only when actual underlying telemetry values change.
+ * Animated number transition indicator providing subtle visual feedback
+ * when underlying telemetry metrics update.
  */
-const AnimatedKpiValue: React.FC<{ value: React.ReactNode }> = ({ value }) => {
+const AnimatedMetric: React.FC<{ value: React.ReactNode }> = ({ value }) => {
   const [prevVal, setPrevVal] = useState(value);
   const [isChanged, setIsChanged] = useState(false);
 
@@ -109,7 +114,7 @@ const AnimatedKpiValue: React.FC<{ value: React.ReactNode }> = ({ value }) => {
   return (
     <span
       className={`inline-block transition-all duration-150 ${
-        isChanged ? 'text-[#087F8C] scale-[1.02]' : ''
+        isChanged ? 'text-[#168C83] scale-[1.02]' : ''
       }`}
     >
       {value}
@@ -140,6 +145,9 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
   onNavigateToPortfolio,
   onNavigateToIntelligence,
 }) => {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
   // Modals
   const [selectedReceiptPayment, setSelectedReceiptPayment] =
     useState<PaymentTransaction | null>(null);
@@ -244,7 +252,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
     loadDashboardData();
   }, [loadDashboardData]);
 
-  // Priority NBA handlers
+  // Priority NBA Handlers
   const handleAcceptPriorityAction = async (action: NextBestAction) => {
     try {
       await bankingApi.acceptNextBestAction(action.id);
@@ -279,25 +287,21 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
     });
   }, [customersList, segmentFilter]);
 
-  // Derived KPI Calculations
-  const kpiData = useMemo(() => {
-    // 1. Total Customers
+  // Derived Command Center Metrics
+  const commandMetrics = useMemo(() => {
     const totalCustomers = filteredCustomers.length || customersList.length || 5;
 
-    // 2. Total Relationship Value (INR)
     const totalRelValue = filteredCustomers.reduce(
       (sum, c) => sum + (parseFloat(c.relationshipValue || '0') || 0),
       0
     ) || metrics.totalDepositsInr + metrics.totalAdvancesInr;
 
-    // 3. Active Accounts
     const activeAccsCount = accounts.filter((a) => a.status === 'ACTIVE').length || accounts.length;
     const totalCasaBalance = accounts.reduce(
       (acc, a) => acc + (parseFloat(a.availableBalance || '0') || 0),
       0
     );
 
-    // 4. Opportunities Pipeline
     const openOpps = opportunitiesList.filter(
       (o) => o.stage !== 'CLOSED_LOST' && o.stage !== 'CLOSED_WON'
     );
@@ -307,7 +311,6 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       0
     );
 
-    // 5. Service Cases & SLA
     const openCases = casesList.filter(
       (c) => c.status !== 'RESOLVED' && c.status !== 'CLOSED'
     );
@@ -316,7 +319,6 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       (c) => c.priority === 'HIGH' || c.priority === 'CRITICAL'
     ).length;
 
-    // 6. Portfolio Health
     const healthyCustomers = filteredCustomers.filter(
       (c) => (c.coreScore || 75) >= 70
     ).length;
@@ -364,8 +366,8 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
 
     return [
       { band: 'Thriving (90-100)', count: Math.max(1, thriving), color: '#16803C' },
-      { band: 'Stable (75-89)', count: Math.max(2, stable), color: '#087F8C' },
-      { band: 'Monitor (60-74)', count: Math.max(1, monitor), color: '#B45309' },
+      { band: 'Stable (75-89)', count: Math.max(2, stable), color: '#168C83' },
+      { band: 'Monitor (60-74)', count: Math.max(1, monitor), color: '#B7791F' },
       { band: 'At Risk (<60)', count: Math.max(1, atRisk), color: '#B42318' },
     ];
   }, [filteredCustomers]);
@@ -420,9 +422,9 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       { month: 'Aug', resolved: 31, open: 3, slaRate: 98.8 },
       { month: 'Sep', resolved: 39, open: 6, slaRate: 96.4 },
       { month: 'Oct', resolved: 42, open: 4, slaRate: 97.8 },
-      { month: 'Nov', resolved: 18, open: Math.max(1, kpiData.openCasesCount), slaRate: 98.4 },
+      { month: 'Nov', resolved: 18, open: Math.max(1, commandMetrics.openCasesCount), slaRate: 98.4 },
     ];
-  }, [kpiData.openCasesCount]);
+  }, [commandMetrics.openCasesCount]);
 
   // Payment Table Columns
   const paymentColumns: Column<PaymentTransaction>[] = [
@@ -432,8 +434,8 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       mono: true,
       render: (p) => (
         <div>
-          <span className="font-mono font-medium text-[#172033]">{p.utrNumber}</span>
-          <div className="text-[10px] text-[#64748B] font-sans">
+          <span className="font-mono font-medium text-[#273444] dark:text-[#E8EEF5]">{p.utrNumber}</span>
+          <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] font-sans">
             {p.rail} • {p.timestamp.split(' ')[1]}
           </div>
         </div>
@@ -444,8 +446,8 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       header: 'Remitter / Beneficiary',
       render: (p) => (
         <div className="max-w-[180px]">
-          <div className="font-medium text-[#172033] truncate">{p.sourceName}</div>
-          <div className="text-[11px] text-[#64748B] truncate">to: {p.destName}</div>
+          <div className="font-medium text-[#273444] dark:text-[#E8EEF5] truncate">{p.sourceName}</div>
+          <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] truncate">to: {p.destName}</div>
         </div>
       ),
     },
@@ -455,7 +457,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       align: 'right',
       mono: true,
       render: (p) => (
-        <span className="font-mono font-bold text-[#172033]">
+        <span className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5]">
           {formatINR(p.amount)}
         </span>
       ),
@@ -485,10 +487,10 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
         p.status === 'SETTLED' ? (
           <button
             onClick={() => setSelectedReceiptPayment(p)}
-            className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium text-[#066974] bg-[#087F8C]/15 hover:bg-[#087F8C]/25 border border-[#087F8C]/30 rounded-xs cursor-pointer transition-colors"
+            className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium text-[#168C83] dark:text-[#2dd4bf] bg-[#168C83]/15 hover:bg-[#168C83]/25 border border-[#168C83]/30 rounded-xs cursor-pointer transition-colors"
             title="View official formatted receipt"
           >
-            <Printer className="w-3 h-3 text-[#087F8C]" />
+            <Printer className="w-3 h-3 text-[#168C83]" />
             <span>Receipt</span>
           </button>
         ) : null,
@@ -499,7 +501,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
     return (
       <div className="p-4 sm:p-6">
         <ErrorState
-          title="Telemetry Telemetry Unavailable"
+          title="Telemetry Connection Issue"
           message={fetchError}
           onRetry={() => loadDashboardData()}
         />
@@ -510,13 +512,13 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
   return (
     <div className="space-y-4 sm:space-y-5">
       {/* ======================================================================
-          1. INTERACTIVE COMMAND TOOLBAR (Filters, Date Range & Quick Actions)
+          1. COMMAND CENTER OPERATIONS TOOLBAR (Filters, Windows & Actions)
           ====================================================================== */}
-      <div className="bg-white border border-[#CBD5E1] rounded-sm p-3 shadow-2xs flex flex-wrap items-center justify-between gap-3">
-        {/* Left: Functional Date Range Pills */}
+      <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm p-3 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+        {/* Left: Date Window Selector Pills */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] flex items-center gap-1 mr-1">
-            <Calendar className="w-3.5 h-3.5 text-[#087F8C]" />
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#5D6B7B] dark:text-[#8194A8] flex items-center gap-1 mr-1">
+            <Calendar className="w-3.5 h-3.5 text-[#168C83]" />
             <span className="hidden sm:inline">Window:</span>
           </span>
           {(
@@ -532,8 +534,8 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
               onClick={() => setDateRange(item.id)}
               className={`px-2.5 py-1 text-xs rounded-xs font-medium transition-colors cursor-pointer ${
                 dateRange === item.id
-                  ? 'bg-[#087F8C] text-white shadow-2xs font-semibold'
-                  : 'bg-[#F8FAFC] text-[#475569] hover:bg-[#F1F5F9] border border-[#CBD5E1]'
+                  ? 'bg-[#168C83] text-white shadow-2xs font-semibold'
+                  : 'bg-[#F4F6F8] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] hover:bg-[#EDF1F5] dark:hover:bg-[#192B3D] border border-[#DCE3EA] dark:border-[#33485D]'
               }`}
             >
               {item.label}
@@ -541,41 +543,41 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
           ))}
         </div>
 
-        {/* Center: Portfolio Segment Filter */}
+        {/* Center: Portfolio Segment Filter Select */}
         <div className="flex items-center gap-1.5">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] hidden md:flex items-center gap-1 mr-1">
-            <Filter className="w-3.5 h-3.5 text-[#087F8C]" />
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#5D6B7B] dark:text-[#8194A8] hidden md:flex items-center gap-1 mr-1">
+            <Filter className="w-3.5 h-3.5 text-[#168C83]" />
             <span>Portfolio:</span>
           </span>
           <select
             value={segmentFilter}
             onChange={(e) => setSegmentFilter(e.target.value as any)}
-            className="text-xs bg-[#F8FAFC] border border-[#CBD5E1] rounded-xs px-2 py-1 text-[#172033] font-medium focus:outline-none focus:ring-1 focus:ring-[#087F8C]"
+            className="text-xs bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs px-2 py-1 text-[#273444] dark:text-[#E8EEF5] font-medium focus:outline-none focus:ring-1 focus:ring-[#168C83] cursor-pointer"
           >
-            <option value="ALL">All Segments</option>
+            <option value="ALL">All Portfolios</option>
             <option value="CORPORATE">Corporate & Commercial</option>
             <option value="RETAIL">Retail & HNI</option>
             <option value="SME">SME & Trade</option>
           </select>
         </div>
 
-        {/* Data Freshness Indicator */}
-        <div className="hidden xl:flex items-center gap-1.5 px-2 py-1 bg-emerald-50/70 border border-emerald-200/60 rounded-xs text-[11px] text-emerald-800">
+        {/* Live Ledger Data Freshness Badge */}
+        <div className="hidden xl:flex items-center gap-1.5 px-2 py-1 bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800 rounded-xs text-[11px] text-emerald-800 dark:text-emerald-300">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           <span className="font-mono text-[10px] font-medium">
             Sync: {lastRefreshedAt.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Asia/Kolkata' })} IST
           </span>
-          <span className="text-[10px] text-emerald-600 font-normal">· PostgreSQL Ledger</span>
+          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-normal">&bull; PostgreSQL Core DB</span>
         </div>
 
-        {/* Right: Refresh & Primary CTAs */}
+        {/* Right: Operational Triggers */}
         <div className="flex items-center gap-2">
           <Button
             size="sm"
             variant="outline"
             icon={
               <RefreshCw
-                className={`w-3.5 h-3.5 text-[#087F8C] ${
+                className={`w-3.5 h-3.5 text-[#168C83] ${
                   isRefreshing ? 'animate-spin' : ''
                 }`}
               />
@@ -590,7 +592,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
           {pendingAuthorizations.length > 0 && (
             <button
               onClick={onNavigateToMakerChecker}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-[#78350f] text-xs font-semibold rounded-xs border border-[#fde68a] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50 text-[#78350f] dark:text-amber-300 text-xs font-semibold rounded-xs border border-[#fde68a] dark:border-amber-800 transition-colors cursor-pointer"
             >
               <AlertTriangle className="w-3.5 h-3.5 text-[#B45309]" />
               <span>{pendingAuthorizations.length} Pending Auth</span>
@@ -609,7 +611,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       </div>
 
       {/* ======================================================================
-          2. KPI SECTION (6 Primary Dynamic Metrics with Subtle Transitions)
+          2. PORTFOLIO COMMAND MATRIX (6 Compact, Actionable Banking Metrics)
           ====================================================================== */}
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
@@ -619,151 +621,151 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
-          {/* 1. Total Customers */}
+          {/* Metric 1: Total Customers */}
           <div
             onClick={onNavigateToCustomers}
-            className="p-3 bg-white border border-[#CBD5E1] rounded-sm shadow-2xs hover:border-[#087F8C] transition-colors cursor-pointer group flex flex-col justify-between"
+            className="p-3 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-2xs hover:border-[#168C83] dark:hover:border-[#168C83] transition-colors cursor-pointer group flex flex-col justify-between"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
+              <span className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">
                 Customers
               </span>
-              <Users className="w-3.5 h-3.5 text-[#087F8C] group-hover:scale-110 transition-transform" />
+              <Users className="w-3.5 h-3.5 text-[#168C83] group-hover:scale-110 transition-transform" />
             </div>
             <div className="my-1">
-              <div className="text-xl font-bold text-[#172033] font-mono tracking-tight">
-                <AnimatedKpiValue value={kpiData.totalCustomers} />
+              <div className="text-xl font-bold text-[#273444] dark:text-[#E8EEF5] font-mono tracking-tight">
+                <AnimatedMetric value={commandMetrics.totalCustomers} />
               </div>
             </div>
-            <div className="text-[10px] text-[#16803C] flex items-center justify-between">
+            <div className="text-[10px] text-[#16803C] dark:text-emerald-400 flex items-center justify-between">
               <span>100% KYC Verified</span>
-              <span className="text-[#087F8C] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                360 →
+              <span className="text-[#168C83] dark:text-[#2dd4bf] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                360 &rarr;
               </span>
             </div>
           </div>
 
-          {/* 2. Relationship Value */}
+          {/* Metric 2: Relationship Value */}
           <div
             onClick={onNavigateToPortfolio || onNavigateToAccounts}
-            className="p-3 bg-white border border-[#CBD5E1] rounded-sm shadow-2xs hover:border-[#087F8C] transition-colors cursor-pointer group flex flex-col justify-between"
+            className="p-3 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-2xs hover:border-[#168C83] dark:hover:border-[#168C83] transition-colors cursor-pointer group flex flex-col justify-between"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
+              <span className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">
                 Rel Value
               </span>
-              <Wallet className="w-3.5 h-3.5 text-[#087F8C] group-hover:scale-110 transition-transform" />
+              <Wallet className="w-3.5 h-3.5 text-[#168C83] group-hover:scale-110 transition-transform" />
             </div>
             <div className="my-1">
-              <div className="text-xl font-bold text-[#172033] font-mono tracking-tight">
-                <AnimatedKpiValue
-                  value={formatINR(kpiData.totalRelValue, { compact: true })}
+              <div className="text-xl font-bold text-[#273444] dark:text-[#E8EEF5] font-mono tracking-tight">
+                <AnimatedMetric
+                  value={formatINR(commandMetrics.totalRelValue, { compact: true })}
                 />
               </div>
             </div>
-            <div className="text-[10px] text-[#64748B] flex items-center justify-between">
+            <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] flex items-center justify-between">
               <span>CASA + Advances</span>
-              <span className="text-[#087F8C] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                Book →
+              <span className="text-[#168C83] dark:text-[#2dd4bf] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                Book &rarr;
               </span>
             </div>
           </div>
 
-          {/* 3. Active Accounts */}
+          {/* Metric 3: Active Deposit Accounts */}
           <div
             onClick={onNavigateToAccounts}
-            className="p-3 bg-white border border-[#CBD5E1] rounded-sm shadow-2xs hover:border-[#087F8C] transition-colors cursor-pointer group flex flex-col justify-between"
+            className="p-3 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-2xs hover:border-[#168C83] dark:hover:border-[#168C83] transition-colors cursor-pointer group flex flex-col justify-between"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
+              <span className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">
                 Accounts
               </span>
-              <Building2 className="w-3.5 h-3.5 text-[#087F8C] group-hover:scale-110 transition-transform" />
+              <Building2 className="w-3.5 h-3.5 text-[#168C83] group-hover:scale-110 transition-transform" />
             </div>
             <div className="my-1">
-              <div className="text-xl font-bold text-[#172033] font-mono tracking-tight">
-                <AnimatedKpiValue value={kpiData.activeAccsCount} />
+              <div className="text-xl font-bold text-[#273444] dark:text-[#E8EEF5] font-mono tracking-tight">
+                <AnimatedMetric value={commandMetrics.activeAccsCount} />
               </div>
             </div>
-            <div className="text-[10px] text-[#64748B] flex items-center justify-between">
-              <span>{formatINR(kpiData.totalCasaBalance, { compact: true })} CASA</span>
-              <span className="text-[#087F8C] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                CASA →
+            <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] flex items-center justify-between">
+              <span>{formatINR(commandMetrics.totalCasaBalance, { compact: true })} CASA</span>
+              <span className="text-[#168C83] dark:text-[#2dd4bf] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                CASA &rarr;
               </span>
             </div>
           </div>
 
-          {/* 4. Opportunities */}
+          {/* Metric 4: Deals / Pipeline */}
           <div
             onClick={onNavigateToOpportunities}
-            className="p-3 bg-white border border-[#CBD5E1] rounded-sm shadow-2xs hover:border-[#087F8C] transition-colors cursor-pointer group flex flex-col justify-between"
+            className="p-3 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-2xs hover:border-[#168C83] dark:hover:border-[#168C83] transition-colors cursor-pointer group flex flex-col justify-between"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
+              <span className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">
                 Deals / Opps
               </span>
-              <Briefcase className="w-3.5 h-3.5 text-[#087F8C] group-hover:scale-110 transition-transform" />
+              <Briefcase className="w-3.5 h-3.5 text-[#168C83] group-hover:scale-110 transition-transform" />
             </div>
             <div className="my-1">
-              <div className="text-xl font-bold text-[#172033] font-mono tracking-tight">
-                <AnimatedKpiValue value={kpiData.oppsCount} />
+              <div className="text-xl font-bold text-[#273444] dark:text-[#E8EEF5] font-mono tracking-tight">
+                <AnimatedMetric value={commandMetrics.oppsCount} />
               </div>
             </div>
-            <div className="text-[10px] text-[#16803C] flex items-center justify-between">
-              <span>{formatINR(kpiData.oppsTotalValue, { compact: true })} Pipeline</span>
-              <span className="text-[#087F8C] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                Deals →
+            <div className="text-[10px] text-[#16803C] dark:text-emerald-400 flex items-center justify-between">
+              <span>{formatINR(commandMetrics.oppsTotalValue, { compact: true })} Pipeline</span>
+              <span className="text-[#168C83] dark:text-[#2dd4bf] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                Deals &rarr;
               </span>
             </div>
           </div>
 
-          {/* 5. Service Cases */}
+          {/* Metric 5: Service Cases & SLA */}
           <div
             onClick={onNavigateToCases}
-            className="p-3 bg-white border border-[#CBD5E1] rounded-sm shadow-2xs hover:border-[#087F8C] transition-colors cursor-pointer group flex flex-col justify-between"
+            className="p-3 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-2xs hover:border-[#168C83] dark:hover:border-[#168C83] transition-colors cursor-pointer group flex flex-col justify-between"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
-                Service Cases
+              <span className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">
+                Service Desk
               </span>
-              <LifeBuoy className="w-3.5 h-3.5 text-[#087F8C] group-hover:scale-110 transition-transform" />
+              <LifeBuoy className="w-3.5 h-3.5 text-[#168C83] group-hover:scale-110 transition-transform" />
             </div>
             <div className="my-1">
-              <div className="text-xl font-bold text-[#172033] font-mono tracking-tight">
-                <AnimatedKpiValue value={kpiData.openCasesCount} />
+              <div className="text-xl font-bold text-[#273444] dark:text-[#E8EEF5] font-mono tracking-tight">
+                <AnimatedMetric value={commandMetrics.openCasesCount} />
               </div>
             </div>
-            <div className="text-[10px] text-[#16803C] flex items-center justify-between">
+            <div className="text-[10px] text-[#16803C] dark:text-emerald-400 flex items-center justify-between">
               <span>97.8% Within SLA</span>
-              <span className="text-[#087F8C] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                Desk →
+              <span className="text-[#168C83] dark:text-[#2dd4bf] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                Desk &rarr;
               </span>
             </div>
           </div>
 
-          {/* 6. Portfolio Health */}
+          {/* Metric 6: Portfolio Health Index */}
           <div
             onClick={onNavigateToPortfolio || onNavigateToIntelligence}
-            className="p-3 bg-white border border-[#CBD5E1] rounded-sm shadow-2xs hover:border-[#087F8C] transition-colors cursor-pointer group flex flex-col justify-between"
+            className="p-3 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-2xs hover:border-[#168C83] dark:hover:border-[#168C83] transition-colors cursor-pointer group flex flex-col justify-between"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
+              <span className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">
                 Portfolio Health
               </span>
-              <Activity className="w-3.5 h-3.5 text-[#087F8C] group-hover:scale-110 transition-transform" />
+              <Activity className="w-3.5 h-3.5 text-[#168C83] group-hover:scale-110 transition-transform" />
             </div>
             <div className="my-1">
-              <div className="text-xl font-bold text-[#172033] font-mono tracking-tight flex items-baseline gap-1">
-                <AnimatedKpiValue value={`${kpiData.healthIndexPercent}%`} />
-                <span className="text-[10px] font-normal text-[#16803C] font-sans">
+              <div className="text-xl font-bold text-[#273444] dark:text-[#E8EEF5] font-mono tracking-tight flex items-baseline gap-1">
+                <AnimatedMetric value={`${commandMetrics.healthIndexPercent}%`} />
+                <span className="text-[10px] font-normal text-[#16803C] dark:text-emerald-400 font-sans">
                   Index
                 </span>
               </div>
             </div>
-            <div className="text-[10px] text-[#16803C] flex items-center justify-between">
+            <div className="text-[10px] text-[#16803C] dark:text-emerald-400 flex items-center justify-between">
               <span>Low Churn Risk</span>
-              <span className="text-[#087F8C] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                CORE →
+              <span className="text-[#168C83] dark:text-[#2dd4bf] font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                CORE &rarr;
               </span>
             </div>
           </div>
@@ -812,30 +814,102 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       </div>
 
       {/* ======================================================================
-          4. INTERACTIVE COMMAND CHARTS SUITE (Trends, Health, Pipeline, SLA)
+          4. CUSTOMER RELATIONSHIP HEALTH & PORTFOLIO SURVEILLANCE
           ====================================================================== */}
-      <div className="bg-white border border-[#CBD5E1] rounded-sm p-4 shadow-2xs">
-        {/* Chart Header & Segmented View Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E2E8F0] pb-3 mb-4">
+      <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm p-4 shadow-2xs space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#DCE3EA] dark:border-[#26394C] pb-3">
           <div>
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#087F8C]" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[#172033]">
-                Executive Analytics & Portfolio Visualizer
+              <Activity className="w-4 h-4 text-[#168C83]" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#273444] dark:text-[#E8EEF5]">
+                Customer Relationship Health & Portfolio Surveillance
               </h3>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-xs bg-[#087F8C]/15 text-[#066974] font-semibold">
-                {chartView === 'trends' ? 'Synthetic Simulation Baseline' : 'Live Ledger Telemetry'}
+              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-xs bg-[#168C83]/15 text-[#168C83] dark:text-[#2dd4bf] font-semibold">
+                CORE Score v1.0
               </span>
             </div>
-            <p className="text-[11px] text-[#64748B] mt-0.5">
+            <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] mt-0.5">
+              Continuous multi-vector evaluation of client engagement, transaction velocity, liquidity retention, and churn indicators.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {onNavigateToCustomers && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onNavigateToCustomers()}
+                className="text-xs"
+              >
+                <span>All Customers 360 &rarr;</span>
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Health Bands & Quick Customer Profiles */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2.5">
+          {customerHealthData.map((tier, idx) => (
+            <div
+              key={idx}
+              className="p-3 rounded-xs border border-[#DCE3EA] dark:border-[#26394C] bg-[#F4F6F8] dark:bg-[#101C2A] flex flex-col justify-between"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#A9BACB]">
+                  {tier.band.split(' ')[0]}
+                </span>
+                <span
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ backgroundColor: tier.color }}
+                />
+              </div>
+              <div className="my-1.5 flex items-baseline justify-between">
+                <span className="text-xl font-bold font-mono text-[#273444] dark:text-[#E8EEF5]">
+                  {tier.count}
+                </span>
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] font-mono">
+                  {tier.band.includes('Thriving')
+                    ? 'Optimal Wallet Share'
+                    : tier.band.includes('Stable')
+                    ? 'Steady Activity'
+                    : tier.band.includes('Monitor')
+                    ? 'Upcoming Maturing'
+                    : 'Active Churn Watch'}
+                </span>
+              </div>
+              <div className="text-[10px] text-[#168C83] dark:text-[#2dd4bf] font-mono">
+                {tier.band.split('(')[1].replace(')', '')} Points
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ======================================================================
+          5. INTERACTIVE COMMAND CHARTS (Trends, Health, Pipeline, SLA)
+          ====================================================================== */}
+      <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm p-4 shadow-2xs">
+        {/* Chart Header & Segmented View Controls */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#DCE3EA] dark:border-[#26394C] pb-3 mb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#168C83]" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#273444] dark:text-[#E8EEF5]">
+                Management Intelligence & Analytics Visualizer
+              </h3>
+              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-xs bg-[#168C83]/15 text-[#168C83] dark:text-[#2dd4bf] font-semibold">
+                {chartView === 'trends' ? 'Simulation Baseline' : 'Live Ledger Telemetry'}
+              </span>
+            </div>
+            <p className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5">
               {chartView === 'trends'
-                ? 'Deterministic longitudinal simulation baseline benchmarked against live active customer telemetry.'
+                ? 'Deterministic longitudinal simulation baseline benchmarked against active customer telemetry.'
                 : 'Multi-dimensional telemetry covering customer momentum, health bands, deal velocity, and service SLA adherence.'}
             </p>
           </div>
 
           {/* Segmented View Mode Tabs */}
-          <div className="flex items-center p-0.5 bg-[#F1F5F9] rounded-xs border border-[#CBD5E1] shrink-0">
+          <div className="flex items-center p-0.5 bg-[#EDF1F5] dark:bg-[#101C2A] rounded-xs border border-[#DCE3EA] dark:border-[#33485D] shrink-0">
             {(
               [
                 { id: 'trends', label: 'CORE Score Trends' },
@@ -849,8 +923,8 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                 onClick={() => setChartView(tab.id)}
                 className={`px-2.5 py-1 text-xs rounded-xs font-medium transition-colors cursor-pointer ${
                   chartView === tab.id
-                    ? 'bg-white text-[#172033] shadow-xs font-semibold'
-                    : 'text-[#64748B] hover:text-[#172033]'
+                    ? 'bg-white dark:bg-[#162638] text-[#273444] dark:text-[#E8EEF5] shadow-xs font-semibold'
+                    : 'text-[#5D6B7B] dark:text-[#8194A8] hover:text-[#273444] dark:hover:text-[#E8EEF5]'
                 }`}
               >
                 {tab.label}
@@ -869,19 +943,19 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
               >
                 <defs>
                   <linearGradient id="coreScoreGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#087F8C" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#087F8C" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="#168C83" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#168C83" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#26394C' : '#DCE3EA'} vertical={false} />
                 <XAxis
                   dataKey="period"
-                  tick={{ fontSize: 11, fill: '#64748B' }}
+                  tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#5D6B7B' }}
                   tickLine={false}
                 />
                 <YAxis
                   domain={[60, 100]}
-                  tick={{ fontSize: 11, fill: '#64748B' }}
+                  tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#5D6B7B' }}
                   tickLine={false}
                   axisLine={false}
                 />
@@ -890,14 +964,14 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
                       return (
-                        <div className="bg-white border border-[#CBD5E1] rounded-xs p-2.5 shadow-md text-xs">
-                          <div className="font-bold text-[#172033] mb-1">
+                        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs p-2.5 shadow-md text-xs">
+                          <div className="font-bold text-[#273444] dark:text-[#E8EEF5] mb-1">
                             {data.period} Evaluation
                           </div>
-                          <div className="text-[#087F8C] font-mono font-semibold">
+                          <div className="text-[#168C83] dark:text-[#2dd4bf] font-mono font-semibold">
                             Average CORE Score: {data.avgScore.toFixed(1)} / 100
                           </div>
-                          <div className="text-[#64748B] text-[10px] mt-0.5">
+                          <div className="text-[#5D6B7B] dark:text-[#8194A8] text-[10px] mt-0.5">
                             Target Threshold: 75.0 (Optimal Retention)
                           </div>
                         </div>
@@ -910,7 +984,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                   type="monotone"
                   dataKey="avgScore"
                   name="CORE Score Trajectory"
-                  stroke="#087F8C"
+                  stroke="#168C83"
                   strokeWidth={2}
                   fillOpacity={1}
                   fill="url(#coreScoreGrad)"
@@ -919,7 +993,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                   type="monotone"
                   dataKey="benchmark"
                   name="Institutional Benchmark"
-                  stroke="#94A3B8"
+                  stroke={isDark ? '#33485D' : '#8793A1'}
                   strokeDasharray="4 4"
                   strokeWidth={1.5}
                   dot={false}
@@ -934,15 +1008,15 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                 data={customerHealthData}
                 margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#26394C' : '#DCE3EA'} vertical={false} />
                 <XAxis
                   dataKey="band"
-                  tick={{ fontSize: 11, fill: '#64748B' }}
+                  tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#5D6B7B' }}
                   tickLine={false}
                 />
                 <YAxis
                   allowDecimals={false}
-                  tick={{ fontSize: 11, fill: '#64748B' }}
+                  tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#5D6B7B' }}
                   tickLine={false}
                   axisLine={false}
                 />
@@ -951,9 +1025,9 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                     if (active && payload && payload.length) {
                       const d = payload[0].payload;
                       return (
-                        <div className="bg-white border border-[#CBD5E1] rounded-xs p-2.5 shadow-md text-xs">
-                          <div className="font-bold text-[#172033] mb-1">{d.band}</div>
-                          <div className="font-mono text-[#087F8C] font-bold">
+                        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs p-2.5 shadow-md text-xs">
+                          <div className="font-bold text-[#273444] dark:text-[#E8EEF5] mb-1">{d.band}</div>
+                          <div className="font-mono text-[#168C83] dark:text-[#2dd4bf] font-bold">
                             {d.count} Banking Relationships
                           </div>
                         </div>
@@ -977,14 +1051,14 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                 data={opportunityPipelineData}
                 margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#26394C' : '#DCE3EA'} vertical={false} />
                 <XAxis
                   dataKey="stage"
-                  tick={{ fontSize: 11, fill: '#64748B' }}
+                  tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#5D6B7B' }}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fontSize: 11, fill: '#64748B' }}
+                  tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#5D6B7B' }}
                   tickLine={false}
                   axisLine={false}
                   unit="L"
@@ -994,12 +1068,12 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                     if (active && payload && payload.length) {
                       const d = payload[0].payload;
                       return (
-                        <div className="bg-white border border-[#CBD5E1] rounded-xs p-2.5 shadow-md text-xs">
-                          <div className="font-bold text-[#172033] mb-1">{d.stage}</div>
-                          <div className="font-mono text-[#087F8C] font-bold">
+                        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs p-2.5 shadow-md text-xs">
+                          <div className="font-bold text-[#273444] dark:text-[#E8EEF5] mb-1">{d.stage}</div>
+                          <div className="font-mono text-[#168C83] dark:text-[#2dd4bf] font-bold">
                             ₹{d.valueLakhs.toFixed(2)} Lakhs
                           </div>
-                          <div className="text-[#64748B] text-[10px]">
+                          <div className="text-[#5D6B7B] dark:text-[#8194A8] text-[10px]">
                             {d.deals} Active Commercial Opportunities
                           </div>
                         </div>
@@ -1011,7 +1085,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                 <Bar
                   dataKey="valueLakhs"
                   name="Value (₹ Lakhs)"
-                  fill="#087F8C"
+                  fill="#168C83"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>
@@ -1024,14 +1098,14 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                 data={serviceSlaData}
                 margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#26394C' : '#DCE3EA'} vertical={false} />
                 <XAxis
                   dataKey="month"
-                  tick={{ fontSize: 11, fill: '#64748B' }}
+                  tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#5D6B7B' }}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fontSize: 11, fill: '#64748B' }}
+                  tick={{ fontSize: 11, fill: isDark ? '#8194A8' : '#5D6B7B' }}
                   tickLine={false}
                   axisLine={false}
                 />
@@ -1040,17 +1114,17 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                     if (active && payload && payload.length) {
                       const d = payload[0].payload;
                       return (
-                        <div className="bg-white border border-[#CBD5E1] rounded-xs p-2.5 shadow-md text-xs">
-                          <div className="font-bold text-[#172033] mb-1">
+                        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs p-2.5 shadow-md text-xs">
+                          <div className="font-bold text-[#273444] dark:text-[#E8EEF5] mb-1">
                             {d.month} Service Audit
                           </div>
-                          <div className="text-[#16803C] font-mono">
+                          <div className="text-[#16803C] dark:text-emerald-400 font-mono">
                             Resolved: {d.resolved} cases
                           </div>
-                          <div className="text-[#B45309] font-mono">
+                          <div className="text-[#B45309] dark:text-amber-300 font-mono">
                             Open: {d.open} cases
                           </div>
-                          <div className="text-[#087F8C] font-mono font-bold mt-1">
+                          <div className="text-[#168C83] dark:text-[#2dd4bf] font-mono font-bold mt-1">
                             SLA Rate: {d.slaRate}%
                           </div>
                         </div>
@@ -1059,7 +1133,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                     return null;
                   }}
                 />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
+                <Legend wrapperStyle={{ fontSize: 11, color: isDark ? '#A9BACB' : '#5D6B7B' }} />
                 <Bar dataKey="resolved" name="Resolved Within SLA" fill="#16803C" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="open" name="Pending Review" fill="#B45309" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -1069,26 +1143,26 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       </div>
 
       {/* ======================================================================
-          5. PERSISTED ACTIVITY & OPERATIONAL DECKS (Tasks, Events, Settlements)
+          6. OPERATIONAL WORKSPACE DECKS (Activities, Tasks, Vault Surveillance)
           ====================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
-        {/* Left Column: Recent Client Activity & Communication Log */}
-        <div className="bg-white border border-[#CBD5E1] rounded-sm p-4 shadow-2xs flex flex-col justify-between">
+        {/* Deck 1: Recent Client Touchpoints & Activity Feed */}
+        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm p-4 shadow-2xs flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-2.5 border-b border-[#E2E8F0] mb-3">
+            <div className="flex items-center justify-between pb-2.5 border-b border-[#DCE3EA] dark:border-[#26394C] mb-3">
               <div className="flex items-center gap-2">
-                <MessageSquare className="w-4 h-4 text-[#087F8C]" />
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#172033]">
-                  Recent Client Activity
+                <MessageSquare className="w-4 h-4 text-[#168C83]" />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#273444] dark:text-[#E8EEF5]">
+                  Recent Client Activities
                 </h3>
               </div>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 bg-[#F1F5F9] text-[#475569] rounded-xs">
+              <span className="text-[10px] font-mono px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs border border-[#DCE3EA] dark:border-[#33485D]">
                 {interactionsList.length} Logged
               </span>
             </div>
 
             {interactionsList.length === 0 ? (
-              <div className="py-8 text-center text-xs text-[#64748B]">
+              <div className="py-8 text-center text-xs text-[#5D6B7B] dark:text-[#8194A8]">
                 No interactions logged in current window.
               </div>
             ) : (
@@ -1096,17 +1170,17 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                 {interactionsList.slice(0, 5).map((item, idx) => (
                   <div
                     key={item.id || idx}
-                    className="p-2 rounded-xs border border-[#E2E8F0] bg-[#F8FAFC] hover:bg-white transition-colors text-xs"
+                    className="p-2 rounded-xs border border-[#DCE3EA] dark:border-[#26394C] bg-[#F4F6F8] dark:bg-[#101C2A] hover:bg-white dark:hover:bg-[#192B3D] transition-colors text-xs"
                   >
                     <div className="flex items-center justify-between text-[11px] mb-0.5">
-                      <span className="font-semibold text-[#172033]">
+                      <span className="font-semibold text-[#273444] dark:text-[#E8EEF5]">
                         {item.customerName || item.channel || 'Client Touchpoint'}
                       </span>
-                      <span className="text-[10px] text-[#64748B] font-mono">
+                      <span className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] font-mono">
                         {item.date || item.createdAt?.split('T')[0] || 'Today'}
                       </span>
                     </div>
-                    <p className="text-[11px] text-[#475569] line-clamp-1">
+                    <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] line-clamp-1">
                       {item.summary || item.notes || 'Routine portfolio status review.'}
                     </p>
                   </div>
@@ -1115,34 +1189,34 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
             )}
           </div>
 
-          <div className="pt-3 border-t border-[#E2E8F0] mt-3 flex justify-between items-center text-xs">
-            <span className="text-[11px] text-[#64748B]">All Touchpoints Persisted</span>
+          <div className="pt-3 border-t border-[#DCE3EA] dark:border-[#26394C] mt-3 flex justify-between items-center text-xs">
+            <span className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8]">Persisted in Interaction Hub</span>
             <button
               onClick={() => onNavigateToEntity?.('/interactions')}
-              className="text-[#087F8C] hover:underline font-semibold text-[11px] cursor-pointer"
+              className="text-[#168C83] dark:text-[#2dd4bf] hover:underline font-semibold text-[11px] cursor-pointer"
             >
-              View Hub →
+              Touchpoint Hub &rarr;
             </button>
           </div>
         </div>
 
-        {/* Center Column: Pending Officer Tasks with SLA Badges */}
-        <div className="bg-white border border-[#CBD5E1] rounded-sm p-4 shadow-2xs flex flex-col justify-between">
+        {/* Deck 2: Pending Officer Tasks with SLA Badges */}
+        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm p-4 shadow-2xs flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-2.5 border-b border-[#E2E8F0] mb-3">
+            <div className="flex items-center justify-between pb-2.5 border-b border-[#DCE3EA] dark:border-[#26394C] mb-3">
               <div className="flex items-center gap-2">
-                <CheckSquare className="w-4 h-4 text-[#087F8C]" />
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#172033]">
+                <CheckSquare className="w-4 h-4 text-[#168C83]" />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#273444] dark:text-[#E8EEF5]">
                   Pending Officer Tasks
                 </h3>
               </div>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 bg-[#B45309]/15 text-[#B45309] font-bold rounded-xs">
+              <span className="text-[10px] font-mono px-1.5 py-0.2 bg-[#B45309]/15 text-[#B45309] dark:text-amber-300 font-bold rounded-xs border border-[#fde68a] dark:border-amber-800">
                 {tasksList.length} Open
               </span>
             </div>
 
             {tasksList.length === 0 ? (
-              <div className="py-8 text-center text-xs text-[#64748B]">
+              <div className="py-8 text-center text-xs text-[#5D6B7B] dark:text-[#8194A8]">
                 All officer tasks up to date.
               </div>
             ) : (
@@ -1150,20 +1224,20 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                 {tasksList.slice(0, 5).map((t, idx) => (
                   <div
                     key={t.id || idx}
-                    className="p-2 rounded-xs border border-[#E2E8F0] bg-[#F8FAFC] flex items-start justify-between gap-2 text-xs"
+                    className="p-2 rounded-xs border border-[#DCE3EA] dark:border-[#26394C] bg-[#F4F6F8] dark:bg-[#101C2A] flex items-start justify-between gap-2 text-xs"
                   >
                     <div className="min-w-0">
-                      <div className="font-semibold text-[#172033] truncate">
+                      <div className="font-semibold text-[#273444] dark:text-[#E8EEF5] truncate">
                         {t.title}
                       </div>
-                      <div className="text-[10px] text-[#64748B] flex items-center gap-1.5 mt-0.5">
+                      <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] flex items-center gap-1.5 mt-0.5">
                         <span>Due: {t.dueDate?.split('T')[0] || 'Today'}</span>
-                        <span>•</span>
+                        <span>&bull;</span>
                         <span
                           className={`font-semibold ${
                             t.priority === 'HIGH' || t.priority === 'CRITICAL'
-                              ? 'text-[#B42318]'
-                              : 'text-[#B45309]'
+                              ? 'text-[#B42318] dark:text-rose-400'
+                              : 'text-[#B45309] dark:text-amber-300'
                           }`}
                         >
                           {t.priority || 'MEDIUM'}
@@ -1179,23 +1253,23 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
             )}
           </div>
 
-          <div className="pt-3 border-t border-[#E2E8F0] mt-3 flex justify-between items-center text-xs">
-            <span className="text-[11px] text-[#64748B]">Enforced Escalation SLAs</span>
+          <div className="pt-3 border-t border-[#DCE3EA] dark:border-[#26394C] mt-3 flex justify-between items-center text-xs">
+            <span className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8]">Enforced Escalation SLAs</span>
             <button
               onClick={onNavigateToTasks}
-              className="text-[#087F8C] hover:underline font-semibold text-[11px] cursor-pointer"
+              className="text-[#168C83] dark:text-[#2dd4bf] hover:underline font-semibold text-[11px] cursor-pointer"
             >
-              Task Register →
+              Task Register &rarr;
             </button>
           </div>
         </div>
 
-        {/* Right Column: Branch Vault & RBI Window Surveillance */}
-        <div className="bg-white border border-[#CBD5E1] rounded-sm p-4 shadow-2xs space-y-3">
-          <div className="flex items-center justify-between pb-2.5 border-b border-[#E2E8F0]">
+        {/* Deck 3: Branch Vault Position & Clearing Windows */}
+        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm p-4 shadow-2xs space-y-3">
+          <div className="flex items-center justify-between pb-2.5 border-b border-[#DCE3EA] dark:border-[#26394C]">
             <div className="flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-[#087F8C]" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[#172033]">
+              <Building2 className="w-4 h-4 text-[#168C83]" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#273444] dark:text-[#E8EEF5]">
                 Branch Vault Position
               </h3>
             </div>
@@ -1204,39 +1278,39 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
 
           <div className="space-y-2 text-xs">
             <div className="flex justify-between items-center">
-              <span className="text-[#64748B]">Physical Vault Cash:</span>
-              <span className="font-mono font-bold text-[#172033]">
+              <span className="text-[#5D6B7B] dark:text-[#8194A8]">Physical Vault Cash:</span>
+              <span className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5]">
                 {formatINR(metrics.vaultCashInHandInr)}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-[#64748B]">Overnight Retention Cap:</span>
-              <span className="font-mono text-[#475569]">
+              <span className="text-[#5D6B7B] dark:text-[#8194A8]">Overnight Retention Cap:</span>
+              <span className="font-mono text-[#5D6B7B] dark:text-[#A9BACB]">
                 {formatINR(metrics.vaultCashAuthorizedLimitInr)}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-[#64748B]">Surplus to Remit (RBI Chest):</span>
-              <span className="font-mono text-[#16803C] font-semibold">₹0.00</span>
+              <span className="text-[#5D6B7B] dark:text-[#8194A8]">Surplus to Remit (RBI Chest):</span>
+              <span className="font-mono text-[#16803C] dark:text-emerald-400 font-semibold">₹0.00</span>
             </div>
           </div>
 
-          <div className="pt-2.5 border-t border-[#E2E8F0]">
-            <div className="text-[10px] uppercase font-bold text-[#64748B] mb-2 tracking-wider">
+          <div className="pt-2.5 border-t border-[#DCE3EA] dark:border-[#26394C]">
+            <div className="text-[10px] uppercase font-bold text-[#5D6B7B] dark:text-[#8194A8] mb-2 tracking-wider">
               Clearing House Windows
             </div>
             <div className="space-y-1.5 text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-[#475569]">RTGS Real-Time:</span>
-                <span className="text-[#16803C] font-medium font-mono text-[11px]">ACTIVE</span>
+                <span className="text-[#5D6B7B] dark:text-[#A9BACB]">RTGS Real-Time:</span>
+                <span className="text-[#16803C] dark:text-emerald-400 font-medium font-mono text-[11px]">ACTIVE</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[#475569]">NEFT 24x7 Batches:</span>
-                <span className="text-[#16803C] font-medium font-mono text-[11px]">ACTIVE</span>
+                <span className="text-[#5D6B7B] dark:text-[#A9BACB]">NEFT 24x7 Batches:</span>
+                <span className="text-[#16803C] dark:text-emerald-400 font-medium font-mono text-[11px]">ACTIVE</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[#475569]">CTS Cheque Clearing:</span>
-                <span className="text-[#B45309] font-medium font-mono text-[11px]">BATCH 2 CLOSING</span>
+                <span className="text-[#5D6B7B] dark:text-[#A9BACB]">CTS Cheque Clearing:</span>
+                <span className="text-[#B45309] dark:text-amber-300 font-medium font-mono text-[11px]">BATCH 2 CLOSING</span>
               </div>
             </div>
           </div>
@@ -1244,23 +1318,23 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       </div>
 
       {/* ======================================================================
-          6. RECENT SETTLEMENT FEED & TRANSACTION RECEIPT MODAL
+          7. REAL-TIME SETTLEMENT FEED & CLEARING SWITCH
           ====================================================================== */}
-      <div className="bg-white border border-[#CBD5E1] rounded-sm shadow-2xs">
-        <div className="p-3 sm:p-3.5 border-b border-[#CBD5E1] flex items-center justify-between">
+      <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-2xs">
+        <div className="p-3 sm:p-3.5 border-b border-[#DCE3EA] dark:border-[#33485D] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#172033]">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#273444] dark:text-[#E8EEF5]">
               Real-Time Settlement & Clearing Switch
             </h3>
-            <span className="font-mono text-xs px-1.5 py-0.2 bg-[#F1F5F9] text-[#475569] border border-[#CBD5E1] rounded-xs">
+            <span className="font-mono text-xs px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs">
               {recentPayments.length} txns
             </span>
           </div>
           <button
             onClick={onNavigateToPayments}
-            className="text-xs text-[#087F8C] hover:underline font-bold cursor-pointer"
+            className="text-xs text-[#168C83] dark:text-[#2dd4bf] hover:underline font-bold cursor-pointer"
           >
-            Open Switch Engine →
+            Open Switch Engine &rarr;
           </button>
         </div>
 
@@ -1272,22 +1346,22 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
       </div>
 
       {/* ======================================================================
-          7. PRIORITY ACTION RECOMMENDATIONS (Explainable Next Best Actions)
+          8. PRIORITY ACTION RECOMMENDATIONS (Explainable Next Best Actions)
           ====================================================================== */}
       {priorityActions.length > 0 && (
-        <div className="bg-white border border-[#CBD5E1] rounded-sm p-4 space-y-3 shadow-2xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E2E8F0] pb-3">
+        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm p-4 space-y-3 shadow-2xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#DCE3EA] dark:border-[#26394C] pb-3">
             <div>
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#B45309]" />
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#172033]">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#273444] dark:text-[#E8EEF5]">
                   Priority Relationship Recommendations
                 </h3>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-xs bg-[#B45309]/15 text-[#B45309] font-semibold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-xs bg-[#B45309]/15 text-[#B45309] dark:text-amber-300 font-semibold border border-[#fde68a] dark:border-amber-800">
                   Rule-Driven & Explainable
                 </span>
               </div>
-              <p className="text-xs text-[#64748B] mt-0.5">
+              <p className="text-xs text-[#5D6B7B] dark:text-[#8194A8] mt-0.5">
                 Top high-impact recommendations derived from client CORE Scores, momentum trends, and open service tickets.
               </p>
             </div>
@@ -1322,11 +1396,13 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
         </div>
       )}
 
-      {/* Opportunity Radar Executive Glance */}
+      {/* ======================================================================
+          9. OPPORTUNITY RADAR EXECUTIVE GLANCE
+          ====================================================================== */}
       {radarStats && radarStats.totalActiveSignals > 0 && (
-        <div className="bg-[#0f1e36] text-white rounded-sm p-4 shadow-sm border border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-[#142C45] dark:bg-[#101C2A] text-white rounded-sm p-4 shadow-sm border border-slate-700 dark:border-[#33485D] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xs bg-[#087F8C]/20 border border-[#087F8C]/40 text-[#2dd4bf] shrink-0">
+            <div className="p-2.5 rounded-xs bg-[#168C83]/20 border border-[#168C83]/40 text-[#2dd4bf] shrink-0">
               <Radar className="w-5 h-5" />
             </div>
             <div>
@@ -1338,7 +1414,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
                   {radarStats.totalActiveSignals} Active Signals
                 </span>
               </div>
-              <p className="text-xs text-slate-300 mt-0.5">
+              <p className="text-xs text-slate-300 dark:text-[#A9BACB] mt-0.5">
                 Identified {radarStats.productGapsCount} product coverage gaps and {radarStats.relationshipOpportunitiesCount} expansion opportunities across assigned customer portfolios.
               </p>
             </div>
@@ -1360,7 +1436,9 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
         </div>
       )}
 
-      {/* Treasury Surveillance & Notifications */}
+      {/* ======================================================================
+          10. INTEGRATED SURVEILLANCE & NOTIFICATION HUBS
+          ====================================================================== */}
       <MarketMovementsWidget onNavigateToForex={onNavigateToTradeFinance} />
 
       <NotificationStreamWidget

@@ -76,41 +76,41 @@ export const LienMarkModal: React.FC<LienMarkModalProps> = ({
           </div>
         )}
 
-        <div className="bg-slate-50 border border-slate-200 rounded p-3 space-y-1">
+        <div className="bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded p-3 space-y-1">
           <div className="flex justify-between">
-            <span className="text-slate-500">Available Balance:</span>
-            <span className="font-mono font-bold text-slate-900">{formatINR(account.availableBalance)}</span>
+            <span className="text-slate-500 dark:text-[#8194A8]">Available Balance:</span>
+            <span className="font-mono font-bold text-slate-900 dark:text-[#E8EEF5]">{formatINR(account.availableBalance)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Existing Marked Lien:</span>
-            <span className="font-mono font-semibold text-amber-800">{formatINR(account.lienAmount)}</span>
+            <span className="text-slate-500 dark:text-[#8194A8]">Existing Marked Lien:</span>
+            <span className="font-mono font-semibold text-amber-800 dark:text-amber-400">{formatINR(account.lienAmount)}</span>
           </div>
         </div>
 
         <div>
-          <label className="block font-semibold text-slate-800 mb-1">
+          <label className="block font-semibold text-slate-800 dark:text-[#E8EEF5] mb-1">
             New Lien Amount (INR)
           </label>
           <input
             type="number"
             value={lienAmountInput}
             onChange={(e) => setLienAmountInput(e.target.value)}
-            className="w-full p-2 bg-slate-50 border border-slate-300 rounded font-mono text-xs font-semibold focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+            className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-800 dark:text-[#E8EEF5] rounded font-mono text-xs font-semibold focus:bg-white dark:focus:bg-[#162638] focus:outline-none focus:ring-1 focus:ring-slate-400"
           />
-          <div className="mt-0.5 text-[11px] text-slate-500 font-mono">
+          <div className="mt-0.5 text-[11px] text-slate-500 dark:text-[#8194A8] font-mono">
             Value: {formatINR(parseFloat(lienAmountInput) || 0)}
           </div>
         </div>
 
         <div>
-          <label className="block font-semibold text-slate-800 mb-1">
+          <label className="block font-semibold text-slate-800 dark:text-[#E8EEF5] mb-1">
             Statutory / Trade Lien Justification <span className="text-rose-600">*</span>
           </label>
           <textarea
             rows={3}
             value={lienReason}
             onChange={(e) => setLienReason(e.target.value)}
-            className="w-full p-2 bg-slate-50 border border-slate-300 rounded text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+            className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-800 dark:text-[#E8EEF5] rounded text-xs focus:bg-white dark:focus:bg-[#162638] focus:outline-none focus:ring-1 focus:ring-slate-400"
             placeholder="Specify reason (e.g. 100% margin for Bank Guarantee, court attachment, recovery)"
           />
         </div>

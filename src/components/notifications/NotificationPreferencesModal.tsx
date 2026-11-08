@@ -140,34 +140,34 @@ export const NotificationPreferencesModal: React.FC<NotificationPreferencesModal
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-fade-in">
-      <div className="bg-white border border-slate-300 rounded shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="bg-white dark:bg-[#162638] border border-slate-300 dark:border-[#33485D] rounded shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="px-5 py-4 bg-[#0f1e36] text-white flex items-center justify-between">
+        <div className="px-5 py-4 bg-[#142C45] dark:bg-[#101C2A] text-white flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <Settings className="w-5 h-5 text-amber-400" />
+            <Settings className="w-5 h-5 text-[#D9A441]" />
             <div>
               <h3 className="text-sm font-bold tracking-tight text-white uppercase font-sans">
                 Notification Preferences
               </h3>
-              <p className="text-[11px] text-slate-300 font-mono">
+              <p className="text-[11px] text-slate-300 dark:text-[#A9BACB] font-mono">
                 Institutional Alert Filtering & Delivery Controls
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded text-slate-300 hover:text-white hover:bg-slate-700/50 cursor-pointer transition-colors"
+            className="p-1 rounded text-slate-300 dark:text-[#A9BACB] hover:text-white hover:bg-slate-700/50 dark:hover:bg-[#1C3045] cursor-pointer transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Institutional Policy Notice */}
-        <div className="px-5 py-3 bg-amber-50/80 border-b border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
-          <Lock className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+        <div className="px-5 py-3 bg-amber-50/80 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-700/50 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-2.5">
+          <Lock className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" />
           <div>
             <span className="font-semibold font-sans">Mandatory Compliance Policy:</span>
-            <span className="text-slate-700 ml-1">
+            <span className="text-slate-700 dark:text-[#A9BACB] ml-1">
               Critical severity alerts (including SLA breaches, significant score drops, and regulatory flags) will
               always be delivered regardless of preferences.
             </span>
@@ -175,9 +175,9 @@ export const NotificationPreferencesModal: React.FC<NotificationPreferencesModal
         </div>
 
         {/* Preferences List */}
-        <div className="p-5 overflow-y-auto space-y-3 divide-y divide-slate-100 flex-1">
+        <div className="p-5 overflow-y-auto space-y-3 divide-y divide-slate-100 dark:divide-[#26394C] flex-1">
           {isLoading ? (
-            <div className="py-12 text-center text-slate-500 font-mono text-xs">
+            <div className="py-12 text-center text-slate-500 dark:text-[#8194A8] font-mono text-xs">
               Loading preferences...
             </div>
           ) : (
@@ -187,19 +187,19 @@ export const NotificationPreferencesModal: React.FC<NotificationPreferencesModal
                 <div key={cfg.key} className="pt-3 first:pt-0 flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-slate-900 font-sans">{cfg.title}</span>
-                      <span className="text-[10px] font-mono uppercase px-1.5 py-0.2 bg-slate-100 text-slate-600 rounded">
+                      <span className="text-xs font-semibold text-slate-900 dark:text-[#E8EEF5] font-sans">{cfg.title}</span>
+                      <span className="text-[10px] font-mono uppercase px-1.5 py-0.2 bg-slate-100 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] rounded border border-slate-200 dark:border-[#33485D]">
                         {cfg.tag}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">{cfg.description}</p>
+                    <p className="text-[11px] text-slate-500 dark:text-[#8194A8] mt-0.5 leading-relaxed">{cfg.description}</p>
                   </div>
 
                   <button
                     type="button"
                     onClick={() => handleToggle(cfg.key)}
                     className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                      enabled ? 'bg-[#0f1e36]' : 'bg-slate-300'
+                      enabled ? 'bg-[#168C83]' : 'bg-slate-300 dark:bg-slate-700'
                     }`}
                   >
                     <span
@@ -219,8 +219,8 @@ export const NotificationPreferencesModal: React.FC<NotificationPreferencesModal
           <div
             className={`px-5 py-2 text-xs font-mono border-t ${
               feedback.type === 'success'
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                : 'bg-rose-50 text-rose-800 border-rose-200'
+                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700/50'
+                : 'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-700/50'
             }`}
           >
             {feedback.message}
@@ -228,8 +228,8 @@ export const NotificationPreferencesModal: React.FC<NotificationPreferencesModal
         )}
 
         {/* Footer */}
-        <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-          <span className="text-[11px] text-slate-500 font-mono">Changes apply across all active sessions</span>
+        <div className="px-5 py-3 bg-slate-50 dark:bg-[#101C2A] border-t border-slate-200 dark:border-[#26394C] flex items-center justify-between">
+          <span className="text-[11px] text-slate-500 dark:text-[#8194A8] font-mono">Changes apply across all active sessions</span>
           <div className="flex items-center gap-2">
             <Button size="sm" variant="outline" onClick={onClose} disabled={isSaving}>
               Cancel
