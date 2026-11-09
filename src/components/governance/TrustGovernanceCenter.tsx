@@ -214,9 +214,9 @@ export const TrustGovernanceCenter: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100 p-4 md:p-6 lg:p-8 space-y-6">
+    <div className="flex flex-col min-h-screen bg-[#F4F6F8] dark:bg-[#0A121E] text-[#142C45] dark:text-[#E8EEF5] p-4 md:p-6 lg:p-8 space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-800 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-[#DCE3EA] dark:border-[#33485D] gap-4">
         <div>
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400">
@@ -225,11 +225,11 @@ export const TrustGovernanceCenter: React.FC = () => {
             <div>
               <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
                 Trust & Governance Center
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#EDF1F5] dark:bg-[#1E3247] text-[#2D3F54] dark:text-[#CBD5E1] border border-[#CBD5E1] dark:border-[#33485D]">
                   Institutional Clarity
                 </span>
               </h1>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] mt-0.5">
                 Centralized enterprise visibility into AI, Agent, Decision, Data, and Security envelopes.
               </p>
             </div>
@@ -237,15 +237,15 @@ export const TrustGovernanceCenter: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-2 px-3 py-1.5 rounded-md bg-slate-900 border border-slate-800 text-xs">
+          <div className="flex items-center space-x-2 px-3 py-1.5 rounded-md bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-slate-300 font-medium">SYNTHETIC ENVIRONMENT</span>
+            <span className="text-[#2D3F54] dark:text-[#CBD5E1] font-medium">SYNTHETIC ENVIRONMENT</span>
           </div>
 
           <button
             onClick={loadData}
             disabled={loading}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-slate-850 hover:bg-slate-800 border border-slate-750 text-xs font-medium text-slate-200 transition-colors"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] text-xs font-medium text-[#142C45] dark:text-[#E8EEF5] transition-colors"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
@@ -254,7 +254,7 @@ export const TrustGovernanceCenter: React.FC = () => {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="overflow-x-auto scrollbar-none border-b border-slate-800 pb-px">
+      <div className="overflow-x-auto scrollbar-none border-b border-[#DCE3EA] dark:border-[#33485D] pb-px">
         <div className="flex space-x-1 min-w-max">
           {tabs
             .filter((t) => !t.hidden)
@@ -266,8 +266,8 @@ export const TrustGovernanceCenter: React.FC = () => {
                   onClick={() => setActiveTab(tab.key)}
                   className={`flex items-center space-x-2 px-3.5 py-2 text-xs font-medium rounded-t-md transition-all border-b-2 ${
                     isActive
-                      ? 'bg-slate-900 text-emerald-400 border-emerald-500 font-semibold'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 border-transparent'
+                      ? 'bg-[#FFFFFF] dark:bg-[#162638] text-emerald-400 border-emerald-500 font-semibold'
+                      : 'text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:bg-[#F8FAFC] dark:bg-[#101C2A] border-transparent'
                   }`}
                 >
                   {tab.icon}
@@ -281,7 +281,7 @@ export const TrustGovernanceCenter: React.FC = () => {
       {/* Main Content Area */}
       <div className="flex-1">
         {loading && !overview && !auditData && !aiGov && (
-          <div className="flex flex-col items-center justify-center py-20 text-slate-400 space-y-3">
+          <div className="flex flex-col items-center justify-center py-20 text-[#5D6B7B] dark:text-[#A9BACB] space-y-3">
             <RefreshCw className="w-6 h-6 animate-spin text-emerald-400" />
             <p className="text-sm">Loading governance telemetry...</p>
           </div>
@@ -324,7 +324,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                 />
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs uppercase tracking-wider text-slate-400 font-bold">System Status:</span>
+                    <span className="text-xs uppercase tracking-wider text-[#5D6B7B] dark:text-[#A9BACB] font-bold">System Status:</span>
                     <span
                       className={`text-sm font-bold ${
                         overview.systemStatus === 'OPERATIONAL'
@@ -337,105 +337,105 @@ export const TrustGovernanceCenter: React.FC = () => {
                       {overview.systemStatus}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-300 mt-0.5">{overview.statusReason}</p>
+                  <p className="text-xs text-[#2D3F54] dark:text-[#CBD5E1] mt-0.5">{overview.statusReason}</p>
                 </div>
               </div>
-              <div className="text-right text-xs text-slate-400">
+              <div className="text-right text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                 <span>Last Audit: {overview.lastAuditTimestamp ? new Date(overview.lastAuditTimestamp).toLocaleTimeString() : 'N/A'}</span>
               </div>
             </div>
 
             {/* Metric Summary Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
+              <div className="p-4 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span className="font-semibold uppercase tracking-wider">Audit Activity</span>
                   <FileCheck className="w-4 h-4 text-emerald-400" />
                 </div>
                 <div className="text-2xl font-bold text-white">{overview.auditActivity.totalEvents.toLocaleString()}</div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span className="text-emerald-400 font-medium">{overview.auditActivity.recentEvents24h}</span> events in last 24h
                 </div>
               </div>
 
-              <div className="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
+              <div className="p-4 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span className="font-semibold uppercase tracking-wider">AI Activity</span>
                   <Sparkles className="w-4 h-4 text-purple-400" />
                 </div>
                 <div className="text-2xl font-bold text-white">{overview.aiActivity.copilotSessions} Sessions</div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span className="text-purple-400 font-medium">{overview.aiActivity.agentPlans}</span> Controlled Agent plans
                 </div>
               </div>
 
-              <div className="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
+              <div className="p-4 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span className="font-semibold uppercase tracking-wider">Human Approvals</span>
                   <CheckCircle2 className="w-4 h-4 text-amber-400" />
                 </div>
                 <div className="text-2xl font-bold text-white">{overview.humanApprovals.pendingCount} Pending</div>
-                <div className="text-xs text-slate-400">Awaiting dual-control Maker-Checker review</div>
+                <div className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">Awaiting dual-control Maker-Checker review</div>
               </div>
 
-              <div className="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
+              <div className="p-4 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span className="font-semibold uppercase tracking-wider">Security Anomaly Filter</span>
                   <Lock className="w-4 h-4 text-rose-400" />
                 </div>
                 <div className="text-2xl font-bold text-white">
                   {overview.security.authorizationFailures} Failures
                 </div>
-                <div className="text-xs text-slate-400">
-                  <span className="text-slate-300 font-medium">{overview.security.criticalEvents}</span> critical events detected
+                <div className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
+                  <span className="text-[#2D3F54] dark:text-[#CBD5E1] font-medium">{overview.security.criticalEvents}</span> critical events detected
                 </div>
               </div>
 
-              <div className="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
+              <div className="p-4 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span className="font-semibold uppercase tracking-wider">Data Access Requests</span>
                   <Database className="w-4 h-4 text-cyan-400" />
                 </div>
                 <div className="text-2xl font-bold text-white">
                   {overview.dataAccess.customerContextRequests.toLocaleString()}
                 </div>
-                <div className="text-xs text-slate-400">Customer & Group 360 context lookups</div>
+                <div className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">Customer & Group 360 context lookups</div>
               </div>
 
-              <div className="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
+              <div className="p-4 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span className="font-semibold uppercase tracking-wider">Governance Exceptions</span>
                   <AlertTriangle className="w-4 h-4 text-amber-400" />
                 </div>
                 <div className="text-2xl font-bold text-white">{overview.governanceExceptions.open} Open</div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span className="text-amber-400 font-medium">{overview.governanceExceptions.highCritical}</span> High/Critical severity
                 </div>
               </div>
             </div>
 
             {/* Quick Navigation Panel */}
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+            <div className="p-5 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-3">
               <h3 className="text-sm font-semibold text-white">Institutional Observability Principles</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                COREvia answers <strong className="text-slate-200">WHO, WHAT, WHEN, WHY, WHICH DATA, WHICH ENGINE, WHICH TOOL, WHICH PERMISSION, WHICH APPROVAL,</strong> and <strong className="text-slate-200">WHICH RESULT</strong> across every customer mutation. Deterministic rules are never labeled "AI decisions". Cryptographic audit hashing guarantees tamper-evident provenance.
+              <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed">
+                COREvia answers <strong className="text-[#142C45] dark:text-[#E8EEF5]">WHO, WHAT, WHEN, WHY, WHICH DATA, WHICH ENGINE, WHICH TOOL, WHICH PERMISSION, WHICH APPROVAL,</strong> and <strong className="text-[#142C45] dark:text-[#E8EEF5]">WHICH RESULT</strong> across every customer mutation. Deterministic rules are never labeled "AI decisions". Cryptographic audit hashing guarantees tamper-evident provenance.
               </p>
               <div className="flex flex-wrap gap-2 pt-2">
                 <button
                   onClick={() => setActiveTab('exceptions')}
-                  className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-750 text-xs font-medium text-emerald-400 border border-slate-700 transition-colors"
+                  className="px-3 py-1.5 rounded bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#E2E8F0] dark:hover:bg-[#26394C] text-xs font-medium text-emerald-400 border border-[#CBD5E1] dark:border-[#33485D] transition-colors"
                 >
                   Inspect Exceptions ({overview.governanceExceptions.open}) →
                 </button>
                 <button
                   onClick={() => setActiveTab('audit')}
-                  className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-750 text-xs font-medium text-slate-200 border border-slate-700 transition-colors"
+                  className="px-3 py-1.5 rounded bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#E2E8F0] dark:hover:bg-[#26394C] text-xs font-medium text-[#142C45] dark:text-[#E8EEF5] border border-[#CBD5E1] dark:border-[#33485D] transition-colors"
                 >
                   Open Audit Explorer →
                 </button>
                 <button
                   onClick={() => setActiveTab('ai')}
-                  className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-750 text-xs font-medium text-purple-400 border border-slate-700 transition-colors"
+                  className="px-3 py-1.5 rounded bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#E2E8F0] dark:hover:bg-[#26394C] text-xs font-medium text-purple-400 border border-[#CBD5E1] dark:border-[#33485D] transition-colors"
                 >
                   Verify Gemini Guardrails →
                 </button>
@@ -451,41 +451,41 @@ export const TrustGovernanceCenter: React.FC = () => {
           <div className="space-y-4">
             {/* Integrity Status Header */}
             {auditData && (
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 rounded-lg bg-slate-900 border border-slate-800 text-xs gap-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-xs gap-2">
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span className="font-semibold text-slate-200">Cryptographic SHA-256 Tamper-Evident Chain:</span>
+                  <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">Cryptographic SHA-256 Tamper-Evident Chain:</span>
                   <span className="text-emerald-400 font-mono font-bold">
                     {auditData.chainIntegrity?.chainStatus || 'VERIFIED_IMMUTABLE'}
                   </span>
-                  <span className="text-slate-400">
+                  <span className="text-[#5D6B7B] dark:text-[#A9BACB]">
                     ({auditData.chainIntegrity?.recordsChecked || 50} recent links verified)
                   </span>
                 </div>
-                <div className="text-slate-400 text-xs">Total Records: {auditData.total}</div>
+                <div className="text-[#5D6B7B] dark:text-[#A9BACB] text-xs">Total Records: {auditData.total}</div>
               </div>
             )}
 
             {/* Filter Bar */}
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 bg-[#FFFFFF] dark:bg-[#162638] p-3 rounded-lg border border-[#DCE3EA] dark:border-[#33485D] text-xs">
               <input
                 type="text"
                 placeholder="Filter by Action / Event..."
                 value={auditFilterEvent}
                 onChange={(e) => setAuditFilterEvent(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+                className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded px-2.5 py-1.5 text-[#142C45] dark:text-[#E8EEF5] focus:outline-none focus:border-emerald-500"
               />
               <input
                 type="text"
                 placeholder="Filter by Module / Resource..."
                 value={auditFilterModule}
                 onChange={(e) => setAuditFilterModule(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+                className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded px-2.5 py-1.5 text-[#142C45] dark:text-[#E8EEF5] focus:outline-none focus:border-emerald-500"
               />
               <select
                 value={auditFilterOutcome}
                 onChange={(e) => setAuditFilterOutcome(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+                className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded px-2.5 py-1.5 text-[#142C45] dark:text-[#E8EEF5] focus:outline-none focus:border-emerald-500"
               >
                 <option value="">All Outcomes</option>
                 <option value="SUCCESS">SUCCESS</option>
@@ -501,9 +501,9 @@ export const TrustGovernanceCenter: React.FC = () => {
             </div>
 
             {/* Audit Table */}
-            <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-900">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+            <div className="overflow-x-auto rounded-lg border border-[#DCE3EA] dark:border-[#33485D] bg-[#FFFFFF] dark:bg-[#162638]">
+              <table className="w-full text-left text-xs text-[#2D3F54] dark:text-[#CBD5E1]">
+                <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] uppercase tracking-wider font-semibold border-b border-[#DCE3EA] dark:border-[#33485D]">
                   <tr>
                     <th className="py-2.5 px-3">Timestamp</th>
                     <th className="py-2.5 px-3 hidden md:table-cell">Actor</th>
@@ -515,7 +515,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                     <th className="py-2.5 px-3 text-right">Details</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800 font-mono">
+                <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D] font-mono">
                   {(!auditData?.events || auditData.events.length === 0) ? (
                     <tr>
                       <td colSpan={8} className="py-12 text-center font-sans">
@@ -532,17 +532,17 @@ export const TrustGovernanceCenter: React.FC = () => {
                     const isExpanded = expandedAuditId === ev.id;
                     return (
                       <React.Fragment key={ev.id}>
-                        <tr className="hover:bg-slate-850/60 transition-colors">
-                          <td className="py-2.5 px-3 text-slate-400 whitespace-nowrap">
+                        <tr className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition-colors">
+                          <td className="py-2.5 px-3 text-[#5D6B7B] dark:text-[#A9BACB] whitespace-nowrap">
                             {new Date(ev.timestamp).toLocaleTimeString()}
                           </td>
                           <td className="py-2.5 px-3 font-sans hidden md:table-cell">
-                            <div className="font-medium text-slate-200">{ev.actor.name}</div>
-                            <div className="text-[10px] text-slate-500">{ev.actor.id}</div>
+                            <div className="font-medium text-[#142C45] dark:text-[#E8EEF5]">{ev.actor.name}</div>
+                            <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8]">{ev.actor.id}</div>
                           </td>
                           <td className="py-2.5 px-3 font-semibold text-white whitespace-nowrap">{ev.event}</td>
-                          <td className="py-2.5 px-3 text-slate-300 hidden lg:table-cell">{ev.module}</td>
-                          <td className="py-2.5 px-3 text-slate-400 hidden sm:table-cell truncate max-w-[140px]">
+                          <td className="py-2.5 px-3 text-[#2D3F54] dark:text-[#CBD5E1] hidden lg:table-cell">{ev.module}</td>
+                          <td className="py-2.5 px-3 text-[#5D6B7B] dark:text-[#A9BACB] hidden sm:table-cell truncate max-w-[140px]">
                             {ev.resource.id}
                           </td>
                           <td className="py-2.5 px-3">
@@ -558,7 +558,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                               {ev.outcome}
                             </span>
                           </td>
-                          <td className="py-2.5 px-3 text-slate-500 text-[10px] hidden xl:table-cell truncate max-w-[120px]">
+                          <td className="py-2.5 px-3 text-[#6B7C93] dark:text-[#8194A8] text-[10px] hidden xl:table-cell truncate max-w-[120px]">
                             {ev.requestId}
                           </td>
                           <td className="py-2.5 px-3 text-right font-sans">
@@ -573,20 +573,20 @@ export const TrustGovernanceCenter: React.FC = () => {
                         </tr>
 
                         {isExpanded && (
-                          <tr className="bg-slate-950/70">
+                          <tr className="bg-[#F8FAFC] dark:bg-[#101C2A]">
                             <td colSpan={8} className="p-4 space-y-3 font-sans text-xs">
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                  <h4 className="font-semibold text-slate-300 mb-1">Cryptographic Provenance</h4>
-                                  <div className="space-y-1 font-mono text-[11px] text-slate-400">
+                                  <h4 className="font-semibold text-[#2D3F54] dark:text-[#CBD5E1] mb-1">Cryptographic Provenance</h4>
+                                  <div className="space-y-1 font-mono text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">
                                     <div>Previous Hash: {ev.tamperEvident.previousHash || '0000000000...'}</div>
                                     <div>Record Hash: {ev.tamperEvident.recordHash || 'N/A'}</div>
                                     <div>Integrity: Verified Chain Link</div>
                                   </div>
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-slate-300 mb-1">Authorization Context</h4>
-                                  <div className="space-y-1 text-slate-400">
+                                  <h4 className="font-semibold text-[#2D3F54] dark:text-[#CBD5E1] mb-1">Authorization Context</h4>
+                                  <div className="space-y-1 text-[#5D6B7B] dark:text-[#A9BACB]">
                                     <div>Actor: {ev.actor.name} ({ev.actor.id})</div>
                                     <div>Role: {ev.actor.role}</div>
                                     <div>Request ID: {ev.requestId}</div>
@@ -615,7 +615,7 @@ export const TrustGovernanceCenter: React.FC = () => {
         {activeTab === 'ai' && aiGov && (
           <div className="space-y-6">
             {/* Safe Model Configuration Card */}
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+            <div className="p-5 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-purple-500/10 border border-purple-500/30 rounded-lg text-purple-400">
@@ -623,7 +623,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-white">Google Gemini Model Configuration</h3>
-                    <p className="text-xs text-slate-400">Safe configuration metadata — secrets masked</p>
+                    <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">Safe configuration metadata — secrets masked</p>
                   </div>
                 </div>
                 <span
@@ -637,17 +637,17 @@ export const TrustGovernanceCenter: React.FC = () => {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs pt-2 border-t border-slate-800">
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs pt-2 border-t border-[#DCE3EA] dark:border-[#33485D]">
                 <div>
-                  <span className="text-slate-400 block mb-1">Provider</span>
+                  <span className="text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Provider</span>
                   <span className="font-semibold text-white">{aiGov.modelConfig.provider}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-1">Configured Model</span>
+                  <span className="text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Configured Model</span>
                   <span className="font-semibold text-white font-mono">{aiGov.modelConfig.model}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-1">API Key Status</span>
+                  <span className="text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">API Key Status</span>
                   <span
                     className={`font-semibold font-mono ${
                       aiGov.modelConfig.keyConfigured ? 'text-emerald-400' : 'text-amber-400'
@@ -657,50 +657,50 @@ export const TrustGovernanceCenter: React.FC = () => {
                   </span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-1">Secret Masking Guarantee</span>
-                  <span className="text-slate-300 font-mono">Zero Exposure Verified</span>
+                  <span className="text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Secret Masking Guarantee</span>
+                  <span className="text-[#2D3F54] dark:text-[#CBD5E1] font-mono">Zero Exposure Verified</span>
                 </div>
               </div>
             </div>
 
             {/* Tool Calls Breakdown */}
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+            <div className="p-5 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-3">
               <h3 className="text-sm font-bold text-white">Controlled Copilot Tool Execution Breakdown</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
                 {aiGov.toolCallsBreakdown.map((tb) => (
-                  <div key={tb.toolName} className="p-3 rounded bg-slate-950 border border-slate-800 space-y-1">
+                  <div key={tb.toolName} className="p-3 rounded bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] space-y-1">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-mono text-emerald-400 font-semibold">{tb.toolName}</span>
-                      <span className="text-slate-300 font-bold">{tb.callCount} calls</span>
+                      <span className="text-[#2D3F54] dark:text-[#CBD5E1] font-bold">{tb.callCount} calls</span>
                     </div>
-                    <div className="text-[10px] text-slate-500 font-mono">Classification: {tb.classification}</div>
+                    <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] font-mono">Classification: {tb.classification}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* AI Fallback Monitoring */}
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+            <div className="p-5 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-3">
               <h3 className="text-sm font-bold text-white">AI Fallback Telemetry</h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                 When external Gemini inference experiences network timeouts or quota exhaustion, COREvia seamlessly falls back to institutional rule engines without leaking sensitive prompt contents.
               </p>
 
-              <div className="overflow-x-auto rounded border border-slate-800">
-                <table className="w-full text-left text-xs text-slate-300 font-mono">
-                  <thead className="bg-slate-950 text-slate-400 border-b border-slate-800 font-sans">
+              <div className="overflow-x-auto rounded border border-[#DCE3EA] dark:border-[#33485D]">
+                <table className="w-full text-left text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-mono">
+                  <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-sans">
                     <tr>
                       <th className="p-2.5">Timestamp</th>
                       <th className="p-2.5">Module</th>
                       <th className="p-2.5">Trigger Reason</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                     {aiGov.aiFallbacks.map((fb, idx) => (
-                      <tr key={idx} className="hover:bg-slate-850/50">
-                        <td className="p-2.5 text-slate-400">{new Date(fb.timestamp).toLocaleTimeString()}</td>
+                      <tr key={idx} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
+                        <td className="p-2.5 text-[#5D6B7B] dark:text-[#A9BACB]">{new Date(fb.timestamp).toLocaleTimeString()}</td>
                         <td className="p-2.5 font-bold text-white">{fb.module}</td>
-                        <td className="p-2.5 text-slate-300 font-sans">{fb.reason}</td>
+                        <td className="p-2.5 text-[#2D3F54] dark:text-[#CBD5E1] font-sans">{fb.reason}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -717,42 +717,42 @@ export const TrustGovernanceCenter: React.FC = () => {
           <div className="space-y-6">
             {/* Agent Metrics Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Plans Created</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Plans Created</span>
                 <div className="text-xl font-bold text-white mt-1">{agentGov.plansCreated}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Approved</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Approved</span>
                 <div className="text-xl font-bold text-emerald-400 mt-1">{agentGov.approved}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Completed</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Completed</span>
                 <div className="text-xl font-bold text-cyan-400 mt-1">{agentGov.completed}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Partial</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Partial</span>
                 <div className="text-xl font-bold text-amber-400 mt-1">{agentGov.partial}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Rejected</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Rejected</span>
                 <div className="text-xl font-bold text-rose-400 mt-1">{agentGov.rejected}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Failed</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Failed</span>
                 <div className="text-xl font-bold text-rose-500 mt-1">{agentGov.failed}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Expired</span>
-                <div className="text-xl font-bold text-slate-400 mt-1">{agentGov.expired}</div>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Expired</span>
+                <div className="text-xl font-bold text-[#5D6B7B] dark:text-[#A9BACB] mt-1">{agentGov.expired}</div>
               </div>
             </div>
 
             {/* Recent Agent Plans */}
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+            <div className="p-5 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-4">
               <h3 className="text-sm font-bold text-white">Recent Agent Plans & Execution Provenance</h3>
-              <div className="overflow-x-auto rounded border border-slate-800">
-                <table className="w-full text-left text-xs text-slate-300 font-mono">
-                  <thead className="bg-slate-950 text-slate-400 border-b border-slate-800 font-sans">
+              <div className="overflow-x-auto rounded border border-[#DCE3EA] dark:border-[#33485D]">
+                <table className="w-full text-left text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-mono">
+                  <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-sans">
                     <tr>
                       <th className="p-2.5">Plan ID</th>
                       <th className="p-2.5">Title / Objective</th>
@@ -762,15 +762,15 @@ export const TrustGovernanceCenter: React.FC = () => {
                       <th className="p-2.5 text-right">Created</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                     {agentGov.recentPlans.map((plan) => (
-                      <tr key={plan.planId} className="hover:bg-slate-850/50">
+                      <tr key={plan.planId} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
                         <td className="p-2.5 font-bold text-emerald-400 whitespace-nowrap">{plan.planId}</td>
                         <td className="p-2.5 font-sans">
-                          <div className="font-semibold text-slate-100">{plan.title}</div>
-                          <div className="text-[11px] text-slate-400 truncate max-w-sm">{plan.objective}</div>
+                          <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{plan.title}</div>
+                          <div className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] truncate max-w-sm">{plan.objective}</div>
                         </td>
-                        <td className="p-2.5 text-slate-300">{plan.customerName || `CUS-${plan.customerId}` || 'N/A'}</td>
+                        <td className="p-2.5 text-[#2D3F54] dark:text-[#CBD5E1]">{plan.customerName || `CUS-${plan.customerId}` || 'N/A'}</td>
                         <td className="p-2.5 text-purple-400">{plan.decisionTraceId}</td>
                         <td className="p-2.5">
                           <span
@@ -781,13 +781,13 @@ export const TrustGovernanceCenter: React.FC = () => {
                                 ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
                                 : plan.status === 'PARTIALLY_COMPLETED'
                                 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-                                : 'bg-slate-800 text-slate-400'
+                                : 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB]'
                             }`}
                           >
                             {plan.status}
                           </span>
                         </td>
-                        <td className="p-2.5 text-right text-slate-400">
+                        <td className="p-2.5 text-right text-[#5D6B7B] dark:text-[#A9BACB]">
                           {new Date(plan.createdAt).toLocaleDateString()}
                         </td>
                       </tr>
@@ -805,30 +805,30 @@ export const TrustGovernanceCenter: React.FC = () => {
         {activeTab === 'access' && accessGov && (
           <div className="space-y-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Total Access Events</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Total Access Events</span>
                 <span className="text-xl font-bold text-white">{accessGov.totalEvents}</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Login Events</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Login Events</span>
                 <span className="text-xl font-bold text-white">{accessGov.loginEvents}</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Logout Events</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Logout Events</span>
                 <span className="text-xl font-bold text-white">{accessGov.logoutEvents}</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Authorization Failures</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Authorization Failures</span>
                 <span className="text-xl font-bold text-amber-400">{accessGov.authorizationFailures}</span>
               </div>
             </div>
 
             {/* Authorization Failures Section */}
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+            <div className="p-5 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-3">
               <h3 className="text-sm font-bold text-white">Recent Access & Authorization Audit Events</h3>
-              <div className="overflow-x-auto rounded border border-slate-800">
-                <table className="w-full text-left text-xs text-slate-300 font-mono">
-                  <thead className="bg-slate-950 text-slate-400 border-b border-slate-800 font-sans">
+              <div className="overflow-x-auto rounded border border-[#DCE3EA] dark:border-[#33485D]">
+                <table className="w-full text-left text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-mono">
+                  <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-sans">
                     <tr>
                       <th className="p-2.5">Timestamp</th>
                       <th className="p-2.5">Actor</th>
@@ -837,13 +837,13 @@ export const TrustGovernanceCenter: React.FC = () => {
                       <th className="p-2.5 text-right">Outcome</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                     {accessGov.recentAccessEvents.map((ae) => (
-                      <tr key={ae.id} className="hover:bg-slate-850/50">
-                        <td className="p-2.5 text-slate-400">{new Date(ae.timestamp).toLocaleTimeString()}</td>
+                      <tr key={ae.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
+                        <td className="p-2.5 text-[#5D6B7B] dark:text-[#A9BACB]">{new Date(ae.timestamp).toLocaleTimeString()}</td>
                         <td className="p-2.5 font-sans font-medium text-white">{ae.actorName}</td>
-                        <td className="p-2.5 text-slate-300 truncate max-w-xs">{ae.resourceId}</td>
-                        <td className="p-2.5 text-slate-400">{ae.action}</td>
+                        <td className="p-2.5 text-[#2D3F54] dark:text-[#CBD5E1] truncate max-w-xs">{ae.resourceId}</td>
+                        <td className="p-2.5 text-[#5D6B7B] dark:text-[#A9BACB]">{ae.action}</td>
                         <td className="p-2.5 text-right">
                           <span
                             className={`px-2 py-0.5 rounded text-[10px] font-bold ${
@@ -870,30 +870,30 @@ export const TrustGovernanceCenter: React.FC = () => {
         {activeTab === 'security' && securityGov && (
           <div className="space-y-6">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Failed Logins</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Failed Logins</span>
                 <div className="text-xl font-bold text-white mt-1">{securityGov.failedLogins}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Auth Failures</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Auth Failures</span>
                 <div className="text-xl font-bold text-amber-400 mt-1">{securityGov.authorizationFailures}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Expired Sessions</span>
-                <div className="text-xl font-bold text-slate-300 mt-1">{securityGov.expiredSessions}</div>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Expired Sessions</span>
+                <div className="text-xl font-bold text-[#2D3F54] dark:text-[#CBD5E1] mt-1">{securityGov.expiredSessions}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Rate Limit Events</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Rate Limit Events</span>
                 <div className="text-xl font-bold text-cyan-400 mt-1">{securityGov.rateLimitEvents}</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase">Active Sessions</span>
+              <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-center">
+                <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-semibold uppercase">Active Sessions</span>
                 <div className="text-xl font-bold text-white mt-1">{securityGov.activeSessionsCount}</div>
               </div>
             </div>
 
             {/* Security Warnings */}
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+            <div className="p-5 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-3">
               <h3 className="text-sm font-bold text-white">Active Security Governance Observations</h3>
               <div className="space-y-2">
                 {securityGov.securityWarnings.map((w, idx) => (
@@ -913,20 +913,20 @@ export const TrustGovernanceCenter: React.FC = () => {
         {activeTab === 'data' && dataGov && (
           <div className="space-y-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Customer Context 24h</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Customer Context 24h</span>
                 <span className="text-xl font-bold text-white">{dataGov.customerContextAccessCount}</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Group Context 24h</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Group Context 24h</span>
                 <span className="text-xl font-bold text-white">{dataGov.groupContextAccessCount}</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Copilot Context Lookups</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Copilot Context Lookups</span>
                 <span className="text-xl font-bold text-white">{dataGov.copilotContextRetrievals}</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Decision Evidence Access</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Decision Evidence Access</span>
                 <span className="text-xl font-bold text-purple-400">
                   {dataGov.decisionEvidenceAccessCount}
                 </span>
@@ -934,10 +934,10 @@ export const TrustGovernanceCenter: React.FC = () => {
             </div>
 
             {/* Data Lineage Visualization */}
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+            <div className="p-5 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-4">
               <div>
                 <h3 className="text-sm font-bold text-white">Canonical Intelligence Data Lineage</h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] mt-0.5">
                   End-to-end provenance graph linking verified customer evidence to the executed tamper-evident audit record.
                 </p>
               </div>
@@ -946,7 +946,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                 {dataGov.lineageNodes.map((node, index) => (
                   <div
                     key={node.id}
-                    className="p-3 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-2 relative"
+                    className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] flex flex-col justify-between space-y-2 relative"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-1">
@@ -968,9 +968,9 @@ export const TrustGovernanceCenter: React.FC = () => {
                         <Check className="w-3.5 h-3.5 text-emerald-400" />
                       </div>
                       <h4 className="text-xs font-bold text-white">{node.label}</h4>
-                      <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">{node.description}</p>
+                      <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mt-1 leading-relaxed">{node.description}</p>
                     </div>
-                    <div className="text-[10px] text-slate-500 font-mono">{node.system} · {node.freshness}</div>
+                    <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] font-mono">{node.system} · {node.freshness}</div>
                   </div>
                 ))}
               </div>
@@ -985,12 +985,12 @@ export const TrustGovernanceCenter: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-white">Pending Institutional Approvals ({approvals.pendingCount})</h3>
-              <span className="text-xs text-slate-400">Maker-Checker dual-control envelope</span>
+              <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">Maker-Checker dual-control envelope</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {approvals.items.map((app) => (
-                <div key={app.id} className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+                <div key={app.id} className="p-4 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-mono font-bold text-emerald-400">{app.id}</span>
                     <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-bold">
@@ -1000,22 +1000,22 @@ export const TrustGovernanceCenter: React.FC = () => {
 
                   <div>
                     <h4 className="text-xs font-bold text-white">{app.title}</h4>
-                    <p className="text-xs text-slate-300 mt-1">{app.objective}</p>
+                    <p className="text-xs text-[#2D3F54] dark:text-[#CBD5E1] mt-1">{app.objective}</p>
                   </div>
 
-                  <div className="p-2.5 rounded bg-slate-950 border border-slate-850 space-y-1 text-xs text-slate-400">
+                  <div className="p-2.5 rounded bg-[#F8FAFC] dark:bg-[#101C2A] border border-slate-850 space-y-1 text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                     <div>
-                      <strong className="text-slate-300">Requested By:</strong> {app.requestedBy}
+                      <strong className="text-[#2D3F54] dark:text-[#CBD5E1]">Requested By:</strong> {app.requestedBy}
                     </div>
                     <div>
-                      <strong className="text-slate-300">Target Entity:</strong> {app.affectedEntityName || app.affectedEntityId}
+                      <strong className="text-[#2D3F54] dark:text-[#CBD5E1]">Target Entity:</strong> {app.affectedEntityName || app.affectedEntityId}
                     </div>
                     <div>
-                      <strong className="text-slate-300">Risk Assessment:</strong> {app.riskImpact}
+                      <strong className="text-[#2D3F54] dark:text-[#CBD5E1]">Risk Assessment:</strong> {app.riskImpact}
                     </div>
                     {app.decisionTraceId && (
                       <div>
-                        <strong className="text-slate-300">Basis:</strong> {app.decisionTraceId}
+                        <strong className="text-[#2D3F54] dark:text-[#CBD5E1]">Basis:</strong> {app.decisionTraceId}
                       </div>
                     )}
                   </div>
@@ -1031,36 +1031,36 @@ export const TrustGovernanceCenter: React.FC = () => {
         {activeTab === 'decisions' && decisions && (
           <div className="space-y-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Total Decisions</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Total Decisions</span>
                 <span className="text-xl font-bold text-white">{decisions.totalDecisions}</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Deterministic</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Deterministic</span>
                 <span className="text-xl font-bold text-emerald-400">{decisions.byMode.DETERMINISTIC}</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Hybrid (Rules + LLM)</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Hybrid (Rules + LLM)</span>
                 <span className="text-xl font-bold text-purple-400">{decisions.byMode.HYBRID}</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Confirmed Rate</span>
+              <div className="p-3.5 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
+                <span className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] block mb-1">Confirmed Rate</span>
                 <span className="text-xl font-bold text-cyan-400">
                   {Math.round((decisions.confirmedCount / decisions.totalDecisions) * 100)}%
                 </span>
               </div>
             </div>
 
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+            <div className="p-5 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-3">
               <h3 className="text-sm font-bold text-white">Recent Explainable Decisions</h3>
               <div className="space-y-3">
                 {decisions.recentDecisions.map((dec) => (
-                  <div key={dec.decisionId} className="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
+                  <div key={dec.decisionId} className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] space-y-2">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-bold text-white">{dec.title}</span>
                       <span className="font-mono text-emerald-400">{dec.decisionId}</span>
                     </div>
-                    <div className="flex items-center space-x-2 text-[10px] text-slate-400 font-mono">
+                    <div className="flex items-center space-x-2 text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-mono">
                       <span>Engine: {dec.sourceEngine}</span>
                       <span>·</span>
                       <span>Mode: {dec.decisionMode}</span>
@@ -1081,12 +1081,12 @@ export const TrustGovernanceCenter: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between text-xs">
               <h3 className="text-sm font-bold text-white">Data Export Governance Trail</h3>
-              <span className="text-slate-400">Total Exports: {exportsData.totalExports}</span>
+              <span className="text-[#5D6B7B] dark:text-[#A9BACB]">Total Exports: {exportsData.totalExports}</span>
             </div>
 
-            <div className="overflow-x-auto rounded border border-slate-800 bg-slate-900">
-              <table className="w-full text-left text-xs text-slate-300 font-mono">
-                <thead className="bg-slate-950 text-slate-400 border-b border-slate-800 font-sans">
+            <div className="overflow-x-auto rounded border border-[#DCE3EA] dark:border-[#33485D] bg-[#FFFFFF] dark:bg-[#162638]">
+              <table className="w-full text-left text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-mono">
+                <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-sans">
                   <tr>
                     <th className="p-2.5">Export ID</th>
                     <th className="p-2.5">Actor</th>
@@ -1097,23 +1097,23 @@ export const TrustGovernanceCenter: React.FC = () => {
                     <th className="p-2.5 text-right">Timestamp</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                   {exportsData.recentExports.map((exp) => (
-                    <tr key={exp.id} className="hover:bg-slate-850/50">
+                    <tr key={exp.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
                       <td className="p-2.5 text-emerald-400 font-bold">{exp.id}</td>
                       <td className="p-2.5 font-sans">
                         <div className="font-medium text-white">{exp.actorName}</div>
-                        <div className="text-[10px] text-slate-500">{exp.actorRole}</div>
+                        <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8]">{exp.actorRole}</div>
                       </td>
-                      <td className="p-2.5 text-slate-200">{exp.dataset}</td>
-                      <td className="p-2.5 text-slate-400">{exp.filterScope}</td>
-                      <td className="p-2.5 text-slate-300">{exp.recordCount}</td>
+                      <td className="p-2.5 text-[#142C45] dark:text-[#E8EEF5]">{exp.dataset}</td>
+                      <td className="p-2.5 text-[#5D6B7B] dark:text-[#A9BACB]">{exp.filterScope}</td>
+                      <td className="p-2.5 text-[#2D3F54] dark:text-[#CBD5E1]">{exp.recordCount}</td>
                       <td className="p-2.5">
                         <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">
                           {exp.outcome}
                         </span>
                       </td>
-                      <td className="p-2.5 text-right text-slate-400 font-sans">
+                      <td className="p-2.5 text-right text-[#5D6B7B] dark:text-[#A9BACB] font-sans">
                         {new Date(exp.timestamp).toLocaleTimeString()}
                       </td>
                     </tr>
@@ -1129,7 +1129,7 @@ export const TrustGovernanceCenter: React.FC = () => {
         {/* ========================================================================= */}
         {activeTab === 'health' && systemHealth && (
           <div className="space-y-6">
-            <div className="flex items-center space-x-3 p-4 rounded-xl bg-slate-900 border border-slate-800">
+            <div className="flex items-center space-x-3 p-4 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D]">
               <span
                 className={`w-3.5 h-3.5 rounded-full ${
                   systemHealth.overall === 'HEALTHY' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'
@@ -1137,30 +1137,30 @@ export const TrustGovernanceCenter: React.FC = () => {
               />
               <div>
                 <h3 className="text-sm font-bold text-white">Overall Architecture Health: {systemHealth.overall}</h3>
-                <p className="text-xs text-slate-400">Live health verification executed via genuine database pings</p>
+                <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">Live health verification executed via genuine database pings</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {Object.entries(systemHealth.services).map(([key, service]: [string, any]) => (
-                <div key={key} className="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-2">
+                <div key={key} className="p-4 rounded-lg bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase text-slate-300">{key}</span>
+                    <span className="text-xs font-bold uppercase text-[#2D3F54] dark:text-[#CBD5E1]">{key}</span>
                     <span
                       className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                         service.status === 'HEALTHY'
                           ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
                           : service.status === 'NOT_CONFIGURED'
-                          ? 'bg-slate-800 text-slate-400 border border-slate-700'
+                          ? 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB] border border-[#CBD5E1] dark:border-[#33485D]'
                           : 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
                       }`}
                     >
                       {service.status}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">{service.details}</p>
+                  <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed">{service.details}</p>
                   {service.latencyMs !== undefined && (
-                    <div className="text-[10px] text-slate-500 font-mono">Ping Latency: {service.latencyMs}ms</div>
+                    <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] font-mono">Ping Latency: {service.latencyMs}ms</div>
                   )}
                 </div>
               ))}
@@ -1177,12 +1177,12 @@ export const TrustGovernanceCenter: React.FC = () => {
               <h3 className="text-sm font-bold text-white">
                 Active Governance Exceptions ({exceptions?.total || 0})
               </h3>
-              <span className="text-slate-400">Human-controlled lifecycle management</span>
+              <span className="text-[#5D6B7B] dark:text-[#A9BACB]">Human-controlled lifecycle management</span>
             </div>
 
-            <div className="overflow-x-auto rounded border border-slate-800 bg-slate-900">
-              <table className="w-full text-left text-xs text-slate-300 font-mono">
-                <thead className="bg-slate-950 text-slate-400 border-b border-slate-800 font-sans">
+            <div className="overflow-x-auto rounded border border-[#DCE3EA] dark:border-[#33485D] bg-[#FFFFFF] dark:bg-[#162638]">
+              <table className="w-full text-left text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-mono">
+                <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-sans">
                   <tr>
                     <th className="p-2.5">Exception ID</th>
                     <th className="p-2.5">Category</th>
@@ -1193,7 +1193,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                     <th className="p-2.5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                   {(!exceptions?.items || exceptions.items.length === 0) ? (
                     <tr>
                       <td colSpan={7} className="py-12 text-center font-sans">
@@ -1207,9 +1207,9 @@ export const TrustGovernanceCenter: React.FC = () => {
                     </tr>
                   ) : (
                     exceptions.items.map((ex) => (
-                    <tr key={ex.id} className="hover:bg-slate-850/50">
+                    <tr key={ex.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
                       <td className="p-2.5 font-bold text-emerald-400 whitespace-nowrap">{ex.exceptionId}</td>
-                      <td className="p-2.5 text-slate-300">{ex.category}</td>
+                      <td className="p-2.5 text-[#2D3F54] dark:text-[#CBD5E1]">{ex.category}</td>
                       <td className="p-2.5">
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-bold ${
@@ -1223,7 +1223,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                           {ex.severity}
                         </span>
                       </td>
-                      <td className="p-2.5 font-sans text-slate-200 truncate max-w-sm">{ex.description}</td>
+                      <td className="p-2.5 font-sans text-[#142C45] dark:text-[#E8EEF5] truncate max-w-sm">{ex.description}</td>
                       <td className="p-2.5">
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-bold ${
@@ -1237,7 +1237,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                           {ex.status}
                         </span>
                       </td>
-                      <td className="p-2.5 text-slate-400 font-sans truncate max-w-[140px]">
+                      <td className="p-2.5 text-[#5D6B7B] dark:text-[#A9BACB] font-sans truncate max-w-[140px]">
                         {ex.assignedUserName || (ex.assignedTo ? `User #${ex.assignedTo}` : 'Unassigned')}
                       </td>
                       <td className="p-2.5 text-right font-sans space-x-1 whitespace-nowrap">
@@ -1245,7 +1245,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                           <button
                             onClick={() => handleAcknowledge(ex.id)}
                             disabled={actionLoading}
-                            className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs font-medium text-emerald-400"
+                            className="px-2 py-1 rounded bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-slate-700 text-xs font-medium text-emerald-400"
                           >
                             Acknowledge
                           </button>
@@ -1258,7 +1258,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                                 setActionType('assign');
                                 setActionInput(String(ex.assignedTo || user?.id || 1));
                               }}
-                              className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200"
+                              className="px-2 py-1 rounded bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-slate-700 text-xs font-medium text-[#142C45] dark:text-[#E8EEF5]"
                             >
                               Assign
                             </button>
@@ -1287,15 +1287,15 @@ export const TrustGovernanceCenter: React.FC = () => {
 
       {/* Exception Action Modal */}
       {selectedException && actionType && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-md w-full space-y-4">
+        <div className="fixed inset-0 bg-[#F8FAFC] dark:bg-[#101C2A] backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-6 max-w-md w-full space-y-4">
             <h3 className="text-sm font-bold text-white capitalize">
               {actionType} Exception ({selectedException.exceptionId})
             </h3>
-            <p className="text-xs text-slate-400">{selectedException.description}</p>
+            <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">{selectedException.description}</p>
 
             <div className="space-y-1">
-              <label className="text-xs text-slate-300 font-medium">
+              <label className="text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-medium">
                 {actionType === 'assign'
                   ? 'Assignee User ID:'
                   : actionType === 'resolve'
@@ -1311,7 +1311,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                     : 'Provide detailed institutional explanation...'
                 }
                 rows={3}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-2.5 text-xs text-[#142C45] dark:text-[#E8EEF5] focus:outline-none focus:border-emerald-500"
               />
             </div>
 
@@ -1321,7 +1321,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                   setSelectedException(null);
                   setActionType(null);
                 }}
-                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300"
+                className="px-3 py-1.5 rounded-lg bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-slate-700 text-xs font-medium text-[#2D3F54] dark:text-[#CBD5E1]"
               >
                 Cancel
               </button>

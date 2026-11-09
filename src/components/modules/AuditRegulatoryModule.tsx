@@ -60,9 +60,9 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
       mono: true,
       render: (log) => (
         <div>
-          <span className="font-mono text-slate-900 font-medium">{log.timestamp}</span>
-          <div className="text-[10px] text-slate-500 font-sans">
-            Op: <span className="font-semibold text-slate-700">{log.operatorName}</span> ({log.operatorId})
+          <span className="font-mono text-[#142C45] dark:text-[#E8EEF5] font-medium">{log.timestamp}</span>
+          <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] font-sans">
+            Op: <span className="font-semibold text-[#2D3F54] dark:text-[#CBD5E1]">{log.operatorName}</span> ({log.operatorId})
           </div>
         </div>
       ),
@@ -71,7 +71,7 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
       key: 'module',
       header: 'Subsystem / Module',
       render: (log) => (
-        <span className="font-mono text-[11px] px-1.5 py-0.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-xs">
+        <span className="font-mono text-[11px] px-1.5 py-0.5 bg-[#EDF1F5] dark:bg-[#1E3247] text-[#2D3F54] dark:text-[#CBD5E1] border border-[#DCE3EA] dark:border-[#33485D] rounded-xs">
           {log.module}
         </span>
       ),
@@ -81,8 +81,8 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
       header: 'Committed Operation',
       render: (log) => (
         <div>
-          <div className="font-semibold text-slate-900">{log.action.replace(/_/g, ' ')}</div>
-          <div className="text-[11px] text-slate-500 font-mono truncate max-w-[280px]">
+          <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{log.action.replace(/_/g, ' ')}</div>
+          <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-mono truncate max-w-[280px]">
             Ref: {log.recordIdentifier}
           </div>
         </div>
@@ -94,8 +94,8 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
       mono: true,
       render: (log) => (
         <div>
-          <span className="text-slate-800">{log.terminalId}</span>
-          <div className="text-[10px] text-slate-400">{log.ipAddress}</div>
+          <span className="text-[#142C45] dark:text-[#E8EEF5]">{log.terminalId}</span>
+          <div className="text-[10px] text-[#8194A8] dark:text-[#64748B]">{log.ipAddress}</div>
         </div>
       ),
     },
@@ -120,7 +120,7 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
             Reportable
           </span>
         ) : (
-          <span className="text-slate-400 text-[10px] font-mono">Internal</span>
+          <span className="text-[#8194A8] dark:text-[#64748B] text-[10px] font-mono">Internal</span>
         )
       ),
     },
@@ -129,15 +129,15 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
   return (
     <div className="space-y-5">
       {/* Top Banner */}
-      <div className="bg-white border border-slate-200 rounded p-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white border border-[#DCE3EA] dark:border-[#33485D] rounded p-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-slate-800" />
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-900">
+            <ShieldCheck className="w-5 h-5 text-[#142C45] dark:text-[#E8EEF5]" />
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#142C45] dark:text-[#E8EEF5]">
               Regulatory Returns & Statutory Audit Archive (RBI / FIU-IND)
             </h2>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#6B7C93] dark:text-[#8194A8] mt-1">
             Compliant with Section 42(2) of RBI Act, 1934 and Prevention of Money Laundering Act (PMLA), 2002.
           </p>
         </div>
@@ -231,12 +231,12 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
 
       {/* Tab 1: Audit Logs */}
       {activeTab === 'audit-logs' && (
-        <div className="bg-white border border-slate-200 rounded">
-          <div className="p-3 border-b border-slate-200 flex justify-between items-center text-xs">
-            <span className="font-medium text-slate-700">
+        <div className="bg-white border border-[#DCE3EA] dark:border-[#33485D] rounded">
+          <div className="p-3 border-b border-[#DCE3EA] dark:border-[#33485D] flex justify-between items-center text-xs">
+            <span className="font-medium text-[#2D3F54] dark:text-[#CBD5E1]">
               Sequential Ledger & Security Audit Journal (Host: CBS-PROD-01)
             </span>
-            <span className="font-mono text-slate-400">Cryptographically Chained</span>
+            <span className="font-mono text-[#8194A8] dark:text-[#64748B]">Cryptographically Chained</span>
           </div>
           <Table
             columns={logColumns}
@@ -248,13 +248,13 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
 
       {/* Tab 2: RBI Form A */}
       {activeTab === 'rbi-form-a' && (
-        <div className="bg-white border border-slate-200 rounded p-5 space-y-4 text-xs">
-          <div className="flex justify-between items-start pb-3 border-b border-slate-200">
+        <div className="bg-white border border-[#DCE3EA] dark:border-[#33485D] rounded p-5 space-y-4 text-xs">
+          <div className="flex justify-between items-start pb-3 border-b border-[#DCE3EA] dark:border-[#33485D]">
             <div>
-              <h3 className="font-bold text-slate-900 text-sm">
+              <h3 className="font-bold text-[#142C45] dark:text-[#E8EEF5] text-sm">
                 FORM A — Statement of Demand and Time Liabilities and Liquid Assets
               </h3>
-              <p className="text-slate-500 mt-0.5">
+              <p className="text-[#6B7C93] dark:text-[#8194A8] mt-0.5">
                 Submitted under Section 42(2) of Reserve Bank of India Act, 1934 | Alternate Friday Reporting
               </p>
             </div>
@@ -269,8 +269,8 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="border border-slate-200 rounded p-3 space-y-2 bg-slate-50/50">
-              <div className="font-semibold text-slate-900 uppercase text-[11px] border-b border-slate-200 pb-1">
+            <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded p-3 space-y-2 bg-[#F8FAFC] dark:bg-[#101C2A]">
+              <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5] uppercase text-[11px] border-b border-[#DCE3EA] dark:border-[#33485D] pb-1">
                 I. Demand Liabilities (INR)
               </div>
               <div className="flex justify-between">
@@ -287,8 +287,8 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
               </div>
             </div>
 
-            <div className="border border-slate-200 rounded p-3 space-y-2 bg-slate-50/50">
-              <div className="font-semibold text-slate-900 uppercase text-[11px] border-b border-slate-200 pb-1">
+            <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded p-3 space-y-2 bg-[#F8FAFC] dark:bg-[#101C2A]">
+              <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5] uppercase text-[11px] border-b border-[#DCE3EA] dark:border-[#33485D] pb-1">
                 II. Time Liabilities (INR)
               </div>
               <div className="flex justify-between">
@@ -299,7 +299,7 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
                 <span>Cash Certificates / Recurring Deposits:</span>
                 <span className="font-mono">₹24,34,08,00,000.00</span>
               </div>
-              <div className="flex justify-between font-bold text-slate-900 pt-1 border-t border-slate-200">
+              <div className="flex justify-between font-bold text-[#142C45] dark:text-[#E8EEF5] pt-1 border-t border-[#DCE3EA] dark:border-[#33485D]">
                 <span>Total Net Demand and Time Liabilities (NDTL):</span>
                 <span className="font-mono text-emerald-800">₹5,12,90,00,00,000.00</span>
               </div>
@@ -310,13 +310,13 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
 
       {/* Tab 3: FIU-IND Reports */}
       {activeTab === 'fiu-reports' && (
-        <div className="bg-white border border-slate-200 rounded p-5 space-y-4 text-xs">
-          <div className="flex justify-between items-start pb-3 border-b border-slate-200">
+        <div className="bg-white border border-[#DCE3EA] dark:border-[#33485D] rounded p-5 space-y-4 text-xs">
+          <div className="flex justify-between items-start pb-3 border-b border-[#DCE3EA] dark:border-[#33485D]">
             <div>
-              <h3 className="font-bold text-slate-900 text-sm">
+              <h3 className="font-bold text-[#142C45] dark:text-[#E8EEF5] text-sm">
                 Financial Intelligence Unit - India (FIU-IND) Compliance Submissions
               </h3>
-              <p className="text-slate-500 mt-0.5">
+              <p className="text-[#6B7C93] dark:text-[#8194A8] mt-0.5">
                 Reporting Entity (RE) ID: RE-SCB-CRVI-00428 • Portal: FINnet 2.0 Gateway
               </p>
             </div>
@@ -331,20 +331,20 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
           </div>
 
           <div className="space-y-3">
-            <div className="border border-slate-200 rounded p-3 bg-slate-50/50 flex items-center justify-between">
+            <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded p-3 bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between">
               <div>
-                <div className="font-semibold text-slate-900">Cash Transaction Report (CTR) — August 2026</div>
-                <div className="text-slate-500 text-[11px] mt-0.5">
+                <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">Cash Transaction Report (CTR) — August 2026</div>
+                <div className="text-[#6B7C93] dark:text-[#8194A8] text-[11px] mt-0.5">
                   14 transactions aggregating &gt; ₹10,00,000 across current and bullion trading accounts.
                 </div>
               </div>
               <Badge variant="success" size="sm">Transmitted & Acknowledged</Badge>
             </div>
 
-            <div className="border border-slate-200 rounded p-3 bg-slate-50/50 flex items-center justify-between">
+            <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded p-3 bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between">
               <div>
-                <div className="font-semibold text-slate-900">Suspicious Transaction Report (STR) — Ref: STR-2026-088</div>
-                <div className="text-slate-500 text-[11px] mt-0.5">
+                <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">Suspicious Transaction Report (STR) — Ref: STR-2026-088</div>
+                <div className="text-[#6B7C93] dark:text-[#8194A8] text-[11px] mt-0.5">
                   Entity: Deccan Agro Exports LLP (CIF-1192834) • Inward overseas remittance from high-risk jurisdiction.
                 </div>
               </div>

@@ -91,12 +91,12 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-slate-900/40 backdrop-blur-xs flex justify-end animate-fadeIn">
-      <div className="w-full max-w-2xl bg-white h-full shadow-2xl flex flex-col border-l border-slate-200 animate-slideLeft">
+      <div className="w-full max-w-2xl bg-[#FFFFFF] dark:bg-[#162638] h-full shadow-2xl flex flex-col border-l border-[#DCE3EA] dark:border-[#33485D] animate-slideLeft">
         {/* Header */}
-        <div className="p-6 border-b border-slate-200 bg-slate-50 flex items-start justify-between">
+        <div className="p-6 border-b border-[#DCE3EA] dark:border-[#33485D] bg-[#F8FAFC] dark:bg-[#101C2A] flex items-start justify-between">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="font-mono text-xs px-2 py-0.5 rounded font-medium bg-slate-200 text-slate-800">
+              <span className="font-mono text-xs px-2 py-0.5 rounded font-medium bg-[#DCE3EA] dark:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5]">
                 {integration.integrationId}
               </span>
               <span
@@ -106,7 +106,7 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
                     : integration.status === 'AVAILABLE' || integration.status === 'CONNECTED'
                     ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                     : integration.status === 'DISABLED'
-                    ? 'bg-slate-200 text-slate-700'
+                    ? 'bg-[#DCE3EA] dark:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1]'
                     : 'bg-rose-100 text-rose-800 border border-rose-200'
                 }`}
               >
@@ -116,14 +116,14 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
                 {integration.mode}
               </span>
             </div>
-            <h2 className="text-xl font-bold text-slate-900">{integration.name}</h2>
-            <p className="text-xs text-slate-500 mt-0.5 font-mono">
+            <h2 className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5]">{integration.name}</h2>
+            <p className="text-xs text-[#6B7C93] dark:text-[#8194A8] mt-0.5 font-mono">
               Adapter: {integration.adapterType} · v{integration.version} · Domain: {integration.domain}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+            className="p-2 text-[#8194A8] dark:text-[#64748B] hover:text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#DCE3EA] dark:bg-[#26394C] rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -140,7 +140,7 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
         )}
 
         {/* Drawer Tabs */}
-        <div className="flex border-b border-slate-200 px-6 bg-slate-50 overflow-x-auto whitespace-nowrap">
+        <div className="flex border-b border-[#DCE3EA] dark:border-[#33485D] px-6 bg-[#F8FAFC] dark:bg-[#101C2A] overflow-x-auto whitespace-nowrap">
           {(['overview', 'config', 'health', 'credentials'] as const).map((tab) => (
             <button
               key={tab}
@@ -148,7 +148,7 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
               className={`py-3 px-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTab === tab
                   ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+                  : 'border-transparent text-[#6B7C93] dark:text-[#8194A8] hover:text-[#142C45] dark:text-[#E8EEF5]'
               }`}
             >
               {tab}
@@ -162,37 +162,37 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
             <div className="space-y-6">
               {/* Quick KPI Strip */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                  <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Health Status</div>
-                  <div className="text-sm font-bold text-slate-900 flex items-center gap-1.5 mt-1 font-mono">
+                <div className="p-3 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D]">
+                  <div className="text-[10px] font-semibold text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider">Health Status</div>
+                  <div className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] flex items-center gap-1.5 mt-1 font-mono">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     {integration.healthStatus}
                   </div>
                 </div>
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                  <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Success Rate</div>
-                  <div className="text-sm font-bold text-slate-900 mt-1 font-mono">{integration.successRate}%</div>
+                <div className="p-3 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D]">
+                  <div className="text-[10px] font-semibold text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider">Success Rate</div>
+                  <div className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] mt-1 font-mono">{integration.successRate}%</div>
                 </div>
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                  <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Avg Latency</div>
-                  <div className="text-sm font-bold text-slate-900 mt-1 font-mono">{integration.averageLatencyMs} ms</div>
+                <div className="p-3 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D]">
+                  <div className="text-[10px] font-semibold text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider">Avg Latency</div>
+                  <div className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] mt-1 font-mono">{integration.averageLatencyMs} ms</div>
                 </div>
               </div>
 
               {/* Description */}
               <div>
-                <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Capabilities & Scope</h4>
-                <p className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                <h4 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider mb-2">Capabilities & Scope</h4>
+                <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed bg-[#F8FAFC] dark:bg-[#101C2A] p-3.5 rounded-lg border border-[#DCE3EA] dark:border-[#33485D]">
                   {integration.metadata?.description || 'Enterprise integration adapter connected to internal API Gateway.'}
                 </p>
               </div>
 
               {/* Circuit Breaker Status */}
               <div>
-                <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Circuit Breaker Telemetry</h4>
-                <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-2 text-xs font-mono">
+                <h4 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider mb-2">Circuit Breaker Telemetry</h4>
+                <div className="p-3.5 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] space-y-2 text-xs font-mono">
                   <div className="flex justify-between">
-                    <span className="text-slate-500">State:</span>
+                    <span className="text-[#6B7C93] dark:text-[#8194A8]">State:</span>
                     <span
                       className={`font-bold px-2 py-0.5 rounded text-[11px] ${
                         integration.circuitBreaker.state === 'CLOSED'
@@ -206,12 +206,12 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Consecutive Failures:</span>
-                    <span className="font-semibold text-slate-800">{integration.circuitBreaker.consecutiveFailures} / {integration.circuitBreaker.failureThreshold}</span>
+                    <span className="text-[#6B7C93] dark:text-[#8194A8]">Consecutive Failures:</span>
+                    <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{integration.circuitBreaker.consecutiveFailures} / {integration.circuitBreaker.failureThreshold}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Reset Timeout:</span>
-                    <span className="font-semibold text-slate-800">{integration.circuitBreaker.resetTimeoutMs}ms</span>
+                    <span className="text-[#6B7C93] dark:text-[#8194A8]">Reset Timeout:</span>
+                    <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{integration.circuitBreaker.resetTimeoutMs}ms</span>
                   </div>
                 </div>
               </div>
@@ -228,7 +228,7 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
                 <button
                   onClick={handleTestHealth}
                   disabled={isTestingHealth}
-                  className="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 flex items-center justify-center gap-1.5 cursor-pointer transition-colors disabled:opacity-50"
+                  className="py-2.5 px-4 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#DCE3EA] dark:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1] text-xs font-semibold rounded-lg border border-[#CBD5E1] dark:border-[#33485D] flex items-center justify-center gap-1.5 cursor-pointer transition-colors disabled:opacity-50"
                 >
                   <RotateCw className={`w-3.5 h-3.5 ${isTestingHealth ? 'animate-spin' : ''}`} />
                   Check Health
@@ -251,29 +251,29 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
 
           {activeTab === 'config' && (
             <div className="space-y-4">
-              <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Gateway Configuration</h4>
-              <div className="bg-slate-50 rounded-lg border border-slate-200 p-4 space-y-3 font-mono text-xs">
+              <h4 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">Gateway Configuration</h4>
+              <div className="bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 space-y-3 font-mono text-xs">
                 <div>
-                  <div className="text-slate-400 text-[10px] uppercase font-sans">Base URL / Endpoint</div>
-                  <div className="text-slate-900 font-semibold break-all mt-0.5">{integration.baseUrl}</div>
+                  <div className="text-[#8194A8] dark:text-[#64748B] text-[10px] uppercase font-sans">Base URL / Endpoint</div>
+                  <div className="text-[#142C45] dark:text-[#E8EEF5] font-semibold break-all mt-0.5">{integration.baseUrl}</div>
                 </div>
-                <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-200">
+                <div className="grid grid-cols-2 gap-4 pt-2 border-t border-[#DCE3EA] dark:border-[#33485D]">
                   <div>
-                    <div className="text-slate-400 text-[10px] uppercase font-sans">Timeout</div>
-                    <div className="text-slate-900 font-semibold mt-0.5">{integration.timeoutMs} ms</div>
+                    <div className="text-[#8194A8] dark:text-[#64748B] text-[10px] uppercase font-sans">Timeout</div>
+                    <div className="text-[#142C45] dark:text-[#E8EEF5] font-semibold mt-0.5">{integration.timeoutMs} ms</div>
                   </div>
                   <div>
-                    <div className="text-slate-400 text-[10px] uppercase font-sans">Rate Limit</div>
-                    <div className="text-slate-900 font-semibold mt-0.5">{integration.rateLimitRpm} RPM</div>
+                    <div className="text-[#8194A8] dark:text-[#64748B] text-[10px] uppercase font-sans">Rate Limit</div>
+                    <div className="text-[#142C45] dark:text-[#E8EEF5] font-semibold mt-0.5">{integration.rateLimitRpm} RPM</div>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-slate-200">
-                  <div className="text-slate-400 text-[10px] uppercase font-sans">Retry Policy</div>
-                  <div className="text-slate-900 mt-1">
+                <div className="pt-2 border-t border-[#DCE3EA] dark:border-[#33485D]">
+                  <div className="text-[#8194A8] dark:text-[#64748B] text-[10px] uppercase font-sans">Retry Policy</div>
+                  <div className="text-[#142C45] dark:text-[#E8EEF5] mt-1">
                     Max Retries: <span className="font-semibold">{integration.retryPolicy.maxRetries}</span> · Backoff:{' '}
                     <span className="font-semibold">{integration.retryPolicy.backoffMs}ms</span>
                   </div>
-                  <div className="text-slate-500 text-[11px] mt-0.5">
+                  <div className="text-[#6B7C93] dark:text-[#8194A8] text-[11px] mt-0.5">
                     Retryable Codes: {integration.retryPolicy.retryableCodes.join(', ') || 'TIMEOUT, 5xx'}
                   </div>
                 </div>
@@ -284,11 +284,11 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
           {activeTab === 'health' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Health Diagnostics</h4>
+                <h4 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">Health Diagnostics</h4>
                 <button
                   onClick={handleTestHealth}
                   disabled={isTestingHealth}
-                  className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded border border-slate-300 flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-3 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#DCE3EA] dark:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1] text-xs font-semibold rounded border border-[#CBD5E1] dark:border-[#33485D] flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
                   <RotateCw className={`w-3 h-3 ${isTestingHealth ? 'animate-spin' : ''}`} />
                   Run Check
@@ -296,27 +296,27 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
               </div>
 
               {healthResult ? (
-                <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-3 font-mono text-xs">
+                <div className="p-4 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] space-y-3 font-mono text-xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-500 font-sans">Status:</span>
+                    <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Status:</span>
                     <span className="font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
                       {healthResult.status}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-500 font-sans">Measured Latency:</span>
-                    <span className="font-bold text-slate-900">{healthResult.latencyMs} ms</span>
+                    <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Measured Latency:</span>
+                    <span className="font-bold text-[#142C45] dark:text-[#E8EEF5]">{healthResult.latencyMs} ms</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-500 font-sans">Timestamp:</span>
-                    <span className="text-slate-700">{healthResult.timestamp}</span>
+                    <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Timestamp:</span>
+                    <span className="text-[#2D3F54] dark:text-[#CBD5E1]">{healthResult.timestamp}</span>
                   </div>
-                  <div className="pt-2 border-t border-slate-200">
-                    <span className="text-slate-500 font-sans block mb-1">Sub-system Checks:</span>
+                  <div className="pt-2 border-t border-[#DCE3EA] dark:border-[#33485D]">
+                    <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans block mb-1">Sub-system Checks:</span>
                     <div className="space-y-1 pl-2">
                       {Object.entries(healthResult.details.checks || {}).map(([key, ok]) => (
                         <div key={key} className="flex items-center justify-between">
-                          <span className="text-slate-700">{key}:</span>
+                          <span className="text-[#2D3F54] dark:text-[#CBD5E1]">{key}:</span>
                           <span className={ok ? 'text-emerald-600 font-bold' : 'text-rose-600 font-bold'}>
                             {ok ? 'PASS' : 'FAIL'}
                           </span>
@@ -326,7 +326,7 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
                   </div>
                 </div>
               ) : (
-                <div className="p-6 bg-slate-50 border border-slate-200 rounded-lg text-center text-xs text-slate-500">
+                <div className="p-6 bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg text-center text-xs text-[#6B7C93] dark:text-[#8194A8]">
                   Click 'Run Check' to execute live adapter diagnostic inspection.
                 </div>
               )}
@@ -335,19 +335,19 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
 
           {activeTab === 'credentials' && (
             <div className="space-y-4">
-              <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Credential Metadata</h4>
-              <div className="bg-slate-50 rounded-lg border border-slate-200 p-4 space-y-3 font-mono text-xs">
+              <h4 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">Credential Metadata</h4>
+              <div className="bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 space-y-3 font-mono text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500 font-sans">Active Key Prefix:</span>
-                  <span className="font-bold text-slate-900 bg-slate-200 px-2 py-0.5 rounded">cv_sim_9984...</span>
+                  <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Active Key Prefix:</span>
+                  <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] bg-[#DCE3EA] dark:bg-[#26394C] px-2 py-0.5 rounded">cv_sim_9984...</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500 font-sans">Secret Storage:</span>
+                  <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Secret Storage:</span>
                   <span className="text-emerald-700 font-semibold font-sans">Hashed (SHA-256)</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500 font-sans">Environment:</span>
-                  <span className="text-slate-800">{integration.environment}</span>
+                  <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Environment:</span>
+                  <span className="text-[#142C45] dark:text-[#E8EEF5]">{integration.environment}</span>
                 </div>
                 <div className="p-2.5 bg-amber-50 rounded border border-amber-200 text-[11px] text-amber-900 font-sans">
                   <strong>Zero Secrets Policy:</strong> Plain-text API keys and secrets are never displayed or stored in unhashed form after initial provisioning.

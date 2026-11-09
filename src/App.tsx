@@ -116,6 +116,8 @@ const pathToModule: Record<string, ModuleType> = {
   '/portfolio-intelligence': 'portfolio-intelligence',
   '/integrations': 'integrations',
   '/admin': 'admin',
+  '/settings': 'admin',
+  '/preferences': 'admin',
   '/showcase': 'showcase',
 };
 
@@ -183,7 +185,7 @@ function BankingWorkplace() {
   const canAccessOperations = hasRole('ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'MAKER_L2', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS') || hasPermission('admin:all') || hasPermission('operations:view');
   const canAccessPortfolio = hasRole('ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS') || hasPermission('admin:all') || hasPermission('portfolio:view') || hasPermission('analytics:view');
   const canAccessIntegrations = hasRole('ADMINISTRATOR', 'COMPLIANCE_OFFICER', 'BRANCH_OPS_HEAD', 'RELATIONSHIP_MANAGER', 'AUDITOR', 'BRANCH_MANAGER', 'OPERATIONS') || hasPermission('admin:all') || hasPermission('integrations:view');
-  const canAccessAdmin = hasRole('ADMINISTRATOR') || hasPermission('admin:all');
+  const canAccessAdmin = true; // Internal RBAC in AdminWorkspace governs privileged admin tabs vs personal preferences
 
   // Navigation State initialized from URL path
   const [activeModule, setActiveModule] = useState<ModuleType>(() => {

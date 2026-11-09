@@ -141,7 +141,7 @@ export const IntegrationsWorkspace: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Enterprise Context Header */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-6 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
@@ -151,12 +151,12 @@ export const IntegrationsWorkspace: React.FC = () => {
               <span className="px-2 py-0.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold rounded">
                 ENV: DEVELOPMENT
               </span>
-              <span className="text-xs text-slate-500 font-mono">
+              <span className="text-xs text-[#6B7C93] dark:text-[#8194A8] font-mono">
                 As of: {new Date().toLocaleTimeString()} (Active Session)
               </span>
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Enterprise Integration & API Gateway</h1>
-            <p className="text-xs text-slate-500 mt-1">
+            <h1 className="text-2xl font-bold text-[#142C45] dark:text-[#E8EEF5] tracking-tight">Enterprise Integration & API Gateway</h1>
+            <p className="text-xs text-[#6B7C93] dark:text-[#8194A8] mt-1">
               Internal gateway routing, synthetic adapter simulators, webhook delivery engine, and strict idempotency controls.
             </p>
           </div>
@@ -176,15 +176,15 @@ export const IntegrationsWorkspace: React.FC = () => {
             </button>
             <button
               onClick={() => setIsNewWebhookModalOpen(true)}
-              className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-2 bg-[#FFFFFF] dark:bg-[#162638] hover:bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] text-[#2D3F54] dark:text-[#CBD5E1] text-xs font-semibold rounded-lg shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5 text-slate-500" />
+              <Plus className="w-3.5 h-3.5 text-[#6B7C93] dark:text-[#8194A8]" />
               New Webhook
             </button>
             <button
               onClick={loadData}
               disabled={isLoading}
-              className="p-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-600 rounded-lg shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+              className="p-2 bg-[#FFFFFF] dark:bg-[#162638] hover:bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] text-[#5D6B7B] dark:text-[#A9BACB] rounded-lg shadow-xs transition-colors cursor-pointer disabled:opacity-50"
               title="Refresh Gateway Telemetry"
             >
               <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -193,59 +193,59 @@ export const IntegrationsWorkspace: React.FC = () => {
         </div>
 
         {/* 6 High-Level Gateway KPIs */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-6 pt-6 border-t border-slate-200">
-          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Integrations</div>
-            <div className="text-xl font-bold text-slate-900 font-mono mt-0.5">{summary?.totalIntegrations || integrations.length}</div>
-            <div className="text-[10px] text-slate-500 mt-0.5">Registered In Gateway</div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-6 pt-6 border-t border-[#DCE3EA] dark:border-[#33485D]">
+          <div className="p-3 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D]">
+            <div className="text-[10px] font-semibold text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider">Integrations</div>
+            <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono mt-0.5">{summary?.totalIntegrations || integrations.length}</div>
+            <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] mt-0.5">Registered In Gateway</div>
           </div>
           <div className="p-3 bg-purple-50/60 rounded-lg border border-purple-200">
             <div className="text-[10px] font-semibold text-purple-700 uppercase tracking-wider">Simulators</div>
             <div className="text-xl font-bold text-purple-900 font-mono mt-0.5">{summary?.simulatedCount || 5}</div>
             <div className="text-[10px] text-purple-700 mt-0.5">Synthetic FinTech Rails</div>
           </div>
-          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">24h Gateway Events</div>
-            <div className="text-xl font-bold text-slate-900 font-mono mt-0.5">{summary?.totalEvents24h || events.length}</div>
-            <div className="text-[10px] text-slate-500 mt-0.5">Inbound & Outbound</div>
+          <div className="p-3 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D]">
+            <div className="text-[10px] font-semibold text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider">24h Gateway Events</div>
+            <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono mt-0.5">{summary?.totalEvents24h || events.length}</div>
+            <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] mt-0.5">Inbound & Outbound</div>
           </div>
-          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Success Rate</div>
+          <div className="p-3 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D]">
+            <div className="text-[10px] font-semibold text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider">Success Rate</div>
             <div className="text-xl font-bold text-emerald-700 font-mono mt-0.5">{summary?.successRate || 99.5}%</div>
             <div className="text-[10px] text-emerald-600 mt-0.5">Verified Deliveries</div>
           </div>
-          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Avg Latency</div>
-            <div className="text-xl font-bold text-slate-900 font-mono mt-0.5">{summary?.averageLatencyMs || 42} ms</div>
-            <div className="text-[10px] text-slate-500 mt-0.5">Gateway Processing</div>
+          <div className="p-3 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D]">
+            <div className="text-[10px] font-semibold text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider">Avg Latency</div>
+            <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono mt-0.5">{summary?.averageLatencyMs || 42} ms</div>
+            <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] mt-0.5">Gateway Processing</div>
           </div>
-          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Circuit Breakers</div>
+          <div className="p-3 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-lg border border-[#DCE3EA] dark:border-[#33485D]">
+            <div className="text-[10px] font-semibold text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider">Circuit Breakers</div>
             <div className="text-xl font-bold text-emerald-700 font-mono mt-0.5 flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               ALL CLOSED
             </div>
-            <div className="text-[10px] text-slate-500 mt-0.5">Normal Operational State</div>
+            <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] mt-0.5">Normal Operational State</div>
           </div>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-3">
         <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 flex-1 min-w-[260px] max-w-md">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-[#8194A8] dark:text-[#64748B] absolute left-3 top-2.5" />
             <input
               type="text"
               placeholder="Search by ID, name, or correlation ID..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full pl-9 pr-3 py-1.5 bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg text-xs font-medium text-[#142C45] dark:text-[#E8EEF5] focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
           <button
             type="submit"
-            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 cursor-pointer"
+            className="px-3 py-1.5 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#DCE3EA] dark:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1] text-xs font-semibold rounded-lg border border-[#CBD5E1] dark:border-[#33485D] cursor-pointer"
           >
             Search
           </button>
@@ -255,7 +255,7 @@ export const IntegrationsWorkspace: React.FC = () => {
           <select
             value={domainFilter}
             onChange={(e) => setDomainFilter(e.target.value)}
-            className="px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium text-slate-700 focus:outline-none"
+            className="px-2.5 py-1.5 bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg text-xs font-medium text-[#2D3F54] dark:text-[#CBD5E1] focus:outline-none"
           >
             <option value="">All Domains</option>
             <option value="CORE_BANKING">Core Banking</option>
@@ -270,7 +270,7 @@ export const IntegrationsWorkspace: React.FC = () => {
           <select
             value={modeFilter}
             onChange={(e) => setModeFilter(e.target.value)}
-            className="px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium text-slate-700 focus:outline-none"
+            className="px-2.5 py-1.5 bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg text-xs font-medium text-[#2D3F54] dark:text-[#CBD5E1] focus:outline-none"
           >
             <option value="">All Modes</option>
             <option value="SIMULATOR">Simulator</option>
@@ -281,7 +281,7 @@ export const IntegrationsWorkspace: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium text-slate-700 focus:outline-none"
+            className="px-2.5 py-1.5 bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg text-xs font-medium text-[#2D3F54] dark:text-[#CBD5E1] focus:outline-none"
           >
             <option value="">All Statuses</option>
             <option value="SIMULATED">Simulated</option>
@@ -295,8 +295,8 @@ export const IntegrationsWorkspace: React.FC = () => {
       </div>
 
       {/* Main Tabs Navigation */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
-        <div className="flex border-b border-slate-200 overflow-x-auto bg-slate-50">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl shadow-xs overflow-hidden">
+        <div className="flex border-b border-[#DCE3EA] dark:border-[#33485D] overflow-x-auto bg-[#F8FAFC] dark:bg-[#101C2A]">
           {[
             { id: 'overview', label: 'Overview', icon: Layers },
             { id: 'integrations', label: `Integrations (${integrations.length})`, icon: Network },
@@ -314,11 +314,11 @@ export const IntegrationsWorkspace: React.FC = () => {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`py-3.5 px-4 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-colors cursor-pointer shrink-0 ${
                   isActive
-                    ? 'border-indigo-600 text-indigo-600 bg-white'
-                    : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-100'
+                    ? 'border-indigo-600 text-indigo-600 bg-[#FFFFFF] dark:bg-[#162638]'
+                    : 'border-transparent text-[#6B7C93] dark:text-[#8194A8] hover:text-[#142C45] dark:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:bg-[#1E3247]'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-[#8194A8] dark:text-[#64748B]'}`} />
                 {tab.label}
               </button>
             );
@@ -340,7 +340,7 @@ export const IntegrationsWorkspace: React.FC = () => {
 
               {/* Quick Simulator Launchers */}
               <div>
-                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+                <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider mb-3">
                   Synthetic Adapter Simulators (Click to execute)
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -350,23 +350,23 @@ export const IntegrationsWorkspace: React.FC = () => {
                       <div
                         key={item.integrationId}
                         onClick={() => handleOpenDrawer(item)}
-                        className="p-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl cursor-pointer transition-all hover:border-indigo-300 group"
+                        className="p-4 bg-[#F8FAFC] dark:bg-[#101C2A] hover:bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl cursor-pointer transition-all hover:border-indigo-300 group"
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-mono text-[11px] px-2 py-0.5 rounded font-semibold bg-white border border-slate-300 text-slate-800">
+                          <span className="font-mono text-[11px] px-2 py-0.5 rounded font-semibold bg-[#FFFFFF] dark:bg-[#162638] border border-[#CBD5E1] dark:border-[#33485D] text-[#142C45] dark:text-[#E8EEF5]">
                             {item.integrationId}
                           </span>
                           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">
                             {item.status}
                           </span>
                         </div>
-                        <h4 className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                        <h4 className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] group-hover:text-indigo-600 transition-colors">
                           {item.name}
                         </h4>
-                        <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                        <p className="text-xs text-[#6B7C93] dark:text-[#8194A8] mt-1 line-clamp-2">
                           {item.metadata?.description}
                         </p>
-                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#DCE3EA] dark:border-[#33485D] text-[11px] font-mono text-[#6B7C93] dark:text-[#8194A8]">
                           <span>Latency: {item.averageLatencyMs}ms</span>
                           <span className="text-indigo-600 font-semibold group-hover:underline flex items-center gap-0.5 font-sans">
                             Details <ChevronRight className="w-3.5 h-3.5" />
@@ -380,7 +380,7 @@ export const IntegrationsWorkspace: React.FC = () => {
               {/* Recent Events Snapshot */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                  <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">
                     Recent Gateway Telemetry
                   </h3>
                   <button
@@ -390,9 +390,9 @@ export const IntegrationsWorkspace: React.FC = () => {
                     View all events →
                   </button>
                 </div>
-                <div className="border border-slate-200 rounded-lg overflow-x-auto">
+                <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded-lg overflow-x-auto">
                   <table className="w-full text-xs text-left">
-                    <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-semibold uppercase tracking-wider text-[10px]">
                       <tr>
                         <th className="py-2.5 px-4">Event ID</th>
                         <th className="py-2.5 px-4">Integration</th>
@@ -402,18 +402,18 @@ export const IntegrationsWorkspace: React.FC = () => {
                         <th className="py-2.5 px-4">Latency</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-200">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {events.slice(0, 5).map((ev) => (
-                        <tr key={ev.eventId} className="hover:bg-slate-50">
-                          <td className="py-2 px-4 font-mono font-medium text-slate-800">{ev.eventId}</td>
-                          <td className="py-2 px-4 font-mono text-slate-600">{ev.integrationId}</td>
-                          <td className="py-2 px-4 font-medium text-slate-900">{ev.eventType}</td>
+                        <tr key={ev.eventId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]">
+                          <td className="py-2 px-4 font-mono font-medium text-[#142C45] dark:text-[#E8EEF5]">{ev.eventId}</td>
+                          <td className="py-2 px-4 font-mono text-[#5D6B7B] dark:text-[#A9BACB]">{ev.integrationId}</td>
+                          <td className="py-2 px-4 font-medium text-[#142C45] dark:text-[#E8EEF5]">{ev.eventType}</td>
                           <td className="py-2 px-4">
                             <span
                               className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${
                                 ev.direction === 'INBOUND'
                                   ? 'bg-blue-100 text-blue-800'
-                                  : 'bg-slate-100 text-slate-800'
+                                  : 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#142C45] dark:text-[#E8EEF5]'
                               }`}
                             >
                               {ev.direction}
@@ -430,7 +430,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                               {ev.status}
                             </span>
                           </td>
-                          <td className="py-2 px-4 font-mono text-slate-600">{ev.latencyMs}ms</td>
+                          <td className="py-2 px-4 font-mono text-[#5D6B7B] dark:text-[#A9BACB]">{ev.latencyMs}ms</td>
                         </tr>
                       ))}
                     </tbody>
@@ -443,9 +443,9 @@ export const IntegrationsWorkspace: React.FC = () => {
           {/* TAB 2: INTEGRATIONS TABLE */}
           {activeTab === 'integrations' && (
             <div className="space-y-4">
-              <div className="border border-slate-200 rounded-lg overflow-x-auto">
+              <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
+                  <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-semibold uppercase tracking-wider text-[10px]">
                     <tr>
                       <th className="py-3 px-4">Integration</th>
                       <th className="py-3 px-4">Domain</th>
@@ -457,7 +457,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                       <th className="py-3 px-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200">
+                  <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                     {integrations.length === 0 ? (
                       <tr>
                         <td colSpan={8} className="py-10 text-center">
@@ -471,14 +471,14 @@ export const IntegrationsWorkspace: React.FC = () => {
                       </tr>
                     ) : (
                       integrations.map((item) => (
-                      <tr key={item.integrationId} className="hover:bg-slate-50/80 transition-colors">
+                      <tr key={item.integrationId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
                         <td className="py-3 px-4">
-                          <div className="font-bold text-slate-900">{item.name}</div>
-                          <div className="font-mono text-[11px] text-slate-500">{item.integrationId}</div>
+                          <div className="font-bold text-[#142C45] dark:text-[#E8EEF5]">{item.name}</div>
+                          <div className="font-mono text-[11px] text-[#6B7C93] dark:text-[#8194A8]">{item.integrationId}</div>
                         </td>
-                        <td className="py-3 px-4 font-mono text-slate-700">{item.domain}</td>
+                        <td className="py-3 px-4 font-mono text-[#2D3F54] dark:text-[#CBD5E1]">{item.domain}</td>
                         <td className="py-3 px-4">
-                          <span className="px-2 py-0.5 rounded font-mono text-[10px] bg-slate-100 text-slate-800 border border-slate-300">
+                          <span className="px-2 py-0.5 rounded font-mono text-[10px] bg-[#EDF1F5] dark:bg-[#1E3247] text-[#142C45] dark:text-[#E8EEF5] border border-[#CBD5E1] dark:border-[#33485D]">
                             {item.mode}
                           </span>
                         </td>
@@ -490,21 +490,21 @@ export const IntegrationsWorkspace: React.FC = () => {
                                 : item.status === 'AVAILABLE' || item.status === 'CONNECTED'
                                 ? 'bg-emerald-100 text-emerald-800'
                                 : item.status === 'DISABLED'
-                                ? 'bg-slate-200 text-slate-700'
+                                ? 'bg-[#DCE3EA] dark:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1]'
                                 : 'bg-rose-100 text-rose-800'
                             }`}
                           >
                             {item.status}
                           </span>
                         </td>
-                        <td className="py-3 px-4 font-mono text-slate-600">v{item.version}</td>
+                        <td className="py-3 px-4 font-mono text-[#5D6B7B] dark:text-[#A9BACB]">v{item.version}</td>
                         <td className="py-3 px-4 font-mono">
                           <span className="flex items-center gap-1 text-emerald-700 font-semibold">
                             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                             {item.healthStatus}
                           </span>
                         </td>
-                        <td className="py-3 px-4 font-mono text-slate-700">{item.averageLatencyMs} ms</td>
+                        <td className="py-3 px-4 font-mono text-[#2D3F54] dark:text-[#CBD5E1]">{item.averageLatencyMs} ms</td>
                         <td className="py-3 px-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
                             <button
@@ -516,7 +516,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                             </button>
                             <button
                               onClick={() => handleOpenDrawer(item)}
-                              className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded text-[11px] cursor-pointer"
+                              className="px-2 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#DCE3EA] dark:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1] font-semibold rounded text-[11px] cursor-pointer"
                             >
                               Inspect
                             </button>
@@ -534,9 +534,9 @@ export const IntegrationsWorkspace: React.FC = () => {
           {/* TAB 3: ENDPOINTS REGISTRY */}
           {activeTab === 'endpoints' && (
             <div className="space-y-4">
-              <div className="border border-slate-200 rounded-lg overflow-x-auto">
+              <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
+                  <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-semibold uppercase tracking-wider text-[10px]">
                     <tr>
                       <th className="py-3 px-4">Endpoint ID</th>
                       <th className="py-3 px-4">Integration</th>
@@ -548,7 +548,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                       <th className="py-3 px-4">Idempotency</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200 font-mono">
+                  <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D] font-mono">
                     {endpoints.length === 0 ? (
                       <tr>
                         <td colSpan={8} className="py-10 text-center font-sans">
@@ -562,9 +562,9 @@ export const IntegrationsWorkspace: React.FC = () => {
                       </tr>
                     ) : (
                       endpoints.map((ep) => (
-                      <tr key={ep.endpointId} className="hover:bg-slate-50">
-                        <td className="py-3 px-4 font-bold text-slate-900">{ep.endpointId}</td>
-                        <td className="py-3 px-4 text-slate-600">{ep.integrationId}</td>
+                      <tr key={ep.endpointId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]">
+                        <td className="py-3 px-4 font-bold text-[#142C45] dark:text-[#E8EEF5]">{ep.endpointId}</td>
+                        <td className="py-3 px-4 text-[#5D6B7B] dark:text-[#A9BACB]">{ep.integrationId}</td>
                         <td className="py-3 px-4">
                           <span
                             className={`px-1.5 py-0.5 rounded text-[10px] font-bold mr-1.5 ${
@@ -572,23 +572,23 @@ export const IntegrationsWorkspace: React.FC = () => {
                                 ? 'bg-blue-100 text-blue-800'
                                 : ep.method === 'POST'
                                 ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-slate-100 text-slate-800'
+                                : 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#142C45] dark:text-[#E8EEF5]'
                             }`}
                           >
                             {ep.method}
                           </span>
-                          <span className="text-slate-900 font-medium">{ep.path}</span>
+                          <span className="text-[#142C45] dark:text-[#E8EEF5] font-medium">{ep.path}</span>
                         </td>
-                        <td className="py-3 px-4 font-sans text-slate-600 max-w-xs truncate">{ep.purpose}</td>
-                        <td className="py-3 px-4 text-slate-600 text-[11px]">{ep.authType}</td>
-                        <td className="py-3 px-4 text-slate-700">{ep.rateLimit} RPM</td>
-                        <td className="py-3 px-4 text-slate-700">{ep.timeoutMs} ms</td>
+                        <td className="py-3 px-4 font-sans text-[#5D6B7B] dark:text-[#A9BACB] max-w-xs truncate">{ep.purpose}</td>
+                        <td className="py-3 px-4 text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">{ep.authType}</td>
+                        <td className="py-3 px-4 text-[#2D3F54] dark:text-[#CBD5E1]">{ep.rateLimit} RPM</td>
+                        <td className="py-3 px-4 text-[#2D3F54] dark:text-[#CBD5E1]">{ep.timeoutMs} ms</td>
                         <td className="py-3 px-4">
                           <span
                             className={`px-1.5 py-0.5 rounded text-[10px] font-sans font-semibold ${
                               ep.idempotencyRequired
                                 ? 'bg-indigo-100 text-indigo-800'
-                                : 'bg-slate-100 text-slate-500'
+                                : 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#6B7C93] dark:text-[#8194A8]'
                             }`}
                           >
                             {ep.idempotencyRequired ? 'MANDATORY' : 'OPTIONAL'}
@@ -607,7 +607,7 @@ export const IntegrationsWorkspace: React.FC = () => {
           {activeTab === 'webhooks' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">
                   Registered Webhook Subscriptions
                 </h3>
                 <button
@@ -619,9 +619,9 @@ export const IntegrationsWorkspace: React.FC = () => {
                 </button>
               </div>
 
-              <div className="border border-slate-200 rounded-lg overflow-x-auto">
+              <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
+                  <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-semibold uppercase tracking-wider text-[10px]">
                     <tr>
                       <th className="py-3 px-4">Webhook ID</th>
                       <th className="py-3 px-4">Integration</th>
@@ -632,7 +632,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                       <th className="py-3 px-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200 font-mono">
+                  <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D] font-mono">
                     {webhooks.length === 0 ? (
                       <tr>
                         <td colSpan={7} className="py-10 text-center font-sans">
@@ -646,17 +646,17 @@ export const IntegrationsWorkspace: React.FC = () => {
                       </tr>
                     ) : (
                       webhooks.map((wh) => (
-                      <tr key={wh.webhookId} className="hover:bg-slate-50">
-                        <td className="py-3 px-4 font-bold text-slate-900">{wh.webhookId}</td>
-                        <td className="py-3 px-4 text-slate-600">{wh.integrationId}</td>
+                      <tr key={wh.webhookId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]">
+                        <td className="py-3 px-4 font-bold text-[#142C45] dark:text-[#E8EEF5]">{wh.webhookId}</td>
+                        <td className="py-3 px-4 text-[#5D6B7B] dark:text-[#A9BACB]">{wh.integrationId}</td>
                         <td className="py-3 px-4 text-indigo-700 font-semibold">{wh.eventType}</td>
-                        <td className="py-3 px-4 text-slate-600 truncate max-w-xs">{wh.targetUrl}</td>
+                        <td className="py-3 px-4 text-[#5D6B7B] dark:text-[#A9BACB] truncate max-w-xs">{wh.targetUrl}</td>
                         <td className="py-3 px-4">
                           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
                             {wh.status}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-slate-700">{wh.failureCount}</td>
+                        <td className="py-3 px-4 text-[#2D3F54] dark:text-[#CBD5E1]">{wh.failureCount}</td>
                         <td className="py-3 px-4 text-right font-sans">
                           <button
                             onClick={async () => {
@@ -671,7 +671,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                                 toast.error(`Test failed: ${e.message}`);
                               }
                             }}
-                            className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold rounded cursor-pointer"
+                            className="px-2 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#DCE3EA] dark:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1] text-[11px] font-semibold rounded cursor-pointer"
                           >
                             Trigger Test
                           </button>
@@ -685,12 +685,12 @@ export const IntegrationsWorkspace: React.FC = () => {
 
               {/* Delivery History */}
               <div>
-                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+                <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider mb-3">
                   Recent Webhook Delivery Attempts
                 </h3>
-                <div className="border border-slate-200 rounded-lg overflow-x-auto">
+                <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded-lg overflow-x-auto">
                   <table className="w-full text-xs text-left">
-                    <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-semibold uppercase tracking-wider text-[10px]">
                       <tr>
                         <th className="py-2.5 px-4">Delivery ID</th>
                         <th className="py-2.5 px-4">Webhook</th>
@@ -702,7 +702,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                         <th className="py-2.5 px-4 text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-200 font-mono">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D] font-mono">
                       {deliveries.length === 0 ? (
                         <tr>
                           <td colSpan={8} className="py-8 text-center font-sans">
@@ -716,10 +716,10 @@ export const IntegrationsWorkspace: React.FC = () => {
                         </tr>
                       ) : (
                         deliveries.map((del) => (
-                        <tr key={del.deliveryId} className="hover:bg-slate-50">
-                          <td className="py-2 px-4 font-bold text-slate-900">{del.deliveryId}</td>
-                          <td className="py-2 px-4 text-slate-600">{del.webhookId}</td>
-                          <td className="py-2 px-4 text-slate-700">Attempt #{del.attempt}</td>
+                        <tr key={del.deliveryId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]">
+                          <td className="py-2 px-4 font-bold text-[#142C45] dark:text-[#E8EEF5]">{del.deliveryId}</td>
+                          <td className="py-2 px-4 text-[#5D6B7B] dark:text-[#A9BACB]">{del.webhookId}</td>
+                          <td className="py-2 px-4 text-[#2D3F54] dark:text-[#CBD5E1]">Attempt #{del.attempt}</td>
                           <td className="py-2 px-4">
                             <span
                               className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
@@ -733,9 +733,9 @@ export const IntegrationsWorkspace: React.FC = () => {
                               {del.status}
                             </span>
                           </td>
-                          <td className="py-2 px-4 text-slate-700">{del.httpStatus || '---'}</td>
-                          <td className="py-2 px-4 text-slate-600">{del.latencyMs ? `${del.latencyMs}ms` : '---'}</td>
-                          <td className="py-2 px-4 font-sans text-slate-500 max-w-xs truncate">
+                          <td className="py-2 px-4 text-[#2D3F54] dark:text-[#CBD5E1]">{del.httpStatus || '---'}</td>
+                          <td className="py-2 px-4 text-[#5D6B7B] dark:text-[#A9BACB]">{del.latencyMs ? `${del.latencyMs}ms` : '---'}</td>
+                          <td className="py-2 px-4 font-sans text-[#6B7C93] dark:text-[#8194A8] max-w-xs truncate">
                             {del.error || 'Acknowledged'}
                           </td>
                           <td className="py-2 px-4 text-right font-sans">
@@ -762,9 +762,9 @@ export const IntegrationsWorkspace: React.FC = () => {
           {/* TAB 5: EVENTS STREAM */}
           {activeTab === 'events' && (
             <div className="space-y-4">
-              <div className="border border-slate-200 rounded-lg overflow-x-auto">
+              <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
+                  <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-semibold uppercase tracking-wider text-[10px]">
                     <tr>
                       <th className="py-3 px-4">Event ID</th>
                       <th className="py-3 px-4">Integration</th>
@@ -776,7 +776,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                       <th className="py-3 px-4">Timestamp</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200 font-mono">
+                  <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D] font-mono">
                     {events.length === 0 ? (
                       <tr>
                         <td colSpan={8} className="py-10 text-center font-sans">
@@ -790,20 +790,20 @@ export const IntegrationsWorkspace: React.FC = () => {
                       </tr>
                     ) : (
                       events.map((ev) => (
-                      <tr key={ev.eventId} className="hover:bg-slate-50">
-                        <td className="py-2.5 px-4 font-bold text-slate-900">{ev.eventId}</td>
-                        <td className="py-2.5 px-4 text-slate-600">{ev.integrationId}</td>
-                        <td className="py-2.5 px-4 font-sans font-semibold text-slate-800">{ev.eventType}</td>
+                      <tr key={ev.eventId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]">
+                        <td className="py-2.5 px-4 font-bold text-[#142C45] dark:text-[#E8EEF5]">{ev.eventId}</td>
+                        <td className="py-2.5 px-4 text-[#5D6B7B] dark:text-[#A9BACB]">{ev.integrationId}</td>
+                        <td className="py-2.5 px-4 font-sans font-semibold text-[#142C45] dark:text-[#E8EEF5]">{ev.eventType}</td>
                         <td className="py-2.5 px-4">
                           <span
                             className={`px-1.5 py-0.5 rounded text-[10px] ${
-                              ev.direction === 'INBOUND' ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-800'
+                              ev.direction === 'INBOUND' ? 'bg-blue-100 text-blue-800' : 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#142C45] dark:text-[#E8EEF5]'
                             }`}
                           >
                             {ev.direction}
                           </span>
                         </td>
-                        <td className="py-2.5 px-4 text-slate-500 text-[11px] truncate max-w-[140px]">
+                        <td className="py-2.5 px-4 text-[#6B7C93] dark:text-[#8194A8] text-[11px] truncate max-w-[140px]">
                           {ev.correlationId}
                         </td>
                         <td className="py-2.5 px-4">
@@ -815,8 +815,8 @@ export const IntegrationsWorkspace: React.FC = () => {
                             {ev.status}
                           </span>
                         </td>
-                        <td className="py-2.5 px-4 text-slate-600">{ev.latencyMs} ms</td>
-                        <td className="py-2.5 px-4 text-slate-500 text-[11px] font-sans">
+                        <td className="py-2.5 px-4 text-[#5D6B7B] dark:text-[#A9BACB]">{ev.latencyMs} ms</td>
+                        <td className="py-2.5 px-4 text-[#6B7C93] dark:text-[#8194A8] text-[11px] font-sans">
                           {new Date(ev.createdAt).toLocaleTimeString()}
                         </td>
                       </tr>
@@ -838,9 +838,9 @@ export const IntegrationsWorkspace: React.FC = () => {
                 </span>
               </div>
 
-              <div className="border border-slate-200 rounded-lg overflow-x-auto">
+              <div className="border border-[#DCE3EA] dark:border-[#33485D] rounded-lg overflow-x-auto">
                 <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
+                  <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#A9BACB] border-b border-[#DCE3EA] dark:border-[#33485D] font-semibold uppercase tracking-wider text-[10px]">
                     <tr>
                       <th className="py-3 px-4">Event ID</th>
                       <th className="py-3 px-4">Integration</th>
@@ -851,24 +851,24 @@ export const IntegrationsWorkspace: React.FC = () => {
                       <th className="py-3 px-4">Timestamp</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200 font-mono">
+                  <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D] font-mono">
                     {failures.map((f) => (
-                      <tr key={f.eventId} className="hover:bg-slate-50">
-                        <td className="py-2.5 px-4 font-bold text-slate-900">{f.eventId}</td>
-                        <td className="py-2.5 px-4 text-slate-600">{f.integrationId}</td>
+                      <tr key={f.eventId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]">
+                        <td className="py-2.5 px-4 font-bold text-[#142C45] dark:text-[#E8EEF5]">{f.eventId}</td>
+                        <td className="py-2.5 px-4 text-[#5D6B7B] dark:text-[#A9BACB]">{f.integrationId}</td>
                         <td className="py-2.5 px-4 text-rose-700 font-bold">{f.errorCode || 'ERROR'}</td>
-                        <td className="py-2.5 px-4 font-sans text-slate-700 max-w-sm">{f.errorMessage}</td>
+                        <td className="py-2.5 px-4 font-sans text-[#2D3F54] dark:text-[#CBD5E1] max-w-sm">{f.errorMessage}</td>
                         <td className="py-2.5 px-4 font-sans">
                           <span
                             className={`px-1.5 py-0.5 rounded text-[10px] font-semibold ${
-                              f.retryable ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600'
+                              f.retryable ? 'bg-amber-100 text-amber-800' : 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB]'
                             }`}
                           >
                             {f.retryable ? 'YES' : 'NO'}
                           </span>
                         </td>
-                        <td className="py-2.5 px-4 text-slate-700">{f.retryCount}</td>
-                        <td className="py-2.5 px-4 font-sans text-slate-500 text-[11px]">
+                        <td className="py-2.5 px-4 text-[#2D3F54] dark:text-[#CBD5E1]">{f.retryCount}</td>
+                        <td className="py-2.5 px-4 font-sans text-[#6B7C93] dark:text-[#8194A8] text-[11px]">
                           {new Date(f.createdAt).toLocaleTimeString()}
                         </td>
                       </tr>
@@ -896,33 +896,33 @@ export const IntegrationsWorkspace: React.FC = () => {
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {integrations.map((item) => (
-                  <div key={item.integrationId} className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3 font-mono text-xs">
+                  <div key={item.integrationId} className="p-4 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-xl border border-[#DCE3EA] dark:border-[#33485D] space-y-3 font-mono text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-900 font-sans text-sm">{item.name}</span>
+                      <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] font-sans text-sm">{item.name}</span>
                       <span className="px-2 py-0.5 rounded font-bold text-[10px] bg-emerald-100 text-emerald-800">
                         {item.healthStatus}
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-500 font-sans">{item.integrationId}</div>
+                    <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-sans">{item.integrationId}</div>
 
-                    <div className="pt-2 border-t border-slate-200 space-y-1.5">
+                    <div className="pt-2 border-t border-[#DCE3EA] dark:border-[#33485D] space-y-1.5">
                       <div className="flex justify-between">
-                        <span className="text-slate-500 font-sans">Circuit Breaker:</span>
+                        <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Circuit Breaker:</span>
                         <span className="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
                           {item.circuitBreaker.state}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500 font-sans">Success Rate:</span>
-                        <span className="text-slate-800 font-bold">{item.successRate}%</span>
+                        <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Success Rate:</span>
+                        <span className="text-[#142C45] dark:text-[#E8EEF5] font-bold">{item.successRate}%</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500 font-sans">Average Latency:</span>
-                        <span className="text-slate-800 font-bold">{item.averageLatencyMs} ms</span>
+                        <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Average Latency:</span>
+                        <span className="text-[#142C45] dark:text-[#E8EEF5] font-bold">{item.averageLatencyMs} ms</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500 font-sans">Consecutive Failures:</span>
-                        <span className="text-slate-800">{item.circuitBreaker.consecutiveFailures} / {item.circuitBreaker.failureThreshold}</span>
+                        <span className="text-[#6B7C93] dark:text-[#8194A8] font-sans">Consecutive Failures:</span>
+                        <span className="text-[#142C45] dark:text-[#E8EEF5]">{item.circuitBreaker.consecutiveFailures} / {item.circuitBreaker.failureThreshold}</span>
                       </div>
                     </div>
 
@@ -937,7 +937,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                             toast.error(`Health check failed: ${e.message}`);
                           }
                         }}
-                        className="w-full py-1.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold rounded font-sans cursor-pointer transition-colors"
+                        className="w-full py-1.5 bg-[#FFFFFF] dark:bg-[#162638] hover:bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] text-[#2D3F54] dark:text-[#CBD5E1] text-xs font-semibold rounded font-sans cursor-pointer transition-colors"
                       >
                         Ping Health Check
                       </button>
