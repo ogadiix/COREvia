@@ -236,30 +236,30 @@ export const OperationsWorkspace: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] text-[#172033] p-6 space-y-6">
+    <div className="min-h-screen bg-[#F4F6F8] dark:bg-[#080F19] text-[#273444] dark:text-[#E8EEF5] p-5 space-y-5">
       {/* Enterprise Context Header */}
-      <div className="bg-white rounded-lg border border-[#E2E8F0] p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-md bg-[#087F8C]/10 text-[#087F8C]">
+            <span className="p-1.5 rounded-md bg-[#168C83]/10 text-[#168C83]">
               <Activity className="w-5 h-5" />
             </span>
-            <h1 className="text-xl font-bold tracking-tight text-[#172033]">
+            <h1 className="text-xl font-bold tracking-tight text-[#142C45] dark:text-[#E8EEF5]">
               Banking Operations Workspace
             </h1>
-            <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono font-medium">
-              SYNTHETIC CONTROL LAYER
+            <span className="text-[11px] px-2 py-0.5 rounded bg-[#168C83]/10 text-[#168C83] border border-[#168C83]/30 font-mono font-medium">
+              Dual-Control Operations
             </span>
           </div>
-          <p className="text-xs text-[#475569] mt-1">
+          <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] mt-1">
             Centralized dual-control maker/checker queue, reconciliation variance monitor, and exception remediation.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="text-right hidden sm:block">
-            <span className="text-[11px] text-[#475569] block">Operational Business Date</span>
-            <span className="text-xs font-mono font-semibold text-slate-800">
+          <div className="text-right hidden sm:block font-mono">
+            <span className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] block">Operational Date</span>
+            <span className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">
               {new Date().toISOString().split('T')[0]} (DAY 274)
             </span>
           </div>
@@ -267,9 +267,9 @@ export const OperationsWorkspace: React.FC = () => {
           <button
             onClick={handleManualRefresh}
             disabled={isRefreshing}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-[#E2E8F0] rounded-md hover:bg-slate-50 transition-colors shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#273444] dark:text-[#E8EEF5] bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-md hover:bg-[#F4F6F8] dark:hover:bg-[#101C2A] transition-colors shadow-2xs"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#087F8C]' : 'text-slate-500'}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#168C83]' : 'text-[#8793A1]'}`} />
             <span>{isRefreshing ? 'Syncing...' : 'Refresh'}</span>
           </button>
         </div>
@@ -277,7 +277,7 @@ export const OperationsWorkspace: React.FC = () => {
 
       {/* Global Error Banner */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs flex items-center justify-between">
+        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-700 dark:text-red-400 text-xs flex items-center justify-between">
           <div className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
@@ -289,9 +289,9 @@ export const OperationsWorkspace: React.FC = () => {
       )}
 
       {retrySuccessMsg && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-xs flex items-center justify-between">
+        <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-800 dark:text-emerald-300 text-xs flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
             <span>{retrySuccessMsg}</span>
           </div>
           <button onClick={() => setRetrySuccessMsg(null)} className="text-emerald-700 hover:text-emerald-900 text-xs font-medium">
@@ -303,29 +303,29 @@ export const OperationsWorkspace: React.FC = () => {
       {/* 3. OPERATIONS SUMMARY METRICS ROW (10 compact database-backed KPIs) */}
       <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2.5">
         {[
-          { label: 'Pending Approvals', val: summary?.pendingApprovals, highlight: (summary?.pendingApprovals ?? 0) > 0 ? 'text-amber-600' : 'text-slate-800' },
-          { label: 'High Priority Ex.', val: summary?.highPriorityExceptions, highlight: (summary?.highPriorityExceptions ?? 0) > 0 ? 'text-red-600 font-bold' : 'text-slate-800' },
-          { label: 'SLA At Risk', val: summary?.slaAtRisk, highlight: (summary?.slaAtRisk ?? 0) > 0 ? 'text-red-600 font-bold' : 'text-slate-800' },
-          { label: 'Failed Workflows', val: summary?.failedWorkflows, highlight: (summary?.failedWorkflows ?? 0) > 0 ? 'text-red-600' : 'text-slate-800' },
-          { label: 'KYC Exceptions', val: summary?.kycExceptions, highlight: 'text-slate-800' },
-          { label: 'Doc Exceptions', val: summary?.documentExceptions, highlight: 'text-slate-800' },
-          { label: 'Recon Exceptions', val: summary?.reconciliationExceptions, highlight: (summary?.reconciliationExceptions ?? 0) > 0 ? 'text-amber-600' : 'text-slate-800' },
-          { label: 'Awaiting Checker', val: summary?.awaitingChecker, highlight: (summary?.awaitingChecker ?? 0) > 0 ? 'text-blue-600' : 'text-slate-800' },
-          { label: 'Tasks Due', val: summary?.operationalTasksDue, highlight: 'text-slate-800' },
-          { label: 'Resolved Today', val: summary?.resolvedToday, highlight: 'text-emerald-600 font-semibold' },
+          { label: 'Pending Approvals', val: summary?.pendingApprovals, highlight: (summary?.pendingApprovals ?? 0) > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-[#142C45] dark:text-[#E8EEF5]' },
+          { label: 'High Priority Ex.', val: summary?.highPriorityExceptions, highlight: (summary?.highPriorityExceptions ?? 0) > 0 ? 'text-red-600 dark:text-red-400 font-bold' : 'text-[#142C45] dark:text-[#E8EEF5]' },
+          { label: 'SLA At Risk', val: summary?.slaAtRisk, highlight: (summary?.slaAtRisk ?? 0) > 0 ? 'text-red-600 dark:text-red-400 font-bold' : 'text-[#142C45] dark:text-[#E8EEF5]' },
+          { label: 'Failed Workflows', val: summary?.failedWorkflows, highlight: (summary?.failedWorkflows ?? 0) > 0 ? 'text-red-600 dark:text-red-400' : 'text-[#142C45] dark:text-[#E8EEF5]' },
+          { label: 'KYC Exceptions', val: summary?.kycExceptions, highlight: 'text-[#142C45] dark:text-[#E8EEF5]' },
+          { label: 'Doc Exceptions', val: summary?.documentExceptions, highlight: 'text-[#142C45] dark:text-[#E8EEF5]' },
+          { label: 'Recon Exceptions', val: summary?.reconciliationExceptions, highlight: (summary?.reconciliationExceptions ?? 0) > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-[#142C45] dark:text-[#E8EEF5]' },
+          { label: 'Awaiting Checker', val: summary?.awaitingChecker, highlight: (summary?.awaitingChecker ?? 0) > 0 ? 'text-blue-600 dark:text-blue-400' : 'text-[#142C45] dark:text-[#E8EEF5]' },
+          { label: 'Tasks Due', val: summary?.operationalTasksDue, highlight: 'text-[#142C45] dark:text-[#E8EEF5]' },
+          { label: 'Resolved Today', val: summary?.resolvedToday, highlight: 'text-emerald-600 dark:text-emerald-400 font-semibold' },
         ].map((item, idx) => (
           <div
             key={idx}
-            className="bg-white rounded-md border border-[#E2E8F0] p-2.5 shadow-2xs flex flex-col justify-between"
+            className="bg-[#FFFFFF] dark:bg-[#162638] rounded-md border border-[#DCE3EA] dark:border-[#33485D] p-2.5 shadow-2xs flex flex-col justify-between"
           >
-            <span className="text-[11px] font-medium text-[#475569] truncate" title={item.label}>
+            <span className="text-[11px] font-medium text-[#5D6B7B] dark:text-[#8194A8] truncate" title={item.label}>
               {item.label}
             </span>
             <div className="mt-1">
               {summaryError ? (
-                <span className="text-xs font-medium text-slate-400">Unavailable</span>
+                <span className="text-xs font-medium text-[#8793A1]">Unavailable</span>
               ) : isLoading ? (
-                <div className="h-4 w-8 bg-slate-100 animate-pulse rounded" />
+                <div className="h-4 w-8 bg-[#EDF1F5] dark:bg-[#101C2A] animate-pulse rounded" />
               ) : (
                 <span className={`text-base font-mono font-semibold ${item.highlight}`}>
                   {item.val !== undefined && item.val !== null ? item.val : 'Unavailable'}
@@ -337,9 +337,9 @@ export const OperationsWorkspace: React.FC = () => {
       </div>
 
       {/* Main Operational Container */}
-      <div className="bg-white rounded-lg border border-[#E2E8F0] shadow-xs overflow-hidden">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] shadow-xs overflow-hidden">
         {/* Tab Navigation */}
-        <div className="border-b border-[#E2E8F0] bg-slate-50/70 px-4 flex flex-wrap items-center justify-between gap-2">
+        <div className="border-b border-[#DCE3EA] dark:border-[#33485D] bg-[#F4F6F8] dark:bg-[#101C2A] px-4 flex flex-wrap items-center justify-between gap-2">
           <div className="flex space-x-1">
             {[
               { id: 'approvals', label: 'Maker / Checker Queue', count: approvals.filter(a => a.status === 'PENDING').length },
@@ -360,14 +360,14 @@ export const OperationsWorkspace: React.FC = () => {
                 }}
                 className={`py-3 px-3.5 text-xs font-medium border-b-2 transition-colors flex items-center gap-1.5 ${
                   activeTab === tab.id
-                    ? 'border-[#087F8C] text-[#087F8C] font-semibold bg-white'
-                    : 'border-transparent text-[#475569] hover:text-[#172033] hover:border-slate-300'
+                    ? 'border-[#168C83] text-[#168C83] font-semibold bg-[#FFFFFF] dark:bg-[#162638]'
+                    : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
                 }`}
               >
                 <span>{tab.label}</span>
                 {tab.count > 0 && (
                   <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                    activeTab === tab.id ? 'bg-[#087F8C] text-white' : 'bg-slate-200 text-slate-700'
+                    activeTab === tab.id ? 'bg-[#168C83] text-white' : 'bg-[#EDF1F5] dark:bg-[#101C2A] text-[#5D6B7B] dark:text-[#8194A8]'
                   }`}>
                     {tab.count}
                   </span>
@@ -379,13 +379,13 @@ export const OperationsWorkspace: React.FC = () => {
           {/* Quick Filters */}
           <div className="py-2 flex items-center gap-2">
             <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#8793A1]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search operational records..."
-                className="text-xs pl-8 pr-3 py-1 border border-slate-200 rounded-md focus:ring-1 focus:ring-[#087F8C] focus:border-[#087F8C] w-48 lg:w-64 bg-white"
+                className="text-xs pl-8 pr-3 py-1 border border-[#DCE3EA] dark:border-[#33485D] rounded-md focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83] w-48 lg:w-64 bg-[#FFFFFF] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] placeholder-[#8793A1]"
               />
             </div>
 
@@ -394,7 +394,7 @@ export const OperationsWorkspace: React.FC = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="text-xs py-1 px-2 border border-slate-200 rounded-md bg-white text-slate-700"
+                className="text-xs py-1 px-2 border border-[#DCE3EA] dark:border-[#33485D] rounded-md bg-[#FFFFFF] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
               >
                 <option value="ALL">All Statuses</option>
                 {activeTab === 'approvals' && (
@@ -431,7 +431,7 @@ export const OperationsWorkspace: React.FC = () => {
               <select
                 value={severityFilter}
                 onChange={(e) => setSeverityFilter(e.target.value)}
-                className="text-xs py-1 px-2 border border-slate-200 rounded-md bg-white text-slate-700"
+                className="text-xs py-1 px-2 border border-[#DCE3EA] dark:border-[#33485D] rounded-md bg-[#FFFFFF] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
               >
                 <option value="ALL">All Severities</option>
                 <option value="CRITICAL">CRITICAL</option>
@@ -447,7 +447,7 @@ export const OperationsWorkspace: React.FC = () => {
         {activeTab === 'approvals' && (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/75 border-b border-[#E2E8F0] text-[#475569] font-medium">
+              <thead className="bg-[#F4F6F8] dark:bg-[#101C2A] border-b border-[#DCE3EA] dark:border-[#33485D] text-[#5D6B7B] dark:text-[#8194A8] font-medium">
                 <tr>
                   <th className="py-2.5 px-4">Approval ID</th>
                   <th className="py-2.5 px-4">Request Type</th>
@@ -1002,29 +1002,29 @@ export const OperationsWorkspace: React.FC = () => {
       {/* Reconciliation Resolution Modal */}
       {isReconModalOpen && selectedReconciliation && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg border border-slate-200 shadow-xl max-w-lg w-full p-6 text-slate-900 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-              <h3 className="text-sm font-semibold text-slate-900">
+          <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] shadow-xl max-w-lg w-full p-6 text-[#273444] dark:text-[#E8EEF5] space-y-4">
+            <div className="flex items-center justify-between border-b border-[#DCE3EA] dark:border-[#33485D] pb-3">
+              <h3 className="text-sm font-semibold text-[#142C45] dark:text-[#E8EEF5]">
                 Resolve Reconciliation Variance: {selectedReconciliation.reconciliationId}
               </h3>
               <button
                 onClick={() => setIsReconModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1"
+                className="text-[#8793A1] hover:text-[#273444] dark:hover:text-[#E8EEF5] p-1"
               >
                 &times;
               </button>
             </div>
 
-            <div className="text-xs bg-slate-50 p-3 rounded border border-slate-200 space-y-1 font-mono">
+            <div className="text-xs bg-[#F4F6F8] dark:bg-[#101C2A] p-3 rounded border border-[#DCE3EA] dark:border-[#33485D] space-y-1 font-mono">
               <p>Type: {selectedReconciliation.reconciliationType}</p>
               <p>Source: {selectedReconciliation.source}</p>
               <p>Expected: {Number(selectedReconciliation.expectedValue).toLocaleString('en-IN')}</p>
               <p>Observed: {Number(selectedReconciliation.observedValue).toLocaleString('en-IN')}</p>
-              <p className="font-bold text-red-600">Variance: {Number(selectedReconciliation.variance).toLocaleString('en-IN')}</p>
+              <p className="font-bold text-red-600 dark:text-red-400">Variance: {Number(selectedReconciliation.variance).toLocaleString('en-IN')}</p>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-700 block">
+              <label className="text-xs font-semibold text-[#5D6B7B] dark:text-[#8194A8] block">
                 Resolution Explanation & Balancing Voucher Reference <span className="text-red-500">*</span>
               </label>
               <textarea
@@ -1032,7 +1032,7 @@ export const OperationsWorkspace: React.FC = () => {
                 value={reconResolutionNotes}
                 onChange={(e) => setReconResolutionNotes(e.target.value)}
                 placeholder="Specify journal entry reference or physical cash count re-verification reason..."
-                className="w-full text-xs p-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-[#087F8C]"
+                className="w-full text-xs p-2.5 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-md text-[#273444] dark:text-[#E8EEF5] placeholder-[#8793A1] focus:ring-1 focus:ring-[#168C83]"
               />
             </div>
 
@@ -1040,7 +1040,7 @@ export const OperationsWorkspace: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsReconModalOpen(false)}
-                className="px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50"
+                className="px-3 py-1.5 text-xs font-medium text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D] rounded-md hover:bg-[#F4F6F8] dark:hover:bg-[#101C2A]"
               >
                 Cancel
               </button>
@@ -1048,7 +1048,7 @@ export const OperationsWorkspace: React.FC = () => {
                 type="button"
                 disabled={isSubmittingRecon || !reconResolutionNotes.trim()}
                 onClick={handleResolveReconciliation}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#087F8C] rounded-md hover:bg-[#076c77] disabled:opacity-50"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#168C83] rounded-md hover:bg-[#1B9D92] disabled:opacity-50"
               >
                 {isSubmittingRecon ? 'Resolving...' : 'Confirm Reconciliation Resolution'}
               </button>
@@ -1060,22 +1060,22 @@ export const OperationsWorkspace: React.FC = () => {
       {/* Safe Workflow Retry Confirmation Modal */}
       {retryTarget && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-2xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg border border-slate-200 p-5 max-w-md w-full shadow-2xl space-y-3">
-            <div className="flex items-center gap-2 text-amber-600">
+          <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-5 max-w-md w-full shadow-2xl space-y-3 text-[#273444] dark:text-[#E8EEF5]">
+            <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
               <RotateCcw className="w-5 h-5 shrink-0" />
-              <h3 className="text-sm font-semibold text-slate-900">
+              <h3 className="text-sm font-semibold text-[#142C45] dark:text-[#E8EEF5]">
                 Safe Workflow Retry Confirmation
               </h3>
             </div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Confirm idempotent retry for workflow <span className="font-mono font-semibold">{retryTarget.workflowId}</span> ({retryTarget.workflowType})?
+            <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed">
+              Confirm idempotent retry for workflow <span className="font-mono font-semibold text-[#142C45] dark:text-[#E8EEF5]">{retryTarget.workflowId}</span> ({retryTarget.workflowType})?
               The system will verify precondition idempotency and record an audit log entry.
             </p>
             <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setRetryTarget(null)}
-                className="px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50"
+                className="px-3 py-1.5 text-xs font-medium text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D] rounded-md hover:bg-[#F4F6F8] dark:hover:bg-[#101C2A]"
               >
                 Cancel
               </button>
@@ -1083,7 +1083,7 @@ export const OperationsWorkspace: React.FC = () => {
                 type="button"
                 disabled={isRetryingWorkflow}
                 onClick={handleWorkflowRetry}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#087F8C] rounded-md hover:bg-[#076c77]"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#168C83] rounded-md hover:bg-[#1B9D92]"
               >
                 {isRetryingWorkflow ? 'Retrying...' : 'Execute Safe Retry'}
               </button>

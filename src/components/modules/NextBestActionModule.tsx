@@ -142,7 +142,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] p-4 rounded-xl border border-[#DCE3EA] dark:border-[#33485D] shadow-xs space-y-3">
         <form onSubmit={handleSearch} className="flex gap-2">
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -177,7 +177,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-xs p-1.5 rounded-md border border-slate-200 bg-slate-50 font-medium"
+            className="text-xs p-1.5 rounded-md border border-slate-200 bg-[#F4F6F8] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] border border-[#DCE3EA] dark:border-[#33485D] font-medium"
           >
             <option value="ACTIVE">Status: Active</option>
             <option value="ACCEPTED">Status: Accepted</option>
@@ -188,7 +188,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="text-xs p-1.5 rounded-md border border-slate-200 bg-slate-50 font-medium"
+            className="text-xs p-1.5 rounded-md border border-slate-200 bg-[#F4F6F8] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] border border-[#DCE3EA] dark:border-[#33485D] font-medium"
           >
             <option value="ALL">Type: All Types</option>
             <option value="SERVICE">Service (SLA / Grievance)</option>
@@ -201,7 +201,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="text-xs p-1.5 rounded-md border border-slate-200 bg-slate-50 font-medium"
+            className="text-xs p-1.5 rounded-md border border-slate-200 bg-[#F4F6F8] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] border border-[#DCE3EA] dark:border-[#33485D] font-medium"
           >
             <option value="ALL">Priority: All</option>
             <option value="CRITICAL">Critical</option>
@@ -213,7 +213,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           <select
             value={urgencyFilter}
             onChange={(e) => setUrgencyFilter(e.target.value)}
-            className="text-xs p-1.5 rounded-md border border-slate-200 bg-slate-50 font-medium"
+            className="text-xs p-1.5 rounded-md border border-slate-200 bg-[#F4F6F8] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] border border-[#DCE3EA] dark:border-[#33485D] font-medium"
           >
             <option value="ALL">Urgency: All</option>
             <option value="IMMEDIATE">Immediate</option>
@@ -245,7 +245,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
 
       {/* Actions List */}
       {loading ? (
-        <div className="py-12 text-center text-xs text-slate-500 bg-white rounded-xl border border-slate-200 flex items-center justify-center gap-2">
+        <div className="py-12 text-center text-xs text-slate-500 bg-[#FFFFFF] dark:bg-[#162638] rounded-xl border border-[#DCE3EA] dark:border-[#33485D] flex items-center justify-center gap-2">
           <RefreshCw className="w-4 h-4 animate-spin text-indigo-600" />
           Loading prioritized recommendations...
         </div>
@@ -256,7 +256,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           description="All customer relationships in this slice are operating nominally or have already been acted upon."
           actionLabel="Recalculate Recommendations"
           onAction={handleRecalculateAll}
-          className="bg-white rounded-xl border border-slate-200 p-12 shadow-xs"
+          className="bg-[#FFFFFF] dark:bg-[#162638] rounded-xl border border-[#DCE3EA] dark:border-[#33485D] p-12 shadow-xs"
         />
       ) : (
         <div className="motion-fade-in space-y-4">

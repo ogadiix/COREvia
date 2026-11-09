@@ -110,20 +110,20 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
     <div
       className={`rounded-xl transition-all duration-200 border ${
         isTop
-          ? 'bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 border-amber-300 shadow-sm'
+          ? 'bg-gradient-to-br from-amber-500/10 via-[#FFFFFF] dark:via-[#162638] to-amber-500/5 border-amber-500/40 shadow-xs'
           : isServiceFirst
-          ? 'bg-rose-50/30 border-rose-200/80 shadow-xs'
-          : 'bg-white border-slate-200 shadow-xs hover:border-slate-300'
+          ? 'bg-red-500/10 border-red-500/30 shadow-xs'
+          : 'bg-[#FFFFFF] dark:bg-[#162638] border-[#DCE3EA] dark:border-[#33485D] shadow-xs hover:border-[#168C83]'
       } ${compact ? 'p-3.5' : 'p-4'}`}
     >
       {/* Service First Callout Banner if Service Priority */}
       {isServiceFirst && !compact && (
-        <div className="mb-2.5 px-3 py-1.5 rounded-lg bg-rose-100/70 border border-rose-200 flex items-center justify-between text-xs text-rose-900 font-medium">
+        <div className="mb-2.5 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-between text-xs text-red-800 dark:text-red-300 font-medium">
           <div className="flex items-center gap-1.5">
-            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+            <AlertTriangle className="w-3.5 h-3.5 text-red-600 dark:text-red-400 shrink-0" />
             <span>Service-First Mandate: Open service grievances take precedence over cross-selling.</span>
           </div>
-          <span className="text-[10px] font-mono text-rose-700 uppercase font-bold">Rule Protected</span>
+          <span className="text-[10px] font-mono text-red-700 dark:text-red-400 uppercase font-bold">Rule Protected</span>
         </div>
       )}
 
@@ -144,14 +144,14 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono text-slate-400">
-            Score: <strong className="text-slate-700">{action.rankScore.toFixed(1)}</strong>
+          <span className="text-[11px] font-mono text-[#5D6B7B] dark:text-[#8194A8]">
+            Score: <strong className="text-[#142C45] dark:text-[#E8EEF5]">{action.rankScore.toFixed(1)}</strong>
           </span>
           {onViewEvidence && (
             <button
               type="button"
               onClick={() => onViewEvidence(action)}
-              className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 font-semibold transition-colors"
+              className="inline-flex items-center gap-1 text-xs text-[#168C83] hover:underline font-semibold transition-colors"
               title="View deterministic rule rationale and linked evidence records"
             >
               <HelpCircle className="w-3.5 h-3.5" />
@@ -163,16 +163,16 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
 
       {/* Customer Header if Present */}
       {action.customerName && (
-        <div className="mb-1.5 flex items-center justify-between text-xs text-slate-500">
+        <div className="mb-1.5 flex items-center justify-between text-xs text-[#5D6B7B] dark:text-[#8194A8]">
           <div className="flex items-center gap-1.5">
-            <span className="font-semibold text-slate-800">{action.customerName}</span>
-            {action.customerCode && <span className="font-mono text-slate-400">({action.customerCode})</span>}
+            <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{action.customerName}</span>
+            {action.customerCode && <span className="font-mono text-[#8793A1]">({action.customerCode})</span>}
           </div>
           {onNavigateToCustomer && (
             <button
               type="button"
               onClick={() => onNavigateToCustomer(action.customerId)}
-              className="text-indigo-600 hover:text-indigo-800 text-[11px] font-medium inline-flex items-center gap-0.5"
+              className="text-[#168C83] hover:underline text-[11px] font-medium inline-flex items-center gap-0.5"
             >
               Customer 360 <ExternalLink className="w-2.5 h-2.5" />
             </button>
@@ -181,30 +181,30 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
       )}
 
       {/* Title & Description */}
-      <h4 className="text-sm font-bold text-slate-900 mb-1 leading-snug">{action.title}</h4>
-      <p className="text-xs text-slate-600 leading-relaxed mb-3">{action.description}</p>
+      <h4 className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] mb-1 leading-snug">{action.title}</h4>
+      <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed mb-3">{action.description}</p>
 
       {/* Rationale & Expected Impact (full view) */}
       {!compact && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3 text-xs">
-          <div className="p-2 rounded bg-slate-50 border border-slate-100">
-            <span className="font-semibold text-slate-700 block mb-0.5">Rationale</span>
-            <span className="text-slate-600 leading-relaxed">{action.rationale}</span>
+          <div className="p-2 rounded bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+            <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] block mb-0.5">Rationale</span>
+            <span className="text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed">{action.rationale}</span>
           </div>
-          <div className="p-2 rounded bg-indigo-50/40 border border-indigo-100">
-            <span className="font-semibold text-indigo-900 block mb-0.5">Expected Impact</span>
-            <span className="text-slate-700 leading-relaxed">{action.expectedImpact}</span>
+          <div className="p-2 rounded bg-indigo-500/10 border border-indigo-500/20 text-[#273444] dark:text-[#E8EEF5]">
+            <span className="font-semibold text-indigo-700 dark:text-indigo-400 block mb-0.5">Expected Impact</span>
+            <span className="text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed">{action.expectedImpact}</span>
           </div>
         </div>
       )}
 
       {/* Evidence Summary preview pill */}
       {action.evidence && action.evidence.length > 0 && !compact && (
-        <div className="mb-3 flex items-center gap-2 text-[11px] text-slate-500 bg-slate-50/70 px-2.5 py-1.5 rounded border border-slate-100">
-          <span className="font-medium text-slate-700">Evidence verified:</span>
+        <div className="mb-3 flex items-center gap-2 text-[11px] text-[#5D6B7B] dark:text-[#8194A8] bg-[#F4F6F8] dark:bg-[#101C2A] px-2.5 py-1.5 rounded border border-[#DCE3EA] dark:border-[#33485D]">
+          <span className="font-medium text-[#142C45] dark:text-[#E8EEF5]">Evidence verified:</span>
           <span className="truncate">{action.evidence[0].recordTitle} ({action.evidence[0].evidenceSummary})</span>
           {action.evidence.length > 1 && (
-            <span className="text-indigo-600 font-semibold shrink-0">+{action.evidence.length - 1} more</span>
+            <span className="text-[#168C83] font-semibold shrink-0">+{action.evidence.length - 1} more</span>
           )}
         </div>
       )}

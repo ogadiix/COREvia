@@ -175,7 +175,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-[#DCE3EA] dark:border-[#33485D]">
             LOW
           </span>
         );
@@ -204,9 +204,9 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
   };
 
   return (
-    <div className="space-y-6 text-slate-900">
+    <div className="space-y-6 text-[#142C45] dark:text-[#E8EEF5]">
       {/* 1. Header & Engine Controls */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded bg-slate-900 text-white shadow-xs">
@@ -214,7 +214,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold tracking-tight text-slate-900 font-sans">
+                <h1 className="text-xl font-bold tracking-tight text-[#142C45] dark:text-[#E8EEF5] font-sans">
                   Relationship Intelligence Engine
                 </h1>
                 <span className="px-2 py-0.5 text-[10px] font-mono font-semibold bg-slate-100 text-slate-700 rounded border border-slate-300">
@@ -256,15 +256,15 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
 
       {/* 2. Executive KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="bg-white border border-slate-200 rounded-lg p-3.5 shadow-xs">
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-3.5 shadow-xs">
           <div className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Active Signals</div>
-          <div className="text-2xl font-bold font-mono text-slate-900 mt-1">
+          <div className="text-2xl font-bold font-mono text-[#142C45] dark:text-[#E8EEF5] mt-1">
             {summary?.totalActive ?? insights.filter((i) => i.status === 'ACTIVE' || i.status === 'ACKNOWLEDGED').length}
           </div>
           <div className="text-[10px] text-slate-400 mt-0.5">Requiring Attention</div>
         </div>
 
-        <div className="bg-white border border-rose-200 bg-rose-50/20 rounded-lg p-3.5 shadow-xs">
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-rose-200 bg-rose-50/20 rounded-lg p-3.5 shadow-xs">
           <div className="text-[11px] font-semibold text-rose-700 uppercase tracking-wider flex items-center gap-1">
             <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
             Critical Priority
@@ -275,7 +275,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
           <div className="text-[10px] text-rose-600/80 mt-0.5">SLA Breaches & High Risk</div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-3.5 shadow-xs">
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-3.5 shadow-xs">
           <div className="text-[11px] font-medium text-emerald-700 uppercase tracking-wider flex items-center gap-1">
             <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
             Growth Signals
@@ -286,7 +286,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
           <div className="text-[10px] text-slate-400 mt-0.5">Cross-Sell & Expansion</div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-3.5 shadow-xs">
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-3.5 shadow-xs">
           <div className="text-[11px] font-medium text-amber-700 uppercase tracking-wider flex items-center gap-1">
             <LifeBuoy className="w-3.5 h-3.5 text-amber-600" />
             Service Concerns
@@ -297,7 +297,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
           <div className="text-[10px] text-slate-400 mt-0.5">Grievance Pressures</div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-3.5 shadow-xs">
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-3.5 shadow-xs">
           <div className="text-[11px] font-medium text-blue-700 uppercase tracking-wider flex items-center gap-1">
             <CheckSquare className="w-3.5 h-3.5 text-blue-600" />
             Operational
@@ -308,7 +308,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
           <div className="text-[10px] text-slate-400 mt-0.5">Tasks & Stagnation</div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-3.5 shadow-xs">
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-3.5 shadow-xs">
           <div className="text-[11px] font-medium text-slate-600 uppercase tracking-wider flex items-center gap-1">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
             Resolved
@@ -321,7 +321,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
       </div>
 
       {/* 2b. CORE Score Health & Deterministic Vectors Panel */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-2xs space-y-3">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-4 shadow-2xs space-y-3">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-slate-100">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-lg bg-teal-50 border border-teal-200 text-teal-800 flex flex-col items-center justify-center shrink-0 shadow-2xs">
@@ -330,7 +330,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="text-sm font-bold text-slate-900">CORE Score Intelligence & Churn Vector</h3>
+                <h3 className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5]">CORE Score Intelligence & Churn Vector</h3>
                 <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
                   HEALTHY RELATIONSHIP
                 </span>
@@ -356,7 +356,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
 
         {/* 4 Vector Gauges */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
-          <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70 space-y-1.5">
+          <div className="p-2.5 rounded bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]/70 space-y-1.5">
             <div className="flex items-center justify-between text-xs">
               <span className="text-slate-600 font-medium">1. Financial Value (35%)</span>
               <span className="font-mono font-bold text-emerald-700">88 / 100</span>
@@ -367,7 +367,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             <span className="text-[10px] text-slate-400 block">CASA velocity & high-margin deposits</span>
           </div>
 
-          <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70 space-y-1.5">
+          <div className="p-2.5 rounded bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]/70 space-y-1.5">
             <div className="flex items-center justify-between text-xs">
               <span className="text-slate-600 font-medium">2. Credit Integrity (25%)</span>
               <span className="font-mono font-bold text-teal-700">92 / 100</span>
@@ -378,7 +378,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             <span className="text-[10px] text-slate-400 block">Zero DPD · Standard asset rating</span>
           </div>
 
-          <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70 space-y-1.5">
+          <div className="p-2.5 rounded bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]/70 space-y-1.5">
             <div className="flex items-center justify-between text-xs">
               <span className="text-slate-600 font-medium">3. Service Health (20%)</span>
               <span className="font-mono font-bold text-amber-700">76 / 100</span>
@@ -389,7 +389,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             <span className="text-[10px] text-slate-400 block">1 active ticket near SLA warning</span>
           </div>
 
-          <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70 space-y-1.5">
+          <div className="p-2.5 rounded bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]/70 space-y-1.5">
             <div className="flex items-center justify-between text-xs">
               <span className="text-slate-600 font-medium">4. Engagement Cadence (20%)</span>
               <span className="font-mono font-bold text-indigo-700">80 / 100</span>
@@ -403,7 +403,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
       </div>
 
       {/* 3. Filtering & Search Toolbar */}
-      <div className="bg-white border border-slate-200 rounded-lg p-3.5 shadow-xs space-y-3">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-3.5 shadow-xs space-y-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           {/* Status Tabs */}
           <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-md text-xs w-full sm:w-auto">
@@ -413,8 +413,8 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                 onClick={() => setSelectedStatus(status)}
                 className={`px-3 py-1.5 rounded font-medium transition-colors ${
                   selectedStatus === status
-                    ? 'bg-white text-slate-900 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-[#FFFFFF] dark:bg-[#162638] text-[#142C45] dark:text-[#E8EEF5] shadow-xs'
+                    : 'text-slate-600 hover:text-[#142C45] dark:text-[#E8EEF5]'
                 }`}
               >
                 {status === 'ACTIVE'
@@ -437,7 +437,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search customer, CIF, signal..."
-                className="w-full pl-8 pr-8 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 font-sans"
+                className="w-full pl-8 pr-8 py-1.5 text-xs bg-[#F4F6F8] dark:bg-[#101C2A] border border-slate-300 rounded focus:bg-[#FFFFFF] dark:bg-[#162638] focus:outline-none focus:ring-1 focus:ring-slate-900 font-sans"
               />
               {searchQuery && (
                 <button
@@ -467,7 +467,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="py-1 px-2 border border-slate-300 rounded bg-slate-50 text-slate-800 text-xs font-sans focus:outline-none"
+              className="py-1 px-2 border border-slate-300 rounded bg-[#F4F6F8] dark:bg-[#101C2A] text-slate-800 text-xs font-sans focus:outline-none"
             >
               <option value="ALL">All Categories</option>
               <option value="SLA_BREACHED">SLA Breached (Grievances)</option>
@@ -489,7 +489,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             <select
               value={selectedPriority}
               onChange={(e) => setSelectedPriority(e.target.value)}
-              className="py-1 px-2 border border-slate-300 rounded bg-slate-50 text-slate-800 text-xs font-sans focus:outline-none"
+              className="py-1 px-2 border border-slate-300 rounded bg-[#F4F6F8] dark:bg-[#101C2A] text-slate-800 text-xs font-sans focus:outline-none"
             >
               <option value="ALL">All Priorities</option>
               <option value="CRITICAL">Critical Only</option>
@@ -516,7 +516,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
 
       {/* 4. Signals List / Feed */}
       {loading ? (
-        <div className="bg-white border border-slate-200 rounded-lg p-12 text-center text-xs text-slate-500 flex flex-col items-center justify-center gap-2 shadow-xs">
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-12 text-center text-xs text-slate-500 flex flex-col items-center justify-center gap-2 shadow-xs">
           <RefreshCw className="w-5 h-5 animate-spin text-slate-400" />
           <span>Evaluating Relationship Signals across PostgreSQL CRM Database...</span>
         </div>
@@ -531,7 +531,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
           }
           actionLabel="Run Deterministic Rules Check"
           onAction={handleRecalculateAll}
-          className="bg-white border border-slate-200 rounded-lg p-12 shadow-xs"
+          className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-12 shadow-xs"
         />
       ) : (
         <div className="space-y-3">
@@ -543,10 +543,10 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             return (
               <div
                 key={ins.id}
-                className={`bg-white border rounded-lg p-4 transition-all shadow-xs hover:border-slate-300 ${
+                className={`bg-[#FFFFFF] dark:bg-[#162638] border rounded-lg p-4 transition-all shadow-xs hover:border-slate-300 ${
                   ins.priority === 'CRITICAL' && !isResolved
                     ? 'border-rose-300 bg-rose-50/10'
-                    : 'border-slate-200'
+                    : 'border-[#DCE3EA] dark:border-[#33485D]'
                 }`}
               >
                 {/* Header Row: Type, Category, Customer & Priority */}
@@ -554,7 +554,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="flex items-center gap-1.5 font-medium text-xs text-slate-800">
                       {getTypeIcon(ins.insightType)}
-                      <span className="font-semibold text-slate-900">{ins.insightType.replace(/_/g, ' ')}</span>
+                      <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{ins.insightType.replace(/_/g, ' ')}</span>
                     </div>
 
                     <span className="text-slate-300">•</span>
@@ -586,7 +586,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                     {getPriorityBadge(ins.priority)}
 
                     {isResolved ? (
-                      <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-600 border border-[#DCE3EA] dark:border-[#33485D] flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                         RESOLVED
                       </span>
@@ -606,7 +606,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                 {/* Core Intelligence Body: Signal Title, Summary & Impact Statement */}
                 <div className="py-3 space-y-2.5">
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900 font-sans tracking-tight">
+                    <h3 className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] font-sans tracking-tight">
                       {ins.title}
                     </h3>
                     <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -615,7 +615,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                   </div>
 
                   {/* Impact Box (Explainable Intelligence requirement: Why does it matter?) */}
-                  <div className="p-2.5 rounded bg-slate-50 border border-slate-200/80 text-xs flex items-start gap-2">
+                  <div className="p-2.5 rounded bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]/80 text-xs flex items-start gap-2">
                     <Info className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
                     <div>
                       <span className="font-semibold text-slate-800">Business & Relationship Impact: </span>
@@ -630,7 +630,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                         setSelectedInsight(ins);
                         setIsEvidenceModalOpen(true);
                       }}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium text-xs border border-slate-200 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium text-xs border border-[#DCE3EA] dark:border-[#33485D] transition-colors"
                     >
                       <Eye className="w-3.5 h-3.5 text-slate-600" />
                       <span>View Evidence ({evidenceCount} Records)</span>
@@ -786,10 +786,10 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             </div>
 
             {/* Customer Dossier Snapshot */}
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="p-3 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded grid grid-cols-2 sm:grid-cols-4 gap-2">
               <div>
                 <span className="text-slate-500 text-[11px] block">Customer Name</span>
-                <span className="font-semibold text-slate-900">{selectedInsight.customerName}</span>
+                <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{selectedInsight.customerName}</span>
               </div>
               <div>
                 <span className="text-slate-500 text-[11px] block">CIF Number</span>
@@ -819,7 +819,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             {/* SUPPORTING EVIDENCE RECORDS (Strictly Verified CRM Records) */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <div className="font-bold text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                <div className="font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                   <FileText className="w-3.5 h-3.5 text-slate-600" />
                   <span>Verified CRM Evidence Records ({selectedInsight.evidence?.length || 0})</span>
                 </div>
@@ -833,7 +833,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                   {selectedInsight.evidence.map((ev, idx) => (
                     <div
                       key={idx}
-                      className="p-3 bg-white border border-slate-200 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs"
+                      className="p-3 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs"
                     >
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
@@ -843,7 +843,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                           <span className="font-mono text-xs font-semibold text-blue-700">
                             {ev.sourceCode}
                           </span>
-                          <span className="font-medium text-slate-900">
+                          <span className="font-medium text-[#142C45] dark:text-[#E8EEF5]">
                             {ev.recordTitle}
                           </span>
                         </div>
@@ -878,7 +878,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                   ))}
                 </div>
               ) : (
-                <div className="p-4 bg-slate-50 border border-slate-200 rounded text-center text-slate-500">
+                <div className="p-4 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-center text-slate-500">
                   No individual line item records recorded for this composite score signal.
                 </div>
               )}
@@ -886,12 +886,12 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
 
             {/* Recommended Action */}
             {selectedInsight.recommendedActionType && (
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded space-y-1">
+              <div className="p-3 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded space-y-1">
                 <span className="font-semibold text-slate-800 text-[11px] uppercase tracking-wider block">
                   Recommended Institutional Action
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono font-semibold text-slate-900 px-2 py-0.5 bg-slate-200 rounded">
+                  <span className="font-mono font-semibold text-[#142C45] dark:text-[#E8EEF5] px-2 py-0.5 bg-slate-200 rounded">
                     {selectedInsight.recommendedActionType}
                   </span>
                   {selectedInsight.recommendedActionContext && (
@@ -904,7 +904,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
             )}
 
             {/* Audit & Officer History */}
-            <div className="border-t border-slate-200 pt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+            <div className="border-t border-[#DCE3EA] dark:border-[#33485D] pt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
               <div>
                 Detected At: <span className="font-mono text-slate-700">{new Date(selectedInsight.detectedAt).toLocaleString('en-IN')}</span>
               </div>
@@ -950,8 +950,8 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
           size="md"
         >
           <div className="space-y-4 text-xs">
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded space-y-1">
-              <div className="font-bold text-slate-900">{actionInsight.title}</div>
+            <div className="p-3 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded space-y-1">
+              <div className="font-bold text-[#142C45] dark:text-[#E8EEF5]">{actionInsight.title}</div>
               <div className="text-slate-600 text-[11px]">{actionInsight.summary}</div>
             </div>
 
@@ -964,7 +964,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                 value={actionNote}
                 onChange={(e) => setActionNote(e.target.value)}
                 placeholder="Enter mandatory audit note explaining actions taken..."
-                className="w-full p-2.5 bg-white border border-slate-300 rounded font-sans text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 text-xs"
+                className="w-full p-2.5 bg-[#FFFFFF] dark:bg-[#162638] border border-slate-300 rounded font-sans text-[#142C45] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-slate-900 text-xs"
               />
             </div>
 
@@ -983,7 +983,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                       key={i}
                       type="button"
                       onClick={() => setActionNote(tpl)}
-                      className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[10px] border border-slate-200 transition-colors"
+                      className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[10px] border border-[#DCE3EA] dark:border-[#33485D] transition-colors"
                     >
                       {tpl}
                     </button>
@@ -999,7 +999,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                       key={i}
                       type="button"
                       onClick={() => setActionNote(tpl)}
-                      className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[10px] border border-slate-200 transition-colors"
+                      className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[10px] border border-[#DCE3EA] dark:border-[#33485D] transition-colors"
                     >
                       {tpl}
                     </button>
@@ -1008,7 +1008,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#DCE3EA] dark:border-[#33485D]">
               <Button
                 variant="outline"
                 size="sm"

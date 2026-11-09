@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { bankingApi } from '../../lib/api.ts';
-import { Badge } from '../common/Badge.tsx';
-import { Button } from '../common/Button.tsx';
-import { Modal } from '../common/Modal.tsx';
-import { EmptyState } from '../common/EmptyState.tsx';
-import { Table, Column } from '../common/Table.tsx';
-import { StatCard } from '../common/StatCard.tsx';
-import { formatINR } from '../../data/mockIndianBankingData.ts';
+import React, { useState, useEffect, useMemo } from 'react';
+import { bankingApi } from '../../lib/api';
+import { Badge } from '../common/Badge';
+import { Button } from '../common/Button';
+import { Modal } from '../common/Modal';
+import { EmptyState } from '../common/EmptyState';
+import { Table, Column } from '../common/Table';
+import { StatCard } from '../common/StatCard';
+import { formatINR } from '../../data/mockIndianBankingData';
 import {
   TrendingUp,
   Search,
@@ -21,8 +21,17 @@ import {
   Bot,
   X,
   SlidersHorizontal,
+  Layers,
+  Building2,
+  ExternalLink,
+  ChevronRight,
+  ArrowUpRight,
+  Flame,
+  Award,
+  AlertCircle,
+  FileText,
 } from 'lucide-react';
-import { useCopilot } from '../../context/CopilotContext.tsx';
+import { useCopilot } from '../../context/CopilotContext';
 import { useToast } from '../common/Toast';
 
 interface OpportunityItem {
@@ -43,26 +52,47 @@ interface OpportunityItem {
   activities?: any[];
 }
 
-export const OpportunitiesModule: React.FC = () => {
+interface OpportunitiesModuleProps {
+  onNavigateToCustomer?: (customerId: number) => void;
+}
+
+const STAGES = [
+  { id: 'PROSPECT', label: 'Prospect', prob: 20 },
+  { id: 'QUALIFIED', label: 'Qualified', prob: 40 },
+  { id: 'PROPOSAL', label: 'Proposal', prob: 60 },
+  { id: 'NEGOTIATION', label: 'Negotiation', prob: 80 },
+  { id: 'WON', label: 'Closed Won', prob: 100 },
+  { id: 'LOST', label: 'Closed Lost', prob: 0 },
+];
+
+export const OpportunitiesModule: React.FC<OpportunitiesModuleProps> = ({ onNavigateToCustomer }) => {
   const { openDrawer } = useCopilot();
   const toast = useToast();
   const [opps, setOpps] = useState<OpportunityItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Filters & Navigation
   const [stageFilter, setStageFilter] = useState<string>('ALL');
   const [search, setSearch] = useState<string>('');
+  const [isCompact, setIsCompact] = useState<boolean>(false);
 
+  // Selection
   const [selectedOpp, setSelectedOpp] = useState<OpportunityItem | null>(null);
   const [oppDetail, setOppDetail] = useState<OpportunityItem | null>(null);
   const [detailLoading, setDetailLoading] = useState<boolean>(false);
 
-  // New Opp Modal
+  // Originate New Deal Modal
   const [isNewModalOpen, setIsNewModalOpen] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>('');
   const [newCustomerId, setNewCustomerId] = useState<number>(1);
-  const [newValue, setNewValue] = useState<string>('1000000');
+  const [newValue, setNewValue] = useState<string>('1500000');
   const [newStage, setNewStage] = useState<string>('PROSPECT');
-  const [newCloseDate, setNewCloseDate] = useState<string>('2026-10-31');
+  const [newCloseDate, setNewCloseDate] = useState<string>(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() + 2);
+    return d.toISOString().split('T')[0];
+  });
   const [newNotes, setNewNotes] = useState<string>('');
   const [saving, setSaving] = useState<boolean>(false);
 
@@ -108,9 +138,10 @@ export const OpportunitiesModule: React.FC = () => {
       await bankingApi.updateOpportunity(selectedOpp.id, {
         stage: newStageVal,
       });
-      toast.success(`Opportunity stage updated to ${newStageVal}`);
+      toast.success(`Opportunity stage transitioned to ${newStageVal}.`);
       loadDetail(selectedOpp.id);
       loadOpps();
+      setSelectedOpp((prev) => (prev ? { ...prev, stage: newStageVal } : null));
     } catch (err: any) {
       toast.error(err.message || 'Failed to update opportunity stage.');
     }
@@ -132,209 +163,326 @@ export const OpportunitiesModule: React.FC = () => {
       setIsNewModalOpen(false);
       setNewTitle('');
       setNewNotes('');
-      toast.success('Opportunity created successfully.');
+      toast.success('Commercial opportunity originated successfully.');
       loadOpps();
     } catch (err: any) {
-      toast.error(err.message || 'Failed to create opportunity.');
+      toast.error(err.message || 'Failed to originate opportunity.');
     } finally {
       setSaving(false);
     }
   };
 
-  const totalPipeline = opps.reduce((sum, o) => sum + (parseFloat(o.expectedValue) || 0), 0);
-  const wonPipeline = opps
-    .filter((o) => o.stage === 'WON')
-    .reduce((sum, o) => sum + (parseFloat(o.expectedValue) || 0), 0);
+  // Pipeline calculations
+  const totalPipeline = useMemo(() => {
+    return opps.reduce((sum, o) => sum + (parseFloat(o.expectedValue) || 0), 0);
+  }, [opps]);
 
-  const filteredOpps = opps.filter((o) => {
-    if (!search.trim()) return true;
-    const term = search.toLowerCase();
-    return (
-      o.opportunityCode.toLowerCase().includes(term) ||
-      o.title.toLowerCase().includes(term) ||
-      (o.customerName && o.customerName.toLowerCase().includes(term))
-    );
-  });
+  const wonPipeline = useMemo(() => {
+    return opps
+      .filter((o) => o.stage === 'WON')
+      .reduce((sum, o) => sum + (parseFloat(o.expectedValue) || 0), 0);
+  }, [opps]);
+
+  const weightedPipeline = useMemo(() => {
+    return opps.reduce((sum, o) => {
+      const val = parseFloat(o.expectedValue) || 0;
+      const prob = o.probability || 0;
+      return sum + (val * prob) / 100;
+    }, 0);
+  }, [opps]);
+
+  const filteredOpps = useMemo(() => {
+    return opps.filter((o) => {
+      if (!search.trim()) return true;
+      const term = search.toLowerCase();
+      return (
+        o.opportunityCode.toLowerCase().includes(term) ||
+        o.title.toLowerCase().includes(term) ||
+        (o.customerName && o.customerName.toLowerCase().includes(term)) ||
+        (o.customerCode && o.customerCode.toLowerCase().includes(term)) ||
+        (o.productName && o.productName.toLowerCase().includes(term))
+      );
+    });
+  }, [opps, search]);
 
   const columns: Column<OpportunityItem>[] = [
     {
       key: 'opportunityCode',
-      header: 'Opp ID',
+      header: 'Deal Reference',
       mono: true,
       render: (o) => (
-        <div>
-          <span className="font-mono font-semibold text-slate-900">{o.opportunityCode}</span>
-          <div className="text-[10px] text-slate-500">{new Date(o.createdAt).toLocaleDateString('en-IN')}</div>
+        <div className="space-y-0.5">
+          <div className="font-mono font-semibold text-[#142C45] dark:text-[#E8EEF5]">
+            {o.opportunityCode}
+          </div>
+          <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] flex items-center gap-1 font-mono">
+            <Calendar className="w-3 h-3 text-[#8793A1]" />
+            <span>{new Date(o.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+          </div>
         </div>
       ),
     },
     {
       key: 'customerName',
-      header: 'Customer',
+      header: 'Client / Account CIF',
       render: (o) => (
-        <div>
-          <span className="font-medium text-slate-900">{o.customerName || 'Client'}</span>
-          <div className="font-mono text-[11px] text-slate-500">{o.customerCode || 'CUS-NA'}</div>
+        <div className="space-y-0.5">
+          <div className="font-medium text-[#273444] dark:text-[#E8EEF5] text-xs">
+            {o.customerName || 'Direct Client'}
+          </div>
+          <div className="font-mono text-[11px] text-[#5D6B7B] dark:text-[#8194A8] flex items-center gap-1">
+            <Building2 className="w-3 h-3 text-[#8793A1]" />
+            <span>{o.customerCode || 'CIF-NA'}</span>
+          </div>
         </div>
       ),
     },
     {
       key: 'title',
-      header: 'Opportunity & Product',
+      header: 'Deal Structure & Product',
       render: (o) => (
-        <div className="max-w-[240px]">
-          <div className="font-semibold text-slate-800 text-xs truncate">{o.title}</div>
-          <div className="text-[11px] text-slate-500 truncate">{o.productName || 'Direct Facility'}</div>
+        <div className="max-w-[260px] space-y-0.5">
+          <div className="font-medium text-[#142C45] dark:text-[#E8EEF5] text-xs truncate" title={o.title}>
+            {o.title}
+          </div>
+          <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] truncate flex items-center gap-1">
+            <span className="inline-block px-1.5 py-0.2 rounded bg-[#EDF1F5] dark:bg-[#101C2A] text-[#142C45] dark:text-[#A9BACB] text-[10px]">
+              {o.productName || 'Direct Credit Facility'}
+            </span>
+          </div>
         </div>
       ),
     },
     {
       key: 'expectedValue',
-      header: 'Expected Facility',
+      header: 'Facility Value',
       mono: true,
       render: (o) => (
-        <div>
-          <span className="font-mono font-semibold text-slate-900">
+        <div className="space-y-0.5">
+          <div className="font-mono font-bold text-[#142C45] dark:text-[#E8EEF5] text-xs">
             {formatINR(parseFloat(o.expectedValue) || 0)}
-          </span>
-          <div className="text-[10px] text-slate-500">{o.probability}% confidence</div>
+          </div>
+          <div className="text-[10px] font-mono text-[#5D6B7B] dark:text-[#8194A8] flex items-center gap-1">
+            <span className="text-[#168C83] font-semibold">{o.probability}%</span>
+            <span>win probability</span>
+          </div>
         </div>
       ),
     },
     {
       key: 'stage',
-      header: 'Stage',
-      render: (o) => (
-        <Badge
-          variant={
-            o.stage === 'WON'
-              ? 'success'
-              : o.stage === 'LOST'
-              ? 'danger'
-              : o.stage === 'PROPOSAL' || o.stage === 'NEGOTIATION'
-              ? 'info'
-              : 'neutral'
-          }
-          size="sm"
-        >
-          {o.stage}
-        </Badge>
-      ),
+      header: 'Pipeline Stage',
+      render: (o) => {
+        const isWon = o.stage === 'WON';
+        const isLost = o.stage === 'LOST';
+        const isAdvanced = o.stage === 'PROPOSAL' || o.stage === 'NEGOTIATION';
+        return (
+          <span
+            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
+              isWon
+                ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30'
+                : isLost
+                ? 'bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/30'
+                : isAdvanced
+                ? 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30'
+                : 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30'
+            }`}
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                isWon ? 'bg-emerald-500' : isLost ? 'bg-red-500' : isAdvanced ? 'bg-blue-500' : 'bg-amber-500'
+              }`}
+            />
+            {o.stage}
+          </span>
+        );
+      },
     },
     {
       key: 'expectedCloseDate',
-      header: 'Target Date',
+      header: 'Target Sanction',
+      mono: true,
       render: (o) => (
-        <span className="text-xs font-mono text-slate-700">{o.expectedCloseDate || '—'}</span>
+        <span className="text-xs font-mono text-[#273444] dark:text-[#E8EEF5]">
+          {o.expectedCloseDate || '—'}
+        </span>
       ),
     },
   ];
 
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+      {/* Executive Command Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#DCE3EA] dark:border-[#33485D] pb-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-slate-700" />
-            <span>Relationship Growth & Deals Pipeline</span>
-          </h1>
-          <p className="text-xs text-slate-500">
-            PostgreSQL deal pipeline tracking, credit cross-sell, and relationship expansion.
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded bg-[#142C45] text-white dark:bg-[#168C83]">
+              <TrendingUp className="w-4 h-4" />
+            </div>
+            <h1 className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5] tracking-tight">
+              Deals & Commercial Opportunities Pipeline
+            </h1>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-[#168C83]/10 text-[#168C83] border border-[#168C83]/30">
+              Credit Origination Engine
+            </span>
+          </div>
+          <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] mt-0.5">
+            Commercial loan origination, cross-sell deal progression, and relationship value expansion.
           </p>
         </div>
+
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={loadOpps} disabled={loading}>
-            <RefreshCw className={`w-3.5 h-3.5 mr-1 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={loadOpps}
+            disabled={loading}
+            className="border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#192B3D]"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${loading ? 'animate-spin' : ''}`} />
+            Sync Pipeline
           </Button>
-          <Button variant="primary" size="sm" onClick={() => setIsNewModalOpen(true)}>
-            <Plus className="w-3.5 h-3.5 mr-1" />
-            New Deal
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => setIsNewModalOpen(true)}
+            className="bg-[#142C45] dark:bg-[#168C83] hover:bg-[#192B3D] text-white"
+          >
+            <Plus className="w-3.5 h-3.5 mr-1.5" />
+            Originate Deal
           </Button>
         </div>
       </div>
 
-      {/* KPI Stats */}
+      {/* KPI Stats Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <StatCard
-          label="Active Deals"
-          value={opps.length.toString()}
-          badge="Live DB"
-          badgeVariant="neutral"
-        />
         <StatCard
           label="Total Pipeline Value"
           value={formatINR(totalPipeline)}
-          badge="Weighted Target"
+          badge="Gross Book"
+          badgeVariant="neutral"
+        />
+        <StatCard
+          label="Weighted Expectation"
+          value={formatINR(weightedPipeline)}
+          badge="Probability Adj."
           badgeVariant="info"
         />
         <StatCard
-          label="In Proposal / Neg."
+          label="Advanced Stages (Prop/Neg)"
           value={opps.filter((o) => o.stage === 'PROPOSAL' || o.stage === 'NEGOTIATION').length.toString()}
-          badge="Advanced"
+          badge="High Conviction"
           badgeVariant="warning"
         />
         <StatCard
-          label="Won Mandates"
+          label="Closed Won Mandates"
           value={formatINR(wonPipeline)}
-          badge="Realized"
+          badge="Executed Book"
           badgeVariant="success"
         />
       </div>
 
-      {/* Controls & Filter */}
-      <div className="bg-white border border-slate-200 rounded p-3 space-y-2.5 shadow-2xs">
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+      {/* Visual Stage Progression Strip */}
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-3 shadow-xs">
+        <div className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider mb-2 flex items-center justify-between">
+          <span>Origination Funnel Stages</span>
+          <span className="font-mono text-[10px]">{opps.length} Active Mandates</span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
+          {STAGES.map((st) => {
+            const stageOpps = opps.filter((o) => o.stage === st.id);
+            const stageTotal = stageOpps.reduce((s, o) => s + (parseFloat(o.expectedValue) || 0), 0);
+            const isSelected = stageFilter === st.id;
+            return (
+              <button
+                key={st.id}
+                type="button"
+                onClick={() => setStageFilter(isSelected ? 'ALL' : st.id)}
+                className={`p-2.5 rounded-lg border text-left transition-all ${
+                  isSelected
+                    ? 'border-[#168C83] bg-[#168C83]/10 ring-1 ring-[#168C83]'
+                    : 'border-[#DCE3EA] dark:border-[#33485D] bg-[#F4F6F8] dark:bg-[#101C2A] hover:border-[#8793A1]'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-[#142C45] dark:text-[#E8EEF5]">{st.label}</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-[#FFFFFF] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB]">
+                    {stageOpps.length}
+                  </span>
+                </div>
+                <div className="font-mono text-xs font-bold text-[#168C83] mt-1">
+                  {formatINR(stageTotal)}
+                </div>
+                <div className="text-[10px] text-[#8793A1] font-mono mt-0.5">
+                  {st.prob}% Win Rate
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Filter and Search Bar */}
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-3 space-y-2.5 shadow-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
           <div className="sm:col-span-8 relative">
-            <Search className="w-4 h-4 absolute left-2.5 top-2.5 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-3 top-2.5 text-[#8793A1]" />
             <input
               type="text"
-              placeholder="Search deals by code, customer, title..."
+              placeholder="Search by deal reference, client name, CIF, product line..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 pr-8 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full pl-9 pr-8 py-2 text-xs bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-md text-[#273444] dark:text-[#E8EEF5] placeholder-[#8793A1] focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 focus:outline-none"
-                aria-label="Clear search"
+                className="absolute right-2.5 top-2.5 text-[#8793A1] hover:text-[#273444] dark:hover:text-[#E8EEF5]"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
 
-          <div className="sm:col-span-4">
+          <div className="sm:col-span-4 flex items-center gap-2">
             <select
               value={stageFilter}
               onChange={(e) => setStageFilter(e.target.value)}
-              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full py-2 px-3 text-xs bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-md text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
             >
-              <option value="ALL">All Deal Stages</option>
-              <option value="PROSPECT">Prospect</option>
-              <option value="QUALIFIED">Qualified</option>
-              <option value="PROPOSAL">Proposal</option>
-              <option value="NEGOTIATION">Negotiation</option>
-              <option value="WON">Closed Won</option>
-              <option value="LOST">Closed Lost</option>
+              <option value="ALL">All Deal Stages ({opps.length})</option>
+              {STAGES.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.label}
+                </option>
+              ))}
             </select>
+
+            <button
+              type="button"
+              onClick={() => setIsCompact(!isCompact)}
+              className="p-2 border border-[#DCE3EA] dark:border-[#33485D] rounded-md text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] shrink-0"
+              title={isCompact ? 'Comfortable Table' : 'Compact Table'}
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
         {/* Filter Summary */}
-        <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
-          <div className="text-[11px] font-mono text-slate-500 flex items-center gap-2">
-            <span>Showing <strong className="text-slate-800">{filteredOpps.length}</strong> of {opps.length} commercial deals</span>
+        <div className="flex items-center justify-between text-xs pt-1">
+          <div className="text-[11px] font-mono text-[#5D6B7B] dark:text-[#8194A8] flex items-center gap-2">
+            <span>
+              Showing <strong className="text-[#142C45] dark:text-[#E8EEF5]">{filteredOpps.length}</strong> of {opps.length} commercial deals
+            </span>
             {(search || stageFilter !== 'ALL') && (
-              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700">
-                <SlidersHorizontal className="w-2.5 h-2.5" />
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-[#EDF1F5] dark:bg-[#101C2A] text-[#142C45] dark:text-[#A9BACB]">
                 Filtered
               </span>
             )}
           </div>
+
           {(search || stageFilter !== 'ALL') && (
             <button
               type="button"
@@ -342,7 +490,7 @@ export const OpportunitiesModule: React.FC = () => {
                 setSearch('');
                 setStageFilter('ALL');
               }}
-              className="text-xs text-brand-teal hover:underline font-medium"
+              className="text-xs text-[#168C83] hover:underline font-medium"
             >
               Reset Filters
             </button>
@@ -350,34 +498,38 @@ export const OpportunitiesModule: React.FC = () => {
         </div>
       </div>
 
-      {/* Table or EmptyState */}
+      {/* Main Operational Table */}
       {error ? (
-        <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded text-xs">
-          Error: {error}
+        <div className="p-4 bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-400 rounded text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4" />
+          <span>Pipeline Error: {error}</span>
         </div>
       ) : !loading && filteredOpps.length === 0 ? (
         <EmptyState
-          icon={<TrendingUp className="w-8 h-8 text-slate-400" />}
-          title="No deals match criteria"
-          description="No opportunities in your relationship pipeline match the current filter or search criteria."
-          actionLabel="Reset Filters"
+          icon={<TrendingUp className="w-8 h-8 text-[#8793A1]" />}
+          title="No commercial opportunities match criteria"
+          description="Adjust your search parameters or stage filters to view active deals."
+          actionLabel="Reset Pipeline Filters"
           onAction={() => {
             setSearch('');
             setStageFilter('ALL');
           }}
-          className="border border-slate-200 rounded-sm bg-white p-8"
+          className="border border-[#DCE3EA] dark:border-[#33485D] rounded-lg bg-[#FFFFFF] dark:bg-[#162638] p-8"
         />
       ) : (
-        <Table
-          columns={columns}
-          data={filteredOpps}
-          isLoading={loading}
-          keyExtractor={(o) => String(o.id)}
-          onRowClick={handleOpenOpp}
-        />
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg overflow-hidden shadow-xs">
+          <Table
+            columns={columns}
+            data={filteredOpps}
+            isLoading={loading}
+            keyExtractor={(o) => String(o.id)}
+            onRowClick={handleOpenOpp}
+            className={isCompact ? 'table-compact' : ''}
+          />
+        </div>
       )}
 
-      {/* Detail Modal */}
+      {/* Opportunity Detail Dossier Modal */}
       {selectedOpp && (
         <Modal
           isOpen={!!selectedOpp}
@@ -390,9 +542,9 @@ export const OpportunitiesModule: React.FC = () => {
           referenceId={selectedOpp.opportunityCode}
           maxWidth="4xl"
           footerActions={
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[11px] text-slate-500 mr-1">Move Stage:</span>
+            <div className="flex flex-col sm:flex-row items-center justify-between w-full gap-2">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mr-1">Move Stage:</span>
                 {['PROPOSAL', 'NEGOTIATION', 'WON', 'LOST'].map((st) => (
                   <Button
                     key={st}
@@ -400,6 +552,11 @@ export const OpportunitiesModule: React.FC = () => {
                     size="sm"
                     onClick={() => handleUpdateStage(st)}
                     disabled={selectedOpp.stage === st}
+                    className={
+                      selectedOpp.stage === st
+                        ? 'bg-[#168C83] text-white'
+                        : 'border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5]'
+                    }
                   >
                     {st}
                   </Button>
@@ -412,67 +569,78 @@ export const OpportunitiesModule: React.FC = () => {
                   setSelectedOpp(null);
                   setOppDetail(null);
                 }}
+                className="border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5]"
               >
-                Close
+                Dismiss
               </Button>
             </div>
           }
         >
           <div className="space-y-4">
-            {/* Copilot Contextual Quick Actions */}
-            <div className="bg-slate-900 border border-emerald-500/30 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 shadow-xs">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-                  <Bot className="w-3.5 h-3.5" />
+            {/* Copilot Action Banner */}
+            <div className="bg-[#101C2A] border border-[#168C83]/40 rounded-lg p-3 flex flex-wrap items-center justify-between gap-2 shadow-xs">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-md bg-[#168C83]/20 flex items-center justify-center text-[#168C83]">
+                  <Bot className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-xs font-semibold text-white">Ask Copilot about Deal:</span>
-                  <span className="text-[10px] text-slate-400 ml-1.5 hidden sm:inline">{selectedOpp.opportunityCode}</span>
+                  <div className="text-xs font-semibold text-[#E8EEF5]">Deal Intelligence Copilot</div>
+                  <div className="text-[10px] text-[#8194A8]">
+                    Review credit appraisal hurdles, pricing thresholds, and sanction readiness
+                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => openDrawer({
-                    type: 'CUSTOMER',
-                    id: selectedOpp.customerId,
-                    code: selectedOpp.customerCode,
-                    label: `${selectedOpp.customerName || 'Client'} · ${selectedOpp.customerCode || selectedOpp.customerId}`,
-                  }, `Review opportunity ${selectedOpp.opportunityCode} (${selectedOpp.title}). What is blocking stage progression and what should I do next?`)}
-                  className="px-2 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[11px] font-medium rounded border border-emerald-500/40 transition-colors"
+                  onClick={() =>
+                    openDrawer(
+                      {
+                        type: 'CUSTOMER',
+                        id: selectedOpp.customerId,
+                        code: selectedOpp.customerCode,
+                        label: `${selectedOpp.customerName || 'Client'} · ${selectedOpp.customerCode || selectedOpp.customerId}`,
+                      },
+                      `Review commercial opportunity ${selectedOpp.opportunityCode} (${selectedOpp.title}). Facility value: ${formatINR(parseFloat(selectedOpp.expectedValue) || 0)}. Analyze credit risk, recommend closing strategy, and identify any missing collateral documents.`
+                    )
+                  }
+                  className="px-2.5 py-1 bg-[#168C83]/20 hover:bg-[#168C83]/30 text-[#168C83] text-[11px] font-medium rounded border border-[#168C83]/40 transition-colors"
                 >
-                  Analyze Stage & Next Steps
+                  Analyze Sanction Readiness
                 </button>
-                <button
-                  type="button"
-                  onClick={() => openDrawer({
-                    type: 'CUSTOMER',
-                    id: selectedOpp.customerId,
-                    code: selectedOpp.customerCode,
-                    label: `${selectedOpp.customerName || 'Client'} · ${selectedOpp.customerCode || selectedOpp.customerId}`,
-                  }, `Summarize customer relationship for ${selectedOpp.customerName}.`)}
-                  className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] rounded border border-slate-700 transition-colors"
-                >
-                  Customer 360 Summary
-                </button>
+                {onNavigateToCustomer && selectedOpp.customerId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onNavigateToCustomer(selectedOpp.customerId);
+                      setSelectedOpp(null);
+                    }}
+                    className="px-2.5 py-1 bg-[#162638] hover:bg-[#1C3045] text-[#A9BACB] text-[11px] rounded border border-[#33485D] transition-colors flex items-center gap-1"
+                  >
+                    <span>Customer 360</span>
+                    <ExternalLink className="w-3 h-3 text-[#8793A1]" />
+                  </button>
+                )}
               </div>
             </div>
 
-            <div className="bg-slate-50 border border-slate-200 rounded p-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            {/* Meta Strip */}
+            <div className="bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-3.5 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div>
-                <span className="text-slate-500">Target Client</span>
-                <div className="font-semibold text-slate-900 mt-0.5">{selectedOpp.customerName}</div>
-                <div className="font-mono text-[10px] text-slate-500">{selectedOpp.customerCode}</div>
+                <span className="text-[10px] font-mono text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">Borrower Account</span>
+                <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5] mt-0.5">{selectedOpp.customerName}</div>
+                <div className="font-mono text-[10px] text-[#5D6B7B] dark:text-[#8194A8]">{selectedOpp.customerCode}</div>
               </div>
               <div>
-                <span className="text-slate-500">Facility Size</span>
-                <div className="font-mono font-bold text-slate-900 mt-0.5">
+                <span className="text-[10px] font-mono text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">Facility Principal</span>
+                <div className="font-mono font-bold text-[#142C45] dark:text-[#E8EEF5] mt-0.5">
                   {formatINR(parseFloat(selectedOpp.expectedValue) || 0)}
                 </div>
+                <div className="text-[10px] text-[#168C83] font-mono">{selectedOpp.probability}% Win Probability</div>
               </div>
               <div>
-                <span className="text-slate-500">Current Stage</span>
+                <span className="text-[10px] font-mono text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">Current Stage</span>
                 <div className="mt-0.5">
                   <Badge variant={selectedOpp.stage === 'WON' ? 'success' : 'info'} size="sm">
                     {selectedOpp.stage}
@@ -480,45 +648,60 @@ export const OpportunitiesModule: React.FC = () => {
                 </div>
               </div>
               <div>
-                <span className="text-slate-500">Target Close</span>
-                <div className="font-mono text-slate-800 mt-0.5">
+                <span className="text-[10px] font-mono text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider">Target Sanction</span>
+                <div className="font-mono text-[#273444] dark:text-[#E8EEF5] mt-0.5">
                   {selectedOpp.expectedCloseDate || '—'}
                 </div>
               </div>
             </div>
 
+            {/* Notes */}
             {selectedOpp.notes && (
-              <div className="p-3 bg-white border border-slate-200 rounded text-xs space-y-1">
-                <span className="font-semibold uppercase tracking-wider text-[10px] text-slate-500">
-                  Deal Notes & Term Sheet Parameters
+              <div className="p-3 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg text-xs space-y-1">
+                <span className="font-semibold uppercase tracking-wider text-[10px] text-[#5D6B7B] dark:text-[#8194A8] flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 text-[#168C83]" />
+                  Term Sheet Synopsis & Notes
                 </span>
-                <p className="text-slate-700">{selectedOpp.notes}</p>
+                <p className="text-[#273444] dark:text-[#E8EEF5] leading-relaxed whitespace-pre-wrap">
+                  {selectedOpp.notes}
+                </p>
               </div>
             )}
 
-            {/* Activities Trail */}
-            <div className="space-y-2 border-t border-slate-200 pt-3">
-              <span className="font-semibold uppercase tracking-wider text-[10px] text-slate-500">
-                Stage Transition & Audit Trail
+            {/* Activities Audit Trail */}
+            <div className="space-y-2 border-t border-[#DCE3EA] dark:border-[#33485D] pt-3">
+              <span className="font-semibold uppercase tracking-wider text-[10px] text-[#5D6B7B] dark:text-[#8194A8] flex items-center gap-1.5">
+                <Layers className="w-3.5 h-3.5 text-[#168C83]" />
+                Stage Transition & Deal Audit Trail
               </span>
               {detailLoading ? (
-                <div className="text-xs text-slate-500 py-2">Loading pipeline events...</div>
+                <div className="text-xs text-[#5D6B7B] dark:text-[#8194A8] py-2 text-center">
+                  Loading deal history...
+                </div>
               ) : (
                 <div className="space-y-2 max-h-44 overflow-y-auto">
                   {oppDetail?.activities && oppDetail.activities.length > 0 ? (
                     oppDetail.activities.map((act: any) => (
-                      <div key={act.id} className="p-2 bg-slate-50 border border-slate-200 rounded text-xs flex justify-between items-center">
+                      <div
+                        key={act.id}
+                        className="p-2.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-md text-xs flex justify-between items-center"
+                      >
                         <div>
-                          <div className="font-medium text-slate-800">{act.description}</div>
-                          <div className="text-[10px] text-slate-500 font-mono">{act.activityType}</div>
+                          <div className="font-medium text-[#142C45] dark:text-[#E8EEF5]">{act.description}</div>
+                          <div className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] font-mono">{act.activityType}</div>
                         </div>
-                        <span className="text-[10px] text-slate-400 font-mono">
-                          {new Date(act.timestamp).toLocaleString('en-IN')}
+                        <span className="text-[10px] text-[#8793A1] font-mono">
+                          {new Date(act.timestamp).toLocaleString('en-IN', {
+                            day: '2-digit',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
                         </span>
                       </div>
                     ))
                   ) : (
-                    <div className="text-xs text-slate-400 italic">No previous events.</div>
+                    <div className="text-xs text-[#8793A1] italic py-2 text-center">No stage transitions logged yet.</div>
                   )}
                 </div>
               )}
@@ -527,20 +710,31 @@ export const OpportunitiesModule: React.FC = () => {
         </Modal>
       )}
 
-      {/* New Opportunity Modal */}
+      {/* Originate Deal Modal */}
       {isNewModalOpen && (
         <Modal
           isOpen={isNewModalOpen}
           onClose={() => setIsNewModalOpen(false)}
           title="Originate Commercial Opportunity"
-          subtitle="Create deal record with PostgreSQL persistence"
+          subtitle="Persist commercial deal parameters in PostgreSQL"
           maxWidth="lg"
           footerActions={
             <div className="flex gap-2 justify-end w-full">
-              <Button variant="outline" size="sm" onClick={() => setIsNewModalOpen(false)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsNewModalOpen(false)}
+                className="border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5]"
+              >
                 Cancel
               </Button>
-              <Button variant="primary" size="sm" onClick={handleCreateOpp} disabled={saving || !newTitle.trim()}>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleCreateOpp}
+                disabled={saving || !newTitle.trim()}
+                className="bg-[#142C45] dark:bg-[#168C83] hover:bg-[#192B3D] text-white"
+              >
                 {saving ? 'Creating...' : 'Originate Opportunity'}
               </Button>
             </div>
@@ -548,11 +742,11 @@ export const OpportunitiesModule: React.FC = () => {
         >
           <form onSubmit={handleCreateOpp} className="space-y-3 text-xs">
             <div>
-              <label className="block text-slate-600 font-medium mb-1">Select Client Account</label>
+              <label className="block text-[#5D6B7B] dark:text-[#A9BACB] font-medium mb-1">Select Client Account</label>
               <select
                 value={newCustomerId}
                 onChange={(e) => setNewCustomerId(Number(e.target.value))}
-                className="w-full p-2 bg-slate-50 border border-slate-300 rounded focus:bg-white"
+                className="w-full p-2 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
               >
                 <option value={1}>Rahul Sharma (CUS-10482) - Affluent Retail</option>
                 <option value={2}>Kalyan Steels & Forgings Ltd (CUS-20841) - Commercial Mid-Market</option>
@@ -563,60 +757,60 @@ export const OpportunitiesModule: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-slate-600 font-medium mb-1">Deal Title</label>
+              <label className="block text-[#5D6B7B] dark:text-[#A9BACB] font-medium mb-1">Deal Title & Structure</label>
               <input
                 type="text"
                 required
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="e.g. Working Capital Line Enhancement"
-                className="w-full p-2 bg-slate-50 border border-slate-300 rounded focus:bg-white"
+                placeholder="e.g. Working Capital Line Enhancement / Term Loan"
+                className="w-full p-2 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[#273444] dark:text-[#E8EEF5] placeholder-[#8793A1] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-slate-600 font-medium mb-1">Expected Facility Size (INR)</label>
+                <label className="block text-[#5D6B7B] dark:text-[#A9BACB] font-medium mb-1">Facility Size (INR)</label>
                 <input
                   type="number"
                   value={newValue}
                   onChange={(e) => setNewValue(e.target.value)}
-                  className="w-full p-2 bg-slate-50 border border-slate-300 rounded focus:bg-white font-mono"
+                  className="w-full p-2 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[#273444] dark:text-[#E8EEF5] font-mono focus:outline-none focus:ring-1 focus:ring-[#168C83]"
                 />
               </div>
               <div>
-                <label className="block text-slate-600 font-medium mb-1">Initial Stage</label>
+                <label className="block text-[#5D6B7B] dark:text-[#A9BACB] font-medium mb-1">Initial Stage</label>
                 <select
                   value={newStage}
                   onChange={(e) => setNewStage(e.target.value)}
-                  className="w-full p-2 bg-slate-50 border border-slate-300 rounded focus:bg-white"
+                  className="w-full p-2 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
                 >
-                  <option value="PROSPECT">Prospect</option>
-                  <option value="QUALIFIED">Qualified</option>
-                  <option value="PROPOSAL">Proposal</option>
-                  <option value="NEGOTIATION">Negotiation</option>
+                  <option value="PROSPECT">Prospect (20%)</option>
+                  <option value="QUALIFIED">Qualified (40%)</option>
+                  <option value="PROPOSAL">Proposal (60%)</option>
+                  <option value="NEGOTIATION">Negotiation (80%)</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="block text-slate-600 font-medium mb-1">Target Close Date</label>
+              <label className="block text-[#5D6B7B] dark:text-[#A9BACB] font-medium mb-1">Target Sanction Date</label>
               <input
                 type="date"
                 value={newCloseDate}
                 onChange={(e) => setNewCloseDate(e.target.value)}
-                className="w-full p-2 bg-slate-50 border border-slate-300 rounded focus:bg-white font-mono"
+                className="w-full p-2 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[#273444] dark:text-[#E8EEF5] font-mono focus:outline-none focus:ring-1 focus:ring-[#168C83]"
               />
             </div>
 
             <div>
-              <label className="block text-slate-600 font-medium mb-1">Deal Synopsis & Notes</label>
+              <label className="block text-[#5D6B7B] dark:text-[#A9BACB] font-medium mb-1">Deal Synopsis & Credit Parameters</label>
               <textarea
                 rows={2}
                 value={newNotes}
                 onChange={(e) => setNewNotes(e.target.value)}
                 placeholder="Facility justification, credit rating, collateral notes..."
-                className="w-full p-2 bg-slate-50 border border-slate-300 rounded focus:bg-white"
+                className="w-full p-2 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[#273444] dark:text-[#E8EEF5] placeholder-[#8793A1] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
               />
             </div>
           </form>

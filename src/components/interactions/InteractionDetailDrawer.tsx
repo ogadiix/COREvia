@@ -135,12 +135,12 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
       />
       <div
         id="interaction-detail-drawer"
-        className="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-white border-l border-slate-200 shadow-2xl flex flex-col text-xs motion-drawer motion-slide-in-right"
+        className="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-white dark:bg-[#162638] border-l border-[#DCE3EA] dark:border-[#33485D] shadow-2xl flex flex-col text-xs motion-drawer motion-slide-in-right"
       >
       {/* Header */}
-      <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+      <div className="px-6 py-4 bg-[#142C45] dark:bg-[#101C2A] text-white flex items-center justify-between border-b border-[#DCE3EA]/10 dark:border-[#33485D]">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 bg-slate-800 text-sky-400 font-mono text-[11px] font-bold rounded border border-slate-700">
+          <span className="px-2 py-0.5 bg-[#168C83]/20 text-[#168C83] font-mono text-[11px] font-bold rounded border border-[#168C83]/40">
             {interaction.interactionReference}
           </span>
           <span className="text-[11px] text-slate-300">Touchpoint Dossier</span>
@@ -150,14 +150,14 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
             id="btn-print-interaction"
             onClick={handlePrint}
             title="Print Record"
-            className="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
+            className="p-1.5 text-slate-400 hover:text-white rounded hover:bg-[#1C3045] transition-colors"
           >
             <Printer className="w-4 h-4" />
           </button>
           <button
             id="btn-close-interaction-detail"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
+            className="p-1.5 text-slate-400 hover:text-white rounded hover:bg-[#1C3045] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -167,15 +167,15 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6 space-y-5">
         {/* Customer Header Card */}
-        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between">
+        <div className="p-3.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-sm text-slate-900">{interaction.customerName || 'Customer'}</span>
-              <span className="text-[10px] font-mono text-slate-500 bg-slate-200 px-1.5 py-0.5 rounded">
+              <span className="font-bold text-sm text-[#142C45] dark:text-[#E8EEF5]">{interaction.customerName || 'Customer'}</span>
+              <span className="text-[10px] font-mono text-[#5D6B7B] dark:text-[#8194A8] bg-[#EDF1F5] dark:bg-[#162638] px-1.5 py-0.5 rounded border border-[#DCE3EA] dark:border-[#33485D]">
                 {interaction.customerCode}
               </span>
             </div>
-            <span className="text-[11px] text-slate-500">
+            <span className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8]">
               Relationship Owner: {interaction.ownerName || 'Relationship Manager'}
             </span>
           </div>
@@ -184,42 +184,42 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
             <button
               id="btn-drawer-view-customer-360"
               onClick={() => onCustomerSelect(interaction.customerId)}
-              className="px-2.5 py-1 text-[11px] font-semibold text-slate-700 bg-white border border-slate-300 rounded hover:bg-slate-100 flex items-center gap-1 shadow-2xs"
+              className="px-2.5 py-1 text-[11px] font-semibold text-[#142C45] dark:text-[#E8EEF5] bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded hover:bg-[#EDF1F5] dark:hover:bg-[#1C3045] flex items-center gap-1 shadow-2xs"
             >
-              Customer 360 <ExternalLink className="w-3 h-3" />
+              Customer 360 <ExternalLink className="w-3 h-3 text-[#168C83]" />
             </button>
           )}
         </div>
 
         {/* Badges & Meta */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <div className="p-2 bg-white border border-slate-200 rounded flex items-center gap-2">
+          <div className="p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded flex items-center gap-2">
             {channelIcons[interaction.channel] || <Phone className="w-4 h-4 text-slate-500" />}
             <div>
-              <span className="text-[9px] uppercase font-semibold text-slate-400 block">Channel</span>
-              <span className="font-bold text-slate-800 truncate block">
+              <span className="text-[9px] uppercase font-semibold text-[#8793A1] block">Channel</span>
+              <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] truncate block">
                 {interaction.channel.replace('_', ' ')}
               </span>
             </div>
           </div>
 
-          <div className="p-2 bg-white border border-slate-200 rounded">
-            <span className="text-[9px] uppercase font-semibold text-slate-400 block">Type</span>
-            <span className="font-bold text-slate-800 truncate block">
+          <div className="p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded">
+            <span className="text-[9px] uppercase font-semibold text-[#8793A1] block">Type</span>
+            <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] truncate block">
               {interaction.interactionType.replace('_', ' ')}
             </span>
           </div>
 
-          <div className="p-2 bg-white border border-slate-200 rounded">
-            <span className="text-[9px] uppercase font-semibold text-slate-400 block">Duration</span>
-            <span className="font-bold text-slate-800">{interaction.duration ? `${interaction.duration}m` : '—'}</span>
+          <div className="p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded">
+            <span className="text-[9px] uppercase font-semibold text-[#8793A1] block">Duration</span>
+            <span className="font-bold text-[#142C45] dark:text-[#E8EEF5]">{interaction.duration ? `${interaction.duration}m` : '—'}</span>
           </div>
 
-          <div className="p-2 bg-white border border-slate-200 rounded">
-            <span className="text-[9px] uppercase font-semibold text-slate-400 block">Sentiment</span>
+          <div className="p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded">
+            <span className="text-[9px] uppercase font-semibold text-[#8793A1] block">Sentiment</span>
             <span
               className={`inline-block px-1.5 py-0.2 rounded text-[10px] font-bold border ${
-                sentimentBadgeColors[interaction.sentiment] || 'bg-slate-100 text-slate-700'
+                sentimentBadgeColors[interaction.sentiment] || 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
               }`}
             >
               {interaction.sentiment}
@@ -228,8 +228,8 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
         </div>
 
         {/* Date & Time */}
-        <div className="flex items-center gap-2 text-slate-500 text-[11px] px-1">
-          <Calendar className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-2 text-[#5D6B7B] dark:text-[#8194A8] text-[11px] px-1 font-mono">
+          <Calendar className="w-3.5 h-3.5 text-[#8793A1]" />
           <span>
             {new Date(interaction.timestamp).toLocaleString('en-IN', {
               weekday: 'short',
@@ -244,18 +244,18 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
 
         {/* Subject & Summary */}
         <div className="space-y-2">
-          <h3 className="text-base font-bold text-slate-900 leading-snug">{interaction.subject}</h3>
-          <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 leading-relaxed whitespace-pre-line">
+          <h3 className="text-base font-bold text-[#142C45] dark:text-[#E8EEF5] leading-snug">{interaction.subject}</h3>
+          <div className="p-3.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg text-[#273444] dark:text-[#A9BACB] leading-relaxed whitespace-pre-line">
             {interaction.summary}
           </div>
         </div>
 
         {/* Outcome Badge */}
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-semibold text-slate-500">Outcome:</span>
+          <span className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#8194A8]">Outcome:</span>
           <span
             className={`px-2.5 py-1 rounded-md text-[11px] font-bold border ${
-              outcomeBadgeColors[interaction.outcome] || 'bg-slate-100 text-slate-800 border-slate-200'
+              outcomeBadgeColors[interaction.outcome] || 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200'
             }`}
           >
             {interaction.outcome.replace(/_/g, ' ')}
@@ -264,22 +264,22 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
 
         {/* Follow-up Section */}
         {interaction.followupRequired && (
-          <div className="p-3.5 bg-amber-50/70 border border-amber-200 rounded-lg space-y-2">
+          <div className="p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-lg space-y-2">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-amber-900 font-bold">
-                <AlertCircle className="w-4 h-4 text-amber-600" />
+              <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300 font-bold">
+                <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 <span>Actionable Follow-up</span>
               </div>
               {interaction.followupPriority && (
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-200 text-amber-900">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                   {interaction.followupPriority} Priority
                 </span>
               )}
             </div>
 
-            <p className="text-amber-950 font-medium">{interaction.followupAction || 'Follow-up required'}</p>
+            <p className="text-amber-900 dark:text-amber-200 font-medium">{interaction.followupAction || 'Follow-up required'}</p>
 
-            <div className="flex items-center justify-between text-[11px] text-amber-800 pt-1 border-t border-amber-200/60">
+            <div className="flex items-center justify-between text-[11px] text-amber-800 dark:text-amber-300 pt-1 border-t border-amber-500/20">
               <div className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
                 <span>
@@ -294,7 +294,7 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
                 </span>
               </div>
               {interaction.followupTaskId && (
-                <span className="font-mono text-[10px] bg-amber-100 px-1.5 py-0.5 rounded border border-amber-300">
+                <span className="font-mono text-[10px] bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-500/40 text-amber-900 dark:text-amber-200">
                   Task #{interaction.followupTaskId}
                 </span>
               )}
@@ -303,16 +303,16 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
         )}
 
         {/* Commitments Checklist */}
-        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg space-y-2.5">
+        <div className="p-3.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg space-y-2.5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-slate-800 font-bold uppercase tracking-wider text-[11px]">
-              <CheckSquare className="w-3.5 h-3.5 text-sky-600" />
+            <div className="flex items-center gap-1.5 text-[#142C45] dark:text-[#E8EEF5] font-bold uppercase tracking-wider text-[11px]">
+              <CheckSquare className="w-3.5 h-3.5 text-[#168C83]" />
               <span>Commitments & Agreed Actions ({interaction.commitments?.length || 0})</span>
             </div>
           </div>
 
           {!interaction.commitments || interaction.commitments.length === 0 ? (
-            <p className="text-slate-400 italic text-[11px]">No formal commitments recorded for this touchpoint.</p>
+            <p className="text-[#8793A1] italic text-[11px]">No formal commitments recorded for this touchpoint.</p>
           ) : (
             <div className="space-y-2">
               {interaction.commitments.map((c) => {
@@ -323,20 +323,20 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
                     key={c.id}
                     className={`p-2.5 rounded border transition-colors flex items-start gap-2.5 ${
                       isCompleted
-                        ? 'bg-emerald-50/50 border-emerald-200 text-slate-600'
-                        : 'bg-white border-slate-200 text-slate-900'
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-[#8793A1]'
+                        : 'bg-white dark:bg-[#162638] border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5]'
                     }`}
                   >
                     <button
                       type="button"
                       disabled={updatingCommitmentId === c.id}
                       onClick={() => handleToggleCommitment(c)}
-                      className="mt-0.5 text-slate-400 hover:text-emerald-600 focus:outline-hidden"
+                      className="mt-0.5 text-[#8793A1] hover:text-[#168C83] focus:outline-hidden"
                     >
                       {isCompleted ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                        <CheckCircle2 className="w-4 h-4 text-[#168C83]" />
                       ) : (
-                        <Circle className="w-4 h-4 text-slate-300" />
+                        <Circle className="w-4 h-4 text-[#8793A1]" />
                       )}
                     </button>
 
@@ -344,18 +344,18 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
                       <div className="flex items-center gap-2 mb-0.5">
                         <span
                           className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ${
-                            isRM ? 'bg-sky-100 text-sky-800' : 'bg-purple-100 text-purple-800'
+                            isRM ? 'bg-[#168C83]/20 text-[#168C83]' : 'bg-purple-500/20 text-purple-700 dark:text-purple-400'
                           }`}
                         >
                           {isRM ? 'Bank RM' : 'Customer'}
                         </span>
-                        {c.ownerName && <span className="text-[10px] text-slate-500 font-medium">({c.ownerName})</span>}
+                        {c.ownerName && <span className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] font-medium">({c.ownerName})</span>}
                       </div>
-                      <p className={`text-xs ${isCompleted ? 'line-through text-slate-400' : 'text-slate-800'}`}>
+                      <p className={`text-xs ${isCompleted ? 'line-through text-[#8793A1]' : 'text-[#273444] dark:text-[#E8EEF5]'}`}>
                         {c.description}
                       </p>
                       {c.dueDate && (
-                        <div className="text-[10px] text-slate-400 mt-1">
+                        <div className="text-[10px] text-[#8793A1] font-mono mt-1">
                           Due:{' '}
                           {new Date(c.dueDate).toLocaleDateString('en-IN', {
                             day: 'numeric',
@@ -373,31 +373,31 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
         </div>
 
         {/* Meeting Participants */}
-        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
-          <div className="flex items-center gap-1.5 text-slate-800 font-bold uppercase tracking-wider text-[11px]">
-            <Users className="w-3.5 h-3.5 text-slate-600" />
+        <div className="p-3.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg space-y-2">
+          <div className="flex items-center gap-1.5 text-[#142C45] dark:text-[#E8EEF5] font-bold uppercase tracking-wider text-[11px]">
+            <Users className="w-3.5 h-3.5 text-[#168C83]" />
             <span>Participants ({interaction.participants?.length || 0})</span>
           </div>
 
-          <div className="divide-y divide-slate-200/70">
+          <div className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
             {(interaction.participants || []).map((p, idx) => (
               <div key={idx} className="py-1.5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-[10px]">
+                  <div className="w-6 h-6 rounded-full bg-[#EDF1F5] dark:bg-[#162638] text-[#142C45] dark:text-[#E8EEF5] flex items-center justify-center font-bold text-[10px]">
                     {p.name.slice(0, 2).toUpperCase()}
                   </div>
                   <div>
-                    <span className="font-semibold text-slate-900 block">{p.name}</span>
-                    <span className="text-[10px] text-slate-500 block">{p.role || p.type}</span>
+                    <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] block">{p.name}</span>
+                    <span className="text-[10px] text-[#5D6B7B] dark:text-[#8194A8] block">{p.role || p.type}</span>
                   </div>
                 </div>
                 <span
                   className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${
                     p.type === 'CUSTOMER'
-                      ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                      ? 'bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/20'
                       : p.type === 'RM'
-                      ? 'bg-sky-50 text-sky-700 border border-sky-200'
-                      : 'bg-slate-100 text-slate-700'
+                      ? 'bg-[#168C83]/10 text-[#168C83] border border-[#168C83]/30'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                   }`}
                 >
                   {p.type}
@@ -408,9 +408,9 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
         </div>
 
         {/* Linked Entities */}
-        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
-          <div className="flex items-center gap-1.5 text-slate-800 font-bold uppercase tracking-wider text-[11px]">
-            <LinkIcon className="w-3.5 h-3.5 text-slate-600" />
+        <div className="p-3.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg space-y-2">
+          <div className="flex items-center gap-1.5 text-[#142C45] dark:text-[#E8EEF5] font-bold uppercase tracking-wider text-[11px]">
+            <LinkIcon className="w-3.5 h-3.5 text-[#168C83]" />
             <span>Cross-Entity Linkages</span>
           </div>
 
@@ -419,25 +419,25 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
               {interaction.links.map((link) => (
                 <div
                   key={link.id}
-                  className="p-2 bg-white border border-slate-200 rounded flex items-center justify-between"
+                  className="p-2 bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded flex items-center justify-between"
                 >
                   <div>
-                    <span className="text-[9px] font-bold uppercase text-slate-400 block">{link.linkType}</span>
-                    <span className="font-semibold text-slate-800 text-[11px]">{link.title || `Entity #${link.linkId}`}</span>
+                    <span className="text-[9px] font-bold uppercase text-[#8793A1] block">{link.linkType}</span>
+                    <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] text-[11px]">{link.title || `Entity #${link.linkId}`}</span>
                   </div>
-                  <span className="text-[10px] text-slate-400 font-mono">#{link.linkId}</span>
+                  <span className="text-[10px] text-[#8793A1] font-mono">#{link.linkId}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-slate-400 italic text-[11px]">No external modules explicitly linked.</p>
+            <p className="text-[#8793A1] italic text-[11px]">No external modules explicitly linked.</p>
           )}
         </div>
 
         {/* Audit Footer */}
-        <div className="pt-2 border-t border-slate-200 text-[10px] text-slate-400 flex items-center justify-between">
+        <div className="pt-2 border-t border-[#DCE3EA] dark:border-[#33485D] text-[10px] text-[#8793A1] flex items-center justify-between font-mono">
           <div className="flex items-center gap-1">
-            <Shield className="w-3 h-3 text-emerald-600" />
+            <Shield className="w-3 h-3 text-[#168C83]" />
             <span>Regulatory Record: Immutable Audit Log Active</span>
           </div>
           <span>ID #{interaction.id}</span>
@@ -445,20 +445,20 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
       </div>
 
       {/* Footer Controls */}
-      <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+      <div className="px-6 py-3 bg-[#F4F6F8] dark:bg-[#101C2A] border-t border-[#DCE3EA] dark:border-[#33485D] flex items-center justify-between">
         {showConfirmDelete ? (
           <div className="flex items-center gap-2">
-            <span className="text-rose-700 font-bold text-[11px]">Confirm soft deletion?</span>
+            <span className="text-red-600 dark:text-red-400 font-bold text-[11px]">Confirm soft deletion?</span>
             <button
               onClick={handleDelete}
               disabled={deleting}
-              className="px-2.5 py-1 bg-rose-600 text-white rounded font-medium hover:bg-rose-700 text-[11px]"
+              className="px-2.5 py-1 bg-red-600 text-white rounded font-medium hover:bg-red-700 text-[11px]"
             >
               {deleting ? 'Deleting...' : 'Yes, Delete'}
             </button>
             <button
               onClick={() => setShowConfirmDelete(false)}
-              className="px-2 py-1 bg-slate-200 text-slate-700 rounded font-medium text-[11px]"
+              className="px-2 py-1 bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] rounded font-medium text-[11px]"
             >
               Cancel
             </button>
@@ -468,7 +468,7 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
             type="button"
             id="btn-delete-interaction"
             onClick={() => setShowConfirmDelete(true)}
-            className="text-slate-400 hover:text-rose-600 font-medium flex items-center gap-1 text-[11px] transition-colors"
+            className="text-[#8793A1] hover:text-red-600 font-medium flex items-center gap-1 text-[11px] transition-colors"
           >
             <Trash2 className="w-3.5 h-3.5" /> Remove Record
           </button>
@@ -478,7 +478,7 @@ export const InteractionDetailDrawer: React.FC<InteractionDetailDrawerProps> = (
           type="button"
           id="btn-close-drawer-bottom"
           onClick={onClose}
-          className="px-4 py-1.5 bg-slate-900 text-white rounded font-medium hover:bg-slate-800 transition-colors shadow-2xs"
+          className="px-4 py-1.5 bg-[#142C45] dark:bg-[#168C83] text-white rounded font-medium hover:bg-[#192B3D] dark:hover:bg-[#1B9D92] transition-colors shadow-2xs"
         >
           Done
         </button>

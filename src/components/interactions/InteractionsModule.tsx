@@ -211,23 +211,23 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
     search || selectedCustomer || selectedChannel || selectedType || selectedOutcome || selectedSentiment || followupFilter !== 'ALL';
 
   return (
-    <div id="interactions-hub-module" className="space-y-5 text-xs text-slate-800 max-w-7xl mx-auto">
+    <div id="interactions-hub-module" className="space-y-4 text-xs text-[#273444] dark:text-[#E8EEF5] max-w-7xl mx-auto">
       {/* Module Title Bar */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <div className="p-1.5 bg-sky-100 text-sky-700 rounded-md">
-              <MessageSquare className="w-5 h-5" />
+            <div className="p-1.5 bg-[#142C45] dark:bg-[#168C83] text-white rounded-md">
+              <MessageSquare className="w-4 h-4" />
             </div>
-            <h1 className="text-lg font-bold tracking-tight text-slate-900">
+            <h1 className="text-lg font-bold tracking-tight text-[#142C45] dark:text-[#E8EEF5]">
               Customer Communication & Interaction Hub
             </h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-sky-50 text-sky-800 border border-sky-200">
-              Phase 24
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-[#168C83]/10 text-[#168C83] border border-[#168C83]/30">
+              Omnichannel CRM
             </span>
           </div>
-          <p className="text-slate-500 text-xs">
-            Complete, chronological, structured record of customer interactions, touchpoints, commitments, and follow-ups across the relationship lifecycle.
+          <p className="text-[#5D6B7B] dark:text-[#A9BACB] text-xs">
+            Chronological audit trail of customer touchpoints, officer commitments, and regulatory follow-ups.
           </p>
         </div>
 
@@ -235,15 +235,15 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
           <button
             id="btn-export-interactions"
             onClick={handleExportCSV}
-            className="px-3 py-2 border border-slate-300 text-slate-700 font-medium rounded-md hover:bg-slate-50 flex items-center gap-1.5 transition-colors shadow-2xs"
+            className="px-3 py-1.5 border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] font-medium rounded-md hover:bg-[#F4F6F8] dark:hover:bg-[#101C2A] flex items-center gap-1.5 transition-colors shadow-2xs"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download className="w-3.5 h-3.5 text-[#168C83]" />
             <span>Export CSV</span>
           </button>
           <button
             id="btn-open-record-interaction"
             onClick={() => setIsRecordModalOpen(true)}
-            className="px-4 py-2 bg-slate-900 text-white font-medium rounded-md hover:bg-slate-800 flex items-center gap-1.5 transition-colors shadow-xs"
+            className="px-3.5 py-1.5 bg-[#142C45] dark:bg-[#168C83] text-white font-medium rounded-md hover:bg-[#192B3D] dark:hover:bg-[#1B9D92] flex items-center gap-1.5 transition-colors shadow-xs"
           >
             <Plus className="w-4 h-4" />
             <span>Record Touchpoint</span>
@@ -254,70 +254,70 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
       {/* Metrics Banner */}
       {metrics && (
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-          <div className="p-3 bg-white border border-slate-200 rounded-lg shadow-2xs">
-            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">
+          <div className="p-3 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg shadow-2xs">
+            <span className="text-[10px] font-semibold text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider block">
               Total Recorded
             </span>
-            <span className="text-xl font-bold text-slate-900 mt-1 block">{metrics.totalInteractions}</span>
-            <span className="text-[10px] text-slate-400">All touchpoints</span>
+            <span className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] mt-1 block font-mono">{metrics.totalInteractions}</span>
+            <span className="text-[10px] text-[#8793A1]">All touchpoints</span>
           </div>
 
-          <div className="p-3 bg-white border border-slate-200 rounded-lg shadow-2xs">
-            <span className="text-[10px] font-semibold text-amber-700 uppercase tracking-wider block">
+          <div className="p-3 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg shadow-2xs">
+            <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider block">
               Follow-ups Pending
             </span>
-            <span className="text-xl font-bold text-amber-900 mt-1 block">
+            <span className="text-xl font-bold text-amber-700 dark:text-amber-400 mt-1 block font-mono">
               {metrics.followUpsRequiredCount}
             </span>
-            <span className="text-[10px] text-amber-600">Action items</span>
+            <span className="text-[10px] text-amber-600 dark:text-amber-500">Action items</span>
           </div>
 
-          <div className="p-3 bg-white border border-slate-200 rounded-lg shadow-2xs">
-            <span className="text-[10px] font-semibold text-rose-700 uppercase tracking-wider block">
+          <div className="p-3 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg shadow-2xs">
+            <span className="text-[10px] font-semibold text-red-700 dark:text-red-400 uppercase tracking-wider block">
               Follow-ups Overdue
             </span>
-            <span className="text-xl font-bold text-rose-900 mt-1 block">
+            <span className="text-xl font-bold text-red-700 dark:text-red-400 mt-1 block font-mono">
               {metrics.followUpsOverdueCount}
             </span>
-            <span className="text-[10px] text-rose-500">Past target date</span>
+            <span className="text-[10px] text-red-500">Past target date</span>
           </div>
 
-          <div className="p-3 bg-white border border-slate-200 rounded-lg shadow-2xs">
-            <span className="text-[10px] font-semibold text-emerald-700 uppercase tracking-wider block">
+          <div className="p-3 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg shadow-2xs">
+            <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">
               Linked to Deals
             </span>
-            <span className="text-xl font-bold text-emerald-900 mt-1 block">
+            <span className="text-xl font-bold text-emerald-700 dark:text-emerald-400 mt-1 block font-mono">
               {metrics.linkedToOpportunitiesCount}
             </span>
-            <span className="text-[10px] text-emerald-600">Pipeline active</span>
+            <span className="text-[10px] text-emerald-600 dark:text-emerald-500">Pipeline active</span>
           </div>
 
-          <div className="p-3 bg-white border border-slate-200 rounded-lg shadow-2xs">
-            <span className="text-[10px] font-semibold text-blue-700 uppercase tracking-wider block">
+          <div className="p-3 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg shadow-2xs">
+            <span className="text-[10px] font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wider block">
               Linked to Cases
             </span>
-            <span className="text-xl font-bold text-blue-900 mt-1 block">
+            <span className="text-xl font-bold text-blue-700 dark:text-blue-400 mt-1 block font-mono">
               {metrics.linkedToCasesCount}
             </span>
-            <span className="text-[10px] text-blue-600">Service desk</span>
+            <span className="text-[10px] text-blue-600 dark:text-blue-500">Service desk</span>
           </div>
 
-          <div className="p-3 bg-white border border-slate-200 rounded-lg shadow-2xs">
-            <span className="text-[10px] font-semibold text-sky-700 uppercase tracking-wider block">
+          <div className="p-3 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg shadow-2xs">
+            <span className="text-[10px] font-semibold text-[#168C83] uppercase tracking-wider block">
               Recent (30 Days)
             </span>
-            <span className="text-xl font-bold text-sky-900 mt-1 block">{metrics.recentCount}</span>
-            <span className="text-[10px] text-sky-600">Active engagement</span>
+            <span className="text-xl font-bold text-[#168C83] mt-1 block font-mono">{metrics.recentCount}</span>
+            <span className="text-[10px] text-[#8793A1]">Active engagement</span>
           </div>
         </div>
       )}
 
       {/* Filter and Search Bar */}
-      <div className="p-4 bg-white border border-slate-200 rounded-lg shadow-xs space-y-3">
+      <div className="p-3.5 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg shadow-xs space-y-3">
         <div className="flex flex-col md:flex-row items-center gap-3">
           {/* Search */}
           <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-3 top-2.5 text-[#8793A1]" />
             <input
               id="input-search-interactions"
               type="text"
@@ -327,7 +327,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-300 rounded-md focus:bg-white focus:ring-1 focus:ring-slate-900"
+              className="w-full pl-9 pr-8 py-2 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-md text-[#273444] dark:text-[#E8EEF5] placeholder-[#8793A1] focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
             />
             {search && (
               <button
@@ -336,7 +336,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                   setSearch('');
                   setPage(1);
                 }}
-                className="absolute right-2.5 top-3 text-slate-400 hover:text-slate-600 focus:outline-none"
+                className="absolute right-2.5 top-2.5 text-[#8793A1] hover:text-[#273444] dark:hover:text-[#E8EEF5]"
                 aria-label="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
@@ -345,12 +345,12 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
           </div>
 
           {/* View Mode Toggle */}
-          <div className="flex items-center gap-1 border border-slate-200 p-0.5 rounded-md bg-slate-50">
+          <div className="flex items-center gap-1 border border-[#DCE3EA] dark:border-[#33485D] p-0.5 rounded-md bg-[#F4F6F8] dark:bg-[#101C2A]">
             <button
               id="btn-view-timeline"
               onClick={() => setViewMode('TIMELINE')}
-              className={`px-3 py-1.5 rounded font-semibold flex items-center gap-1.5 transition-colors ${
-                viewMode === 'TIMELINE' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+              className={`px-3 py-1.5 rounded font-semibold flex items-center gap-1.5 transition-colors text-xs ${
+                viewMode === 'TIMELINE' ? 'bg-[#FFFFFF] dark:bg-[#162638] text-[#142C45] dark:text-[#E8EEF5] shadow-2xs' : 'text-[#5D6B7B] dark:text-[#8194A8] hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
               }`}
             >
               <Activity className="w-3.5 h-3.5" />
@@ -359,8 +359,8 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
             <button
               id="btn-view-table"
               onClick={() => setViewMode('TABLE')}
-              className={`px-3 py-1.5 rounded font-semibold flex items-center gap-1.5 transition-colors ${
-                viewMode === 'TABLE' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+              className={`px-3 py-1.5 rounded font-semibold flex items-center gap-1.5 transition-colors text-xs ${
+                viewMode === 'TABLE' ? 'bg-[#FFFFFF] dark:bg-[#162638] text-[#142C45] dark:text-[#E8EEF5] shadow-2xs' : 'text-[#5D6B7B] dark:text-[#8194A8] hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
               }`}
             >
               <LayoutList className="w-3.5 h-3.5" />
@@ -371,7 +371,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
           <button
             id="btn-refresh-interactions"
             onClick={fetchInteractions}
-            className="p-2 border border-slate-300 text-slate-600 rounded-md hover:bg-slate-50"
+            className="p-2 border border-[#DCE3EA] dark:border-[#33485D] text-[#5D6B7B] dark:text-[#8194A8] rounded-md hover:bg-[#F4F6F8] dark:hover:bg-[#101C2A]"
             title="Refresh List"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -379,7 +379,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
         </div>
 
         {/* Dropdown Filters */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 pt-2 border-t border-slate-100">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 pt-2 border-t border-[#DCE3EA] dark:border-[#33485D]">
           <div>
             <select
               id="filter-channel"
@@ -388,7 +388,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                 setSelectedChannel(e.target.value);
                 setPage(1);
               }}
-              className="w-full p-1.5 bg-slate-50 border border-slate-300 rounded text-[11px]"
+              className="w-full p-1.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[11px] text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
             >
               <option value="">All Channels</option>
               <option value="PHONE">Phone Calls</option>
@@ -411,7 +411,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                 setSelectedType(e.target.value);
                 setPage(1);
               }}
-              className="w-full p-1.5 bg-slate-50 border border-slate-300 rounded text-[11px]"
+              className="w-full p-1.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[11px] text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
             >
               <option value="">All Types</option>
               <option value="CALL">Call</option>
@@ -435,7 +435,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                 setSelectedOutcome(e.target.value);
                 setPage(1);
               }}
-              className="w-full p-1.5 bg-slate-50 border border-slate-300 rounded text-[11px]"
+              className="w-full p-1.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[11px] text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
             >
               <option value="">All Outcomes</option>
               <option value="FOLLOW_UP_REQUIRED">Follow-up Required</option>
@@ -458,7 +458,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                 setSelectedSentiment(e.target.value);
                 setPage(1);
               }}
-              className="w-full p-1.5 bg-slate-50 border border-slate-300 rounded text-[11px]"
+              className="w-full p-1.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[11px] text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
             >
               <option value="">All Sentiments</option>
               <option value="POSITIVE">Positive</option>
@@ -476,7 +476,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                 setFollowupFilter(e.target.value as any);
                 setPage(1);
               }}
-              className="w-full p-1.5 bg-slate-50 border border-slate-300 rounded text-[11px]"
+              className="w-full p-1.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[11px] text-[#273444] dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-[#168C83]"
             >
               <option value="ALL">All Touchpoints</option>
               <option value="REQUIRED">Follow-ups Required Only</option>
@@ -488,7 +488,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
             <button
               id="btn-clear-filters"
               onClick={clearFilters}
-              className="w-full py-1.5 px-2 bg-rose-50 text-rose-700 border border-rose-200 rounded font-medium hover:bg-rose-100 flex items-center justify-center gap-1"
+              className="w-full py-1.5 px-2 bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/30 rounded font-medium hover:bg-red-500/20 flex items-center justify-center gap-1"
             >
               <X className="w-3 h-3" /> Clear Filters
             </button>
@@ -525,25 +525,25 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                     key={item.id}
                     id={`interaction-card-${item.id}`}
                     onClick={() => setSelectedInteraction(item)}
-                    className="p-4 bg-white border border-slate-200 hover:border-slate-400 rounded-lg shadow-2xs transition-all cursor-pointer group hover:shadow-xs space-y-3"
+                    className="p-4 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] hover:border-[#168C83] dark:hover:border-[#168C83] rounded-lg shadow-2xs transition-all cursor-pointer group hover:shadow-xs space-y-3"
                   >
                     {/* Top Row */}
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 bg-slate-100 font-mono text-[10px] font-bold text-slate-700 rounded border border-slate-200">
+                        <span className="px-2 py-0.5 bg-[#F4F6F8] dark:bg-[#101C2A] font-mono text-[10px] font-bold text-[#142C45] dark:text-[#E8EEF5] rounded border border-[#DCE3EA] dark:border-[#33485D]">
                           {item.interactionReference}
                         </span>
-                        <div className="flex items-center gap-1 px-2 py-0.5 bg-slate-50 text-slate-700 rounded border border-slate-200 font-semibold text-[11px]">
-                          {channelIcons[item.channel] || <Phone className="w-3.5 h-3.5 text-slate-500" />}
+                        <div className="flex items-center gap-1 px-2 py-0.5 bg-[#EDF1F5] dark:bg-[#101C2A] text-[#142C45] dark:text-[#E8EEF5] rounded border border-[#DCE3EA] dark:border-[#33485D] font-semibold text-[11px]">
+                          {channelIcons[item.channel] || <Phone className="w-3.5 h-3.5 text-[#8793A1]" />}
                           <span>{item.channel.replace('_', ' ')}</span>
                         </div>
-                        <span className="text-[11px] text-slate-400">•</span>
-                        <span className="text-[11px] font-medium text-slate-600">
+                        <span className="text-[11px] text-[#8793A1]">•</span>
+                        <span className="text-[11px] font-medium text-[#5D6B7B] dark:text-[#A9BACB]">
                           {item.interactionType.replace('_', ' ')}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2 text-slate-400 text-[11px]">
+                      <div className="flex items-center gap-2 text-[#8793A1] text-[11px] font-mono">
                         <Clock className="w-3 h-3" />
                         <span>
                           {dateObj.toLocaleDateString('en-IN', {
@@ -558,7 +558,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                           })}
                         </span>
                         {item.duration && (
-                          <span className="bg-slate-100 px-1.5 py-0.2 rounded text-[10px] text-slate-600 font-mono">
+                          <span className="bg-[#EDF1F5] dark:bg-[#101C2A] px-1.5 py-0.2 rounded text-[10px] text-[#142C45] dark:text-[#E8EEF5] font-mono">
                             {item.duration}m
                           </span>
                         )}
@@ -568,33 +568,33 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                     {/* Customer & Subject */}
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
+                        <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] group-hover:text-[#168C83] transition-colors">
                           {item.customerName || 'Customer Entity'}
                         </span>
                         {item.customerCode && (
-                          <span className="text-[10px] font-mono text-slate-400">({item.customerCode})</span>
+                          <span className="text-[10px] font-mono text-[#8793A1]">({item.customerCode})</span>
                         )}
-                        <span className="text-slate-300">|</span>
-                        <span className="text-slate-500 text-[11px]">Officer: {item.ownerName || 'Bank RM'}</span>
+                        <span className="text-[#8793A1]">|</span>
+                        <span className="text-[#5D6B7B] dark:text-[#8194A8] text-[11px]">Officer: {item.ownerName || 'Bank RM'}</span>
                       </div>
-                      <h3 className="text-sm font-bold text-slate-900 leading-snug">{item.subject}</h3>
+                      <h3 className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] leading-snug">{item.subject}</h3>
                     </div>
 
                     {/* Summary Excerpt */}
-                    <p className="text-slate-600 line-clamp-2 leading-relaxed text-xs">{item.summary}</p>
+                    <p className="text-[#5D6B7B] dark:text-[#A9BACB] line-clamp-2 leading-relaxed text-xs">{item.summary}</p>
 
                     {/* Follow-up Banner if required */}
                     {item.followupRequired && (
-                      <div className="p-2.5 bg-amber-50/80 border border-amber-200 rounded flex items-center justify-between text-[11px]">
+                      <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded flex items-center justify-between text-[11px]">
                         <div className="flex items-center gap-2 min-w-0">
-                          <AlertCircle className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                          <span className="font-semibold text-amber-900 truncate">
+                          <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                          <span className="font-semibold text-amber-800 dark:text-amber-300 truncate">
                             Follow-up: {item.followupAction || item.subject}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           {item.followupDate && (
-                            <span className="text-[10px] font-medium text-amber-800">
+                            <span className="text-[10px] font-medium text-amber-800 dark:text-amber-300 font-mono">
                               Target:{' '}
                               {new Date(item.followupDate).toLocaleDateString('en-IN', {
                                 day: 'numeric',
@@ -603,7 +603,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                             </span>
                           )}
                           {item.followupPriority && (
-                            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold uppercase bg-amber-200 text-amber-900">
+                            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold uppercase bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                               {item.followupPriority}
                             </span>
                           )}
@@ -612,50 +612,50 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                     )}
 
                     {/* Bottom Status Tags & Cross Links */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#DCE3EA] dark:border-[#33485D]">
                       <div className="flex flex-wrap items-center gap-1.5">
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                            outcomeColors[item.outcome] || 'bg-slate-100 text-slate-800'
+                            outcomeColors[item.outcome] || 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-700'
                           }`}
                         >
                           {item.outcome.replace(/_/g, ' ')}
                         </span>
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                            sentimentColors[item.sentiment] || 'bg-slate-100 text-slate-800'
+                            sentimentColors[item.sentiment] || 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-700'
                           }`}
                         >
                           {item.sentiment}
                         </span>
 
                         {item.commitments && item.commitments.length > 0 && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200 flex items-center gap-1">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#168C83]/10 text-[#168C83] border border-[#168C83]/30 flex items-center gap-1">
                             <CheckSquare className="w-3 h-3" />
                             <span>{item.commitments.length} Commitment(s)</span>
                           </span>
                         )}
 
                         {item.linkedOpportunityId && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
                             <Briefcase className="w-3 h-3" /> Deal #{item.linkedOpportunityId}
                           </span>
                         )}
 
                         {item.linkedCaseId && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/30 flex items-center gap-1">
                             <LifeBuoy className="w-3 h-3" /> Case #{item.linkedCaseId}
                           </span>
                         )}
 
                         {item.linkedOnboardingId && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-800 border border-purple-200 flex items-center gap-1">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/30 flex items-center gap-1">
                             <UserCheck className="w-3 h-3" /> KYC #{item.linkedOnboardingId}
                           </span>
                         )}
                       </div>
 
-                      <span className="text-[11px] font-semibold text-sky-600 group-hover:translate-x-0.5 transition-transform flex items-center">
+                      <span className="text-[11px] font-semibold text-[#168C83] group-hover:translate-x-0.5 transition-transform flex items-center">
                         Dossier <ChevronRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
@@ -665,9 +665,9 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
             </div>
           ) : (
             /* Table Grid View */
-            <div className="bg-white border border-slate-200 rounded-lg overflow-x-auto shadow-2xs">
+            <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg overflow-x-auto shadow-2xs">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-wider">
+                <thead className="bg-[#F4F6F8] dark:bg-[#101C2A] border-b border-[#DCE3EA] dark:border-[#33485D] text-[#5D6B7B] dark:text-[#8194A8] text-[10px] font-bold uppercase tracking-wider">
                   <tr>
                     <th className="py-2.5 px-3">Reference</th>
                     <th className="py-2.5 px-3">Date</th>
@@ -680,38 +680,38 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                     <th className="py-2.5 px-3">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                   {interactions.map((item) => (
                     <tr
                       key={item.id}
                       onClick={() => setSelectedInteraction(item)}
-                      className="hover:bg-slate-50/80 cursor-pointer transition-colors"
+                      className="hover:bg-[#F4F6F8] dark:hover:bg-[#101C2A] cursor-pointer transition-colors"
                     >
-                      <td className="py-2.5 px-3 font-mono font-bold text-[11px] text-slate-700 whitespace-nowrap">
+                      <td className="py-2.5 px-3 font-mono font-bold text-[11px] text-[#142C45] dark:text-[#E8EEF5] whitespace-nowrap">
                         {item.interactionReference}
                       </td>
-                      <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">
+                      <td className="py-2.5 px-3 text-[#5D6B7B] dark:text-[#8194A8] whitespace-nowrap font-mono">
                         {new Date(item.timestamp).toLocaleDateString('en-IN', {
                           day: 'numeric',
                           month: 'short',
                         })}
                       </td>
-                      <td className="py-2.5 px-3 font-semibold text-slate-900 whitespace-nowrap">
+                      <td className="py-2.5 px-3 font-semibold text-[#142C45] dark:text-[#E8EEF5] whitespace-nowrap">
                         {item.customerName || 'Customer'}
                       </td>
                       <td className="py-2.5 px-3 whitespace-nowrap">
-                        <div className="flex items-center gap-1 font-medium text-slate-700">
+                        <div className="flex items-center gap-1 font-medium text-[#273444] dark:text-[#E8EEF5]">
                           {channelIcons[item.channel]}
                           <span>{item.channel}</span>
                         </div>
                       </td>
-                      <td className="py-2.5 px-3 max-w-xs truncate font-medium text-slate-800" title={item.subject}>
+                      <td className="py-2.5 px-3 max-w-xs truncate font-medium text-[#273444] dark:text-[#E8EEF5]" title={item.subject}>
                         {item.subject}
                       </td>
                       <td className="py-2.5 px-3 whitespace-nowrap">
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                            outcomeColors[item.outcome] || 'bg-slate-100 text-slate-800'
+                            outcomeColors[item.outcome] || 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-700'
                           }`}
                         >
                           {item.outcome.replace(/_/g, ' ')}
@@ -720,7 +720,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                       <td className="py-2.5 px-3 whitespace-nowrap">
                         <span
                           className={`px-1.5 py-0.2 rounded text-[10px] font-bold border ${
-                            sentimentColors[item.sentiment] || 'bg-slate-100 text-slate-800'
+                            sentimentColors[item.sentiment] || 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-700'
                           }`}
                         >
                           {item.sentiment}
@@ -728,11 +728,11 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                       </td>
                       <td className="py-2.5 px-3 whitespace-nowrap">
                         {item.followupRequired ? (
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                             Required
                           </span>
                         ) : (
-                          <span className="text-slate-400">—</span>
+                          <span className="text-[#8793A1]">—</span>
                         )}
                       </td>
                       <td className="py-2.5 px-3 text-right">
@@ -741,7 +741,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                             e.stopPropagation();
                             setSelectedInteraction(item);
                           }}
-                          className="text-sky-600 hover:text-sky-800 font-semibold"
+                          className="text-[#168C83] hover:underline font-semibold"
                         >
                           View
                         </button>
@@ -763,17 +763,17 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
               onViewAllInteractions={() => setSelectedCustomer('')}
             />
           ) : (
-            <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs space-y-3">
-              <div className="flex items-center gap-2 text-slate-800 font-bold uppercase tracking-wider text-xs">
-                <Activity className="w-4 h-4 text-sky-600" />
+            <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-4 shadow-xs space-y-3">
+              <div className="flex items-center gap-2 text-[#142C45] dark:text-[#E8EEF5] font-bold uppercase tracking-wider text-xs">
+                <Activity className="w-4 h-4 text-[#168C83]" />
                 <span>Client Communication Intelligence</span>
               </div>
-              <p className="text-slate-500 text-xs leading-relaxed">
+              <p className="text-[#5D6B7B] dark:text-[#A9BACB] text-xs leading-relaxed">
                 Filter by a specific customer or click on any touchpoint to load their full Customer 360 Communication Profile, contact cadence metrics, channel breakdown, and sentiment trajectory.
               </p>
 
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded text-xs space-y-2">
-                <span className="font-semibold text-slate-700 block">Quick Filters by Relationship</span>
+              <div className="p-3 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-md text-xs space-y-2">
+                <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] block">Quick Filters by Relationship</span>
                 <div className="flex flex-wrap gap-1.5">
                   {Array.from(new Map(interactions.map((i) => [i.customerId, i.customerName])).entries())
                     .filter(([_, name]) => Boolean(name))
@@ -782,7 +782,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
                       <button
                         key={id}
                         onClick={() => setSelectedCustomer(id)}
-                        className="px-2 py-1 bg-white border border-slate-200 rounded text-[11px] font-medium text-slate-700 hover:bg-sky-50 hover:text-sky-800 hover:border-sky-300 transition-colors"
+                        className="px-2 py-1 bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded text-[11px] font-medium text-[#273444] dark:text-[#E8EEF5] hover:border-[#168C83] transition-colors"
                       >
                         {name}
                       </button>
@@ -793,12 +793,12 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
           )}
 
           {/* Regulatory & Institutional Compliance Note */}
-          <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-600 text-[11px] space-y-1.5">
-            <div className="flex items-center gap-1.5 text-slate-800 font-bold">
-              <Shield className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="p-3.5 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg text-[#5D6B7B] dark:text-[#A9BACB] text-[11px] space-y-1.5">
+            <div className="flex items-center gap-1.5 text-[#142C45] dark:text-[#E8EEF5] font-bold">
+              <Shield className="w-3.5 h-3.5 text-[#168C83]" />
               <span>Institutional Record Governance</span>
             </div>
-            <p className="text-slate-500 leading-normal">
+            <p className="text-[#5D6B7B] dark:text-[#8194A8] leading-normal">
               All interaction entries are subject to immutable audit logging in accordance with RBI guidelines on customer relationship records, credit reviews, and grievance handling.
             </p>
           </div>

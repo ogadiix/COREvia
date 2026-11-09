@@ -268,10 +268,10 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
     >
       <div
         id="record-interaction-modal-container"
-        className="bg-white border border-slate-200 rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden text-xs"
+        className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden text-xs text-[#273444] dark:text-[#E8EEF5]"
       >
         {/* Header */}
-        <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <div className="px-6 py-4 bg-[#142C45] dark:bg-[#101C2A] text-white flex items-center justify-between border-b border-[#DCE3EA]/10 dark:border-[#33485D]">
           <div>
             <h2 className="text-sm font-bold tracking-tight">Record Customer Interaction</h2>
             <p className="text-[11px] text-slate-300">
@@ -281,7 +281,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
           <button
             id="btn-close-record-interaction"
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded transition-colors"
+            className="text-slate-400 hover:text-white p-1 rounded hover:bg-[#1C3045] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -312,7 +312,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                   value={customerId}
                   onChange={(e) => setCustomerId(Number(e.target.value))}
                   disabled={loadingCustomers}
-                  className="w-full p-2 bg-white border border-slate-300 rounded focus:ring-1 focus:ring-slate-900 focus:border-slate-900"
+                  className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900 focus:border-slate-900"
                 >
                   <option value="">Select customer...</option>
                   {customersList.map((c) => (
@@ -333,7 +333,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 type="datetime-local"
                 value={timestamp}
                 onChange={(e) => setTimestamp(e.target.value)}
-                className="w-full p-2 bg-white border border-slate-300 rounded focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
               />
             </div>
           </div>
@@ -348,7 +348,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-interaction-channel"
                 value={channel}
                 onChange={(e) => setChannel(e.target.value as InteractionChannel)}
-                className="w-full p-2 bg-white border border-slate-300 rounded focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
               >
                 <option value="PHONE">Phone / Telephonic Call</option>
                 <option value="IN_PERSON">In-Person Meeting (Client Site)</option>
@@ -371,7 +371,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-interaction-type"
                 value={interactionType}
                 onChange={(e) => setInteractionType(e.target.value as InteractionType)}
-                className="w-full p-2 bg-white border border-slate-300 rounded focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
               >
                 <option value="CALL">Routine Call</option>
                 <option value="MEETING">Strategic Meeting</option>
@@ -398,7 +398,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 max="480"
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
-                className="w-full p-2 bg-white border border-slate-300 rounded focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
               />
             </div>
           </div>
@@ -414,7 +414,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
               placeholder="e.g., Working Capital Limit Review & FX Hedging Term Sheet"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              className="w-full p-2 bg-white border border-slate-300 rounded focus:ring-1 focus:ring-slate-900 font-medium"
+              className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900 font-medium"
             />
           </div>
 
@@ -429,7 +429,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
               placeholder="Provide clear structured notes on discussion items, customer queries, decisions, and officer observations..."
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              className="w-full p-2.5 bg-white border border-slate-300 rounded focus:ring-1 focus:ring-slate-900"
+              className="w-full p-2.5 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
             />
           </div>
 
@@ -443,7 +443,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-interaction-outcome"
                 value={outcome}
                 onChange={(e) => setOutcome(e.target.value as InteractionOutcome)}
-                className="w-full p-2 bg-white border border-slate-300 rounded focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
               >
                 <option value="FOLLOW_UP_REQUIRED">Follow-up Required</option>
                 <option value="OPPORTUNITY_IDENTIFIED">New Opportunity Identified</option>
@@ -466,7 +466,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-interaction-sentiment"
                 value={sentiment}
                 onChange={(e) => setSentiment(e.target.value as InteractionSentiment)}
-                className="w-full p-2 bg-white border border-slate-300 rounded focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
               >
                 <option value="POSITIVE">Positive / Highly Satisfied</option>
                 <option value="NEUTRAL">Neutral / Routine</option>
@@ -477,7 +477,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
           </div>
 
           {/* Participants */}
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
+          <div className="p-3 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <Users className="w-3.5 h-3.5 text-slate-600" />
@@ -501,7 +501,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                   <select
                     value={p.type}
                     onChange={(e) => handleUpdateParticipant(idx, 'type', e.target.value)}
-                    className="w-28 p-1.5 bg-white border border-slate-300 rounded text-[11px]"
+                    className="w-28 p-1.5 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] text-[11px]"
                   >
                     <option value="CUSTOMER">Customer</option>
                     <option value="RM">Relationship Mgr</option>
@@ -513,14 +513,14 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                     placeholder="Full Name"
                     value={p.name}
                     onChange={(e) => handleUpdateParticipant(idx, 'name', e.target.value)}
-                    className="flex-1 p-1.5 bg-white border border-slate-300 rounded text-[11px]"
+                    className="flex-1 p-1.5 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] text-[11px]"
                   />
                   <input
                     type="text"
                     placeholder="Role / Title"
                     value={p.role || ''}
                     onChange={(e) => handleUpdateParticipant(idx, 'role', e.target.value)}
-                    className="w-36 p-1.5 bg-white border border-slate-300 rounded text-[11px]"
+                    className="w-36 p-1.5 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] text-[11px]"
                   />
                   {participants.length > 1 && (
                     <button
@@ -568,7 +568,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                     placeholder="e.g., Deliver amended Sanction Letter with reduced margin to CFO"
                     value={followupAction}
                     onChange={(e) => setFollowupAction(e.target.value)}
-                    className="w-full p-2 bg-white border border-slate-300 rounded"
+                    className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83]"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -579,7 +579,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                       type="date"
                       value={followupDate}
                       onChange={(e) => setFollowupDate(e.target.value)}
-                      className="w-full p-2 bg-white border border-slate-300 rounded"
+                      className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83]"
                     />
                   </div>
                   <div>
@@ -588,7 +588,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                       id="select-followup-priority"
                       value={followupPriority}
                       onChange={(e) => setFollowupPriority(e.target.value as any)}
-                      className="w-full p-2 bg-white border border-slate-300 rounded"
+                      className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83]"
                     >
                       <option value="LOW">Low</option>
                       <option value="MEDIUM">Medium</option>
@@ -602,7 +602,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
           </div>
 
           {/* Commitments Manager */}
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
+          <div className="p-3 bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <CheckSquare className="w-3.5 h-3.5 text-slate-600" />
@@ -647,7 +647,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                           upd[idx].dueDate = e.target.value;
                           setCommitments(upd);
                         }}
-                        className="p-1 bg-white border border-slate-300 rounded text-[10px]"
+                        className="p-1 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] text-[10px]"
                       />
                       <button
                         type="button"
@@ -666,7 +666,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                         upd[idx].description = e.target.value;
                         setCommitments(upd);
                       }}
-                      className="w-full p-1.5 bg-white border border-slate-300 rounded text-[11px]"
+                      className="w-full p-1.5 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] text-[11px]"
                     />
                   </div>
                 ))}
@@ -684,7 +684,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-linked-opportunity"
                 value={linkedOpportunityId}
                 onChange={(e) => setLinkedOpportunityId(e.target.value)}
-                className="w-full p-2 bg-white border border-slate-300 rounded"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83]"
               >
                 <option value="">None / Not Linked</option>
                 {customerOpps.map((opp) => (
@@ -703,7 +703,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-linked-case"
                 value={linkedCaseId}
                 onChange={(e) => setLinkedCaseId(e.target.value)}
-                className="w-full p-2 bg-white border border-slate-300 rounded"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83]"
               >
                 <option value="">None / Not Linked</option>
                 {customerCases.map((cs) => (
@@ -717,12 +717,12 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
         </form>
 
         {/* Footer Actions */}
-        <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <div className="px-6 py-3 bg-[#F4F6F8] dark:bg-[#101C2A] border-t border-[#DCE3EA] dark:border-[#33485D] flex items-center justify-between">
           <button
             type="button"
             id="btn-cancel-record-interaction"
             onClick={onClose}
-            className="px-4 py-2 border border-slate-300 text-slate-700 rounded-md font-medium hover:bg-slate-100 transition-colors"
+            className="px-4 py-2 border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded-md font-medium hover:bg-[#EDF1F5] dark:hover:bg-[#162638] transition-colors"
           >
             Cancel
           </button>
@@ -731,7 +731,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
             id="btn-submit-record-interaction"
             onClick={handleSubmit}
             disabled={submitting}
-            className="px-5 py-2 bg-slate-900 text-white rounded-md font-medium hover:bg-slate-800 disabled:opacity-50 flex items-center gap-2 transition-colors shadow-xs"
+            className="px-5 py-2 bg-[#142C45] dark:bg-[#168C83] text-white rounded-md font-medium hover:bg-[#192B3D] dark:hover:bg-[#1B9D92] disabled:opacity-50 flex items-center gap-2 transition-colors shadow-xs"
           >
             {submitting ? 'Recording Touchpoint...' : 'Confirm & Save Interaction'}
           </button>

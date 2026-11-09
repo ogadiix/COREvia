@@ -103,28 +103,28 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg border border-slate-200 shadow-xl max-w-2xl w-full overflow-hidden text-slate-900 animate-in fade-in zoom-in-95 duration-150">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] shadow-xl max-w-2xl w-full overflow-hidden text-[#273444] dark:text-[#E8EEF5] animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div className="px-6 py-4 border-b border-[#DCE3EA] dark:border-[#33485D] flex items-center justify-between bg-[#F4F6F8] dark:bg-[#101C2A]">
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-200 text-slate-800 font-semibold">
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-[#EDF1F5] dark:bg-[#162638] text-[#142C45] dark:text-[#E8EEF5] font-semibold border border-[#DCE3EA] dark:border-[#33485D]">
                 {approval.approvalId}
               </span>
               <span className={`text-xs px-2 py-0.5 rounded border font-medium ${getPriorityBadge(approval.priority)}`}>
                 {approval.priority}
               </span>
-              <span className="text-xs px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200 font-medium">
+              <span className="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-medium">
                 {approval.status}
               </span>
             </div>
-            <h2 className="text-base font-semibold text-slate-900 mt-1">
+            <h2 className="text-base font-semibold text-[#142C45] dark:text-[#E8EEF5] mt-1">
               Review Operational Approval: {approval.requestType.replace(/_/g, ' ')}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-md hover:bg-slate-200 transition-colors"
+            className="text-[#8793A1] hover:text-[#273444] dark:hover:text-[#E8EEF5] p-1.5 rounded-md hover:bg-[#EDF1F5] dark:hover:bg-[#101C2A] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -155,46 +155,46 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
           )}
 
           {/* Context Details Grid */}
-          <div className="grid grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded-md border border-slate-200">
+          <div className="grid grid-cols-2 gap-4 text-xs bg-[#F4F6F8] dark:bg-[#101C2A] p-4 rounded-md border border-[#DCE3EA] dark:border-[#33485D]">
             <div>
-              <span className="text-slate-500 font-medium block">Customer</span>
-              <span className="text-slate-900 font-semibold block mt-0.5">
-                {approval.customerName || 'N/A'} {approval.customerCode && <span className="font-mono text-slate-500 font-normal">({approval.customerCode})</span>}
+              <span className="text-[#5D6B7B] dark:text-[#8194A8] font-medium block">Customer</span>
+              <span className="text-[#142C45] dark:text-[#E8EEF5] font-semibold block mt-0.5">
+                {approval.customerName || 'N/A'} {approval.customerCode && <span className="font-mono text-[#5D6B7B] dark:text-[#8194A8] font-normal">({approval.customerCode})</span>}
               </span>
             </div>
 
             <div>
-              <span className="text-slate-500 font-medium block">Related Entity</span>
-              <span className="text-slate-900 font-mono font-medium block mt-0.5">
+              <span className="text-[#5D6B7B] dark:text-[#8194A8] font-medium block">Related Entity</span>
+              <span className="text-[#142C45] dark:text-[#E8EEF5] font-mono font-medium block mt-0.5">
                 {approval.relatedEntityType || 'N/A'}: {approval.relatedEntityId || 'N/A'}
               </span>
             </div>
 
             <div>
-              <span className="text-slate-500 font-medium block">Operational Amount</span>
-              <span className="text-slate-900 font-mono font-semibold block mt-0.5">
+              <span className="text-[#5D6B7B] dark:text-[#8194A8] font-medium block">Operational Amount</span>
+              <span className="text-[#142C45] dark:text-[#E8EEF5] font-mono font-semibold block mt-0.5">
                 {approval.amount ? `${approval.currency} ${Number(approval.amount).toLocaleString('en-IN')}` : 'Non-Financial'}
               </span>
             </div>
 
             <div>
-              <span className="text-slate-500 font-medium block">SLA Deadline</span>
-              <span className="text-slate-900 font-medium block mt-0.5 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-[#5D6B7B] dark:text-[#8194A8] font-medium block">SLA Deadline</span>
+              <span className="text-[#142C45] dark:text-[#E8EEF5] font-medium block mt-0.5 flex items-center gap-1 font-mono">
+                <Clock className="w-3.5 h-3.5 text-[#8793A1]" />
                 {approval.slaDeadline ? new Date(approval.slaDeadline).toLocaleString() : 'No SLA set'}
               </span>
             </div>
 
             <div>
-              <span className="text-slate-500 font-medium block">Maker</span>
-              <span className="text-slate-900 font-medium block mt-0.5">
+              <span className="text-[#5D6B7B] dark:text-[#8194A8] font-medium block">Maker</span>
+              <span className="text-[#142C45] dark:text-[#E8EEF5] font-medium block mt-0.5">
                 {approval.makerName} ({approval.makerRole || 'MAKER'})
               </span>
             </div>
 
             <div>
-              <span className="text-slate-500 font-medium block">Created Timestamp</span>
-              <span className="text-slate-900 font-medium block mt-0.5">
+              <span className="text-[#5D6B7B] dark:text-[#8194A8] font-medium block">Created Timestamp</span>
+              <span className="text-[#142C45] dark:text-[#E8EEF5] font-medium block mt-0.5 font-mono">
                 {new Date(approval.createdAt).toLocaleString()}
               </span>
             </div>
@@ -202,10 +202,10 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
 
           {/* Request Reason */}
           <div>
-            <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider block mb-1">
+            <label className="text-xs font-semibold text-[#5D6B7B] dark:text-[#8194A8] uppercase tracking-wider block mb-1">
               Operational Justification / Reason
             </label>
-            <div className="p-3 bg-white border border-slate-200 rounded-md text-xs text-slate-800 leading-relaxed font-sans">
+            <div className="p-3 bg-[#FFFFFF] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-md text-xs text-[#273444] dark:text-[#E8EEF5] leading-relaxed font-sans">
               {approval.reason}
             </div>
           </div>
@@ -301,8 +301,8 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-          <span className="text-[11px] text-slate-500">
+        <div className="px-6 py-4 border-t border-[#DCE3EA] dark:border-[#33485D] bg-[#F4F6F8] dark:bg-[#101C2A] flex items-center justify-between">
+          <span className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8]">
             Mandatory audit logging active on all dual-control events
           </span>
 
@@ -310,7 +310,7 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50"
+              className="px-3.5 py-1.5 text-xs font-medium text-[#273444] dark:text-[#E8EEF5] bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-md hover:bg-[#EDF1F5] dark:hover:bg-[#1C3045]"
             >
               Close
             </button>
@@ -320,7 +320,7 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
                 type="button"
                 disabled={isMaker || isSubmitting || !checkerNotes.trim()}
                 onClick={() => setConfirmDialog(true)}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#087F8C] rounded-md hover:bg-[#076c77] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#168C83] rounded-md hover:bg-[#1B9D92] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? 'Processing...' : `Submit ${action}`}
               </button>
@@ -332,22 +332,22 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
       {/* Confirmation Dialog */}
       {confirmDialog && (
         <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-2xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg border border-slate-200 p-5 max-w-md w-full shadow-2xl space-y-3">
-            <div className="flex items-center gap-2 text-amber-600">
+          <div className="bg-white dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-5 max-w-md w-full shadow-2xl space-y-3 text-[#273444] dark:text-[#E8EEF5]">
+            <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
               <AlertTriangle className="w-5 h-5 shrink-0" />
-              <h3 className="text-sm font-semibold text-slate-900">
+              <h3 className="text-sm font-semibold text-[#142C45] dark:text-[#E8EEF5]">
                 Confirm Operational Dual-Control Mutation
               </h3>
             </div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Are you sure you want to mark approval <span className="font-mono font-semibold">{approval.approvalId}</span> as <span className="font-semibold text-slate-900">{action}</span>?
+            <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed">
+              Are you sure you want to mark approval <span className="font-mono font-semibold text-[#142C45] dark:text-[#E8EEF5]">{approval.approvalId}</span> as <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{action}</span>?
               This action will be permanently recorded in the immutable audit log and trigger relevant regulatory notifications.
             </p>
             <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setConfirmDialog(false)}
-                className="px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50"
+                className="px-3 py-1.5 text-xs font-medium text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D] rounded-md hover:bg-[#EDF1F5] dark:hover:bg-[#101C2A]"
               >
                 Cancel
               </button>
@@ -355,7 +355,7 @@ export const ApprovalReviewModal: React.FC<ApprovalReviewModalProps> = ({
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleSubmit}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#087F8C] rounded-md hover:bg-[#076c77]"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#168C83] rounded-md hover:bg-[#1B9D92]"
               >
                 {isSubmitting ? 'Submitting...' : 'Confirm Action'}
               </button>

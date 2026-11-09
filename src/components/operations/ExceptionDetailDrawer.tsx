@@ -152,15 +152,15 @@ export const ExceptionDetailDrawer: React.FC<ExceptionDetailDrawerProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-slate-900/40 backdrop-blur-2xs flex justify-end">
-      <div className="bg-white w-full max-w-xl h-full shadow-2xl border-l border-slate-200 flex flex-col text-slate-900 animate-in slide-in-from-right duration-200">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] w-full max-w-xl h-full shadow-2xl border-l border-[#DCE3EA] dark:border-[#33485D] flex flex-col text-[#273444] dark:text-[#E8EEF5] animate-in slide-in-from-right duration-200">
         {/* Header */}
-        <div className="p-5 border-b border-slate-200 bg-slate-50 flex items-start justify-between">
+        <div className="p-5 border-b border-[#DCE3EA] dark:border-[#33485D] bg-[#F4F6F8] dark:bg-[#101C2A] flex items-start justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-200 text-slate-800 font-semibold">
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-[#EDF1F5] dark:bg-[#162638] text-[#142C45] dark:text-[#E8EEF5] font-semibold border border-[#DCE3EA] dark:border-[#33485D]">
                 {exception.exceptionId}
               </span>
-              <span className="text-[11px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300">
+              <span className="text-[11px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D]">
                 {exception.category}
               </span>
               <span className={`text-xs px-2 py-0.5 rounded border font-medium ${getSeverityBadge(exception.severity)}`}>
@@ -170,26 +170,26 @@ export const ExceptionDetailDrawer: React.FC<ExceptionDetailDrawerProps> = ({
                 {exception.status}
               </span>
             </div>
-            <h2 className="text-base font-semibold text-slate-900 pt-1 leading-snug">
+            <h2 className="text-base font-semibold text-[#142C45] dark:text-[#E8EEF5] pt-1 leading-snug">
               {exception.description}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-md hover:bg-slate-200"
+            className="text-[#8793A1] hover:text-[#273444] dark:hover:text-[#E8EEF5] p-1.5 rounded-md hover:bg-[#EDF1F5] dark:hover:bg-[#101C2A]"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab navigation inside Drawer */}
-        <div className="flex border-b border-slate-200 bg-white px-5 text-xs font-medium">
+        <div className="flex border-b border-[#DCE3EA] dark:border-[#33485D] bg-[#FFFFFF] dark:bg-[#162638] px-5 text-xs font-medium">
           <button
             onClick={() => setActiveTab('details')}
             className={`py-3 px-3 border-b-2 transition-colors ${
               activeTab === 'details'
-                ? 'border-[#087F8C] text-[#087F8C] font-semibold'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
+                ? 'border-[#168C83] text-[#168C83] font-semibold'
+                : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
             }`}
           >
             Exception Context & Evidence
@@ -198,12 +198,12 @@ export const ExceptionDetailDrawer: React.FC<ExceptionDetailDrawerProps> = ({
             onClick={() => setActiveTab('audit')}
             className={`py-3 px-3 border-b-2 flex items-center gap-1.5 transition-colors ${
               activeTab === 'audit'
-                ? 'border-[#087F8C] text-[#087F8C] font-semibold'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
+                ? 'border-[#168C83] text-[#168C83] font-semibold'
+                : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
             }`}
           >
             <History className="w-3.5 h-3.5" />
-            Operational Audit Trail
+            Remediation Trail
           </button>
         </div>
 
@@ -405,14 +405,14 @@ export const ExceptionDetailDrawer: React.FC<ExceptionDetailDrawerProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-          <span className="text-[11px] text-slate-500">
+        <div className="p-4 border-t border-[#DCE3EA] dark:border-[#33485D] bg-[#F4F6F8] dark:bg-[#101C2A] flex items-center justify-between">
+          <span className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8]">
             Immutable regulatory audit trail recorded
           </span>
           <button
             type="button"
             onClick={onClose}
-            className="px-3.5 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50"
+            className="px-3.5 py-1.5 text-xs font-medium text-[#273444] dark:text-[#E8EEF5] bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-md hover:bg-[#EDF1F5] dark:hover:bg-[#101C2A]"
           >
             Close
           </button>
@@ -422,22 +422,22 @@ export const ExceptionDetailDrawer: React.FC<ExceptionDetailDrawerProps> = ({
       {/* Confirmation Modal */}
       {actionConfirm === 'RESOLVE' && (
         <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-2xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg border border-slate-200 p-5 max-w-md w-full shadow-2xl space-y-3">
-            <div className="flex items-center gap-2 text-emerald-600">
+          <div className="bg-white dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-5 max-w-md w-full shadow-2xl space-y-3 text-[#273444] dark:text-[#E8EEF5]">
+            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 className="w-5 h-5 shrink-0" />
-              <h3 className="text-sm font-semibold text-slate-900">
+              <h3 className="text-sm font-semibold text-[#142C45] dark:text-[#E8EEF5]">
                 Confirm Exception Resolution
               </h3>
             </div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Confirm resolution of operational exception <span className="font-mono font-semibold">{exception.exceptionId}</span>?
+            <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed">
+              Confirm resolution of operational exception <span className="font-mono font-semibold text-[#142C45] dark:text-[#E8EEF5]">{exception.exceptionId}</span>?
               This will update customer SLA statuses and archive the pending operational item.
             </p>
             <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setActionConfirm(null)}
-                className="px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50"
+                className="px-3 py-1.5 text-xs font-medium text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D] rounded-md hover:bg-[#EDF1F5] dark:hover:bg-[#101C2A]"
               >
                 Cancel
               </button>
@@ -445,7 +445,7 @@ export const ExceptionDetailDrawer: React.FC<ExceptionDetailDrawerProps> = ({
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleResolve}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#087F8C] rounded-md hover:bg-[#076c77]"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#168C83] rounded-md hover:bg-[#1B9D92]"
               >
                 {isSubmitting ? 'Resolving...' : 'Confirm Resolution'}
               </button>
