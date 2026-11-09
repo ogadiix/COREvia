@@ -29,6 +29,11 @@ import {
   Check,
   X,
   SlidersHorizontal,
+  ExternalLink,
+  Percent,
+  Wallet,
+  Activity,
+  Layers,
 } from 'lucide-react';
 
 interface LendingModuleProps {
@@ -51,6 +56,8 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedType, setSelectedType] = useState<string>('ALL');
   const [selectedClassification, setSelectedClassification] = useState<string>('ALL');
+  const [quickFilter, setQuickFilter] = useState<'ALL' | 'STANDARD' | 'WATCHLIST' | 'HNI'>('ALL');
+  const [tableDensity, setTableDensity] = useState<'normal' | 'compact'>('normal');
 
   // Sorting
   const [sortBy, setSortBy] = useState<string>('sanctionDate');
@@ -67,6 +74,7 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
   // Loan Detail Modal State
   const [activeLoan, setActiveLoan] = useState<any | null>(null);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
+  const [activeDetailTab, setActiveDetailTab] = useState<'SCHEDULE' | 'SPECIFICATIONS' | 'GOVERNANCE'>('SCHEDULE');
   const [loadingDetail, setLoadingDetail] = useState<boolean>(false);
 
   // Repayments Schedule & Summary inside Modal
@@ -99,32 +107,36 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
           id: row.id,
           loanAccountNumber: row.loanAccountNumber,
           cifNumber: row.cifNumber || 'CIF-NA',
-          borrowerName: row.borrowerName || row.customerName || 'Borrower',
-          customerName: row.customerName,
+          borrowerName: row.borrowerName || 'Primary Borrower',
+          customerName: row.customerName || row.borrowerName,
           customerCode: row.customerCode,
           customerId: row.customerId,
-          loanType: row.loanType,
+          loanType: row.loanType as LoanType,
           sanctionedLimit: parseFloat(row.sanctionedLimit || '0'),
           drawingPower: parseFloat(row.drawingPower || row.sanctionedLimit || '0'),
           outstandingPrincipal: parseFloat(row.outstandingPrincipal || '0'),
-          interestDue: parseFloat(row.interestDue || '0'),
-          interestRate: parseFloat(row.interestRate || '0'),
-          benchmarkRate: row.benchmarkRate || 'Repo Rate + Spread',
-          tenureMonths: row.tenureMonths || 60,
-          relationshipManagerId: row.relationshipManagerId,
-          rmName: row.rmName || 'Assigned Officer',
-          rmEmail: row.rmEmail,
-          sanctionDate: row.sanctionDate ? String(row.sanctionDate).split('T')[0] : '2023-01-01',
-          maturityDate: row.maturityDate ? String(row.maturityDate).split('T')[0] : '2030-01-01',
-          nextEmiDate: row.nextEmiDate ? String(row.nextEmiDate).split('T')[0] : '2026-10-05',
+          interestRate: parseFloat(row.interestRate || '8.5'),
+          benchmarkRate: row.benchmarkRate || 'MCLR-1Y',
           emiAmount: parseFloat(row.emiAmount || '0'),
-          overdueDays: row.overdueDays || 0,
+          tenureMonths: parseInt(row.tenureMonths || '60', 10),
+          sanctionDate: row.sanctionDate ? String(row.sanctionDate).split('T')[0] : '2023-01-01',
+          firstDisbursementDate: row.firstDisbursementDate ? String(row.firstDisbursementDate).split('T')[0] : '2023-01-15',
+          maturityDate: row.maturityDate ? String(row.maturityDate).split('T')[0] : '2028-01-15',
+          nextEmiDate: row.nextEmiDate ? String(row.nextEmiDate).split('T')[0] : '2026-10-15',
+          interestDue: parseFloat(row.interestDue || '0'),
+          penalInterestDue: parseFloat(row.penalInterestDue || '0'),
+          overdueDays: parseInt(row.overdueDays || row.dpd || '0', 10),
           assetClassification: row.assetClassification as AssetClassification,
-          collateralType: row.collateralType || 'Standard Lien / Charge',
+          collateralType: row.collateralType || 'IMMOVABLE_PROPERTY',
           collateralValue: parseFloat(row.collateralValue || '0'),
-          hypothecationDetails: row.hypothecationDetails || 'Direct Facility',
+          hypothecationDetails: row.hypothecationDetails || 'Equitable mortgage on primary asset',
           prioritySector: Boolean(row.prioritySector),
           provisionAmount: parseFloat(row.provisionAmount || '0'),
+          dpd: parseInt(row.dpd || '0', 10),
+          branchCode: row.branchCode || '0104',
+          branchName: row.branchName || 'Mumbai Fort Branch',
+          relationshipManagerId: row.relationshipManagerId || '0104',
+          rmName: row.rmName || 'Aditya Nair (Credit RM)',
         }));
 
         setLoanList(mapped);
@@ -136,7 +148,7 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
         }
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch loans from database.');
+      setError(err.message || 'Failed to fetch loan accounts from database.');
     } finally {
       setLoading(false);
     }
@@ -162,10 +174,11 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
     fetchLoans();
   };
 
-  // Open Loan Detail Modal & load repayments
-  const handleOpenLoanDetail = async (loan: LoanAccount) => {
+  // Open Loan Detail Modal & load repayments schedule
+  const handleOpenLoanDetail = (loan: LoanAccount) => {
     setActiveLoan(loan);
     setDetailModalOpen(true);
+    setActiveDetailTab('SCHEDULE');
     setRepaymentPage(1);
     loadLoanDetailAndRepayments(loan.id || loan.loanAccountNumber, 1);
   };
@@ -174,25 +187,29 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
     setLoadingRepayments(true);
     try {
       const detail = await bankingApi.getLoanDetail(idOrNumber);
-      if (detail) setActiveLoan(detail);
+      if (detail) {
+        setActiveLoan(detail);
+      }
 
       const repRes = await bankingApi.getLoanRepayments(idOrNumber, {
         page: pageNum,
         limit: 10,
       });
 
-      if (repRes) {
-        setRepayments(repRes.data || []);
-        if (repRes.summary) setRepaymentSummary(repRes.summary);
+      if (repRes && repRes.data) {
+        setRepayments(repRes.data);
         if (repRes.pagination) {
           setRepaymentPagination({
             total: repRes.pagination.total,
             totalPages: repRes.pagination.totalPages,
           });
         }
+        if (repRes.summary) {
+          setRepaymentSummary(repRes.summary);
+        }
       }
     } catch (err) {
-      console.error('Error fetching loan repayments:', err);
+      console.error('Error fetching loan detail & repayment records:', err);
     } finally {
       setLoadingRepayments(false);
     }
@@ -216,35 +233,63 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
     setCurrentPage(1);
   };
 
-  // Table columns per exact user specification:
-  // Loan ID, Customer, Loan Type, Original Amount, Outstanding, Interest Rate, Tenure, Status, Next Due Date, Relationship Manager
+  // Filtered loan list with quick filter
+  const displayedLoans = useMemo(() => {
+    return loanList.filter((l) => {
+      if (quickFilter === 'STANDARD') return l.assetClassification === 'STANDARD';
+      if (quickFilter === 'WATCHLIST') return l.assetClassification !== 'STANDARD';
+      if (quickFilter === 'HNI') return (l.sanctionedLimit || 0) >= 5000000;
+      return true;
+    });
+  }, [loanList, quickFilter]);
+
+  // Columns definition
   const columns: Column<LoanAccount>[] = [
     {
       key: 'loanAccountNumber',
-      header: 'Loan ID',
+      header: 'Loan Facility ID',
       mono: true,
+      sortable: true,
       render: (l) => (
         <div>
-          <span className="font-mono font-semibold text-slate-900">{l.loanAccountNumber}</span>
-          <div className="text-[10px] text-slate-500 font-mono">
-            Sanctioned: {l.sanctionDate}
+          <span className="font-mono font-semibold text-slate-900 dark:text-[#E8EEF5]">
+            {l.loanAccountNumber}
+          </span>
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono">
+            Sanction: {l.sanctionDate}
           </div>
         </div>
       ),
     },
     {
       key: 'borrowerName',
-      header: 'Customer',
+      header: 'Borrower Entity',
+      sortable: true,
       render: (l) => (
         <div className="max-w-[200px]">
-          <div className="font-semibold text-slate-900 truncate">{l.borrowerName}</div>
-          <div className="text-[11px] text-slate-500 font-mono">CIF: {l.cifNumber}</div>
+          <div
+            className={`font-semibold text-slate-900 dark:text-[#E8EEF5] truncate ${
+              onNavigateToCustomer ? 'hover:text-[#168C83] dark:hover:text-[#1B9D92] cursor-pointer' : ''
+            }`}
+            onClick={(e) => {
+              if (onNavigateToCustomer && (l.customerId || l.customerCode || l.cifNumber)) {
+                e.stopPropagation();
+                onNavigateToCustomer(l.customerCode || l.customerId || l.cifNumber);
+              }
+            }}
+          >
+            {l.borrowerName}
+          </div>
+          <div className="text-[11px] text-slate-500 dark:text-[#8194A8] font-mono">
+            CIF: {l.cifNumber}
+          </div>
         </div>
       ),
     },
     {
       key: 'loanType',
-      header: 'Loan Type',
+      header: 'Facility Scheme',
+      sortable: true,
       render: (l) => {
         const typeLabels: Record<string, string> = {
           HOME_LOAN: 'Home Loan',
@@ -257,32 +302,38 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
           VEHICLE_LOAN: 'Auto / Vehicle',
           BUSINESS_LOAN: 'Commercial Business',
         };
-        return <span className="font-medium text-xs text-slate-800">{typeLabels[l.loanType] || l.loanType}</span>;
+        return (
+          <span className="font-medium text-xs text-slate-700 dark:text-[#A9BACB]">
+            {typeLabels[l.loanType] || l.loanType}
+          </span>
+        );
       },
     },
     {
       key: 'sanctionedLimit',
-      header: 'Original Amount',
+      header: 'Sanctioned Limit',
       align: 'right',
       mono: true,
+      sortable: true,
       render: (l) => (
-        <span className="font-mono font-semibold text-slate-900 text-xs">
+        <span className="font-mono font-semibold text-slate-900 dark:text-[#E8EEF5] text-xs">
           {formatINR(l.sanctionedLimit)}
         </span>
       ),
     },
     {
       key: 'outstandingPrincipal',
-      header: 'Outstanding',
+      header: 'Outstanding Balance',
       align: 'right',
       mono: true,
+      sortable: true,
       render: (l) => (
         <div>
-          <span className="font-mono font-bold text-xs text-slate-900">
+          <span className="font-mono font-bold text-xs text-slate-900 dark:text-[#E8EEF5]">
             {formatINR(l.outstandingPrincipal)}
           </span>
           {l.interestDue > 0 && (
-            <div className="text-[10px] text-amber-700 font-mono">
+            <div className="text-[10px] text-amber-600 dark:text-amber-400 font-mono">
               Int Due: {formatINR(l.interestDue)}
             </div>
           )}
@@ -294,12 +345,15 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
       header: 'Interest Rate',
       align: 'right',
       mono: true,
+      sortable: true,
       render: (l) => (
         <div>
-          <span className="font-mono text-xs font-semibold text-slate-900">
+          <span className="font-mono text-xs font-semibold text-slate-900 dark:text-[#E8EEF5]">
             {(Number(l.interestRate) || 0).toFixed(2)}%
           </span>
-          <div className="text-[10px] text-slate-500 line-clamp-1">{l.benchmarkRate}</div>
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] line-clamp-1">
+            {l.benchmarkRate}
+          </div>
         </div>
       ),
     },
@@ -312,7 +366,7 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
         const months = Number(l.tenureMonths) || 60;
         const years = (months / 12).toFixed(months % 12 === 0 ? 0 : 1);
         return (
-          <span className="font-mono text-xs text-slate-700">
+          <span className="font-mono text-xs text-slate-600 dark:text-[#A9BACB]">
             {months} M ({years} Yrs)
           </span>
         );
@@ -320,8 +374,9 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
     },
     {
       key: 'assetClassification',
-      header: 'Status',
+      header: 'Asset Status',
       align: 'center',
+      sortable: true,
       render: (l) => {
         if (l.assetClassification === 'STANDARD') return <Badge variant="success" size="sm">Standard</Badge>;
         if (l.assetClassification === 'SMA_0') return <Badge variant="warning" size="sm">SMA-0</Badge>;
@@ -335,26 +390,21 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
       header: 'Next Due Date',
       align: 'center',
       mono: true,
+      sortable: true,
       render: (l) => (
         <div>
-          <span className="font-mono text-xs text-slate-900 font-medium">{l.nextEmiDate}</span>
-          <div className="text-[10px] text-slate-500 font-mono">EMI: {formatINR(l.emiAmount)}</div>
-        </div>
-      ),
-    },
-    {
-      key: 'rmName',
-      header: 'Relationship Manager',
-      render: (l) => (
-        <div className="max-w-[150px]">
-          <div className="text-xs font-medium text-slate-900 truncate">{l.rmName || 'Branch RM'}</div>
-          <div className="text-[10px] text-slate-500 font-mono">RM ID: {l.relationshipManagerId || '0104'}</div>
+          <span className="font-mono text-xs text-slate-900 dark:text-[#E8EEF5] font-medium">
+            {l.nextEmiDate}
+          </span>
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono">
+            EMI: {formatINR(l.emiAmount)}
+          </div>
         </div>
       ),
     },
     {
       key: 'actions',
-      header: 'Actions',
+      header: 'Action',
       align: 'right',
       render: (l) => (
         <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
@@ -363,15 +413,17 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
             variant="outline"
             icon={<Eye className="w-3.5 h-3.5" />}
             onClick={() => handleOpenLoanDetail(l)}
+            className="text-xs py-0.5 px-2"
           >
-            Detail
+            Inquire
           </Button>
           {onRequestLimitRevision && (
             <Button
               size="sm"
               variant="ghost"
               onClick={() => onRequestLimitRevision(l)}
-              title="Request Limit Revision"
+              className="text-xs py-0.5 px-2 text-slate-600 dark:text-[#A9BACB]"
+              title="Request Credit Limit Revision"
             >
               Revision
             </Button>
@@ -382,113 +434,20 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
   ];
 
   return (
-    <div className="space-y-5">
-      {/* Overview Aggregates from PostgreSQL */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatCard
-          label="Sanctioned Credit Book"
-          value={stats ? formatINR(stats.totalSanctionedLimit, { compact: true }) : '₹12.45 Cr'}
-          code="LN-SANCT-0104"
-          subtext="Total committed advances book"
-        />
-        <StatCard
-          label="Total Principal Outstanding"
-          value={stats ? formatINR(stats.totalOutstanding, { compact: true }) : '₹9.82 Cr'}
-          code="LN-OUTST-0104"
-          subtext="Earning asset portfolio exposure"
-        />
-        <StatCard
-          label="Regulatory Provisions"
-          value={stats ? formatINR(stats.totalProvisions, { compact: true }) : '₹4.85 L'}
-          code="IRAC-PROV-STD"
-          subtext="Prudential reserve provisioning"
-        />
-        <StatCard
-          label="Stressed / SMA Advances"
-          value={stats ? String(stats.stressedAccountsCount) : '1'}
-          code="SMA-ALERT-Q"
-          subtext="Active monitoring & resolution"
-        />
-      </div>
+    <div className="space-y-4">
+      {/* Module Executive Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-[#33485D] pb-3">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900 dark:text-[#E8EEF5] tracking-tight flex items-center gap-2">
+            <Landmark className="w-5 h-5 text-[#142C45] dark:text-[#1B9D92]" />
+            <span>Lending &amp; Credit Facilities Master</span>
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-[#8194A8]">
+            Advances ledger, asset classification, and repayment tracking backed by PostgreSQL.
+          </p>
+        </div>
 
-      {/* Filter and Search Bar */}
-      <div className="bg-white border border-slate-200 rounded p-3 flex flex-wrap items-center justify-between gap-3">
-        <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 flex-1 max-w-md">
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search Loan #, Borrower Name, CIF, or PAN..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0f1e36]"
-            />
-          </div>
-          <Button size="sm" variant="secondary" type="submit">
-            Search
-          </Button>
-          {searchTerm && (
-            <Button
-              size="sm"
-              variant="ghost"
-              type="button"
-              onClick={() => {
-                setSearchTerm('');
-                setCurrentPage(1);
-                fetchLoans();
-              }}
-            >
-              Clear
-            </Button>
-          )}
-        </form>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Loan Type Filter */}
-          <select
-            value={selectedType}
-            onChange={(e) => {
-              setSelectedType(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="text-xs bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400"
-          >
-            <option value="ALL">All Facilities</option>
-            <option value="HOME_LOAN">Home Loans</option>
-            <option value="WORKING_CAPITAL_CC">Cash Credit / WC</option>
-            <option value="TERM_LOAN">Term Advances</option>
-            <option value="MSME_PRIORITY">MSME Priority</option>
-            <option value="PERSONAL_LOAN">Personal Loans</option>
-            <option value="VEHICLE_LOAN">Auto Loans</option>
-          </select>
-
-          {/* Classification Filter */}
-          <select
-            value={selectedClassification}
-            onChange={(e) => {
-              setSelectedClassification(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="text-xs bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400"
-          >
-            <option value="ALL">All Asset Classifications</option>
-            <option value="STANDARD">Standard Asset</option>
-            <option value="SMA_0">SMA-0 (1-30 Days)</option>
-            <option value="SMA_1">SMA-1 (31-60 Days)</option>
-            <option value="SMA_2">SMA-2 (61-90 Days)</option>
-            <option value="SUB_STANDARD">Sub-Standard NPA</option>
-          </select>
-
-          {/* Sort Control */}
-          <button
-            onClick={() => handleSort('outstandingPrincipal')}
-            className="flex items-center gap-1 px-2.5 py-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded border border-slate-300 transition-colors cursor-pointer"
-            title="Sort by Outstanding"
-          >
-            <ArrowUpDown className="w-3 h-3" />
-            <span>Outstanding {sortBy === 'outstandingPrincipal' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}</span>
-          </button>
-
+        <div className="flex items-center gap-2">
           <Button
             size="sm"
             variant="outline"
@@ -503,105 +462,285 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
         </div>
       </div>
 
-      {/* Main Lending Data Table */}
-      <div className="bg-white border border-slate-200 rounded overflow-hidden shadow-2xs">
-        <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
-          <div>
-            <h2 className="text-sm font-semibold text-slate-900">Advances & Credit Facilities Portfolio</h2>
-            <p className="text-xs text-slate-500">
-              Live loan facility query from PostgreSQL `loans` and `loan_repayments` with IRAC norms.
-            </p>
-          </div>
-          <span className="text-xs font-mono text-slate-500">
-            Showing {loanList.length} of {paginationInfo.total} loan facilities
-          </span>
-        </div>
+      {/* Aggregate Credit Book KPI Strip */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <StatCard
+          label="Sanctioned Credit Book"
+          value={stats ? formatINR(stats.totalSanctionedLimit, { compact: true }) : '₹12.45 Cr'}
+          code="LN-SANCT-0104"
+          subtext="Committed advances book"
+          badge="Committed Exposure"
+          badgeVariant="info"
+        />
+        <StatCard
+          label="Principal Outstanding"
+          value={stats ? formatINR(stats.totalOutstanding, { compact: true }) : '₹9.82 Cr'}
+          code="LN-OUTST-0104"
+          subtext="Current portfolio exposure"
+          badge="Earning Assets"
+          badgeVariant="success"
+        />
+        <StatCard
+          label="SMA Watchlist / At-Risk"
+          value={stats ? formatINR(stats.totalOverdue || 0, { compact: true }) : '₹35.20 L'}
+          code="RBI-SMA-CTRL"
+          subtext="SMA-0, 1 &amp; 2 delinquency"
+          badge="Credit Risk"
+          badgeVariant="warning"
+        />
+        <StatCard
+          label="Gross NPA Exposure"
+          value={stats?.totalNpa ? formatINR(stats.totalNpa, { compact: true }) : '₹0.00'}
+          code="RBI-GNPA-RATIO"
+          subtext="Impaired assets under recovery"
+          badge="0.00% GNPA"
+          badgeVariant="neutral"
+        />
+      </div>
 
-        {loading ? (
-          <div className="py-16 text-center text-slate-500">
-            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-slate-400" />
-            <p className="text-xs">Querying PostgreSQL Lending database...</p>
-          </div>
-        ) : error ? (
-          <div className="p-6 text-center text-red-600 bg-red-50">
-            <AlertCircle className="w-6 h-6 mx-auto mb-2" />
-            <p className="text-sm font-medium">{error}</p>
-          </div>
-        ) : loanList.length === 0 ? (
-          <EmptyState
-            icon={<Landmark className="w-8 h-8 text-slate-400" />}
-            title="No loan accounts match criteria"
-            description="No lending facilities match the current search term, loan type, or asset classification."
-            actionLabel="Reset Filters"
-            onAction={() => {
-              setSearchTerm('');
-              setSelectedType('ALL');
-              setSelectedClassification('ALL');
-              setCurrentPage(1);
-              fetchLoans();
-            }}
-            className="py-12 bg-white"
-          />
-        ) : (
-          <Table
-            data={loanList}
-            columns={columns}
-            keyExtractor={(l) => l.loanAccountNumber}
-            onRowClick={(l) => handleOpenLoanDetail(l)}
-          />
-        )}
+      {/* Filter and Search Bar */}
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-3 space-y-3 shadow-2xs">
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+          {/* Search Box */}
+          <form onSubmit={handleSearchSubmit} className="sm:col-span-5 relative">
+            <Search className="w-4 h-4 text-slate-400 dark:text-[#8194A8] absolute left-2.5 top-2.5" />
+            <input
+              type="text"
+              placeholder="Search Loan ID, Borrower Name, CIF, or PAN..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-8 pr-8 py-1.5 text-xs bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded focus:bg-white dark:focus:bg-[#162638] focus:outline-none focus:ring-1 focus:ring-[#168C83] text-slate-900 dark:text-[#E8EEF5] transition-colors"
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm('');
+                  setCurrentPage(1);
+                  fetchLoans();
+                }}
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </form>
 
-        {/* Pagination Bar */}
-        <div className="px-4 py-3 border-t border-slate-200 flex items-center justify-between bg-slate-50 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="text-slate-600">Rows per page:</span>
+          {/* Loan Facility Type Filter */}
+          <div className="sm:col-span-3">
             <select
-              value={pageSize}
+              value={selectedType}
               onChange={(e) => {
-                setPageSize(Number(e.target.value));
+                setSelectedType(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-white border border-slate-300 rounded px-2 py-1 text-slate-800 font-mono"
+              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded focus:bg-white dark:focus:bg-[#162638] focus:outline-none focus:ring-1 focus:ring-[#168C83] text-slate-800 dark:text-[#E8EEF5]"
             >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
+              <option value="ALL">All Facility Schemes</option>
+              <option value="HOME_LOAN">Home / Housing Loan</option>
+              <option value="WORKING_CAPITAL_CC">Cash Credit / Working Capital</option>
+              <option value="TERM_LOAN">Term Advance</option>
+              <option value="MSME_PRIORITY">MSME Priority</option>
+              <option value="PERSONAL_LOAN">Personal Loan</option>
+              <option value="VEHICLE_LOAN">Auto / Vehicle Advance</option>
             </select>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-slate-600 font-mono">
-              Page {currentPage} of {paginationInfo.totalPages || 1}
+          {/* Asset Classification Filter */}
+          <div className="sm:col-span-2">
+            <select
+              value={selectedClassification}
+              onChange={(e) => {
+                setSelectedClassification(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded focus:bg-white dark:focus:bg-[#162638] focus:outline-none focus:ring-1 focus:ring-[#168C83] text-slate-800 dark:text-[#E8EEF5]"
+            >
+              <option value="ALL">All Asset Classes</option>
+              <option value="STANDARD">Standard Performing</option>
+              <option value="SMA_0">SMA-0 (1-30 DPD)</option>
+              <option value="SMA_1">SMA-1 (31-60 DPD)</option>
+              <option value="SMA_2">SMA-2 (61-90 DPD)</option>
+            </select>
+          </div>
+
+          {/* Density & Sort Controls */}
+          <div className="sm:col-span-2 flex items-center justify-end gap-1.5">
+            <button
+              onClick={() => handleSort('outstandingPrincipal')}
+              className="flex items-center gap-1 text-[11px] px-2 py-1 rounded bg-slate-100 dark:bg-[#192B3D] text-slate-700 dark:text-[#A9BACB] hover:bg-slate-200 dark:hover:bg-[#20364B] border border-slate-300 dark:border-[#33485D] transition-colors"
+              title="Sort by Outstanding Principal"
+            >
+              <ArrowUpDown className="w-3 h-3" />
+              <span>Balance {sortBy === 'outstandingPrincipal' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}</span>
+            </button>
+
+            <div className="inline-flex rounded border border-slate-300 dark:border-[#33485D] p-0.5 bg-slate-100 dark:bg-[#101C2A]">
+              <button
+                type="button"
+                onClick={() => setTableDensity('normal')}
+                className={`text-[10px] px-1.5 py-0.5 rounded font-medium transition-colors ${
+                  tableDensity === 'normal'
+                    ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-xs'
+                    : 'text-slate-500 dark:text-[#8194A8]'
+                }`}
+              >
+                Normal
+              </button>
+              <button
+                type="button"
+                onClick={() => setTableDensity('compact')}
+                className={`text-[10px] px-1.5 py-0.5 rounded font-medium transition-colors ${
+                  tableDensity === 'compact'
+                    ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-xs'
+                    : 'text-slate-500 dark:text-[#8194A8]'
+                }`}
+              >
+                Compact
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Filter Chips */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-[#1F334A] text-xs">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-[11px] font-mono text-slate-500 dark:text-[#8194A8] mr-1">
+              Showing <strong className="text-slate-800 dark:text-[#E8EEF5]">{displayedLoans.length}</strong> of {paginationInfo.total} loan facilities:
             </span>
+
+            {[
+              { id: 'ALL', label: 'All Facilities' },
+              { id: 'STANDARD', label: 'Standard Performing' },
+              { id: 'WATCHLIST', label: 'SMA Watchlist' },
+              { id: 'HNI', label: 'High Exposure (> ₹50L)' },
+            ].map((chip) => (
+              <button
+                key={chip.id}
+                type="button"
+                onClick={() => setQuickFilter(chip.id as any)}
+                className={`text-[11px] px-2.5 py-0.5 rounded transition-colors ${
+                  quickFilter === chip.id
+                    ? 'bg-[#142C45] dark:bg-[#1B9D92] text-white font-medium'
+                    : 'bg-slate-100 dark:bg-[#192B3D] text-slate-600 dark:text-[#A9BACB] hover:bg-slate-200 dark:hover:bg-[#20364B]'
+                }`}
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
+
+          {(searchTerm || selectedType !== 'ALL' || selectedClassification !== 'ALL' || quickFilter !== 'ALL') && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedType('ALL');
+                setSelectedClassification('ALL');
+                setQuickFilter('ALL');
+                setCurrentPage(1);
+                fetchLoans();
+              }}
+              className="text-xs text-[#168C83] dark:text-[#1B9D92] hover:underline font-medium"
+            >
+              Reset Filters
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Main Loans Data Table */}
+      {loading ? (
+        <div className="py-16 text-center text-slate-500 dark:text-[#8194A8] bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded">
+          <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-[#168C83]" />
+          <p className="text-xs">Querying PostgreSQL Lending database...</p>
+        </div>
+      ) : error ? (
+        <div className="p-6 text-center text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900 rounded">
+          <AlertCircle className="w-6 h-6 mx-auto mb-2" />
+          <p className="text-sm font-medium">{error}</p>
+        </div>
+      ) : displayedLoans.length === 0 ? (
+        <EmptyState
+          icon={<Landmark className="w-8 h-8 text-slate-400 dark:text-[#8194A8]" />}
+          title="No loan facilities match criteria"
+          description="No credit accounts match the current search term, scheme, or asset classification filters."
+          actionLabel="Reset Filters"
+          onAction={() => {
+            setSearchTerm('');
+            setSelectedType('ALL');
+            setSelectedClassification('ALL');
+            setQuickFilter('ALL');
+            setCurrentPage(1);
+            fetchLoans();
+          }}
+          className="py-12 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded"
+        />
+      ) : (
+        <div className="space-y-3">
+          <Table
+            data={displayedLoans}
+            columns={columns}
+            keyExtractor={(l) => l.loanAccountNumber}
+            density={tableDensity}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSort={handleSort}
+            onRowClick={(l) => handleOpenLoanDetail(l)}
+          />
+
+          {/* Table Pagination Bar */}
+          <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-2.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2 text-slate-500 dark:text-[#8194A8]">
+              <span>
+                Showing page <strong className="text-slate-800 dark:text-[#E8EEF5]">{currentPage}</strong> of {paginationInfo.totalPages || 1}
+                {' '}({paginationInfo.total} total facilities)
+              </span>
+
+              <span className="text-slate-300 dark:text-[#33485D]">|</span>
+
+              <div className="flex items-center gap-1">
+                <span>Per page:</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded px-1.5 py-0.5 text-xs text-slate-800 dark:text-[#E8EEF5]"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+            </div>
+
             <div className="flex items-center gap-1">
               <Button
-                size="sm"
+                size="xs"
                 variant="outline"
                 disabled={currentPage <= 1 || loading}
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 icon={<ChevronLeft className="w-3.5 h-3.5" />}
               >
-                Prev
+                Previous
               </Button>
               <Button
-                size="sm"
+                size="xs"
                 variant="outline"
                 disabled={currentPage >= paginationInfo.totalPages || loading}
                 onClick={() => setCurrentPage((p) => Math.min(paginationInfo.totalPages, p + 1))}
-                icon={<ChevronRight className="w-3.5 h-3.5" />}
               >
-                Next
+                <span>Next</span>
+                <ChevronRight className="w-3.5 h-3.5 ml-1" />
               </Button>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Loan Detail Modal per exact requirements:
-          Loan ID, Customer, Loan Type, Original Principal, Outstanding Principal, Interest Rate, Tenure, Start Date, Maturity Date, Next Due Date, Status
-          Repayment Summary
-          Payment History schedule
-          Relationship Context */}
+      {/* Loan Detail Inquiry Modal */}
       {activeLoan && (
         <Modal
           isOpen={detailModalOpen}
@@ -609,295 +748,310 @@ export const LendingModule: React.FC<LendingModuleProps> = ({
             setDetailModalOpen(false);
             setActiveLoan(null);
           }}
-          title={`Credit Facility Dossier: ${activeLoan.loanAccountNumber}`}
+          title={
+            <div className="flex items-center gap-2">
+              <Landmark className="w-4 h-4 text-[#168C83] dark:text-[#1B9D92]" />
+              <span>Credit Facility Dossier: {activeLoan.loanAccountNumber}</span>
+            </div>
+          }
+          subtitle={`Borrower: ${activeLoan.borrowerName} · CIF: ${activeLoan.cifNumber}`}
           size="4xl"
         >
-          <div className="space-y-6">
-            {/* Core Header Card */}
-            <div className="bg-slate-50 border border-slate-200 rounded p-4">
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded bg-slate-900 text-white flex items-center justify-center font-mono font-bold">
-                    CR
+          <div className="space-y-4">
+            {/* Header & Cohesive 6-Metric Facility Balance Strip */}
+            <div className="bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded p-4 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-[#1F334A]">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-base font-bold text-slate-900 dark:text-[#E8EEF5]">
+                      {activeLoan.loanAccountNumber}
+                    </span>
+                    <Badge variant="neutral" size="sm">
+                      {activeLoan.loanType}
+                    </Badge>
+                    <Badge
+                      variant={activeLoan.assetClassification === 'STANDARD' ? 'success' : 'danger'}
+                      size="sm"
+                    >
+                      {activeLoan.assetClassification}
+                    </Badge>
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-base font-bold text-slate-900">
-                        {activeLoan.loanAccountNumber}
-                      </span>
-                      <span className="text-xs px-2 py-0.5 bg-slate-200 text-slate-700 rounded font-medium">
-                        {String(activeLoan.loanType).replace(/_/g, ' ')}
-                      </span>
-                    </div>
-                    <div className="text-xs text-slate-600 font-mono">
-                      CIF: {activeLoan.cifNumber} • Benchmark: {activeLoan.benchmarkRate}
-                    </div>
+                  <div className="text-xs text-slate-500 dark:text-[#8194A8] font-mono mt-0.5">
+                    Branch: {activeLoan.branchName} • RM: {activeLoan.rmName || 'Branch Credit RM'}
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Badge
-                    variant={
-                      activeLoan.assetClassification === 'STANDARD'
-                        ? 'success'
-                        : activeLoan.assetClassification === 'SMA_0'
-                        ? 'warning'
-                        : 'danger'
-                    }
-                    size="md"
-                  >
-                    {activeLoan.assetClassification}
-                  </Badge>
+                  {onRequestLimitRevision && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setDetailModalOpen(false);
+                        onRequestLimitRevision(activeLoan);
+                      }}
+                    >
+                      Credit Limit Revision
+                    </Button>
+                  )}
                 </div>
               </div>
 
-              {/* Exact Fields Required:
-                  Loan ID, Customer, Loan Type, Original Principal, Outstanding Principal, Interest Rate, Tenure, Start Date, Maturity Date, Next Due Date, Status */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
-                <div>
-                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Customer</div>
-                  <div className="text-xs font-semibold text-slate-900 mt-0.5 truncate">{activeLoan.borrowerName || activeLoan.customerName}</div>
-                  <div className="text-[10px] text-slate-500 font-mono">CIF: {activeLoan.cifNumber}</div>
+              {/* 6-Metric Strip */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-1">
+                <div className="bg-white dark:bg-[#162638] p-2.5 rounded border border-slate-200 dark:border-[#33485D]">
+                  <span className="text-[10px] text-slate-500 dark:text-[#8194A8] uppercase font-mono block">Sanctioned Limit</span>
+                  <span className="text-sm font-mono font-bold text-slate-900 dark:text-[#E8EEF5] mt-0.5 block">
+                    {formatINR(parseFloat(activeLoan.sanctionedLimit || '0'))}
+                  </span>
+                  <span className="text-[9px] text-slate-400 block mt-0.5">Committed drawing ceiling</span>
                 </div>
 
-                <div>
-                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Original Principal</div>
-                  <div className="text-sm font-mono font-bold text-slate-900 mt-0.5">
-                    {formatINR(parseFloat(String(activeLoan.sanctionedLimit || '0')))}
-                  </div>
+                <div className="bg-white dark:bg-[#162638] p-2.5 rounded border border-slate-200 dark:border-[#33485D]">
+                  <span className="text-[10px] text-slate-500 dark:text-[#8194A8] uppercase font-mono block">Outstanding Principal</span>
+                  <span className="text-sm font-mono font-bold text-amber-600 dark:text-amber-400 mt-0.5 block">
+                    {formatINR(parseFloat(activeLoan.outstandingPrincipal || '0'))}
+                  </span>
+                  <span className="text-[9px] text-slate-400 block mt-0.5">Current principal balance</span>
                 </div>
 
-                <div>
-                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Outstanding Principal</div>
-                  <div className="text-sm font-mono font-bold text-amber-700 mt-0.5">
-                    {formatINR(parseFloat(String(activeLoan.outstandingPrincipal || '0')))}
-                  </div>
+                <div className="bg-white dark:bg-[#162638] p-2.5 rounded border border-slate-200 dark:border-[#33485D]">
+                  <span className="text-[10px] text-slate-500 dark:text-[#8194A8] uppercase font-mono block">Scheduled Monthly EMI</span>
+                  <span className="text-sm font-mono font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 block">
+                    {formatINR(parseFloat(activeLoan.emiAmount || '0'))}
+                  </span>
+                  <span className="text-[9px] text-slate-400 block mt-0.5">Next Due: {activeLoan.nextEmiDate}</span>
                 </div>
 
-                <div>
-                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Interest Rate</div>
-                  <div className="text-xs font-mono font-bold text-slate-900 mt-0.5">
-                    {(parseFloat(String(activeLoan?.interestRate || '0')) || 0).toFixed(2)}% p.a.
-                  </div>
-                  <div className="text-[10px] text-slate-500">{activeLoan?.benchmarkRate || 'Benchmark Linked'}</div>
-                </div>
-
-                <div>
-                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Tenure</div>
-                  <div className="text-xs font-mono font-bold text-slate-900 mt-0.5">
-                    {activeLoan?.tenureMonths || 60} Months ({(((activeLoan?.tenureMonths || 60) / 12) || 5).toFixed(0)} Yrs)
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Sanction / Start Date</div>
-                  <div className="text-xs font-mono font-semibold text-slate-900 mt-0.5">
-                    {String(activeLoan.sanctionDate || '').split('T')[0]}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Maturity Date</div>
-                  <div className="text-xs font-mono font-semibold text-slate-900 mt-0.5">
-                    {String(activeLoan.maturityDate || '').split('T')[0]}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Next Due Date</div>
-                  <div className="text-xs font-mono font-bold text-emerald-700 mt-0.5">
-                    {String(activeLoan.nextEmiDate || '').split('T')[0]}
-                  </div>
-                  <div className="text-[10px] text-slate-500 font-mono">
-                    EMI: {formatINR(parseFloat(String(activeLoan.emiAmount || '0')))}
-                  </div>
+                <div className="bg-white dark:bg-[#162638] p-2.5 rounded border border-slate-200 dark:border-[#33485D]">
+                  <span className="text-[10px] text-slate-500 dark:text-[#8194A8] uppercase font-mono block">Applied Interest Rate</span>
+                  <span className="text-sm font-mono font-bold text-slate-900 dark:text-[#E8EEF5] mt-0.5 block">
+                    {(Number(activeLoan.interestRate) || 8.5).toFixed(2)}% p.a.
+                  </span>
+                  <span className="text-[9px] text-slate-400 block mt-0.5">{activeLoan.benchmarkRate || 'MCLR-1Y'}</span>
                 </div>
               </div>
             </div>
 
-            {/* Repayment Summary Block */}
-            {repaymentSummary && (
-              <div className="bg-emerald-50/60 border border-emerald-200 rounded p-3">
-                <div className="text-xs font-bold uppercase tracking-wider text-emerald-900 mb-2">
-                  Repayment Summary Track Record
+            {/* Modal Navigation Tabs */}
+            <div className="flex items-center gap-1 border-b border-slate-200 dark:border-[#33485D] text-xs">
+              <button
+                onClick={() => setActiveDetailTab('SCHEDULE')}
+                className={`py-2 px-3 border-b-2 font-medium transition-colors ${
+                  activeDetailTab === 'SCHEDULE'
+                    ? 'border-[#168C83] text-[#142C45] dark:text-[#1B9D92] font-semibold'
+                    : 'border-transparent text-slate-600 dark:text-[#A9BACB] hover:text-slate-900'
+                }`}
+              >
+                Repayment Schedule ({repaymentPagination.total})
+              </button>
+              <button
+                onClick={() => setActiveDetailTab('SPECIFICATIONS')}
+                className={`py-2 px-3 border-b-2 font-medium transition-colors ${
+                  activeDetailTab === 'SPECIFICATIONS'
+                    ? 'border-[#168C83] text-[#142C45] dark:text-[#1B9D92] font-semibold'
+                    : 'border-transparent text-slate-600 dark:text-[#A9BACB] hover:text-slate-900'
+                }`}
+              >
+                Terms &amp; Facility Parameters
+              </button>
+              <button
+                onClick={() => setActiveDetailTab('GOVERNANCE')}
+                className={`py-2 px-3 border-b-2 font-medium transition-colors ${
+                  activeDetailTab === 'GOVERNANCE'
+                    ? 'border-[#168C83] text-[#142C45] dark:text-[#1B9D92] font-semibold'
+                    : 'border-transparent text-slate-600 dark:text-[#A9BACB] hover:text-slate-900'
+                }`}
+              >
+                Asset Classification &amp; SMA Watchlist
+              </button>
+            </div>
+
+            {/* Tab 1: Repayment Schedule */}
+            {activeDetailTab === 'SCHEDULE' && (
+              <div className="space-y-3">
+                {loadingRepayments ? (
+                  <div className="py-8 text-center text-slate-500 dark:text-[#8194A8]">
+                    <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-1 text-[#168C83]" />
+                    <p className="text-xs">Fetching repayment amortization schedule...</p>
+                  </div>
+                ) : repayments.length === 0 ? (
+                  <div className="p-6 text-center text-slate-500 dark:text-[#8194A8] bg-slate-50 dark:bg-[#101C2A] rounded border border-slate-200 dark:border-[#33485D]">
+                    <p className="text-xs">No repayment installment records found.</p>
+                  </div>
+                ) : (
+                  <div className="border border-slate-200 dark:border-[#33485D] rounded overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs text-left">
+                        <thead className="bg-slate-100 dark:bg-[#101C2A] text-slate-700 dark:text-[#A9BACB] font-semibold border-b border-slate-200 dark:border-[#33485D]">
+                          <tr>
+                            <th className="px-3 py-2">Installment #</th>
+                            <th className="px-3 py-2">Due Date</th>
+                            <th className="px-3 py-2 text-right">Principal</th>
+                            <th className="px-3 py-2 text-right">Interest</th>
+                            <th className="px-3 py-2 text-right">Total EMI</th>
+                            <th className="px-3 py-2 text-center">Payment Date</th>
+                            <th className="px-3 py-2 text-center">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200 dark:divide-[#1F334A] bg-white dark:bg-[#162638]">
+                          {repayments.map((rep) => (
+                            <tr key={rep.id || rep.installmentNumber} className="hover:bg-slate-50 dark:hover:bg-[#192B3D] transition-colors">
+                              <td className="px-3 py-2 font-mono font-bold text-slate-800 dark:text-[#E8EEF5]">
+                                #{rep.installmentNumber}
+                              </td>
+                              <td className="px-3 py-2 font-mono text-slate-600 dark:text-[#A9BACB]">
+                                {rep.dueDate}
+                              </td>
+                              <td className="px-3 py-2 font-mono text-right text-slate-700 dark:text-[#A9BACB]">
+                                {formatINR(parseFloat(String(rep.principalComponent || '0')))}
+                              </td>
+                              <td className="px-3 py-2 font-mono text-right text-slate-700 dark:text-[#A9BACB]">
+                                {formatINR(parseFloat(String(rep.interestComponent || '0')))}
+                              </td>
+                              <td className="px-3 py-2 font-mono font-bold text-right text-slate-900 dark:text-[#E8EEF5]">
+                                {formatINR(parseFloat(String(rep.totalEmi || '0')))}
+                              </td>
+                              <td className="px-3 py-2 text-center font-mono text-slate-500 dark:text-[#8194A8]">
+                                {rep.paymentDate || '—'}
+                              </td>
+                              <td className="px-3 py-2 text-center whitespace-nowrap">
+                                <Badge
+                                  variant={
+                                    rep.status === 'PAID'
+                                      ? 'success'
+                                      : rep.status === 'OVERDUE'
+                                      ? 'danger'
+                                      : 'neutral'
+                                  }
+                                  size="sm"
+                                >
+                                  {rep.status}
+                                </Badge>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Pagination */}
+                    <div className="px-3 py-2 bg-slate-50 dark:bg-[#101C2A] border-t border-slate-200 dark:border-[#33485D] flex items-center justify-between text-xs">
+                      <span className="text-slate-500 dark:text-[#8194A8] font-mono">
+                        Page {repaymentPage} of {repaymentPagination.totalPages || 1}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          size="xs"
+                          variant="outline"
+                          disabled={repaymentPage <= 1 || loadingRepayments}
+                          onClick={() => handleRepaymentPageChange(repaymentPage - 1)}
+                        >
+                          Previous
+                        </Button>
+                        <Button
+                          size="xs"
+                          variant="outline"
+                          disabled={repaymentPage >= repaymentPagination.totalPages || loadingRepayments}
+                          onClick={() => handleRepaymentPageChange(repaymentPage + 1)}
+                        >
+                          Next
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Tab 2: Terms & Parameters */}
+            {activeDetailTab === 'SPECIFICATIONS' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="p-3.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded space-y-2">
+                  <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] border-b border-slate-200 dark:border-[#1F334A] pb-1.5 uppercase text-[11px] tracking-wide">
+                    Facility Tenor &amp; Benchmarks
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 dark:text-[#8194A8]">Sanction Date:</span>
+                    <span className="font-mono text-slate-800 dark:text-[#E8EEF5]">{activeLoan.sanctionDate}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 dark:text-[#8194A8]">Maturity Date:</span>
+                    <span className="font-mono text-slate-800 dark:text-[#E8EEF5]">{activeLoan.maturityDate}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 dark:text-[#8194A8]">Tenure:</span>
+                    <span className="font-mono text-slate-800 dark:text-[#E8EEF5]">{activeLoan.tenureMonths} Months</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 dark:text-[#8194A8]">Benchmark Peg:</span>
+                    <span className="font-mono text-slate-800 dark:text-[#E8EEF5]">{activeLoan.benchmarkRate}</span>
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div>
-                    <span className="text-slate-500">Paid Installments:</span>
-                    <span className="font-mono font-bold text-slate-900 ml-1.5">
-                      {repaymentSummary.totalInstallmentsPaid} of {activeLoan.tenureMonths || 240}
-                    </span>
+
+                <div className="p-3.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded space-y-2">
+                  <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] border-b border-slate-200 dark:border-[#1F334A] pb-1.5 uppercase text-[11px] tracking-wide">
+                    Servicing &amp; Officer Routing
                   </div>
-                  <div>
-                    <span className="text-slate-500">Principal Amortized:</span>
-                    <span className="font-mono font-bold text-emerald-800 ml-1.5">
-                      {formatINR(repaymentSummary.totalPrincipalPaid)}
-                    </span>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 dark:text-[#8194A8]">Primary Borrower:</span>
+                    <span className="font-medium text-slate-800 dark:text-[#E8EEF5]">{activeLoan.borrowerName}</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500">Interest Serviced:</span>
-                    <span className="font-mono font-bold text-slate-900 ml-1.5">
-                      {formatINR(repaymentSummary.totalInterestPaid)}
-                    </span>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 dark:text-[#8194A8]">Servicing Branch:</span>
+                    <span className="font-medium text-slate-800 dark:text-[#E8EEF5]">{activeLoan.branchName}</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500">Total Repaid to Date:</span>
-                    <span className="font-mono font-bold text-slate-900 ml-1.5">
-                      {formatINR(repaymentSummary.totalRepaidToDate)}
-                    </span>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 dark:text-[#8194A8]">Credit RM:</span>
+                    <span className="font-medium text-slate-800 dark:text-[#E8EEF5]">{activeLoan.rmName || 'Branch Credit RM'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 dark:text-[#8194A8]">Penal Interest Due:</span>
+                    <span className="font-mono text-rose-600 dark:text-rose-400 font-semibold">{formatINR(activeLoan.penalInterestDue || 0)}</span>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Payment History Schedule Table per exact requirement:
-                "Payment history should show payment schedule/history for that specific loan" */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-slate-500" />
-                    <span>Amortization & Payment History Schedule</span>
-                  </h4>
-                  <p className="text-[11px] text-slate-500">
-                    Sourced from PostgreSQL `loan_repayments` for this specific facility.
-                  </p>
-                </div>
-                <span className="text-xs font-mono text-slate-500">
-                  Total Records: {repaymentPagination.total}
-                </span>
-              </div>
-
-              {loadingRepayments ? (
-                <div className="py-8 text-center text-slate-500">
-                  <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-1 text-slate-400" />
-                  <p className="text-xs">Loading loan repayment schedule...</p>
-                </div>
-              ) : repayments.length === 0 ? (
-                <div className="p-6 text-center text-slate-500 bg-slate-50 rounded border border-slate-200">
-                  <p className="text-xs">No repayment entries registered yet for this loan.</p>
-                </div>
-              ) : (
-                <div className="border border-slate-200 rounded overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-left">
-                      <thead className="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200">
-                        <tr>
-                          <th className="px-3 py-2">Inst #</th>
-                          <th className="px-3 py-2">Due Date</th>
-                          <th className="px-3 py-2">Paid Date</th>
-                          <th className="px-3 py-2 text-right">Principal</th>
-                          <th className="px-3 py-2 text-right">Interest</th>
-                          <th className="px-3 py-2 text-right">Total Paid</th>
-                          <th className="px-3 py-2 text-right">Outstanding After</th>
-                          <th className="px-3 py-2 text-center">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-200">
-                        {repayments.map((r) => (
-                          <tr key={r.id} className="hover:bg-slate-50 font-sans">
-                            <td className="px-3 py-2 font-mono font-bold text-slate-700">
-                              #{r.installmentNumber}
-                            </td>
-                            <td className="px-3 py-2 font-mono text-slate-600 whitespace-nowrap">
-                              {r.dueDate ? String(r.dueDate).split('T')[0] : '—'}
-                            </td>
-                            <td className="px-3 py-2 font-mono text-slate-700 whitespace-nowrap">
-                              {r.paidDate ? String(r.paidDate).split('T')[0] : 'Pending'}
-                            </td>
-                            <td className="px-3 py-2 font-mono text-right text-slate-800">
-                              {formatINR(parseFloat(String(r.principalPaid || '0')))}
-                            </td>
-                            <td className="px-3 py-2 font-mono text-right text-slate-600">
-                              {formatINR(parseFloat(String(r.interestPaid || '0')))}
-                            </td>
-                            <td className="px-3 py-2 font-mono font-bold text-right text-slate-900">
-                              {formatINR(parseFloat(String(r.totalAmount || '0')))}
-                            </td>
-                            <td className="px-3 py-2 font-mono text-right text-slate-700">
-                              {formatINR(parseFloat(String(r.outstandingBalanceAfter || '0')))}
-                            </td>
-                            <td className="px-3 py-2 text-center whitespace-nowrap">
-                              <Badge variant={r.status === 'PAID' ? 'success' : 'warning'} size="sm">
-                                {r.status}
-                              </Badge>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+            {/* Tab 3: Governance & SMA Watchlist */}
+            {activeDetailTab === 'GOVERNANCE' && (
+              <div className="space-y-3 text-xs">
+                <div className="p-3.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded space-y-2">
+                  <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-[#168C83] dark:text-[#1B9D92]" />
+                    <span>RBI Asset Classification &amp; Prudential Provisioning</span>
                   </div>
-
-                  {/* Repayment Pagination Bar */}
-                  <div className="px-3 py-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-mono">
-                      Page {repaymentPage} of {repaymentPagination.totalPages || 1}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={repaymentPage <= 1 || loadingRepayments}
-                        onClick={() => handleRepaymentPageChange(repaymentPage - 1)}
-                      >
-                        Previous
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={repaymentPage >= repaymentPagination.totalPages || loadingRepayments}
-                        onClick={() => handleRepaymentPageChange(repaymentPage + 1)}
-                      >
-                        Next
-                      </Button>
+                  <p className="text-slate-600 dark:text-[#A9BACB] text-[11px] leading-relaxed">
+                    Under Reserve Bank of India (RBI) Prudential Framework for Resolution of Stressed Assets, facilities are classified based on Special Mention Account (SMA) stages: SMA-0 (1-30 days), SMA-1 (31-60 days), and SMA-2 (61-90 days). Once overdue crosses 90 days, the asset transitions automatically to Non-Performing Asset (NPA) status.
+                  </p>
+                  <div className="flex items-center gap-4 pt-2">
+                    <div className="p-2 bg-white dark:bg-[#162638] rounded border border-slate-200 dark:border-[#33485D]">
+                      <span className="text-[10px] text-slate-500 dark:text-[#8194A8] block">Current Classification</span>
+                      <span className="font-bold text-slate-800 dark:text-[#E8EEF5]">{activeLoan.assetClassification}</span>
+                    </div>
+                    <div className="p-2 bg-white dark:bg-[#162638] rounded border border-slate-200 dark:border-[#33485D]">
+                      <span className="text-[10px] text-slate-500 dark:text-[#8194A8] block">Days Past Due (DPD)</span>
+                      <span className="font-bold font-mono text-slate-800 dark:text-[#E8EEF5]">{activeLoan.dpd || 0} Days</span>
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
-
-            {/* Relationship Context Block per exact requirement:
-                "Relationship Context: Loan detail must clearly reflect the customer relationship" */}
-            <div className="bg-slate-50 border border-slate-200 rounded p-4 space-y-3">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-900">
-                Customer Relationship & Security Context
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                <div>
-                  <span className="text-slate-500 block mb-0.5">Assigned Relationship Manager</span>
-                  <span className="font-semibold text-slate-900">{activeLoan.rmName || 'Deepak Nambiar'}</span>
-                  <div className="text-[11px] text-slate-500 font-mono">{activeLoan.rmEmail || 'deepak.nambiar@corevia.bank.in'}</div>
-                </div>
-                <div>
-                  <span className="text-slate-500 block mb-0.5">Primary Collateral & Valuation</span>
-                  <span className="font-semibold text-slate-900">{activeLoan.collateralType || 'Mortgage'}</span>
-                  <div className="text-[11px] text-emerald-800 font-mono font-bold">
-                    Valuation: {formatINR(parseFloat(String(activeLoan.collateralValue || '0')))}
-                  </div>
-                </div>
-                <div>
-                  <span className="text-slate-500 block mb-0.5">Hypothecation / Asset Location</span>
-                  <span className="text-slate-800 font-sans">{activeLoan.hypothecationDetails || 'Direct Legal Charge'}</span>
-                  <div className="text-[10px] text-slate-500 mt-0.5">
-                    Priority Sector: {activeLoan.prioritySector ? 'Yes (RBI Priority)' : 'No (General Advance)'}
-                  </div>
-                </div>
-              </div>
-            </div>
+            )}
 
             {/* Modal Footer */}
-            <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
-              <div className="text-[11px] text-slate-500 font-mono">
-                Facility Ref: FAC-{activeLoan.id || activeLoan.loanAccountNumber}
+            <div className="pt-3 border-t border-slate-200 dark:border-[#33485D] flex items-center justify-between">
+              <div className="text-[11px] text-slate-500 dark:text-[#8194A8] font-mono">
+                Audit Record ID: LN-{activeLoan.id || activeLoan.loanAccountNumber} • Branch {activeLoan.branchCode}
               </div>
               <Button
-                variant="secondary"
+                variant="primary"
+                size="sm"
                 onClick={() => {
                   setDetailModalOpen(false);
                   setActiveLoan(null);
                 }}
               >
-                Close Facility Dossier
+                Close Inquiry
               </Button>
             </div>
           </div>
