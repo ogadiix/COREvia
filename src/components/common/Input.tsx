@@ -37,8 +37,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const helperId = `${id}-helper`;
 
     const sizeClasses = {
-      sm: 'h-7 py-1 text-xs',
-      md: 'h-8 py-1.5 text-xs',
+      sm: 'h-8 sm:h-7 py-1 text-xs',
+      md: 'h-9 sm:h-8 py-1.5 text-xs',
     };
 
     const hasError = Boolean(error);

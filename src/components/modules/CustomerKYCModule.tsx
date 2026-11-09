@@ -853,7 +853,7 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
           </div>
 
           {/* Integrated Cohesive Metric Strip (No Excessive Cards) */}
-          <div className="grid grid-cols-2 md:grid-cols-6 divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-[#1F334A] bg-slate-50/50 dark:bg-[#101C2A]/60 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 dark:divide-[#1F334A] bg-slate-50/50 dark:bg-[#101C2A]/60 text-xs">
             {/* 1. TRV */}
             <div className="p-3">
               <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-[#8194A8] block">
@@ -969,7 +969,11 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
         {/* STRUCTURED WORKSPACE TABS */}
         <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded shadow-2xs">
           {/* Scrollable Tab Header Bar */}
-          <div className="flex items-center gap-1 border-b border-slate-200 dark:border-[#33485D] px-3 pt-2 overflow-x-auto text-xs scrollbar-none">
+          <div
+            role="tablist"
+            aria-label="Customer 360 Workspace Modules"
+            className="flex items-center gap-1 border-b border-slate-200 dark:border-[#33485D] px-3 pt-2 overflow-x-auto text-xs scrollbar-none"
+          >
             {[
               { id: 'SUMMARY', label: 'Relationship Summary', icon: BarChart3 },
               {
@@ -1036,6 +1040,8 @@ export const CustomerKYCModule: React.FC<CustomerKYCModuleProps> = ({
               return (
                 <button
                   key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => setActive360Tab(tab.id as Customer360TabType)}
                   className={`flex items-center gap-1.5 py-2 px-3 border-b-2 font-medium whitespace-nowrap transition-colors text-xs ${
                     isActive

@@ -118,12 +118,12 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
               {category.shortcuts.map((shortcut, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-2 rounded-xs bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#26394C] text-xs hover:border-[#168C83]/40 transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 p-2 rounded-xs bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#26394C] text-xs hover:border-[#168C83]/40 transition-colors"
                 >
-                  <span className="text-[#5D6B7B] dark:text-[#A9BACB] pr-2 leading-tight">
+                  <span className="text-[#5D6B7B] dark:text-[#A9BACB] sm:pr-2 leading-tight">
                     {shortcut.description}
                   </span>
-                  <div className="flex items-center gap-1 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0 self-start sm:self-auto">
                     {shortcut.keys.map((k, kIdx) => (
                       <React.Fragment key={kIdx}>
                         <kbd className="font-mono text-[11px] font-semibold px-1.5 py-0.5 rounded-xs bg-white dark:bg-[#162638] text-[#273444] dark:text-[#E8EEF5] border border-[#CBD5E1] dark:border-[#33485D] shadow-2xs">

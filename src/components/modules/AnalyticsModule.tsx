@@ -491,7 +491,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
         {/* Secondary Filters Tray */}
         {showAdvancedFilters && (
-          <div className="pt-3 border-t border-[#EDF1F5] dark:border-[#26394C] grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+          <div className="pt-3 border-t border-[#EDF1F5] dark:border-[#26394C] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
             <div>
               <label className="block text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium mb-1">CORE Score Band</label>
               <select
@@ -574,8 +574,14 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
       </div>
 
       {/* Primary Analytics Navigation Tabs */}
-      <div className="flex border-b border-[#DCE3EA] dark:border-[#33485D] overflow-x-auto no-scrollbar gap-1 text-xs font-medium">
+      <div
+        role="tablist"
+        aria-label="Management Intelligence & Analytics Categories"
+        className="flex border-b border-[#DCE3EA] dark:border-[#33485D] overflow-x-auto no-scrollbar gap-1 text-xs font-medium"
+      >
         <button
+          role="tab"
+          aria-selected={activeTab === 'overview'}
           onClick={() => setActiveTab('overview')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'overview'
@@ -587,6 +593,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === 'portfolio'}
           onClick={() => setActiveTab('portfolio')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'portfolio'
@@ -598,6 +606,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === 'relationship_value'}
           onClick={() => setActiveTab('relationship_value')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
             activeTab === 'relationship_value'
@@ -612,6 +622,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === 'health'}
           onClick={() => setActiveTab('health')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'health'
@@ -623,6 +635,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === 'opportunities'}
           onClick={() => setActiveTab('opportunities')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'opportunities'
@@ -634,6 +648,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === 'service'}
           onClick={() => setActiveTab('service')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'service'
@@ -645,6 +661,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === 'rm'}
           onClick={() => setActiveTab('rm')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'rm'
@@ -656,6 +674,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === 'products'}
           onClick={() => setActiveTab('products')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'products'
@@ -667,6 +687,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === 'trends'}
           onClick={() => setActiveTab('trends')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'trends'

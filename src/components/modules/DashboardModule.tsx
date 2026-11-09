@@ -614,13 +614,13 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
           2. PORTFOLIO COMMAND MATRIX (6 Compact, Actionable Banking Metrics)
           ====================================================================== */}
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
           {Array.from({ length: 6 }).map((_, idx) => (
             <SkeletonCard key={idx} className="h-24" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
           {/* Metric 1: Total Customers */}
           <div
             onClick={onNavigateToCustomers}
@@ -848,7 +848,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
         </div>
 
         {/* Health Bands & Quick Customer Profiles */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           {customerHealthData.map((tier, idx) => (
             <div
               key={idx}
@@ -909,7 +909,11 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
           </div>
 
           {/* Segmented View Mode Tabs */}
-          <div className="flex items-center p-0.5 bg-[#EDF1F5] dark:bg-[#101C2A] rounded-xs border border-[#DCE3EA] dark:border-[#33485D] shrink-0">
+          <div
+            role="tablist"
+            aria-label="Intelligence Chart Views"
+            className="flex items-center p-0.5 bg-[#EDF1F5] dark:bg-[#101C2A] rounded-xs border border-[#DCE3EA] dark:border-[#33485D] shrink-0 overflow-x-auto max-w-full"
+          >
             {(
               [
                 { id: 'trends', label: 'CORE Score Trends' },
@@ -920,8 +924,10 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
             ).map((tab) => (
               <button
                 key={tab.id}
+                role="tab"
+                aria-selected={chartView === tab.id}
                 onClick={() => setChartView(tab.id)}
-                className={`px-2.5 py-1 text-xs rounded-xs font-medium transition-colors cursor-pointer ${
+                className={`px-2.5 py-1 text-xs rounded-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
                   chartView === tab.id
                     ? 'bg-white dark:bg-[#162638] text-[#273444] dark:text-[#E8EEF5] shadow-xs font-semibold'
                     : 'text-[#5D6B7B] dark:text-[#8194A8] hover:text-[#273444] dark:hover:text-[#E8EEF5]'

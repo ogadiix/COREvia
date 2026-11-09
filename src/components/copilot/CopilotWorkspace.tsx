@@ -415,12 +415,12 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
       {/* 4. Categorized Suggested Banking Prompts Dock */}
       {messages.length <= 3 && (
         <div className="px-4 py-3 bg-[#FFFFFF] dark:bg-[#162638] border-t border-[#DCE3EA] dark:border-[#33485D] shrink-0 space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
             <div className="text-[10px] font-bold text-[#5D6B7B] dark:text-[#A9BACB] uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#168C83] dark:text-[#46C3B2]" />
               <span>Suggested Institutional Prompts</span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap">
               {BANKING_PROMPT_CATEGORIES.map((cat, idx) => (
                 <button
                   key={idx}

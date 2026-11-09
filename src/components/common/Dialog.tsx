@@ -114,7 +114,7 @@ export const Dialog: React.FC<DialogProps> = ({
     <div
       id={id}
       style={{ zIndex: zIndex.modal }}
-      className="fixed inset-0 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 dark:bg-black/75 backdrop-blur-[1px] motion-fade-in select-none overflow-y-auto"
+      className="fixed inset-0 flex items-center justify-center p-2 sm:p-4 bg-slate-950/60 dark:bg-black/75 backdrop-blur-[1px] motion-fade-in select-none overflow-y-auto"
     >
       {/* Backdrop */}
       <div
@@ -130,7 +130,7 @@ export const Dialog: React.FC<DialogProps> = ({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={subtitle ? descId : undefined}
-        className={`relative z-10 w-full ${sizeClasses[effectiveSize]} bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-xl flex flex-col max-h-[92vh] overflow-hidden my-auto motion-dialog-enter text-[#273444] dark:text-[#E8EEF5]`}
+        className={`relative z-10 w-full ${sizeClasses[effectiveSize]} bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm shadow-xl flex flex-col max-h-[96dvh] sm:max-h-[92vh] overflow-hidden my-auto motion-dialog-enter text-[#273444] dark:text-[#E8EEF5]`}
       >
         {/* Institutional Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#DCE3EA] dark:border-[#26394C] bg-[#F8FAFC] dark:bg-[#101C2A]">

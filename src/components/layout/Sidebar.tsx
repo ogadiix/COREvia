@@ -479,7 +479,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {isMobileOpen ? (
                 <button
                   onClick={onCloseMobile}
-                  className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 dark:hover:bg-[#162638] cursor-pointer"
+                  className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center rounded text-slate-400 hover:text-white hover:bg-slate-800 dark:hover:bg-[#162638] cursor-pointer"
                   title="Close navigation (Escape)"
                   aria-label="Close navigation"
                 >
