@@ -100,6 +100,18 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
     }
   }, [isOpen, fetchNotifications]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   const handleSync = async () => {
     setIsSyncing(true);
     try {
@@ -276,7 +288,12 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
       />
 
       {/* Slide-over Drawer */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white dark:bg-[#162638] border-l border-slate-300 dark:border-[#33485D] shadow-2xl flex flex-col animate-slide-left">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Notifications & Alerts"
+        className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white dark:bg-[#162638] border-l border-slate-300 dark:border-[#33485D] shadow-2xl flex flex-col motion-drawer-right"
+      >
         {/* Header */}
         <div className="p-4 bg-[#142C45] dark:bg-[#101C2A] text-white flex flex-col gap-3 shrink-0">
           <div className="flex items-center justify-between">

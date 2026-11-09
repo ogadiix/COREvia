@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Building2,
   Calendar,
@@ -27,9 +27,12 @@ import {
   Home,
   Shield,
   Layers,
+  Keyboard,
 } from 'lucide-react';
 import { BANK_META, formatINR } from '../../data/mockIndianBankingData';
 import { Button } from '../common/Button';
+import { Tooltip } from '../common/Tooltip';
+import { KeyboardShortcutsModal } from '../common/KeyboardShortcutsModal';
 import { bankingApi } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
 import { ThemeSwitcher } from '../common/ThemeSwitcher';
@@ -129,6 +132,8 @@ export const Header: React.FC<HeaderProps> = ({
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>(0);
   const [isCityDropdownOpen, setIsCityDropdownOpen] = useState<boolean>(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState<boolean>(false);
+  const [isShortcutsGuideOpen, setIsShortcutsGuideOpen] = useState<boolean>(false);
+  const [selectedSearchIndex, setSelectedSearchIndex] = useState<number>(-1);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
@@ -222,15 +227,29 @@ export const Header: React.FC<HeaderProps> = ({
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      const activeTag = document.activeElement?.tagName;
+      const isInputFocused =
+        activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT';
+
       if (e.key === 'Escape') {
         setShowDropdown(false);
         setIsCityDropdownOpen(false);
         setIsProfileDropdownOpen(false);
         setIsMobileSearchOpen(false);
-      } else if (e.key === '/' && (e.ctrlKey || e.metaKey)) {
+        setIsShortcutsGuideOpen(false);
+      } else if (
+        (e.key === 'k' || e.key === 'K' || e.key === '/') &&
+        (e.ctrlKey || e.metaKey)
+      ) {
         e.preventDefault();
         const searchInput = document.getElementById('corevia-global-search');
-        if (searchInput) searchInput.focus();
+        if (searchInput) {
+          searchInput.focus();
+          if (searchResults) setShowDropdown(true);
+        }
+      } else if (e.key === '?' && !isInputFocused) {
+        e.preventDefault();
+        setIsShortcutsGuideOpen((prev) => !prev);
       }
     };
 
@@ -245,6 +264,7 @@ export const Header: React.FC<HeaderProps> = ({
   const handleItemClick = (type: string, id: string) => {
     setShowDropdown(false);
     onSearchChange('');
+    setSelectedSearchIndex(-1);
     if (onSelectSearchResult) {
       onSelectSearchResult(type, id);
     }
@@ -254,10 +274,87 @@ export const Header: React.FC<HeaderProps> = ({
     if (e) e.stopPropagation();
     setShowDropdown(false);
     onSearchChange('');
+    setSelectedSearchIndex(-1);
     if (onNavigatePath) {
       onNavigatePath(path);
     } else {
       window.location.href = path;
+    }
+  };
+
+  const flatSearchResults = useMemo(() => {
+    if (!searchResults) return [];
+    const items: {
+      type: string;
+      id: string;
+      action: () => void;
+    }[] = [];
+
+    searchResults.accounts.forEach((acc: any) => {
+      items.push({
+        type: 'account',
+        id: acc.accountNumber,
+        action: () => handleItemClick('account', acc.accountNumber),
+      });
+    });
+
+    searchResults.loans.forEach((loan: any) => {
+      items.push({
+        type: 'loan',
+        id: loan.loanAccountNumber,
+        action: () => handleItemClick('loan', loan.loanAccountNumber),
+      });
+    });
+
+    searchResults.customers.forEach((c: any) => {
+      items.push({
+        type: 'customer',
+        id: c.customerCode || c.id,
+        action: () => handleItemClick('customer', c.customerCode || c.id),
+      });
+    });
+
+    (searchResults.journeys || []).forEach((j: any) => {
+      items.push({
+        type: 'journey',
+        id: String(j.id),
+        action: () => handleNavigateEntity(`/journeys?journeyId=${j.id}`),
+      });
+    });
+
+    (searchResults.groups || []).forEach((g: any) => {
+      items.push({
+        type: 'group',
+        id: String(g.groupId || g.id),
+        action: () => handleNavigateEntity(`/group/${g.groupId}`),
+      });
+    });
+
+    return items;
+  }, [searchResults]);
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showDropdown || flatSearchResults.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedSearchIndex((prev) =>
+        prev < flatSearchResults.length - 1 ? prev + 1 : 0
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedSearchIndex((prev) =>
+        prev > 0 ? prev - 1 : flatSearchResults.length - 1
+      );
+    } else if (e.key === 'Enter') {
+      if (selectedSearchIndex >= 0 && flatSearchResults[selectedSearchIndex]) {
+        e.preventDefault();
+        flatSearchResults[selectedSearchIndex].action();
+      }
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      setShowDropdown(false);
+      setSelectedSearchIndex(-1);
     }
   };
 
@@ -284,49 +381,58 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           ) : (
             <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
-              {searchResults.accounts.map((acc: any) => (
-                <div
-                  key={acc.id}
-                  onClick={() => handleItemClick('account', acc.accountNumber)}
-                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
-                >
-                  <div>
-                    <div className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
-                      <span>{acc.accountNumber}</span>
-                      <span className="text-[10px] font-sans px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs font-normal">
-                        {acc.accountType}
-                      </span>
+              {searchResults.accounts.map((acc: any) => {
+                const isHighlighted =
+                  selectedSearchIndex >= 0 &&
+                  flatSearchResults[selectedSearchIndex]?.id === acc.accountNumber;
+                return (
+                  <div
+                    key={acc.id}
+                    onClick={() => handleItemClick('account', acc.accountNumber)}
+                    className={`px-3 py-2 cursor-pointer flex items-center justify-between group transition-colors ${
+                      isHighlighted
+                        ? 'bg-[#EDF1F5] dark:bg-[#1f354d] ring-1 ring-[#168C83]'
+                        : 'hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D]'
+                    }`}
+                  >
+                    <div>
+                      <div className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
+                        <span>{acc.accountNumber}</span>
+                        <span className="text-[10px] font-sans px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs font-normal">
+                          {acc.accountType}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5">
+                        {acc.customerName} • CIF: {acc.cifNumber}
+                      </div>
                     </div>
-                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5">
-                      {acc.customerName} • CIF: {acc.cifNumber}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5]">
-                      {formatINR(parseFloat(acc.availableBalance || '0'))}
-                    </div>
-                    <div className="flex items-center justify-end gap-1.5 mt-0.5">
-                      <button
-                        onClick={(e) =>
-                          handleNavigateEntity(
-                            `/relationship-graph?entityType=ACCOUNT&entityId=${acc.accountNumber}`,
-                            e
-                          )
-                        }
-                        title="View in Relationship Graph"
-                        className="text-[10px] text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200 dark:border-teal-800"
-                      >
-                        <GitFork className="w-2.5 h-2.5 text-teal-700 dark:text-teal-400" />
-                        <span>Graph</span>
-                      </button>
-                      <div className="text-[10px] text-[#168C83] dark:text-[#2dd4bf] font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span>View</span>
-                        <ArrowRight className="w-3 h-3" />
+                    <div className="text-right">
+                      <div className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5]">
+                        {formatINR(parseFloat(acc.availableBalance || '0'))}
+                      </div>
+                      <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                        <button
+                          onClick={(e) =>
+                            handleNavigateEntity(
+                              `/relationship-graph?entityType=ACCOUNT&entityId=${acc.accountNumber}`,
+                              e
+                            )
+                          }
+                          title="View in Relationship Graph"
+                          className="text-[10px] text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200 dark:border-teal-800"
+                        >
+                          <GitFork className="w-2.5 h-2.5 text-teal-700 dark:text-teal-400" />
+                          <span>Graph</span>
+                        </button>
+                        <div className="text-[10px] text-[#168C83] dark:text-[#2dd4bf] font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span>View</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -345,49 +451,58 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           ) : (
             <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
-              {searchResults.loans.map((loan: any) => (
-                <div
-                  key={loan.id}
-                  onClick={() => handleItemClick('loan', loan.loanAccountNumber)}
-                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
-                >
-                  <div>
-                    <div className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
-                      <span>{loan.loanAccountNumber}</span>
-                      <span className="text-[10px] font-sans px-1.5 py-0.2 bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 rounded-xs font-normal">
-                        {String(loan.loanType).replace(/_/g, ' ')}
-                      </span>
+              {searchResults.loans.map((loan: any) => {
+                const isHighlighted =
+                  selectedSearchIndex >= 0 &&
+                  flatSearchResults[selectedSearchIndex]?.id === loan.loanAccountNumber;
+                return (
+                  <div
+                    key={loan.id}
+                    onClick={() => handleItemClick('loan', loan.loanAccountNumber)}
+                    className={`px-3 py-2 cursor-pointer flex items-center justify-between group transition-colors ${
+                      isHighlighted
+                        ? 'bg-[#EDF1F5] dark:bg-[#1f354d] ring-1 ring-[#168C83]'
+                        : 'hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D]'
+                    }`}
+                  >
+                    <div>
+                      <div className="font-mono font-bold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
+                        <span>{loan.loanAccountNumber}</span>
+                        <span className="text-[10px] font-sans px-1.5 py-0.2 bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 rounded-xs font-normal">
+                          {String(loan.loanType).replace(/_/g, ' ')}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5">
+                        {loan.borrowerName || loan.customerName} • CIF: {loan.cifNumber}
+                      </div>
                     </div>
-                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5">
-                      {loan.borrowerName || loan.customerName} • CIF: {loan.cifNumber}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-mono font-bold text-amber-900 dark:text-amber-300">
-                      {formatINR(parseFloat(loan.outstandingPrincipal || '0'))}
-                    </div>
-                    <div className="flex items-center justify-end gap-1.5 mt-0.5">
-                      <button
-                        onClick={(e) =>
-                          handleNavigateEntity(
-                            `/relationship-graph?entityType=LOAN&entityId=${loan.loanAccountNumber}`,
-                            e
-                          )
-                        }
-                        title="View in Relationship Graph"
-                        className="text-[10px] text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200 dark:border-teal-800"
-                      >
-                        <GitFork className="w-2.5 h-2.5 text-teal-700 dark:text-teal-400" />
-                        <span>Graph</span>
-                      </button>
-                      <div className="text-[10px] text-amber-700 dark:text-amber-400 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span>View</span>
-                        <ArrowRight className="w-3 h-3" />
+                    <div className="text-right">
+                      <div className="font-mono font-bold text-amber-900 dark:text-amber-300">
+                        {formatINR(parseFloat(loan.outstandingPrincipal || '0'))}
+                      </div>
+                      <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                        <button
+                          onClick={(e) =>
+                            handleNavigateEntity(
+                              `/relationship-graph?entityType=LOAN&entityId=${loan.loanAccountNumber}`,
+                              e
+                            )
+                          }
+                          title="View in Relationship Graph"
+                          className="text-[10px] text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200 dark:border-teal-800"
+                        >
+                          <GitFork className="w-2.5 h-2.5 text-teal-700 dark:text-teal-400" />
+                          <span>Graph</span>
+                        </button>
+                        <div className="text-[10px] text-amber-700 dark:text-amber-400 font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span>View</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -406,46 +521,55 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           ) : (
             <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
-              {searchResults.customers.map((c: any) => (
-                <div
-                  key={c.id}
-                  onClick={() => handleItemClick('customer', c.customerCode || c.id)}
-                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
-                >
-                  <div>
-                    <div className="font-bold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
-                      <span>{c.fullName}</span>
-                      <span className="font-mono text-[10px] px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs font-normal">
-                        {c.customerCode}
-                      </span>
+              {searchResults.customers.map((c: any) => {
+                const isHighlighted =
+                  selectedSearchIndex >= 0 &&
+                  flatSearchResults[selectedSearchIndex]?.id === (c.customerCode || c.id);
+                return (
+                  <div
+                    key={c.id}
+                    onClick={() => handleItemClick('customer', c.customerCode || c.id)}
+                    className={`px-3 py-2 cursor-pointer flex items-center justify-between group transition-colors ${
+                      isHighlighted
+                        ? 'bg-[#EDF1F5] dark:bg-[#1f354d] ring-1 ring-[#168C83]'
+                        : 'hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D]'
+                    }`}
+                  >
+                    <div>
+                      <div className="font-bold text-[#273444] dark:text-[#E8EEF5] flex items-center gap-1.5">
+                        <span>{c.fullName}</span>
+                        <span className="font-mono text-[10px] px-1.5 py-0.2 bg-[#EDF1F5] dark:bg-[#162638] text-[#5D6B7B] dark:text-[#A9BACB] rounded-xs font-normal">
+                          {c.customerCode}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5 flex items-center gap-2">
+                        <span className="font-mono">PAN: {c.panNumber || 'NA'}</span>
+                        <span>•</span>
+                        <span>{c.segment || 'Retail'}</span>
+                      </div>
                     </div>
-                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] mt-0.5 flex items-center gap-2">
-                      <span className="font-mono">PAN: {c.panNumber || 'NA'}</span>
-                      <span>•</span>
-                      <span>{c.segment || 'Retail'}</span>
+                    <div className="text-right flex items-center gap-2">
+                      <button
+                        onClick={(e) =>
+                          handleNavigateEntity(
+                            `/relationship-graph?entityType=CUSTOMER&entityId=${c.id || c.customerCode}`,
+                            e
+                          )
+                        }
+                        title="View in Relationship Graph"
+                        className="text-[10px] text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200 dark:border-teal-800"
+                      >
+                        <GitFork className="w-2.5 h-2.5 text-teal-700 dark:text-teal-400" />
+                        <span>Graph</span>
+                      </button>
+                      <div className="text-[10px] text-[#168C83] dark:text-[#2dd4bf] font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>Profile</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </div>
                     </div>
                   </div>
-                  <div className="text-right flex items-center gap-2">
-                    <button
-                      onClick={(e) =>
-                        handleNavigateEntity(
-                          `/relationship-graph?entityType=CUSTOMER&entityId=${c.id || c.customerCode}`,
-                          e
-                        )
-                      }
-                      title="View in Relationship Graph"
-                      className="text-[10px] text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium border border-teal-200 dark:border-teal-800"
-                    >
-                      <GitFork className="w-2.5 h-2.5 text-teal-700 dark:text-teal-400" />
-                      <span>Graph</span>
-                    </button>
-                    <div className="text-[10px] text-[#168C83] dark:text-[#2dd4bf] font-sans font-medium flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span>Profile</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -460,25 +584,34 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
             <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
-              {searchResults.journeys.map((j: any) => (
-                <div
-                  key={j.id}
-                  onClick={() => handleNavigateEntity(`/journeys?journeyId=${j.id}`)}
-                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
-                >
-                  <div>
-                    <div className="font-semibold text-[#273444] dark:text-[#E8EEF5]">{j.journeyName}</div>
-                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] font-mono">
-                      {j.customerCode} • {j.journeyType}
+              {searchResults.journeys.map((j: any) => {
+                const isHighlighted =
+                  selectedSearchIndex >= 0 &&
+                  flatSearchResults[selectedSearchIndex]?.id === String(j.id);
+                return (
+                  <div
+                    key={j.id}
+                    onClick={() => handleNavigateEntity(`/journeys?journeyId=${j.id}`)}
+                    className={`px-3 py-2 cursor-pointer flex items-center justify-between group transition-colors ${
+                      isHighlighted
+                        ? 'bg-[#EDF1F5] dark:bg-[#1f354d] ring-1 ring-[#168C83]'
+                        : 'hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D]'
+                    }`}
+                  >
+                    <div>
+                      <div className="font-semibold text-[#273444] dark:text-[#E8EEF5]">{j.journeyName}</div>
+                      <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] font-mono">
+                        {j.customerCode} • {j.journeyType}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300">
+                        {j.status}
+                      </span>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300">
-                      {j.status}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
@@ -493,33 +626,42 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
             <div className="divide-y divide-[#DCE3EA] dark:divide-[#26394C]">
-              {searchResults.groups.map((g: any) => (
-                <div
-                  key={g.id || g.groupId}
-                  onClick={() => handleNavigateEntity(`/group/${g.groupId}`)}
-                  className="px-3 py-2 hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D] cursor-pointer flex items-center justify-between group transition-colors"
-                >
-                  <div>
-                    <div className="font-semibold text-[#273444] dark:text-[#E8EEF5]">
-                      {g.displayName || g.name}
+              {searchResults.groups.map((g: any) => {
+                const isHighlighted =
+                  selectedSearchIndex >= 0 &&
+                  flatSearchResults[selectedSearchIndex]?.id === String(g.groupId || g.id);
+                return (
+                  <div
+                    key={g.id || g.groupId}
+                    onClick={() => handleNavigateEntity(`/group/${g.groupId}`)}
+                    className={`px-3 py-2 cursor-pointer flex items-center justify-between group transition-colors ${
+                      isHighlighted
+                        ? 'bg-[#EDF1F5] dark:bg-[#1f354d] ring-1 ring-[#168C83]'
+                        : 'hover:bg-[#F4F6F8] dark:hover:bg-[#192B3D]'
+                    }`}
+                  >
+                    <div>
+                      <div className="font-semibold text-[#273444] dark:text-[#E8EEF5]">
+                        {g.displayName || g.name}
+                      </div>
+                      <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] font-mono">
+                        {g.groupId} • {g.groupType}
+                      </div>
                     </div>
-                    <div className="text-[11px] text-[#5D6B7B] dark:text-[#8194A8] font-mono">
-                      {g.groupId} • {g.groupType}
+                    <div className="text-right">
+                      <span
+                        className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                          g.groupType === 'HOUSEHOLD'
+                            ? 'bg-purple-100 dark:bg-purple-950/40 text-purple-800 dark:text-purple-300'
+                            : 'bg-cyan-100 dark:bg-cyan-950/40 text-cyan-800 dark:text-cyan-300'
+                        }`}
+                      >
+                        {g.groupType}
+                      </span>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span
-                      className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                        g.groupType === 'HOUSEHOLD'
-                          ? 'bg-purple-100 dark:bg-purple-950/40 text-purple-800 dark:text-purple-300'
-                          : 'bg-cyan-100 dark:bg-cyan-950/40 text-cyan-800 dark:text-cyan-300'
-                      }`}
-                    >
-                      {g.groupType}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
@@ -713,13 +855,14 @@ export const Header: React.FC<HeaderProps> = ({
             <input
               id="corevia-global-search"
               type="text"
-              placeholder="Search Account, Loan, Customer, CIF, PAN... (Ctrl+/)"
+              placeholder="Search Account, Loan, Customer, CIF, PAN... (⌘K / Ctrl+/)"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
               onFocus={() => {
                 if (searchResults) setShowDropdown(true);
               }}
-              className="w-full pl-8 pr-14 py-1.5 text-xs bg-[#F4F6F8] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm text-[#273444] dark:text-[#E8EEF5] placeholder:text-[#8793A1] dark:placeholder:text-[#8194A8] focus:bg-white dark:focus:bg-[#192B3D] focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83] font-mono transition-colors"
+              className="w-full pl-8 pr-16 py-1.5 text-xs bg-[#F4F6F8] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-sm text-[#273444] dark:text-[#E8EEF5] placeholder:text-[#8793A1] dark:placeholder:text-[#8194A8] focus:bg-white dark:focus:bg-[#192B3D] focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83] font-mono transition-colors"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
               {searchQuery ? (
@@ -727,6 +870,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onClick={() => {
                     onSearchChange('');
                     setShowDropdown(false);
+                    setSelectedSearchIndex(-1);
                   }}
                   className="text-[#8793A1] hover:text-[#273444] dark:hover:text-[#E8EEF5] text-xs px-1 cursor-pointer"
                   title="Clear search"
@@ -735,7 +879,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               ) : (
                 <kbd className="hidden lg:inline-block font-mono text-[10px] text-[#8793A1] dark:text-[#8194A8] bg-[#EDF1F5] dark:bg-[#101C2A] px-1 py-0.2 rounded border border-[#DCE3EA] dark:border-[#33485D]">
-                  /
+                  ⌘K
                 </kbd>
               )}
             </div>
@@ -823,6 +967,18 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             )}
           </button>
+
+          {/* Workstation Keyboard Shortcuts Guide Button */}
+          <Tooltip content="Keyboard Shortcuts (?)" position="bottom">
+            <button
+              onClick={() => setIsShortcutsGuideOpen(true)}
+              className="p-1.5 rounded-sm text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#273444] dark:hover:text-[#E8EEF5] hover:bg-[#F4F6F8] dark:hover:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] transition-colors cursor-pointer motion-interactive focus:outline-none focus-visible:ring-1 focus-visible:ring-[#168C83]"
+              aria-label="Open keyboard shortcuts cheat sheet"
+              title="Keyboard Shortcuts (?)"
+            >
+              <Keyboard className="w-3.5 h-3.5" />
+            </button>
+          </Tooltip>
 
           {/* Universal Theme Switcher (Light / Dark / System) */}
           <ThemeSwitcher variant="compact" />
@@ -923,7 +1079,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Search className="w-4 h-4 text-[#8793A1] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search Account, Customer, CIF, Loan..."
+              placeholder="Search Account, Customer, CIF, Loan... (⌘K / Ctrl+/)"
               value={searchQuery}
               onChange={(e) => {
                 onSearchChange(e.target.value);
@@ -931,6 +1087,7 @@ export const Header: React.FC<HeaderProps> = ({
                   setShowDropdown(true);
                 }
               }}
+              onKeyDown={handleSearchKeyDown}
               onFocus={() => {
                 if (searchResults) setShowDropdown(true);
               }}
@@ -942,6 +1099,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => {
                   onSearchChange('');
                   setShowDropdown(false);
+                  setSelectedSearchIndex(-1);
                 }}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8793A1] hover:text-[#273444] dark:hover:text-[#E8EEF5] text-xs cursor-pointer"
               >
@@ -957,6 +1115,12 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
       )}
+
+      {/* Workstation Keyboard Shortcuts Reference Modal */}
+      <KeyboardShortcutsModal
+        isOpen={isShortcutsGuideOpen}
+        onClose={() => setIsShortcutsGuideOpen(false)}
+      />
 
       {/* Notification Center Slide-over Drawer */}
       <NotificationDrawer

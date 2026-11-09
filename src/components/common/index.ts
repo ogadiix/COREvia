@@ -22,5 +22,7 @@ export * from './Notification';
 export * from './StatCard';
 export * from './ThemeSwitcher';
 export * from './AccessRestrictedNotice';
+export * from './ConfirmDialog';
+export * from './KeyboardShortcutsModal';
 export * from '../../lib/motion';
 

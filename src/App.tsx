@@ -357,12 +357,15 @@ function BankingWorkplace() {
       } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
         e.preventDefault();
         handleToggleSidebarCollapse();
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'j') {
+        e.preventDefault();
+        toggleDrawer();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleToggleSidebarCollapse]);
+  }, [handleToggleSidebarCollapse, toggleDrawer]);
 
   // Filter accounts when global search is used
   const filteredAccountsForSearch = useMemo(() => {

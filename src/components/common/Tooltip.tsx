@@ -1,4 +1,4 @@
-import React, { useState, useId, useRef } from 'react';
+import React, { useState, useId, useRef, useEffect, useCallback } from 'react';
 import { zIndex } from './tokens';
 
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
@@ -22,18 +22,41 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const tooltipId = useId();
 
-  const showTooltip = () => {
+  const showTooltip = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       setIsVisible(true);
     }, delayMs);
-  };
+  }, [delayMs]);
 
-  const hideTooltip = () => {
+  const hideTooltip = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
     setIsVisible(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isVisible) {
+        hideTooltip();
+      }
+    };
+
+    if (isVisible) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isVisible, hideTooltip]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const positionClasses: Record<TooltipPosition, string> = {
     top: 'bottom-full left-1/2 -translate-x-1/2 mb-1.5',
@@ -59,7 +82,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           id={tooltipId}
           role="tooltip"
           style={{ zIndex: zIndex.tooltip }}
-          className={`absolute pointer-events-none whitespace-nowrap px-2 py-1 bg-[#142C45] dark:bg-[#101C2A] text-white dark:text-[#E8EEF5] text-[11px] font-sans font-medium rounded-xs shadow-md border border-slate-700 dark:border-[#33485D] animate-in fade-in duration-100 ${positionClasses[position]} ${className}`}
+          className={`absolute pointer-events-none whitespace-nowrap px-2 py-1 bg-[#142C45] dark:bg-[#101C2A] text-white dark:text-[#E8EEF5] text-[11px] font-sans font-medium rounded-xs shadow-md border border-slate-700 dark:border-[#33485D] motion-fade-in ${positionClasses[position]} ${className}`}
         >
           {content}
         </div>
