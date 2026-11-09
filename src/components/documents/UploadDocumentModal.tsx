@@ -214,22 +214,22 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white rounded-lg shadow-2xl border border-slate-200 overflow-hidden my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 dark:bg-black/80 backdrop-blur-xs overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-[#162638] rounded-lg shadow-2xl border border-slate-200 dark:border-[#33485D] overflow-hidden my-8">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50/80">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-[#33485D] bg-slate-50/80 dark:bg-[#101C2A]">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-md bg-slate-900 text-white flex items-center justify-center shadow-xs">
-              <Upload className="w-4 h-4 text-amber-400" />
+            <div className="w-8 h-8 rounded-md bg-slate-900 dark:bg-cyan-600 text-white flex items-center justify-center shadow-xs">
+              <Upload className="w-4 h-4 text-amber-400 dark:text-white" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-slate-900">Upload & Vault Document</h2>
-              <p className="text-xs text-slate-500 font-mono">COREvia Synthetic Document Registry</p>
+              <h2 className="text-base font-semibold text-slate-900 dark:text-[#E8EEF5]">Upload & Vault Document</h2>
+              <p className="text-xs text-slate-500 dark:text-[#A9BACB] font-mono">COREvia Synthetic Document Registry</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-md hover:bg-slate-200/60 transition-colors"
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-md hover:bg-slate-200/60 dark:hover:bg-[#101C2A] transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -238,7 +238,7 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {errorMessage && (
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded-md flex items-start gap-2.5 text-xs text-rose-700">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 rounded-md flex items-start gap-2.5 text-xs text-rose-700 dark:text-rose-300">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-500" />
               <span>{errorMessage}</span>
             </div>
@@ -246,20 +246,20 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
 
           {/* Customer Selection */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider">
               Customer Entity <span className="text-rose-500">*</span>
             </label>
             {preselectedCustomerId && preselectedCustomerName ? (
-              <div className="px-3 py-2 bg-slate-100 border border-slate-200 rounded-md text-sm font-medium text-slate-900 flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-slate-500" />
+              <div className="px-3 py-2 bg-slate-100 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded-md text-sm font-medium text-slate-900 dark:text-[#E8EEF5] flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-slate-500 dark:text-[#A9BACB]" />
                 <span>{preselectedCustomerName}</span>
-                <span className="text-xs text-slate-500 font-mono ml-auto">CID #{preselectedCustomerId}</span>
+                <span className="text-xs text-slate-500 dark:text-[#A9BACB] font-mono ml-auto">CID #{preselectedCustomerId}</span>
               </div>
             ) : (
               <select
                 value={selectedCustomerId}
                 onChange={(e) => setSelectedCustomerId(e.target.value ? Number(e.target.value) : '')}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-sm bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:outline-hidden focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
                 required
               >
                 <option value="">-- Select Customer --</option>
@@ -275,13 +275,13 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
           {/* Document Type & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider">
                 Document Type <span className="text-rose-500">*</span>
               </label>
               <select
                 value={documentType}
                 onChange={(e) => setDocumentType(e.target.value as DocumentType)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-sm bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:outline-hidden focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
               >
                 <option value="PAN">PAN (Permanent Account Number)</option>
                 <option value="Aadhaar Card">Aadhaar Card (UIDAI)</option>
@@ -304,13 +304,13 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider">
                 Category
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as DocumentCategory)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-sm bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:outline-hidden focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
               >
                 <option value="KYC">KYC & Identity</option>
                 <option value="FINANCIAL">Financial & Underwriting</option>
@@ -324,7 +324,7 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
 
           {/* Title */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider">
               Document Display Title <span className="text-rose-500">*</span>
             </label>
             <input
@@ -332,7 +332,7 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Rahul Sharma PAN Card Verification Copy"
-              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-sm bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:outline-hidden focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
               required
             />
           </div>
@@ -340,7 +340,7 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
           {/* Document Reference & Issuing Authority */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider">
                 Document Number / ID
               </label>
               <input
@@ -348,12 +348,12 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
                 value={documentNumber}
                 onChange={(e) => setDocumentNumber(e.target.value)}
                 placeholder="e.g. ABCDE1234F or 987654321012"
-                className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white text-slate-900 font-mono focus:outline-hidden focus:ring-2 focus:ring-slate-900"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-sm bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] font-mono focus:outline-hidden focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider">
                 Issuing Authority
               </label>
               <input
@@ -361,7 +361,7 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
                 value={issuingAuthority}
                 onChange={(e) => setIssuingAuthority(e.target.value)}
                 placeholder="e.g. Income Tax Department, UIDAI"
-                className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-sm bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:outline-hidden focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
               />
             </div>
           </div>
@@ -369,25 +369,25 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
           {/* Expiry Date & Related Entity */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider">
                 Expiry Date (If Applicable)
               </label>
               <input
                 type="date"
                 value={expiryDate}
                 onChange={(e) => setExpiryDate(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-sm bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:outline-hidden focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider">
                 Association Context
               </label>
               <select
                 value={relatedEntityType}
                 onChange={(e) => setRelatedEntityType(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-sm bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:outline-hidden focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
               >
                 <option value="CUSTOMER">Customer Profile (General)</option>
                 <option value="ONBOARDING">Onboarding Application</option>
@@ -399,19 +399,19 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
           </div>
 
           {/* Upload Method Toggle: Synthetic Document vs Physical/Digital File */}
-          <div className="pt-2 border-t border-slate-200">
+          <div className="pt-2 border-t border-slate-200 dark:border-[#33485D]">
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider">
                 Document File Payload
               </label>
-              <div className="flex bg-slate-100 p-0.5 rounded-md border border-slate-200 text-xs">
+              <div className="flex bg-slate-100 dark:bg-[#101C2A] p-0.5 rounded-md border border-slate-200 dark:border-[#33485D] text-xs">
                 <button
                   type="button"
                   onClick={() => setUploadMode('SYNTHETIC')}
-                  className={`px-2.5 py-1 rounded font-medium transition-colors ${
+                  className={`px-2.5 py-1 rounded font-medium transition-colors cursor-pointer ${
                     uploadMode === 'SYNTHETIC'
-                      ? 'bg-white text-slate-900 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-xs'
+                      : 'text-slate-600 dark:text-[#A9BACB] hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Synthetic Document Engine
@@ -419,10 +419,10 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setUploadMode('FILE')}
-                  className={`px-2.5 py-1 rounded font-medium transition-colors ${
+                  className={`px-2.5 py-1 rounded font-medium transition-colors cursor-pointer ${
                     uploadMode === 'FILE'
-                      ? 'bg-white text-slate-900 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] shadow-xs'
+                      : 'text-slate-600 dark:text-[#A9BACB] hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Upload File (.pdf/.jpg)
@@ -431,17 +431,17 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
             </div>
 
             {uploadMode === 'SYNTHETIC' ? (
-              <div className="p-3.5 bg-amber-50/50 border border-amber-200/80 rounded-md text-xs text-slate-700 space-y-1.5">
-                <div className="flex items-center gap-2 text-amber-900 font-semibold">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              <div className="p-3.5 bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/50 rounded-md text-xs text-slate-700 dark:text-[#A9BACB] space-y-1.5">
+                <div className="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-semibold">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                   <span>COREvia Synthetic Banking Artifact</span>
                 </div>
-                <p className="text-slate-600 leading-relaxed">
-                  In compliance with enterprise banking simulation standards, a certified synthetic PDF artifact will be generated with SHA-256 integrity checksums, watermarking, and OCR metadata for <span className="font-semibold text-slate-800">{documentType}</span>.
+                <p className="text-slate-600 dark:text-[#A9BACB] leading-relaxed">
+                  In compliance with enterprise banking simulation standards, a certified synthetic PDF artifact will be generated with SHA-256 integrity checksums, watermarking, and OCR metadata for <span className="font-semibold text-slate-800 dark:text-[#E8EEF5]">{documentType}</span>.
                 </p>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-slate-300 rounded-md p-4 text-center hover:border-slate-400 transition-colors">
+              <div className="border-2 border-dashed border-slate-300 dark:border-[#33485D] rounded-md p-4 text-center hover:border-slate-400 dark:hover:border-cyan-500 transition-colors">
                 <input
                   type="file"
                   id="document-file-upload"
@@ -454,10 +454,10 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
                   className="cursor-pointer flex flex-col items-center justify-center space-y-1.5"
                 >
                   <Upload className="w-6 h-6 text-slate-400" />
-                  <span className="text-xs font-semibold text-slate-700">
+                  <span className="text-xs font-semibold text-slate-700 dark:text-[#E8EEF5]">
                     {selectedFile ? selectedFile.name : 'Click or drag file to upload'}
                   </span>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-slate-500 dark:text-[#A9BACB]">
                     PDF, PNG, JPG up to 15MB · Magic byte integrity verified
                   </span>
                 </label>
@@ -466,11 +466,11 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-[#33485D]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50"
+              className="px-4 py-2 text-xs font-medium text-slate-700 dark:text-[#A9BACB] bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded-md hover:bg-slate-50 dark:hover:bg-[#192B3D] cursor-pointer"
               disabled={isSubmitting}
             >
               Cancel
@@ -478,13 +478,13 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-md shadow-xs flex items-center gap-2 disabled:opacity-50"
+              className="px-4 py-2 text-xs font-semibold text-white bg-slate-900 dark:bg-cyan-600 hover:bg-slate-800 dark:hover:bg-cyan-500 rounded-md shadow-xs flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {isSubmitting ? (
                 <span>Vaulting Document...</span>
               ) : (
                 <>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 dark:text-white" />
                   <span>Confirm & Index Document</span>
                 </>
               )}

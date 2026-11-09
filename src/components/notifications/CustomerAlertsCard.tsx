@@ -97,7 +97,7 @@ export const CustomerAlertsCard: React.FC<CustomerAlertsCardProps> = ({
 
   if (isLoading) {
     return (
-      <div className="bg-white border border-slate-200 rounded p-4 text-center text-xs font-mono text-slate-400">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 text-center text-xs font-mono text-slate-400 dark:text-[#8194A8]">
         Loading customer alerts & signals...
       </div>
     );
@@ -105,12 +105,12 @@ export const CustomerAlertsCard: React.FC<CustomerAlertsCardProps> = ({
 
   if (alerts.length === 0) {
     return (
-      <div className="bg-white border border-slate-200 rounded p-4 text-center">
-        <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto mb-2">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 text-center">
+        <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center mx-auto mb-2">
           <CheckCircle2 className="w-4 h-4" />
         </div>
-        <p className="text-xs font-semibold text-slate-800 font-sans">No Active Account Alerts</p>
-        <p className="text-[11px] text-slate-500 font-sans mt-0.5">
+        <p className="text-xs font-semibold text-slate-800 dark:text-[#E8EEF5] font-sans">No Active Account Alerts</p>
+        <p className="text-[11px] text-slate-500 dark:text-[#8194A8] font-sans mt-0.5">
           Customer relationship is in good standing with no open SLA breaches or critical task flags.
         </p>
       </div>
@@ -118,24 +118,24 @@ export const CustomerAlertsCard: React.FC<CustomerAlertsCardProps> = ({
   }
 
   return (
-    <div className="bg-white border border-slate-200 rounded p-4 space-y-3">
-      <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+    <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 space-y-3">
+      <div className="flex items-center justify-between border-b border-slate-100 dark:border-[#33485D] pb-2.5">
         <div className="flex items-center gap-2">
-          <ShieldAlert className="w-4 h-4 text-amber-600" />
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 font-sans">
+          <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#E8EEF5] font-sans">
             Customer Alerts & Signals ({alerts.length})
           </h4>
         </div>
-        <span className="text-[10px] font-mono text-slate-400">Scoped to Customer Account</span>
+        <span className="text-[10px] font-mono text-slate-400 dark:text-[#8194A8]">Scoped to Customer Account</span>
       </div>
 
-      <div className="divide-y divide-slate-100">
+      <div className="divide-y divide-slate-100 dark:divide-[#33485D]">
         {alerts.map((alert) => (
           <div key={alert.id} className="py-2.5 flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 mb-1">
                 {getSeverityBadge(alert.severity)}
-                <span className="text-[10px] font-mono uppercase px-1.5 py-0.2 bg-slate-100 text-slate-600 rounded">
+                <span className="text-[10px] font-mono uppercase px-1.5 py-0.2 bg-slate-100 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] rounded">
                   {alert.category}
                 </span>
                 {alert.status === 'ACKNOWLEDGED' && (

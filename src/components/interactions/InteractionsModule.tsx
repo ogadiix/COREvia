@@ -501,9 +501,9 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
         {/* Left Column: List / Timeline (8 or 12 cols) */}
         <div className={`${selectedCustomer ? 'lg:col-span-8' : 'lg:col-span-8'} space-y-4`}>
           {loading && interactions.length === 0 ? (
-            <div className="p-8 text-center bg-white border border-slate-200 rounded-lg">
+            <div className="p-8 text-center bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg">
               <RefreshCw className="w-6 h-6 animate-spin text-slate-400 mx-auto mb-2" />
-              <span className="text-slate-500 font-medium">Loading interaction records...</span>
+              <span className="text-slate-500 dark:text-[#8194A8] font-medium">Loading interaction records...</span>
             </div>
           ) : interactions.length === 0 ? (
             <EmptyState
@@ -512,7 +512,7 @@ export const InteractionsModule: React.FC<InteractionsModuleProps> = ({
               description="No customer communication records match the active channel, type, outcome, or search filters."
               actionLabel="Record Touchpoint"
               onAction={() => setIsRecordModalOpen(true)}
-              className="py-12 bg-white border border-slate-200 rounded-lg shadow-2xs"
+              className="py-12 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg shadow-2xs"
             />
           ) : viewMode === 'TIMELINE' ? (
             /* Timeline View */

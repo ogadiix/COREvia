@@ -168,80 +168,80 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
 
       {/* KPI Cards Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="p-3.5 bg-white border border-slate-200 rounded-lg shadow-2xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+        <div className="p-3.5 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg shadow-2xs">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-[#A9BACB] mb-1">
             <span className="font-medium">Total Groups</span>
-            <Users2 className="w-4 h-4 text-cyan-600" />
+            <Users2 className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
           </div>
-          <div className="text-xl font-bold text-slate-900">
+          <div className="text-xl font-bold text-slate-900 dark:text-[#E8EEF5]">
             {analytics?.totalGroups ?? groups.length}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-2">
-            <span className="text-purple-600 font-semibold">{analytics?.householdsCount ?? 0} Households</span>
+          <div className="text-[11px] text-slate-500 dark:text-[#A9BACB] mt-1 flex items-center gap-2">
+            <span className="text-purple-600 dark:text-purple-400 font-semibold">{analytics?.householdsCount ?? 0} Households</span>
             <span>•</span>
-            <span className="text-cyan-600 font-semibold">{analytics?.businessGroupsCount ?? 0} Business</span>
+            <span className="text-cyan-600 dark:text-cyan-400 font-semibold">{analytics?.businessGroupsCount ?? 0} Business</span>
           </div>
         </div>
 
-        <div className="p-3.5 bg-white border border-slate-200 rounded-lg shadow-2xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+        <div className="p-3.5 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg shadow-2xs">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-[#A9BACB] mb-1">
             <span className="font-medium">Portfolio Relationship Value</span>
-            <TrendingUp className="w-4 h-4 text-emerald-600" />
+            <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
-          <div className="text-xl font-bold text-slate-900">
+          <div className="text-xl font-bold text-slate-900 dark:text-[#E8EEF5]">
             {analytics?.totalRelationshipValueFormatted ?? '₹61.2L'}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">
+          <div className="text-[11px] text-slate-500 dark:text-[#A9BACB] mt-1">
             Across authorized group members
           </div>
         </div>
 
-        <div className="p-3.5 bg-white border border-slate-200 rounded-lg shadow-2xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+        <div className="p-3.5 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg shadow-2xs">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-[#A9BACB] mb-1">
             <span className="font-medium">Active Lifecycle Journeys</span>
-            <Milestone className="w-4 h-4 text-indigo-600" />
+            <Milestone className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
           </div>
-          <div className="text-xl font-bold text-slate-900">
+          <div className="text-xl font-bold text-slate-900 dark:text-[#E8EEF5]">
             {analytics?.activeJourneysTotal ?? 3}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">
+          <div className="text-[11px] text-slate-500 dark:text-[#A9BACB] mt-1">
             {analytics?.blockedJourneysTotal ?? 0} blocked steps requiring attention
           </div>
         </div>
 
-        <div className="p-3.5 bg-white border border-slate-200 rounded-lg shadow-2xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+        <div className="p-3.5 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg shadow-2xs">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-[#A9BACB] mb-1">
             <span className="font-medium">Open Service Cases</span>
-            <AlertTriangle className="w-4 h-4 text-amber-600" />
+            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
           </div>
-          <div className="text-xl font-bold text-slate-900">
+          <div className="text-xl font-bold text-slate-900 dark:text-[#E8EEF5]">
             {analytics?.openServiceCasesTotal ?? 2}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">
+          <div className="text-[11px] text-slate-500 dark:text-[#A9BACB] mt-1">
             SLA compliance actively tracked
           </div>
         </div>
       </div>
 
       {/* Filter Tabs & Search Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-2.5 rounded-lg border border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-[#162638] p-2.5 rounded-lg border border-slate-200 dark:border-[#33485D]">
         <div className="flex flex-wrap items-center gap-1">
           <button
             onClick={() => setSelectedType('ALL')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
               selectedType === 'ALL'
-                ? 'bg-slate-900 text-white'
-                : 'text-slate-600 hover:bg-slate-100'
+                ? 'bg-slate-900 dark:bg-cyan-600 text-white'
+                : 'text-slate-600 dark:text-[#A9BACB] hover:bg-slate-100 dark:hover:bg-[#101C2A]'
             }`}
           >
             All Groups
           </button>
           <button
             onClick={() => setSelectedType('HOUSEHOLD')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 cursor-pointer ${
               selectedType === 'HOUSEHOLD'
                 ? 'bg-purple-700 text-white'
-                : 'text-slate-600 hover:bg-slate-100'
+                : 'text-slate-600 dark:text-[#A9BACB] hover:bg-slate-100 dark:hover:bg-[#101C2A]'
             }`}
           >
             <Home className="w-3.5 h-3.5" />
@@ -249,10 +249,10 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
           </button>
           <button
             onClick={() => setSelectedType('BUSINESS')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 cursor-pointer ${
               selectedType === 'BUSINESS'
                 ? 'bg-cyan-700 text-white'
-                : 'text-slate-600 hover:bg-slate-100'
+                : 'text-slate-600 dark:text-[#A9BACB] hover:bg-slate-100 dark:hover:bg-[#101C2A]'
             }`}
           >
             <Building2 className="w-3.5 h-3.5" />
@@ -260,20 +260,20 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
           </button>
           <button
             onClick={() => setSelectedType('MY_GROUPS')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
               selectedType === 'MY_GROUPS'
-                ? 'bg-slate-900 text-white'
-                : 'text-slate-600 hover:bg-slate-100'
+                ? 'bg-slate-900 dark:bg-cyan-600 text-white'
+                : 'text-slate-600 dark:text-[#A9BACB] hover:bg-slate-100 dark:hover:bg-[#101C2A]'
             }`}
           >
             My Assigned Groups
           </button>
           <button
             onClick={() => setSelectedType('NEEDS_ATTENTION')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 cursor-pointer ${
               selectedType === 'NEEDS_ATTENTION'
                 ? 'bg-amber-600 text-white'
-                : 'text-slate-600 hover:bg-slate-100'
+                : 'text-slate-600 dark:text-[#A9BACB] hover:bg-slate-100 dark:hover:bg-[#101C2A]'
             }`}
           >
             <AlertTriangle className="w-3.5 h-3.5" />
@@ -282,29 +282,29 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
         </div>
 
         <div className="relative min-w-[220px]">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
             placeholder="Search group ID, name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-md focus:bg-white focus:outline-hidden focus:ring-1 focus:ring-cyan-500"
+            className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] text-slate-900 dark:text-[#E8EEF5] placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-md focus:bg-white dark:focus:bg-[#101C2A] focus:outline-hidden focus:ring-1 focus:ring-cyan-500"
           />
         </div>
       </div>
 
       {/* Group List / Grid */}
       {loading ? (
-        <div className="p-12 text-center bg-white border border-slate-200 rounded-lg">
-          <RefreshCw className="w-6 h-6 animate-spin mx-auto text-cyan-600 mb-2" />
-          <div className="text-sm font-semibold text-slate-800">Loading Relationship Groups...</div>
-          <div className="text-xs text-slate-500">Querying authoritative PostgreSQL group records</div>
+        <div className="p-12 text-center bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg">
+          <RefreshCw className="w-6 h-6 animate-spin mx-auto text-cyan-600 dark:text-cyan-400 mb-2" />
+          <div className="text-sm font-semibold text-slate-800 dark:text-[#E8EEF5]">Loading Relationship Groups...</div>
+          <div className="text-xs text-slate-500 dark:text-[#A9BACB]">Querying authoritative PostgreSQL group records</div>
         </div>
       ) : groups.length === 0 ? (
-        <div className="p-12 text-center bg-white border border-slate-200 rounded-lg">
-          <Users2 className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-          <div className="text-sm font-semibold text-slate-800">No relationship groups found</div>
-          <p className="text-xs text-slate-500 mt-1">
+        <div className="p-12 text-center bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg">
+          <Users2 className="w-8 h-8 mx-auto text-slate-300 dark:text-slate-600 mb-2" />
+          <div className="text-sm font-semibold text-slate-800 dark:text-[#E8EEF5]">No relationship groups found</div>
+          <p className="text-xs text-slate-500 dark:text-[#A9BACB] mt-1">
             Try adjusting your search criteria or create a new group.
           </p>
         </div>
@@ -316,7 +316,7 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
               <div
                 key={group.id || group.groupId}
                 onClick={() => onSelectGroup(group.groupId)}
-                className="bg-white border border-slate-200 hover:border-cyan-400 rounded-lg p-4 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between group"
+                className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] hover:border-cyan-400 dark:hover:border-cyan-400 rounded-lg p-4 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-2">
@@ -384,16 +384,16 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
 
       {/* New Group Modal */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full border border-slate-200 overflow-hidden">
-            <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#162638] rounded-lg shadow-xl max-w-md w-full border border-slate-200 dark:border-[#33485D] overflow-hidden">
+            <div className="p-4 border-b border-slate-200 dark:border-[#33485D] flex items-center justify-between bg-slate-50 dark:bg-[#101C2A]">
               <div className="flex items-center gap-2">
-                <Users2 className="w-4 h-4 text-cyan-700" />
-                <h3 className="font-bold text-sm text-slate-900">Create Relationship Group</h3>
+                <Users2 className="w-4 h-4 text-cyan-700 dark:text-cyan-400" />
+                <h3 className="font-bold text-sm text-slate-900 dark:text-[#E8EEF5]">Create Relationship Group</h3>
               </div>
               <button
                 onClick={() => setIsCreateModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm cursor-pointer"
               >
                 ✕
               </button>
@@ -401,13 +401,13 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
 
             <form onSubmit={handleCreateGroup} className="p-4 space-y-3">
               {createError && (
-                <div className="p-2.5 bg-rose-50 border border-rose-200 rounded text-xs text-rose-700">
+                <div className="p-2.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 rounded text-xs text-rose-700 dark:text-rose-300">
                   {createError}
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">
                   Group ID / Code *
                 </label>
                 <input
@@ -416,18 +416,18 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
                   placeholder="e.g. HH-20841 or BIZ-59102"
                   value={createForm.groupId}
                   onChange={(e) => setCreateForm({ ...createForm, groupId: e.target.value })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">
                   Group Type *
                 </label>
                 <select
                   value={createForm.groupType}
                   onChange={(e) => setCreateForm({ ...createForm, groupType: e.target.value as GroupType })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 >
                   <option value="HOUSEHOLD">HOUSEHOLD (Family / Household Relationship)</option>
                   <option value="BUSINESS">BUSINESS (Single Business Enterprise)</option>
@@ -436,7 +436,7 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">
                   Formal Legal / Family Name *
                 </label>
                 <input
@@ -445,12 +445,12 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
                   placeholder="e.g. Sharma Family Household or Bio-Agro Holdings"
                   value={createForm.name}
                   onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">
                   Display / Short Name *
                 </label>
                 <input
@@ -459,12 +459,12 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
                   placeholder="e.g. Sharma Family or Sharma Bio-Agro"
                   value={createForm.displayName}
                   onChange={(e) => setCreateForm({ ...createForm, displayName: e.target.value })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">
                   Description / Relationship Summary
                 </label>
                 <textarea
@@ -472,7 +472,7 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
                   placeholder="Private banking relationship scope, family head, or corporate holding notes..."
                   value={createForm.description}
                   onChange={(e) => setCreateForm({ ...createForm, description: e.target.value })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 />
               </div>
 
@@ -490,7 +490,7 @@ export const PortfolioGroupsView: React.FC<PortfolioGroupsViewProps> = ({ onSele
                   variant="primary"
                   size="sm"
                   disabled={createSubmitting}
-                  className="bg-cyan-700 hover:bg-cyan-800 text-white"
+                  className="bg-cyan-700 hover:bg-cyan-800 text-white cursor-pointer"
                 >
                   {createSubmitting ? 'Creating...' : 'Create Group'}
                 </Button>

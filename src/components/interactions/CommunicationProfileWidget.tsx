@@ -67,10 +67,10 @@ export const CommunicationProfileWidget: React.FC<CommunicationProfileWidgetProp
 
   if (loading) {
     return (
-      <div className="p-4 bg-white border border-slate-200 rounded-lg shadow-xs animate-pulse space-y-3">
-        <div className="h-4 bg-slate-200 rounded w-1/2"></div>
-        <div className="h-16 bg-slate-100 rounded"></div>
-        <div className="h-12 bg-slate-100 rounded"></div>
+      <div className="p-4 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg shadow-xs animate-pulse space-y-3">
+        <div className="h-4 bg-slate-200 dark:bg-[#101C2A] rounded w-1/2"></div>
+        <div className="h-16 bg-slate-100 dark:bg-[#101C2A] rounded"></div>
+        <div className="h-12 bg-slate-100 dark:bg-[#101C2A] rounded"></div>
       </div>
     );
   }
@@ -100,12 +100,12 @@ export const CommunicationProfileWidget: React.FC<CommunicationProfileWidgetProp
   };
 
   return (
-    <div id="communication-profile-widget" className="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden">
+    <div id="communication-profile-widget" className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg shadow-xs overflow-hidden text-[#273444] dark:text-[#E8EEF5]">
       {/* Header */}
-      <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+      <div className="px-4 py-3 bg-slate-50 dark:bg-[#101C2A] border-b border-slate-200 dark:border-[#33485D] flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Activity className="w-4 h-4 text-sky-600" />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+          <Activity className="w-4 h-4 text-sky-600 dark:text-[#2dd4c7]" />
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-[#E8EEF5]">
             Communication Profile {customerName ? `• ${customerName}` : ''}
           </h3>
         </div>
@@ -113,7 +113,7 @@ export const CommunicationProfileWidget: React.FC<CommunicationProfileWidgetProp
           <button
             id="btn-view-customer-interactions"
             onClick={onViewAllInteractions}
-            className="text-xs font-semibold text-sky-600 hover:text-sky-800 hover:underline"
+            className="text-xs font-semibold text-sky-600 dark:text-[#2dd4c7] hover:text-sky-800 dark:hover:text-[#5eead4] hover:underline cursor-pointer"
           >
             Full Timeline
           </button>
@@ -123,35 +123,35 @@ export const CommunicationProfileWidget: React.FC<CommunicationProfileWidgetProp
       <div className="p-4 space-y-4 text-xs">
         {/* Top Key Metrics */}
         <div className="grid grid-cols-3 gap-2">
-          <div className="p-2.5 bg-slate-50 border border-slate-200 rounded text-center">
-            <span className="text-[10px] uppercase font-semibold text-slate-500 block">Total Touchpoints</span>
-            <span className="text-base font-bold text-slate-900">{profile.totalInteractions}</span>
+          <div className="p-2.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded text-center">
+            <span className="text-[10px] uppercase font-semibold text-slate-500 dark:text-[#8194A8] block">Total Touchpoints</span>
+            <span className="text-base font-bold text-slate-900 dark:text-[#E8EEF5]">{profile.totalInteractions}</span>
           </div>
-          <div className="p-2.5 bg-sky-50 border border-sky-100 rounded text-center">
-            <span className="text-[10px] uppercase font-semibold text-sky-700 block">Preferred Channel</span>
-            <span className="text-xs font-bold text-sky-900 truncate block mt-0.5">
+          <div className="p-2.5 bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-900/60 rounded text-center">
+            <span className="text-[10px] uppercase font-semibold text-sky-700 dark:text-sky-300 block">Preferred Channel</span>
+            <span className="text-xs font-bold text-sky-900 dark:text-sky-200 truncate block mt-0.5">
               {channelLabels[profile.preferredChannel] || profile.preferredChannel}
             </span>
           </div>
-          <div className="p-2.5 bg-emerald-50 border border-emerald-100 rounded text-center">
-            <span className="text-[10px] uppercase font-semibold text-emerald-700 block">Open Commitments</span>
-            <span className="text-base font-bold text-emerald-800">{profile.openCommitmentsCount}</span>
+          <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/60 rounded text-center">
+            <span className="text-[10px] uppercase font-semibold text-emerald-700 dark:text-emerald-300 block">Open Commitments</span>
+            <span className="text-base font-bold text-emerald-800 dark:text-emerald-300">{profile.openCommitmentsCount}</span>
           </div>
         </div>
 
         {/* Cadence / Recency */}
-        <div className="p-2.5 bg-white border border-slate-200 rounded flex items-center justify-between">
+        <div className="p-2.5 bg-white dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-slate-400" />
+            <Clock className="w-4 h-4 text-slate-400 dark:text-[#8194A8]" />
             <div>
-              <span className="text-slate-500 text-[11px] block">Contact Cadence</span>
-              <span className="font-semibold text-slate-800">{profile.contactCadence}</span>
+              <span className="text-slate-500 dark:text-[#8194A8] text-[11px] block">Contact Cadence</span>
+              <span className="font-semibold text-slate-800 dark:text-[#E8EEF5]">{profile.contactCadence}</span>
             </div>
           </div>
           {profile.lastContactDate && (
             <div className="text-right">
-              <span className="text-slate-400 text-[10px] block">Last Contact</span>
-              <span className="font-medium text-slate-700">
+              <span className="text-slate-400 dark:text-[#8194A8] text-[10px] block">Last Contact</span>
+              <span className="font-medium text-slate-700 dark:text-[#E8EEF5]">
                 {new Date(profile.lastContactDate).toLocaleDateString('en-IN', {
                   day: 'numeric',
                   month: 'short',

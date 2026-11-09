@@ -161,7 +161,7 @@ export const ConvertOpportunityModal: React.FC<ConvertOpportunityModalProps> = (
             <select
               value={stage}
               onChange={(e) => setStage(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none bg-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-[#33485D] rounded-lg text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
             >
               <option value="PROSPECT">Prospect (Initial Discovery)</option>
               <option value="QUALIFIED">Qualified (Requirement Verified)</option>

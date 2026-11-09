@@ -85,18 +85,18 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
-      <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full border border-slate-200 overflow-hidden">
+      <div className="bg-white dark:bg-[#162638] rounded-xl shadow-2xl max-w-lg w-full border border-slate-200 dark:border-[#33485D] overflow-hidden text-[#273444] dark:text-[#E8EEF5]">
         {/* Header */}
-        <div className="p-5 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+        <div className="p-5 border-b border-slate-200 dark:border-[#33485D] bg-slate-50 dark:bg-[#101C2A] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600">
+            <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
               <Webhook className="w-4 h-4" />
             </div>
-            <h3 className="text-base font-bold text-slate-900">Register Webhook</h3>
+            <h3 className="text-base font-bold text-slate-900 dark:text-[#E8EEF5]">Register Webhook</h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-[#E8EEF5] hover:bg-slate-200 dark:hover:bg-[#1C3045] rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -104,13 +104,13 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
 
         {createdSecret ? (
           <div className="p-6 space-y-4">
-            <div className="flex items-center gap-2 text-emerald-700 font-bold text-sm">
+            <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold text-sm">
               <CheckCircle2 className="w-5 h-5" />
               Webhook Successfully Registered!
             </div>
-            <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900 space-y-1">
+            <div className="p-3 bg-amber-50 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-800/50 text-xs text-amber-900 dark:text-amber-300 space-y-1">
               <div className="flex items-center gap-1.5 font-bold">
-                <ShieldAlert className="w-4 h-4 text-amber-600" />
+                <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 Signing Secret (Shown Only Once)
               </div>
               <p>Store this secret in your secure vault. You will not be able to view it again.</p>
@@ -120,17 +120,17 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
                 type="text"
                 readOnly
                 value={createdSecret}
-                className="w-full pr-10 py-2.5 px-3 bg-slate-100 border border-slate-300 rounded-lg font-mono text-xs text-slate-900 select-all"
+                className="w-full pr-10 py-2.5 px-3 bg-slate-100 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded-lg font-mono text-xs text-slate-900 dark:text-[#E8EEF5] select-all"
               />
               <button
                 onClick={copySecret}
-                className="absolute right-2 top-2 p-1 text-slate-500 hover:text-indigo-600 cursor-pointer"
+                className="absolute right-2 top-2 p-1 text-slate-500 dark:text-[#8194A8] hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer"
                 title="Copy secret"
               >
                 <Copy className="w-4 h-4" />
               </button>
             </div>
-            {copied && <p className="text-xs text-emerald-600 font-semibold">Copied to clipboard!</p>}
+            {copied && <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Copied to clipboard!</p>}
             <button
               onClick={onClose}
               className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm cursor-pointer"
@@ -141,13 +141,13 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
         ) : (
           <form onSubmit={handleSubmit} className="p-5 space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider mb-1">
                 Integration
               </label>
               <select
                 value={integrationId}
                 onChange={(e) => setIntegrationId(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="w-full px-3 py-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded-lg text-xs font-medium text-slate-900 dark:text-[#E8EEF5] focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               >
                 {integrations.map((i) => (
                   <option key={i.integrationId} value={i.integrationId}>
@@ -158,13 +158,13 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider mb-1">
                 Subscribed Event Type
               </label>
               <select
                 value={eventType}
                 onChange={(e) => setEventType(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="w-full px-3 py-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded-lg text-xs font-mono text-slate-900 dark:text-[#E8EEF5] focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               >
                 {EVENT_TYPES.map((et) => (
                   <option key={et} value={et}>
@@ -175,7 +175,7 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] uppercase tracking-wider mb-1">
                 Target Listener URL
               </label>
               <input
@@ -184,7 +184,7 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
                 value={targetUrl}
                 onChange={(e) => setTargetUrl(e.target.value)}
                 placeholder="https://..."
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="w-full px-3 py-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded-lg text-xs font-mono text-slate-900 dark:text-[#E8EEF5] focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
             </div>
 
@@ -192,7 +192,7 @@ export const NewWebhookModal: React.FC<NewWebhookModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-[#A9BACB] hover:text-slate-800 dark:hover:text-[#E8EEF5] cursor-pointer"
               >
                 Cancel
               </button>

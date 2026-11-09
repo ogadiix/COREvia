@@ -625,7 +625,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
             ) : (
               <div className="space-y-2">
                 {commitments.map((c, idx) => (
-                  <div key={idx} className="p-2 bg-white border border-slate-200 rounded space-y-1.5">
+                  <div key={idx} className="p-2 bg-white dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded space-y-1.5">
                     <div className="flex items-center justify-between gap-2">
                       <select
                         value={c.commitmentType}

@@ -196,7 +196,7 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
           <Button
             size="sm"
             variant="outline"
-            className="text-slate-900 bg-white hover:bg-slate-100"
+            className="text-slate-900 dark:text-[#E8EEF5] bg-white dark:bg-[#162638] hover:bg-slate-100 dark:hover:bg-[#1C3045] border border-slate-200 dark:border-[#33485D]"
             onClick={onOpenNewTransaction}
             icon={<Send className="w-3.5 h-3.5" />}
           >
@@ -246,28 +246,28 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white border border-slate-200 rounded p-3.5 space-y-3">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-3.5 space-y-3 text-[#273444] dark:text-[#E8EEF5]">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <ArrowLeftRight className="w-4 h-4 text-slate-700" />
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-800">
+            <ArrowLeftRight className="w-4 h-4 text-slate-700 dark:text-[#E8EEF5]" />
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-800 dark:text-[#E8EEF5]">
               Payments Journal & Settlement Inward/Outward Log
             </h2>
-            <span className="font-mono text-xs px-1.5 py-0.2 bg-slate-100 text-slate-600 rounded">
+            <span className="font-mono text-xs px-1.5 py-0.2 bg-slate-100 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] rounded border border-transparent dark:border-[#33485D]">
               {filteredPayments.length} entries
             </span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 pt-2 border-t border-slate-100">
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 pt-2 border-t border-slate-100 dark:border-[#33485D]">
           <div className="sm:col-span-6 relative">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-slate-400 dark:text-[#8194A8] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search by UTR Number, Txn ID, Remitter, Beneficiary, or Account..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded font-mono focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded font-mono focus:bg-white dark:focus:bg-[#101C2A] focus:outline-none focus:ring-1 focus:ring-slate-400"
             />
           </div>
 
@@ -275,7 +275,7 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
             <select
               value={selectedRail}
               onChange={(e) => setSelectedRail(e.target.value)}
-              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:bg-white dark:focus:bg-[#101C2A] focus:outline-none focus:ring-1 focus:ring-slate-400"
             >
               <option value="ALL">All Payment Rails</option>
               <option value="RTGS">RTGS (High Value Gross)</option>
@@ -290,7 +290,7 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
+              className="w-full py-1.5 px-2.5 text-xs bg-slate-50 dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:bg-white dark:focus:bg-[#101C2A] focus:outline-none focus:ring-1 focus:ring-slate-400"
             >
               <option value="ALL">All Clearing Statuses</option>
               <option value="SETTLED">Settled Only</option>
@@ -384,28 +384,28 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
             </div>
 
             {/* Remitter & Beneficiary Box */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="border border-slate-200 rounded p-3 bg-white space-y-1.5">
-                <div className="font-semibold text-slate-800 text-[11px] uppercase tracking-wide border-b border-slate-100 pb-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#273444] dark:text-[#E8EEF5]">
+              <div className="border border-slate-200 dark:border-[#33485D] rounded p-3 bg-white dark:bg-[#162638] space-y-1.5">
+                <div className="font-semibold text-slate-800 dark:text-[#E8EEF5] text-[11px] uppercase tracking-wide border-b border-slate-100 dark:border-[#33485D] pb-1">
                   Remitter (Source)
                 </div>
-                <div className="font-semibold text-slate-900">{activePayment.sourceName}</div>
-                <div className="font-mono text-slate-600">A/c: {activePayment.sourceAccount}</div>
-                <div className="font-mono text-slate-500 text-[11px]">IFSC: {activePayment.sourceBankIfsc}</div>
+                <div className="font-semibold text-slate-900 dark:text-[#E8EEF5]">{activePayment.sourceName}</div>
+                <div className="font-mono text-slate-600 dark:text-[#A9BACB]">A/c: {activePayment.sourceAccount}</div>
+                <div className="font-mono text-slate-500 dark:text-[#8194A8] text-[11px]">IFSC: {activePayment.sourceBankIfsc}</div>
               </div>
 
-              <div className="border border-slate-200 rounded p-3 bg-white space-y-1.5">
-                <div className="font-semibold text-slate-800 text-[11px] uppercase tracking-wide border-b border-slate-100 pb-1">
+              <div className="border border-slate-200 dark:border-[#33485D] rounded p-3 bg-white dark:bg-[#162638] space-y-1.5">
+                <div className="font-semibold text-slate-800 dark:text-[#E8EEF5] text-[11px] uppercase tracking-wide border-b border-slate-100 dark:border-[#33485D] pb-1">
                   Beneficiary (Destination)
                 </div>
-                <div className="font-semibold text-slate-900">{activePayment.destName}</div>
-                <div className="font-mono text-slate-600">A/c: {activePayment.destAccount}</div>
-                <div className="font-mono text-slate-500 text-[11px]">IFSC: {activePayment.destBankIfsc}</div>
+                <div className="font-semibold text-slate-900 dark:text-[#E8EEF5]">{activePayment.destName}</div>
+                <div className="font-mono text-slate-600 dark:text-[#A9BACB]">A/c: {activePayment.destAccount}</div>
+                <div className="font-mono text-slate-500 dark:text-[#8194A8] text-[11px]">IFSC: {activePayment.destBankIfsc}</div>
               </div>
             </div>
 
             {/* Narration & Technical IDs */}
-            <div className="border border-slate-200 rounded p-3 bg-white space-y-2">
+            <div className="border border-slate-200 dark:border-[#33485D] rounded p-3 bg-white dark:bg-[#162638] space-y-2 text-xs text-[#273444] dark:text-[#E8EEF5]">
               <div className="flex justify-between">
                 <span className="text-slate-500">Narration / Purpose:</span>
                 <span className="font-medium text-slate-900 text-right max-w-[280px]">

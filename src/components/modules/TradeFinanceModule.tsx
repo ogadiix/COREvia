@@ -334,14 +334,14 @@ export const TradeFinanceModule: React.FC<TradeFinanceModuleProps> = ({
 
       {/* TAB 1: Instruments Register */}
       {activeTab === 'instruments' && (
-        <div className="bg-white border border-slate-200 rounded">
-          <div className="p-3.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded text-[#273444] dark:text-[#E8EEF5]">
+          <div className="p-3.5 border-b border-slate-200 dark:border-[#33485D] flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Landmark className="w-4 h-4 text-slate-700" />
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-800">
+              <Landmark className="w-4 h-4 text-slate-700 dark:text-[#E8EEF5]" />
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-800 dark:text-[#E8EEF5]">
                 Letters of Credit & Bank Guarantee Register
               </h2>
-              <span className="font-mono text-xs px-1.5 py-0.2 bg-slate-100 text-slate-600 rounded">
+              <span className="font-mono text-xs px-1.5 py-0.2 bg-slate-100 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] rounded border border-transparent dark:border-[#33485D]">
                 Live Revaluation Active
               </span>
             </div>
@@ -400,21 +400,21 @@ export const TradeFinanceModule: React.FC<TradeFinanceModuleProps> = ({
 
       {/* TAB 4: Correspondent Nostro Desks */}
       {activeTab === 'nostro' && (
-        <div className="bg-white border border-slate-200 rounded p-4 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 space-y-4 text-[#273444] dark:text-[#E8EEF5]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 dark:border-[#33485D] gap-2">
             <div className="flex items-center gap-2">
-              <Globe2 className="w-4 h-4 text-slate-700" />
+              <Globe2 className="w-4 h-4 text-slate-700 dark:text-[#E8EEF5]" />
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-800">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-800 dark:text-[#E8EEF5]">
                   Correspondent Foreign Exchange (Nostro) Desks & Mirror Ledgers
                 </h3>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-slate-500 dark:text-[#8194A8]">
                   Real-time valuation against interbank spot benchmark fixing
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs text-slate-500">SWIFT: CRVIINBBMUM</span>
+              <span className="font-mono text-xs text-slate-500 dark:text-[#8194A8]">SWIFT: CRVIINBBMUM</span>
               <Badge variant="success" size="sm">
                 Total: ₹{((nostroDesks?.totalInr || 0) / 10000000).toFixed(2)} Cr
               </Badge>
@@ -423,80 +423,80 @@ export const TradeFinanceModule: React.FC<TradeFinanceModuleProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
             {/* USD Desk */}
-            <div className="p-3 rounded border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 transition-colors shadow-xs">
-              <div className="flex justify-between items-center text-slate-500">
-                <span className="font-semibold text-slate-900 flex items-center gap-1.5">
+            <div className="p-3 rounded border border-slate-200 dark:border-[#33485D] bg-slate-50 dark:bg-[#101C2A] hover:bg-white dark:hover:bg-[#1C3045] hover:border-slate-300 dark:hover:border-slate-600 transition-colors shadow-xs">
+              <div className="flex justify-between items-center text-slate-500 dark:text-[#8194A8]">
+                <span className="font-semibold text-slate-900 dark:text-[#E8EEF5] flex items-center gap-1.5">
                   <span className="text-base">🇺🇸</span> USD Desk
                 </span>
-                <span className="font-mono text-[11px] bg-slate-200/70 px-1.5 py-0.5 rounded">CITIUS33</span>
+                <span className="font-mono text-[11px] bg-slate-200/70 dark:bg-[#1C3045] px-1.5 py-0.5 rounded">CITIUS33</span>
               </div>
-              <div className="mt-2 font-mono font-bold text-slate-900 text-base">
+              <div className="mt-2 font-mono font-bold text-slate-900 dark:text-[#E8EEF5] text-base">
                 ${nostroDesks?.usd?.amount?.toLocaleString() || '18,420,000'}
               </div>
-              <div className="text-[11px] font-mono text-emerald-700 font-semibold mt-0.5">
+              <div className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold mt-0.5">
                 ≈ {formatINR(nostroDesks?.usd?.inr || 0)}
               </div>
-              <div className="text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-200 flex justify-between">
+              <div className="text-[10px] text-slate-500 dark:text-[#8194A8] mt-2 pt-2 border-t border-slate-200 dark:border-[#33485D] flex justify-between">
                 <span>Citibank N.A., New York</span>
                 <span className="font-mono">@ ₹{(Number(nostroDesks?.usd?.rate) || 83.94).toFixed(2)}</span>
               </div>
             </div>
 
             {/* EUR Desk */}
-            <div className="p-3 rounded border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 transition-colors shadow-xs">
-              <div className="flex justify-between items-center text-slate-500">
-                <span className="font-semibold text-slate-900 flex items-center gap-1.5">
+            <div className="p-3 rounded border border-slate-200 dark:border-[#33485D] bg-slate-50 dark:bg-[#101C2A] hover:bg-white dark:hover:bg-[#1C3045] hover:border-slate-300 dark:hover:border-slate-600 transition-colors shadow-xs">
+              <div className="flex justify-between items-center text-slate-500 dark:text-[#8194A8]">
+                <span className="font-semibold text-slate-900 dark:text-[#E8EEF5] flex items-center gap-1.5">
                   <span className="text-base">🇪🇺</span> EUR Desk
                 </span>
-                <span className="font-mono text-[11px] bg-slate-200/70 px-1.5 py-0.5 rounded">DEUTDEDD</span>
+                <span className="font-mono text-[11px] bg-slate-200/70 dark:bg-[#1C3045] px-1.5 py-0.5 rounded">DEUTDEDD</span>
               </div>
-              <div className="mt-2 font-mono font-bold text-slate-900 text-base">
+              <div className="mt-2 font-mono font-bold text-slate-900 dark:text-[#E8EEF5] text-base">
                 €{nostroDesks?.eur?.amount?.toLocaleString() || '9,140,500'}
               </div>
-              <div className="text-[11px] font-mono text-emerald-700 font-semibold mt-0.5">
+              <div className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold mt-0.5">
                 ≈ {formatINR(nostroDesks?.eur?.inr || 0)}
               </div>
-              <div className="text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-200 flex justify-between">
+              <div className="text-[10px] text-slate-500 dark:text-[#8194A8] mt-2 pt-2 border-t border-slate-200 dark:border-[#33485D] flex justify-between">
                 <span>Deutsche Bank AG, Frankfurt</span>
                 <span className="font-mono">@ ₹{(Number(nostroDesks?.eur?.rate) || 91.32).toFixed(2)}</span>
               </div>
             </div>
 
             {/* GBP Desk */}
-            <div className="p-3 rounded border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 transition-colors shadow-xs">
-              <div className="flex justify-between items-center text-slate-500">
-                <span className="font-semibold text-slate-900 flex items-center gap-1.5">
+            <div className="p-3 rounded border border-slate-200 dark:border-[#33485D] bg-slate-50 dark:bg-[#101C2A] hover:bg-white dark:hover:bg-[#1C3045] hover:border-slate-300 dark:hover:border-slate-600 transition-colors shadow-xs">
+              <div className="flex justify-between items-center text-slate-500 dark:text-[#8194A8]">
+                <span className="font-semibold text-slate-900 dark:text-[#E8EEF5] flex items-center gap-1.5">
                   <span className="text-base">🇬🇧</span> GBP Desk
                 </span>
-                <span className="font-mono text-[11px] bg-slate-200/70 px-1.5 py-0.5 rounded">BARCGB22</span>
+                <span className="font-mono text-[11px] bg-slate-200/70 dark:bg-[#1C3045] px-1.5 py-0.5 rounded">BARCGB22</span>
               </div>
-              <div className="mt-2 font-mono font-bold text-slate-900 text-base">
+              <div className="mt-2 font-mono font-bold text-slate-900 dark:text-[#E8EEF5] text-base">
                 £{nostroDesks?.gbp?.amount?.toLocaleString() || '4,850,200'}
               </div>
-              <div className="text-[11px] font-mono text-emerald-700 font-semibold mt-0.5">
+              <div className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold mt-0.5">
                 ≈ {formatINR(nostroDesks?.gbp?.inr || 0)}
               </div>
-              <div className="text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-200 flex justify-between">
+              <div className="text-[10px] text-slate-500 dark:text-[#8194A8] mt-2 pt-2 border-t border-slate-200 dark:border-[#33485D] flex justify-between">
                 <span>Barclays Bank PLC, London</span>
                 <span className="font-mono">@ ₹{(Number(nostroDesks?.gbp?.rate) || 107.48).toFixed(2)}</span>
               </div>
             </div>
 
             {/* JPY Desk */}
-            <div className="p-3 rounded border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 transition-colors shadow-xs">
-              <div className="flex justify-between items-center text-slate-500">
-                <span className="font-semibold text-slate-900 flex items-center gap-1.5">
+            <div className="p-3 rounded border border-slate-200 dark:border-[#33485D] bg-slate-50 dark:bg-[#101C2A] hover:bg-white dark:hover:bg-[#1C3045] hover:border-slate-300 dark:hover:border-slate-600 transition-colors shadow-xs">
+              <div className="flex justify-between items-center text-slate-500 dark:text-[#8194A8]">
+                <span className="font-semibold text-slate-900 dark:text-[#E8EEF5] flex items-center gap-1.5">
                   <span className="text-base">🇯🇵</span> JPY Desk
                 </span>
-                <span className="font-mono text-[11px] bg-slate-200/70 px-1.5 py-0.5 rounded">BOTKJPJT</span>
+                <span className="font-mono text-[11px] bg-slate-200/70 dark:bg-[#1C3045] px-1.5 py-0.5 rounded">BOTKJPJT</span>
               </div>
-              <div className="mt-2 font-mono font-bold text-slate-900 text-base">
+              <div className="mt-2 font-mono font-bold text-slate-900 dark:text-[#E8EEF5] text-base">
                 ¥{nostroDesks?.jpy?.amount?.toLocaleString() || '142,000,000'}
               </div>
-              <div className="text-[11px] font-mono text-emerald-700 font-semibold mt-0.5">
+              <div className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold mt-0.5">
                 ≈ {formatINR(nostroDesks?.jpy?.inr || 0)}
               </div>
-              <div className="text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-200 flex justify-between">
+              <div className="text-[10px] text-slate-500 dark:text-[#8194A8] mt-2 pt-2 border-t border-slate-200 dark:border-[#33485D] flex justify-between">
                 <span>MUFG Bank Ltd, Tokyo</span>
                 <span className="font-mono">@ ₹{(Number(nostroDesks?.jpy?.rate) || 57.65).toFixed(2)} / 100¥</span>
               </div>
@@ -590,22 +590,22 @@ export const TradeFinanceModule: React.FC<TradeFinanceModuleProps> = ({
               );
             })()}
 
-            <div className="border border-slate-200 rounded p-3 bg-white space-y-2">
+            <div className="border border-slate-200 dark:border-[#33485D] rounded p-3 bg-white dark:bg-[#162638] space-y-2 text-xs text-[#273444] dark:text-[#E8EEF5]">
               <div className="flex justify-between">
-                <span className="text-slate-500">Applicant:</span>
-                <span className="font-semibold text-slate-900">{activeItem.applicantName}</span>
+                <span className="text-slate-500 dark:text-[#8194A8]">Applicant:</span>
+                <span className="font-semibold text-slate-900 dark:text-[#E8EEF5]">{activeItem.applicantName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Beneficiary:</span>
-                <span className="font-semibold text-slate-900">{activeItem.beneficiaryName}</span>
+                <span className="text-slate-500 dark:text-[#8194A8]">Beneficiary:</span>
+                <span className="font-semibold text-slate-900 dark:text-[#E8EEF5]">{activeItem.beneficiaryName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Advising Bank (SWIFT / IFSC):</span>
-                <span className="font-mono text-slate-800">{activeItem.advisingBankIfscOrSwift}</span>
+                <span className="text-slate-500 dark:text-[#8194A8]">Advising Bank (SWIFT / IFSC):</span>
+                <span className="font-mono text-slate-800 dark:text-[#E8EEF5]">{activeItem.advisingBankIfscOrSwift}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Underlying Shipment / Contract:</span>
-                <span className="font-medium text-slate-800 text-right max-w-[280px]">
+                <span className="text-slate-500 dark:text-[#8194A8]">Underlying Shipment / Contract:</span>
+                <span className="font-medium text-slate-800 dark:text-[#E8EEF5] text-right max-w-[280px]">
                   {activeItem.underlyingGoods}
                 </span>
               </div>

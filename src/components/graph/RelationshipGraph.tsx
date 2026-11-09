@@ -524,9 +524,9 @@ export const RelationshipGraph: React.FC<RelationshipGraphProps> = ({
       {/* Main Content Area */}
       <div className="relative flex-1 overflow-hidden bg-slate-50/60 dark:bg-[#0A121E]">
         {loading && (
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-white/80 backdrop-blur-xs">
-            <RefreshCw className="w-8 h-8 text-indigo-600 animate-spin mb-2" />
-            <span className="text-xs font-medium text-slate-600">Loading relationship context...</span>
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-white/80 dark:bg-[#0A121E]/80 backdrop-blur-xs">
+            <RefreshCw className="w-8 h-8 text-indigo-600 dark:text-indigo-400 animate-spin mb-2" />
+            <span className="text-xs font-medium text-slate-600 dark:text-[#E8EEF5]">Loading relationship context...</span>
           </div>
         )}
 

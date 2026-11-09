@@ -89,18 +89,18 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded p-4 space-y-4">
+    <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 space-y-4 text-[#273444] dark:text-[#E8EEF5]">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 dark:border-[#33485D] gap-2">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-blue-50 text-blue-900 rounded border border-blue-100">
+          <div className="p-1.5 bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 rounded border border-blue-100 dark:border-blue-900">
             <Calculator className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-800">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-800 dark:text-[#E8EEF5]">
               Cross-Border Trade FX Conversion & Margin Estimator
             </h3>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-500 dark:text-[#8194A8]">
               Compute real-time settlement equivalents, statutory GST (Rule 32(2)), and cash margin liens
             </p>
           </div>
@@ -116,7 +116,7 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
         <div className="lg:col-span-5 space-y-3.5 text-xs">
           {/* Instrument Type */}
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">
+            <label className="block font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">
               Cross-Border Trade Instrument / Remittance Type
             </label>
             <select
@@ -131,7 +131,7 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
                   setSettlementType('TT_BUYING');
                 }
               }}
-              className="w-full p-2 border border-slate-200 rounded bg-slate-50/50 focus:bg-white focus:outline-hidden focus:border-[#0f1e36]"
+              className="w-full p-2 border border-slate-200 dark:border-[#33485D] rounded bg-slate-50/50 dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:bg-white dark:focus:bg-[#101C2A] focus:outline-hidden focus:border-[#0f1e36] dark:focus:border-[#168C83]"
             >
               <option value="LETTER_OF_CREDIT">Import Letter of Credit (Outward LC Settlement)</option>
               <option value="BANK_GUARANTEE">Bank Guarantee / SBLC (Performance / Financial)</option>
@@ -145,11 +145,11 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
           {/* Currency & Amount */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-slate-700 mb-1">Foreign Currency</label>
+              <label className="block font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">Foreign Currency</label>
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="w-full p-2 border border-slate-200 rounded bg-slate-50/50 focus:bg-white focus:outline-hidden focus:border-[#0f1e36] font-mono font-medium"
+                className="w-full p-2 border border-slate-200 dark:border-[#33485D] rounded bg-slate-50/50 dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:bg-white dark:focus:bg-[#101C2A] focus:outline-hidden focus:border-[#0f1e36] dark:focus:border-[#168C83] font-mono font-medium"
               >
                 {availableQuotes.map((q) => (
                   <option key={q.baseCurrency} value={q.baseCurrency}>
@@ -160,16 +160,16 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
             </div>
 
             <div>
-              <label className="block font-semibold text-slate-700 mb-1">Foreign Face Value</label>
+              <label className="block font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">Foreign Face Value</label>
               <div className="relative">
-                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 font-mono font-bold text-slate-500">
+                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 font-mono font-bold text-slate-500 dark:text-[#8194A8]">
                   {activeQuote?.symbol || '$'}
                 </span>
                 <input
                   type="number"
                   value={amount}
                   onChange={(e) => setAmount(Math.max(0, Number(e.target.value)))}
-                  className="w-full pl-7 pr-2.5 py-2 border border-slate-200 rounded bg-slate-50/50 focus:bg-white focus:outline-hidden focus:border-[#0f1e36] font-mono font-bold text-slate-900"
+                  className="w-full pl-7 pr-2.5 py-2 border border-slate-200 dark:border-[#33485D] rounded bg-slate-50/50 dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:bg-white dark:focus:bg-[#101C2A] focus:outline-hidden focus:border-[#0f1e36] dark:focus:border-[#168C83] font-mono font-bold"
                   placeholder="250000"
                 />
               </div>
@@ -178,7 +178,7 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
 
           {/* Quick Amount Presets */}
           <div className="flex items-center gap-1.5 pt-0.5">
-            <span className="text-[10px] text-slate-400 font-medium">Quick Amount:</span>
+            <span className="text-[10px] text-slate-400 dark:text-[#8194A8] font-medium">Quick Amount:</span>
             {[50000, 100000, 250000, 500000, 1000000].map((preset) => (
               <button
                 key={preset}
@@ -186,8 +186,8 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
                 onClick={() => setAmount(preset)}
                 className={`px-1.5 py-0.5 text-[10px] font-mono rounded border transition-colors cursor-pointer ${
                   amount === preset
-                    ? 'border-slate-900 bg-slate-900 text-white'
-                    : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
+                    ? 'border-slate-900 dark:border-[#168C83] bg-slate-900 dark:bg-[#168C83] text-white'
+                    : 'border-slate-200 dark:border-[#33485D] bg-slate-50 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] hover:bg-slate-100 dark:hover:bg-[#1C3045]'
                 }`}
               >
                 ${preset >= 1000000 ? `${preset / 1000000}M` : `${preset / 1000}k`}
@@ -197,7 +197,7 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
 
           {/* Rate Type Selector */}
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">
+            <label className="block font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">
               Applicable FEDAI Card Rate Type
             </label>
             <div className="grid grid-cols-2 gap-1.5">
@@ -213,12 +213,12 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
                   onClick={() => setSettlementType(rate.id as ForexSettlementType)}
                   className={`p-2 text-left rounded border transition-colors cursor-pointer ${
                     settlementType === rate.id
-                      ? 'border-[#0f1e36] bg-blue-50/50 text-[#0f1e36] font-semibold ring-1 ring-[#0f1e36]'
-                      : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+                      ? 'border-[#0f1e36] dark:border-[#168C83] bg-blue-50/50 dark:bg-[#1C3045] text-[#0f1e36] dark:text-[#2dd4c7] font-semibold ring-1 ring-[#0f1e36] dark:ring-[#168C83]'
+                      : 'border-slate-200 dark:border-[#33485D] bg-white dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] hover:bg-slate-50 dark:hover:bg-[#162638]'
                   }`}
                 >
                   <div className="font-semibold text-[11px]">{rate.label}</div>
-                  <div className="text-[10px] text-slate-500">{rate.desc}</div>
+                  <div className="text-[10px] text-slate-500 dark:text-[#8194A8]">{rate.desc}</div>
                 </button>
               ))}
             </div>
@@ -227,10 +227,10 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
           {/* Cash Margin Requirement */}
           <div>
             <div className="flex justify-between items-center mb-1">
-              <label className="font-semibold text-slate-700">
+              <label className="font-semibold text-slate-700 dark:text-[#A9BACB]">
                 Cash Margin Lien Collateral
               </label>
-              <span className="font-mono font-bold text-slate-900">{cashMarginPct}% Lien</span>
+              <span className="font-mono font-bold text-slate-900 dark:text-[#E8EEF5]">{cashMarginPct}% Lien</span>
             </div>
             <input
               type="range"
@@ -239,9 +239,9 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
               step={5}
               value={cashMarginPct}
               onChange={(e) => setCashMarginPct(Number(e.target.value))}
-              className="w-full accent-[#0f1e36] cursor-pointer"
+              className="w-full accent-[#0f1e36] dark:accent-[#168C83] cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-0.5">
+            <div className="flex justify-between text-[10px] text-slate-400 dark:text-[#8194A8] font-mono mt-0.5">
               <span>0% (Clean Facility)</span>
               <span>15% (Standard LC)</span>
               <span>25%</span>
@@ -251,44 +251,44 @@ Statutory Compliance: ${conversionResult.femaComplianceCategory}`;
         </div>
 
         {/* Right Panel: Statutory Settlement Breakdown */}
-        <div className="lg:col-span-7 bg-slate-50 border border-slate-200 rounded p-4 flex flex-col justify-between space-y-4">
+        <div className="lg:col-span-7 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded p-4 flex flex-col justify-between space-y-4">
           <div className="space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-[#33485D]">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-[#8194A8]">
                 Settlement Cost Summary
               </span>
-              <span className="font-mono text-xs text-slate-600 flex items-center gap-1">
+              <span className="font-mono text-xs text-slate-600 dark:text-[#A9BACB] flex items-center gap-1">
                 Rate: ₹{conversionResult?.appliedRate?.toFixed(4) || '—'} / {currency}
               </span>
             </div>
 
             {/* Big Net Result Display */}
-            <div className="bg-white border border-slate-200 rounded p-3 text-center space-y-1">
-              <div className="text-[11px] text-slate-500 font-medium">
+            <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-3 text-center space-y-1">
+              <div className="text-[11px] text-slate-500 dark:text-[#8194A8] font-medium">
                 Gross Converted INR Counter-Value
               </div>
-              <div className="font-mono text-2xl font-bold text-slate-900">
+              <div className="font-mono text-2xl font-bold text-slate-900 dark:text-[#E8EEF5]">
                 {conversionResult ? formatINR(conversionResult.grossTargetAmount) : '—'}
               </div>
-              <div className="text-[11px] font-mono text-slate-500">
+              <div className="text-[11px] font-mono text-slate-500 dark:text-[#8194A8]">
                 Equivalent to {currency} {amount.toLocaleString()} @ ₹{conversionResult?.appliedRate?.toFixed(4) || '0.00'}
               </div>
             </div>
 
             {/* Cost & Tax Breakdown Rows */}
-            <div className="bg-white border border-slate-200 rounded p-3 space-y-2 text-xs">
+            <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-3 space-y-2 text-xs">
               <div className="flex justify-between items-center">
-                <span className="text-slate-600">Interbank Mid Benchmark:</span>
-                <span className="font-mono font-medium text-slate-800">
+                <span className="text-slate-600 dark:text-[#A9BACB]">Interbank Mid Benchmark:</span>
+                <span className="font-mono font-medium text-slate-800 dark:text-[#E8EEF5]">
                   ₹{activeQuote?.midRate?.toFixed(4) || '—'}
                 </span>
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-slate-600">
+                <span className="text-slate-600 dark:text-[#A9BACB]">
                   FEDAI Bank Spread ({conversionResult?.bankSpreadPercentage || 0}%):
                 </span>
-                <span className="font-mono font-medium text-slate-800">
+                <span className="font-mono font-medium text-slate-800 dark:text-[#E8EEF5]">
                   + ₹{conversionResult?.spreadAmountInr?.toLocaleString('en-IN') || '0.00'}
                 </span>
               </div>

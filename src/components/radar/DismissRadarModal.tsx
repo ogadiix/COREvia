@@ -96,7 +96,7 @@ export const DismissRadarModal: React.FC<DismissRadarModalProps> = ({
           <select
             value={selectedPreset}
             onChange={(e) => setSelectedPreset(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none bg-white"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-[#33485D] rounded-lg text-xs focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
           >
             {PRESET_REASONS.map((r) => (
               <option key={r} value={r}>

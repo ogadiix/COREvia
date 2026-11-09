@@ -146,55 +146,55 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
       </div>
 
       {/* KPI Metrics Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-          <div className="text-xs text-slate-500 font-medium flex items-center justify-between">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-[#273444] dark:text-[#E8EEF5]">
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-4 shadow-xs">
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] font-medium flex items-center justify-between">
             <span>Active Journeys</span>
-            <Layers className="w-4 h-4 text-blue-600" />
+            <Layers className="w-4 h-4 text-blue-600 dark:text-[#2dd4c7]" />
           </div>
-          <div className="text-2xl font-bold text-slate-900 mt-2">{activeCount}</div>
-          <div className="text-[11px] text-slate-500 mt-1 font-mono">Portfolio In-Flight</div>
+          <div className="text-2xl font-bold text-slate-900 dark:text-[#E8EEF5] mt-2">{activeCount}</div>
+          <div className="text-[11px] text-slate-500 dark:text-[#8194A8] mt-1 font-mono">Portfolio In-Flight</div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-          <div className="text-xs text-slate-500 font-medium flex items-center justify-between">
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-4 shadow-xs">
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] font-medium flex items-center justify-between">
             <span>Blocked Milestones</span>
-            <AlertTriangle className="w-4 h-4 text-rose-600" />
+            <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
           </div>
-          <div className="text-2xl font-bold text-rose-600 mt-2">{blockedCount}</div>
-          <div className="text-[11px] text-rose-700 mt-1 font-mono">Requires RM Attention</div>
+          <div className="text-2xl font-bold text-rose-600 dark:text-rose-400 mt-2">{blockedCount}</div>
+          <div className="text-[11px] text-rose-700 dark:text-rose-300 mt-1 font-mono">Requires RM Attention</div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-          <div className="text-xs text-slate-500 font-medium flex items-center justify-between">
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-4 shadow-xs">
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] font-medium flex items-center justify-between">
             <span>SLA Breached</span>
-            <Clock className="w-4 h-4 text-amber-600" />
+            <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
           </div>
-          <div className="text-2xl font-bold text-amber-600 mt-2">{slaBreachedCount}</div>
-          <div className="text-[11px] text-amber-700 mt-1 font-mono">Past Target Date</div>
+          <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-2">{slaBreachedCount}</div>
+          <div className="text-[11px] text-amber-700 dark:text-amber-300 mt-1 font-mono">Past Target Date</div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-          <div className="text-xs text-slate-500 font-medium flex items-center justify-between">
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-4 shadow-xs">
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] font-medium flex items-center justify-between">
             <span>Completed (30d)</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
-          <div className="text-2xl font-bold text-emerald-600 mt-2">{completedCount}</div>
-          <div className="text-[11px] text-emerald-700 mt-1 font-mono">Verified Outcomes</div>
+          <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">{completedCount}</div>
+          <div className="text-[11px] text-emerald-700 dark:text-emerald-300 mt-1 font-mono">Verified Outcomes</div>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-4 shadow-xs space-y-3 text-[#273444] dark:text-[#E8EEF5]">
         <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row items-center gap-3">
           <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-4 h-4 text-slate-400 dark:text-[#8194A8] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search by Journey ID, Name, or Customer..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600"
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded text-slate-900 dark:text-[#E8EEF5] focus:bg-white dark:focus:bg-[#101C2A] focus:outline-none focus:ring-1 focus:ring-blue-600"
             />
           </div>
 
@@ -203,7 +203,7 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-2.5 py-1.5 text-xs border border-slate-300 rounded bg-white text-slate-800"
+              className="px-2.5 py-1.5 text-xs border border-slate-300 dark:border-[#33485D] rounded bg-white dark:bg-[#101C2A] text-slate-800 dark:text-[#E8EEF5]"
             >
               <option value="ALL">All Statuses</option>
               <option value="IN_PROGRESS">In Progress</option>
@@ -217,7 +217,7 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
             <select
               value={selectedTemplate}
               onChange={(e) => setSelectedTemplate(e.target.value)}
-              className="px-2.5 py-1.5 text-xs border border-slate-300 rounded bg-white text-slate-800 max-w-xs truncate"
+              className="px-2.5 py-1.5 text-xs border border-slate-300 dark:border-[#33485D] rounded bg-white dark:bg-[#101C2A] text-slate-800 dark:text-[#E8EEF5] max-w-xs truncate"
             >
               <option value="ALL">All Templates ({templates.length})</option>
               {templates.map((tpl) => (
@@ -231,7 +231,7 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
             <select
               value={selectedSla}
               onChange={(e) => setSelectedSla(e.target.value)}
-              className="px-2.5 py-1.5 text-xs border border-slate-300 rounded bg-white text-slate-800"
+              className="px-2.5 py-1.5 text-xs border border-slate-300 dark:border-[#33485D] rounded bg-white dark:bg-[#101C2A] text-slate-800 dark:text-[#E8EEF5]"
             >
               <option value="ALL">All SLAs</option>
               <option value="ON_TRACK">On Track</option>
@@ -247,7 +247,7 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
       </div>
 
       {/* Journeys List Table */}
-      <div className="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg shadow-xs overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-500 flex flex-col items-center">
             <RefreshCw className="w-6 h-6 animate-spin text-blue-600 mb-2" />
@@ -388,49 +388,49 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
 
       {/* MODAL: Initiate Journey */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
-          <div className="bg-white rounded-lg max-w-lg w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <Milestone className="w-5 h-5 text-blue-600" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs p-4">
+          <div className="bg-white dark:bg-[#162638] rounded-lg max-w-lg w-full p-6 shadow-xl space-y-4 border border-slate-200 dark:border-[#33485D]">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#33485D] pb-3">
+              <h3 className="text-base font-bold text-slate-900 dark:text-[#E8EEF5] flex items-center gap-2">
+                <Milestone className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 Initiate Governed Customer Journey
               </h3>
               <button
                 onClick={() => setIsCreateModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 font-bold"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-bold"
               >
                 ×
               </button>
             </div>
 
             {createError && (
-              <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 text-xs rounded-md">
+              <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-800 dark:text-rose-300 text-xs rounded-md">
                 {createError}
               </div>
             )}
 
             <form onSubmit={handleCreateJourney} className="space-y-4 text-xs">
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Customer ID or CIF</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Customer ID or CIF</label>
                 <input
                   type="number"
                   value={createCustomerId}
                   onChange={(e) => setCreateCustomerId(e.target.value)}
                   placeholder="e.g. 1"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900 font-mono"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] font-mono"
                   required
                 />
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-slate-400 dark:text-slate-500">
                   Customer 1: Rahul Sharma | Customer 2: Kalyan Jewellers | Customer 3: Anita Desai
                 </span>
               </div>
 
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Standard Lifecycle Template</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Standard Lifecycle Template</label>
                 <select
                   value={createTemplateCode}
                   onChange={(e) => setCreateTemplateCode(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                 >
                   {templates.map((tpl) => (
                     <option key={tpl.templateCode} value={tpl.templateCode}>
@@ -441,11 +441,11 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
               </div>
 
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Priority</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Priority</label>
                 <select
                   value={createPriority}
                   onChange={(e) => setCreatePriority(e.target.value as any)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                 >
                   <option value="LOW">Low Priority</option>
                   <option value="MEDIUM">Medium Priority</option>
@@ -455,13 +455,13 @@ export const PortfolioJourneysView: React.FC<PortfolioJourneysViewProps> = ({
               </div>
 
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Initiation Notes</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Initiation Notes</label>
                 <textarea
                   rows={3}
                   value={createNotes}
                   onChange={(e) => setCreateNotes(e.target.value)}
                   placeholder="Optional context or instructions for assigned milestone officers..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                 />
               </div>
 

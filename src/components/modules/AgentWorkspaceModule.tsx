@@ -296,22 +296,22 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
       )}
 
       {/* Header Bar */}
-      <div className="bg-white rounded-xl border border-[#E2E8F0] p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-[#162638] rounded-xl border border-[#E2E8F0] dark:border-[#33485D] p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 text-[#273444] dark:text-[#E8EEF5]">
         <div>
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-[#087F8C]/10 border border-[#087F8C]/20 text-[#087F8C]">
+            <div className="p-2.5 rounded-lg bg-[#087F8C]/10 border border-[#087F8C]/20 text-[#087F8C] dark:text-[#2dd4c7]">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2.5">
-                <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#172033]">
+                <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#172033] dark:text-[#E8EEF5]">
                   Controlled Banking Agent
                 </h1>
                 <Badge variant="success" size="sm">
                   Dual-Control Governed
                 </Badge>
               </div>
-              <p className="text-xs text-[#475569] mt-0.5">
+              <p className="text-xs text-[#475569] dark:text-[#8194A8] mt-0.5">
                 Sequential workflow orchestration with strict human approval gates & transaction verification.
               </p>
             </div>
@@ -388,14 +388,14 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
       {/* Main Grid: Sessions Sidebar + Plan Detail Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Sessions & Historical Runs (4 cols on lg) */}
-        <div className="lg:col-span-4 space-y-4">
-          <div className="bg-white border border-[#E2E8F0] rounded-xl p-4 shadow-2xs">
-            <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-[#475569] flex items-center gap-2">
-                <History className="w-3.5 h-3.5 text-[#087F8C]" />
+        <div className="lg:col-span-4 space-y-4 text-[#273444] dark:text-[#E8EEF5]">
+          <div className="bg-white dark:bg-[#162638] border border-[#E2E8F0] dark:border-[#33485D] rounded-xl p-4 shadow-2xs">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100 dark:border-[#33485D]">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-[#475569] dark:text-[#A9BACB] flex items-center gap-2">
+                <History className="w-3.5 h-3.5 text-[#087F8C] dark:text-[#2dd4c7]" />
                 Governed Sessions
               </h2>
-              <span className="text-xs font-mono text-[#64748B]">{sessions.length} recorded</span>
+              <span className="text-xs font-mono text-[#64748B] dark:text-[#8194A8]">{sessions.length} recorded</span>
             </div>
 
             <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
@@ -416,12 +416,12 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
                     onClick={() => handleSelectSession(sess)}
                     className={`p-3 rounded-lg border text-left cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-[#F0FDFA] border-[#087F8C] shadow-2xs ring-1 ring-[#087F8C]/20'
-                        : 'bg-white border-[#E2E8F0] hover:bg-slate-50 hover:border-slate-300'
+                        ? 'bg-[#F0FDFA] dark:bg-[#1C3045] border-[#087F8C] dark:border-[#2dd4c7] shadow-2xs ring-1 ring-[#087F8C]/20'
+                        : 'bg-white dark:bg-[#101C2A] border-[#E2E8F0] dark:border-[#33485D] hover:bg-slate-50 dark:hover:bg-[#162638]'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs font-mono font-semibold text-slate-800">
+                      <span className="text-xs font-mono font-semibold text-slate-800 dark:text-[#E8EEF5]">
                         {sess.sessionId}
                       </span>
                       <Badge variant={statusVariant} size="sm">
@@ -429,11 +429,11 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
                       </Badge>
                     </div>
 
-                    <div className="text-sm font-semibold text-[#172033] truncate">
+                    <div className="text-sm font-semibold text-[#172033] dark:text-[#E8EEF5] truncate">
                       {sess.customerName || 'General Portfolio Governance'}
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-[#64748B] mt-2 pt-2 border-t border-slate-100">
+                    <div className="flex items-center justify-between text-[11px] text-[#64748B] dark:text-[#8194A8] mt-2 pt-2 border-t border-slate-100 dark:border-[#33485D]">
                       <span>Origin: {sess.contextType}</span>
                       <span>{new Date(sess.createdAt).toLocaleDateString('en-IN')}</span>
                     </div>
@@ -442,7 +442,7 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
               })}
 
               {sessions.length === 0 && !isLoading && (
-                <div className="p-6 text-center text-xs text-[#64748B]">
+                <div className="p-6 text-center text-xs text-[#64748B] dark:text-[#8194A8]">
                   No agent sessions created yet. Click "New Agent Plan" to begin.
                 </div>
               )}
@@ -451,18 +451,18 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
 
           {/* Context Minimization Overview Box */}
           {activeSession?.context && (
-            <div className="bg-white border border-[#E2E8F0] rounded-xl p-4 space-y-3 shadow-2xs">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#475569] flex items-center gap-1.5">
-                  <Database className="w-3.5 h-3.5 text-indigo-600" />
+            <div className="bg-white dark:bg-[#162638] border border-[#E2E8F0] dark:border-[#33485D] rounded-xl p-4 space-y-3 shadow-2xs">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-[#33485D]">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#475569] dark:text-[#A9BACB] flex items-center gap-1.5">
+                  <Database className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                   Authorized Context
                 </span>
-                <span className="text-[10px] font-mono text-emerald-700 px-1.5 py-0.5 rounded bg-emerald-50 border border-emerald-200">
+                <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
                   Minimization Active
                 </span>
               </div>
 
-              <div className="p-3 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] text-xs text-[#475569] leading-relaxed">
+              <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#E2E8F0] dark:border-[#33485D] text-xs text-[#475569] dark:text-[#A9BACB] leading-relaxed">
                 {activeSession.context.summary}
               </div>
 
@@ -510,31 +510,31 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
           )}
 
           {/* Governed Tool Allowlist Reference */}
-          <div className="bg-white border border-[#E2E8F0] rounded-xl p-4 shadow-2xs">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#475569] mb-1.5 flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-[#087F8C]" />
+          <div className="bg-white dark:bg-[#162638] border border-[#E2E8F0] dark:border-[#33485D] rounded-xl p-4 shadow-2xs">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#475569] dark:text-[#E8EEF5] mb-1.5 flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-[#087F8C] dark:text-[#2dd4c7]" />
               Tool Governance Boundaries
             </h3>
-            <p className="text-[11px] text-[#64748B] leading-relaxed mb-3">
+            <p className="text-[11px] text-[#64748B] dark:text-[#8194A8] leading-relaxed mb-3">
               Only strictly allowlisted read tools & non-financial mutations are permissible. Fund transfers and automated credit approvals are permanently blocked.
             </p>
             <div className="flex flex-wrap gap-1.5 text-[10px] font-mono">
-              <span className="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-800">CREATE_TASK</span>
-              <span className="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-800">UPDATE_SERVICE_CASE</span>
-              <span className="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-800">CREATE_RELATIONSHIP_REVIEW</span>
-              <span className="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-800">UPDATE_OPPORTUNITY</span>
-              <span className="px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-rose-800 line-through">TRANSFER_FUNDS</span>
-              <span className="px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-rose-800 line-through">APPROVE_LOAN</span>
+              <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300">CREATE_TASK</span>
+              <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300">UPDATE_SERVICE_CASE</span>
+              <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300">CREATE_RELATIONSHIP_REVIEW</span>
+              <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300">UPDATE_OPPORTUNITY</span>
+              <span className="px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 line-through">TRANSFER_FUNDS</span>
+              <span className="px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 line-through">APPROVE_LOAN</span>
             </div>
           </div>
         </div>
 
         {/* Right Column: Active Plan, Steps, Approval, & Execution (8 cols on lg) */}
-        <div className="lg:col-span-8 space-y-4">
+        <div className="lg:col-span-8 space-y-4 text-[#273444] dark:text-[#E8EEF5]">
           {activePlan ? (
             <>
               {/* Plan Card Header */}
-              <div className="bg-white border border-[#E2E8F0] rounded-xl p-5 shadow-2xs space-y-4">
+              <div className="bg-white dark:bg-[#162638] border border-[#E2E8F0] dark:border-[#33485D] rounded-xl p-5 shadow-2xs space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                   <div>
                     <div className="flex items-center gap-2 mb-1.5">
@@ -634,7 +634,7 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
               </div>
 
               {/* Steps List */}
-              <div className="bg-white border border-[#E2E8F0] rounded-xl p-5 shadow-2xs space-y-4">
+              <div className="bg-white dark:bg-[#162638] border border-[#E2E8F0] dark:border-[#33485D] rounded-xl p-5 shadow-2xs space-y-4">
                 <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                   <div className="flex items-center gap-2">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
@@ -662,16 +662,16 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
                         key={step.stepNumber}
                         className={`p-3.5 rounded-lg border transition-all ${
                           step.status === 'COMPLETED'
-                            ? 'bg-emerald-50/40 border-emerald-200'
+                            ? 'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800'
                             : step.status === 'EXECUTING'
-                            ? 'bg-blue-50/50 border-blue-300 ring-1 ring-blue-400/20'
+                            ? 'bg-blue-50/50 dark:bg-blue-950/30 border-blue-300 dark:border-blue-700 ring-1 ring-blue-400/20'
                             : step.status === 'FAILED'
-                            ? 'bg-rose-50/40 border-rose-200'
+                            ? 'bg-rose-50/40 dark:bg-rose-950/20 border-rose-200 dark:border-rose-800'
                             : step.status === 'SKIPPED'
-                            ? 'bg-slate-50 border-slate-200 text-slate-400'
+                            ? 'bg-slate-50 dark:bg-[#101C2A] border-slate-200 dark:border-[#33485D] text-slate-400 dark:text-slate-500'
                             : isChecked
-                            ? 'bg-white border-slate-300 shadow-2xs'
-                            : 'bg-slate-50/50 border-slate-200 text-slate-500'
+                            ? 'bg-white dark:bg-[#192B3D] border-slate-300 dark:border-[#33485D] shadow-2xs'
+                            : 'bg-slate-50/50 dark:bg-[#101C2A]/50 border-slate-200 dark:border-[#33485D] text-slate-500 dark:text-[#A9BACB]'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-3">
@@ -853,7 +853,7 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
 
               {/* Execution Outcome Report Card */}
               {executionReport && (
-                <div className="bg-white border border-emerald-300 rounded-xl p-5 shadow-sm space-y-4 animate-in fade-in">
+                <div className="bg-white dark:bg-[#162638] border border-emerald-300 dark:border-emerald-800 rounded-xl p-5 shadow-sm space-y-4 animate-in fade-in">
                   <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-5 h-5 text-emerald-600" />
@@ -915,7 +915,7 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
               )}
             </>
           ) : (
-            <div className="bg-white border border-[#E2E8F0] rounded-xl p-8 text-center shadow-2xs">
+            <div className="bg-white dark:bg-[#162638] border border-[#E2E8F0] dark:border-[#33485D] rounded-xl p-8 text-center shadow-2xs">
               <EmptyState
                 icon={<ShieldAlert className="w-5 h-5 text-[#087F8C]" />}
                 title="No Active Governed Plan Selected"
@@ -989,21 +989,21 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
             </div>
           }
         >
-          <div className="space-y-4 text-xs py-2">
+          <div className="space-y-4 text-xs py-2 text-[#273444] dark:text-[#E8EEF5]">
             <div>
-              <label className="block text-slate-700 font-semibold mb-1">
+              <label className="block text-slate-700 dark:text-[#A9BACB] font-semibold mb-1">
                 Customer ID / Target CIF
               </label>
               <input
                 type="number"
                 value={newPlanCustomer}
                 onChange={(e) => setNewPlanCustomer(Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:border-[#087F8C] font-mono text-xs"
+                className="w-full px-3 py-2 rounded-lg bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-900 dark:text-[#E8EEF5] focus:outline-none focus:border-[#087F8C] font-mono text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-slate-700 font-semibold mb-1">
+              <label className="block text-slate-700 dark:text-[#A9BACB] font-semibold mb-1">
                 Plan Title
               </label>
               <input
@@ -1011,12 +1011,12 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
                 placeholder="e.g. Rahul Sharma Relationship Recovery Plan"
                 value={newPlanTitle}
                 onChange={(e) => setNewPlanTitle(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:border-[#087F8C] text-xs"
+                className="w-full px-3 py-2 rounded-lg bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-900 dark:text-[#E8EEF5] focus:outline-none focus:border-[#087F8C] text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-slate-700 font-semibold mb-1">
+              <label className="block text-slate-700 dark:text-[#A9BACB] font-semibold mb-1">
                 Business Objective
               </label>
               <textarea
@@ -1024,12 +1024,12 @@ export const AgentWorkspaceModule: React.FC<AgentWorkspaceModuleProps> = ({
                 placeholder="e.g. Clear service friction ticket, schedule executive relationship review, and unblock stalled loan facility."
                 value={newPlanObjective}
                 onChange={(e) => setNewPlanObjective(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:border-[#087F8C] text-xs leading-relaxed"
+                className="w-full px-3 py-2 rounded-lg bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-900 dark:text-[#E8EEF5] focus:outline-none focus:border-[#087F8C] text-xs leading-relaxed"
               />
             </div>
 
-            <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 text-[#475569] text-[11px] leading-relaxed">
-              <strong className="text-slate-800">Governance Notice:</strong> Creating a plan produces a structured draft with dependency validation. No database mutations will occur until you explicitly authorize the plan steps.
+            <div className="p-3 rounded-lg bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] text-[#475569] dark:text-[#A9BACB] text-[11px] leading-relaxed">
+              <strong className="text-slate-800 dark:text-[#E8EEF5]">Governance Notice:</strong> Creating a plan produces a structured draft with dependency validation. No database mutations will occur until you explicitly authorize the plan steps.
             </div>
           </div>
         </Dialog>

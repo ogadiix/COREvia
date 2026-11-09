@@ -320,19 +320,19 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
       )}
 
       {/* Overview Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-[#273444] dark:text-[#E8EEF5]">
         {/* Customer Context Card */}
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-          <div className="text-xs text-slate-500 font-medium flex items-center gap-1.5 mb-2">
-            <User className="w-3.5 h-3.5 text-blue-600" />
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-4 shadow-xs">
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] font-medium flex items-center gap-1.5 mb-2">
+            <User className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             Customer Subject
           </div>
-          <div className="font-bold text-slate-900 truncate">{journey.customerName || `Customer #${journey.customerId}`}</div>
-          <div className="text-xs text-slate-500 font-mono mt-0.5">Code: {journey.customerCode || 'CUS-N/A'}</div>
+          <div className="font-bold text-slate-900 dark:text-[#E8EEF5] truncate">{journey.customerName || `Customer #${journey.customerId}`}</div>
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] font-mono mt-0.5">Code: {journey.customerCode || 'CUS-N/A'}</div>
           {onNavigateToCustomer && (
             <button
               onClick={() => onNavigateToCustomer(journey.customerId)}
-              className="text-xs text-blue-600 hover:text-blue-800 font-medium mt-2 flex items-center gap-1 cursor-pointer"
+              className="text-xs text-blue-600 dark:text-[#2dd4c7] hover:text-blue-800 dark:hover:text-[#5eead4] font-medium mt-2 flex items-center gap-1 cursor-pointer"
             >
               <span>View Customer 360</span>
               <ExternalLink className="w-3 h-3" />
@@ -341,21 +341,21 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
         </div>
 
         {/* Progress Card */}
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-          <div className="text-xs text-slate-500 font-medium flex items-center gap-1.5 mb-2">
-            <Milestone className="w-3.5 h-3.5 text-indigo-600" />
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-4 shadow-xs">
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] font-medium flex items-center gap-1.5 mb-2">
+            <Milestone className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
             Step Progression
           </div>
           <div className="flex items-baseline justify-between mb-1.5">
-            <span className="text-xl font-bold text-slate-900">{progress?.progressPercentage || 0}%</span>
-            <span className="text-xs text-slate-500 font-mono">
+            <span className="text-xl font-bold text-slate-900 dark:text-[#E8EEF5]">{progress?.progressPercentage || 0}%</span>
+            <span className="text-xs text-slate-500 dark:text-[#8194A8] font-mono">
               {progress?.completedSteps || 0} / {progress?.totalSteps || steps.length} Completed
             </span>
           </div>
-          <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-slate-100 dark:bg-[#101C2A] rounded-full h-2 overflow-hidden">
             <div
               className={`h-2 rounded-full transition-all duration-500 ${
-                journey.status === 'BLOCKED' ? 'bg-rose-500' : 'bg-blue-600'
+                journey.status === 'BLOCKED' ? 'bg-rose-500' : 'bg-blue-600 dark:bg-[#168C83]'
               }`}
               style={{ width: `${progress?.progressPercentage || 0}%` }}
             />
@@ -363,33 +363,33 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
         </div>
 
         {/* SLA Health Card */}
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-          <div className="text-xs text-slate-500 font-medium flex items-center gap-1.5 mb-2">
-            <Clock className="w-3.5 h-3.5 text-amber-600" />
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-4 shadow-xs">
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] font-medium flex items-center gap-1.5 mb-2">
+            <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
             SLA & Deadlines
           </div>
-          <div className="text-base font-bold text-slate-900">
+          <div className="text-base font-bold text-slate-900 dark:text-[#E8EEF5]">
             {journey.targetCompletionDate ? new Date(journey.targetCompletionDate).toLocaleDateString() : 'Target N/A'}
           </div>
-          <div className="text-xs text-slate-500 mt-1">
-            Status: <span className="font-semibold text-slate-800">{journey.slaStatus}</span>
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] mt-1">
+            Status: <span className="font-semibold text-slate-800 dark:text-[#E8EEF5]">{journey.slaStatus}</span>
           </div>
           {journey.decisionTraceId && (
-            <div className="mt-2 text-[11px] font-mono text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 truncate">
+            <div className="mt-2 text-[11px] font-mono text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded border border-purple-200 dark:border-purple-800/60 truncate">
               Linked Trace: {journey.decisionTraceId}
             </div>
           )}
         </div>
 
         {/* Assigned Owner Card */}
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-          <div className="text-xs text-slate-500 font-medium flex items-center gap-1.5 mb-2">
-            <Building2 className="w-3.5 h-3.5 text-emerald-600" />
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-4 shadow-xs">
+          <div className="text-xs text-slate-500 dark:text-[#8194A8] font-medium flex items-center gap-1.5 mb-2">
+            <Building2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             Operational Ownership
           </div>
-          <div className="font-bold text-slate-900">{journey.ownerName || 'Unassigned Officer'}</div>
-          <div className="text-xs text-slate-600 font-mono mt-0.5">Role: {journey.ownerRole}</div>
-          <div className="text-[11px] text-slate-400 mt-2">
+          <div className="font-bold text-slate-900 dark:text-[#E8EEF5]">{journey.ownerName || 'Unassigned Officer'}</div>
+          <div className="text-xs text-slate-600 dark:text-[#A9BACB] font-mono mt-0.5">Role: {journey.ownerRole}</div>
+          <div className="text-[11px] text-slate-400 dark:text-[#8194A8] mt-2">
             Template: {journey.templateName || journey.templateCode}
           </div>
         </div>
@@ -431,18 +431,18 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
 
       {/* Tab 1: STEPS MATRIX */}
       {activeTab === 'STEPS' && (
-        <div className="space-y-4">
-          <div className="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden">
-            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+        <div className="space-y-4 text-[#273444] dark:text-[#E8EEF5]">
+          <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg shadow-xs overflow-hidden">
+            <div className="px-4 py-3 bg-slate-50 dark:bg-[#101C2A] border-b border-slate-200 dark:border-[#33485D] flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-700 dark:text-[#E8EEF5] uppercase tracking-wider">
                 Governed Step Execution Matrix
               </span>
-              <span className="text-[11px] text-slate-500">
+              <span className="text-[11px] text-slate-500 dark:text-[#8194A8]">
                 Steps must satisfy prerequisite dependencies before unlocking ready state.
               </span>
             </div>
 
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-slate-100 dark:divide-[#33485D]">
               {steps.map((step) => {
                 const isReady = step.status === 'READY';
                 const isInProgress = step.status === 'IN_PROGRESS';
@@ -454,12 +454,12 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
                     key={step.id}
                     className={`p-4 transition-colors ${
                       isBlocked
-                        ? 'bg-rose-50/50'
+                        ? 'bg-rose-50/50 dark:bg-rose-950/30'
                         : isCompleted
-                        ? 'bg-slate-50/30'
+                        ? 'bg-slate-50/30 dark:bg-[#101C2A]/30'
                         : isReady
-                        ? 'bg-blue-50/30'
-                        : 'bg-white'
+                        ? 'bg-blue-50/30 dark:bg-blue-950/30'
+                        : 'bg-white dark:bg-[#162638]'
                     }`}
                   >
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -616,28 +616,28 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
 
       {/* Tab 2: AUDIT TIMELINE */}
       {activeTab === 'TIMELINE' && (
-        <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-xs">
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-6 shadow-xs text-[#273444] dark:text-[#E8EEF5]">
           <div className="space-y-6">
             {timeline.length === 0 ? (
-              <p className="text-xs text-slate-500 italic">No timeline events recorded.</p>
+              <p className="text-xs text-slate-500 dark:text-[#8194A8] italic">No timeline events recorded.</p>
             ) : (
               timeline.map((evt, idx) => (
                 <div key={evt.id || idx} className="relative flex items-start gap-4">
                   {idx < timeline.length - 1 && (
-                    <div className="absolute left-3.5 top-7 bottom-0 w-0.5 bg-slate-200 -z-0" />
+                    <div className="absolute left-3.5 top-7 bottom-0 w-0.5 bg-slate-200 dark:bg-[#33485D] -z-0" />
                   )}
-                  <div className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 border border-blue-300 flex items-center justify-center text-xs shrink-0 z-10">
+                  <div className="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-800 flex items-center justify-center text-xs shrink-0 z-10">
                     <Clock className="w-3.5 h-3.5" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold text-slate-900">{evt.title}</h4>
-                      <span className="text-[11px] font-mono text-slate-400">
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-[#E8EEF5]">{evt.title}</h4>
+                      <span className="text-[11px] font-mono text-slate-400 dark:text-[#8194A8]">
                         {new Date(evt.timestamp).toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-600 mt-0.5">{evt.description}</p>
-                    <div className="text-[10px] text-slate-400 font-mono mt-1">
+                    <p className="text-xs text-slate-600 dark:text-[#A9BACB] mt-0.5">{evt.description}</p>
+                    <div className="text-[10px] text-slate-400 dark:text-[#8194A8] font-mono mt-1">
                       Actor: {evt.actorName || 'System Service'} ({evt.actorRole || 'SYSTEM'})
                     </div>
                   </div>
@@ -650,10 +650,10 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
 
       {/* Tab 3: AUTHORITATIVE EVIDENCE */}
       {activeTab === 'EVIDENCE' && (
-        <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-xs space-y-4">
-          <div className="border-b border-slate-200 pb-3">
-            <h3 className="text-sm font-bold text-slate-900">Verified Evidence Records</h3>
-            <p className="text-xs text-slate-500">
+        <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-6 shadow-xs space-y-4 text-[#273444] dark:text-[#E8EEF5]">
+          <div className="border-b border-slate-200 dark:border-[#33485D] pb-3">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-[#E8EEF5]">Verified Evidence Records</h3>
+            <p className="text-xs text-slate-500 dark:text-[#8194A8]">
               Evidence is cryptographically and referentially verified against authoritative COREvia tables.
             </p>
           </div>
@@ -662,20 +662,20 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
             {steps
               .filter((s) => s.evidenceVerified)
               .map((s) => (
-                <div key={s.id} className="p-3.5 bg-slate-50 border border-slate-200 rounded-md">
+                <div key={s.id} className="p-3.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded-md">
                   <div className="flex items-center justify-between">
-                    <div className="font-semibold text-xs text-slate-900">{s.name}</div>
-                    <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    <div className="font-semibold text-xs text-slate-900 dark:text-[#E8EEF5]">{s.name}</div>
+                    <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
                       Verified at {s.verifiedAt ? new Date(s.verifiedAt).toLocaleString() : 'Completion'}
                     </span>
                   </div>
-                  <div className="mt-2 text-xs font-mono bg-white p-2.5 rounded border border-slate-200 text-slate-700 overflow-x-auto">
+                  <div className="mt-2 text-xs font-mono bg-white dark:bg-[#162638] p-2.5 rounded border border-slate-200 dark:border-[#33485D] text-slate-700 dark:text-[#E8EEF5] overflow-x-auto">
                     {JSON.stringify(s.completionEvidence || {}, null, 2)}
                   </div>
                 </div>
               ))}
             {steps.filter((s) => s.evidenceVerified).length === 0 && (
-              <p className="text-xs text-slate-500 italic">No verified completion evidence records yet.</p>
+              <p className="text-xs text-slate-500 dark:text-[#8194A8] italic">No verified completion evidence records yet.</p>
             )}
           </div>
         </div>
@@ -684,23 +684,23 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
       {/* MODAL 1: Handoff Ownership */}
       {isHandoffModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-              <h3 className="text-sm font-bold text-slate-900">Transfer Journey Ownership</h3>
+          <div className="bg-white dark:bg-[#162638] rounded-lg max-w-md w-full p-6 shadow-xl space-y-4 border border-slate-200 dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5]">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#33485D] pb-3">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-[#E8EEF5]">Transfer Journey Ownership</h3>
               <button
                 onClick={() => setIsHandoffModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 font-bold"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-[#E8EEF5] font-bold cursor-pointer"
               >
                 ×
               </button>
             </div>
             <form onSubmit={handleHandoff} className="space-y-4 text-xs">
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Target Department / Role</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Target Department / Role</label>
                 <select
                   value={handoffRole}
                   onChange={(e) => setHandoffRole(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-blue-600"
                 >
                   <option value="RELATIONSHIP_MANAGER">Relationship Manager (RM)</option>
                   <option value="KYC_OPERATIONS">KYC Operations</option>
@@ -712,13 +712,13 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
               </div>
 
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Handoff Rationale (Mandatory)</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Handoff Rationale (Mandatory)</label>
                 <textarea
                   rows={3}
                   value={handoffReason}
                   onChange={(e) => setHandoffReason(e.target.value)}
                   placeholder="Provide explicit operational context and reason for transferring responsibility..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] focus:outline-none focus:ring-1 focus:ring-blue-600"
                   required
                 />
               </div>
@@ -745,26 +745,26 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
       {/* MODAL 2: Escalate Journey */}
       {isEscalateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5 text-purple-900">
-                <ShieldAlert className="w-4 h-4 text-purple-700" />
+          <div className="bg-white dark:bg-[#162638] rounded-lg max-w-md w-full p-6 shadow-xl space-y-4 border border-slate-200 dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5]">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#33485D] pb-3">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-[#E8EEF5] flex items-center gap-1.5 text-purple-900 dark:text-purple-300">
+                <ShieldAlert className="w-4 h-4 text-purple-700 dark:text-purple-400" />
                 Escalate via Decision Trace
               </h3>
               <button
                 onClick={() => setIsEscalateModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 font-bold"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-[#E8EEF5] font-bold cursor-pointer"
               >
                 ×
               </button>
             </div>
             <form onSubmit={handleEscalate} className="space-y-4 text-xs">
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Escalation Urgency</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Escalation Urgency</label>
                 <select
                   value={escalationUrgency}
                   onChange={(e) => setEscalationUrgency(e.target.value as any)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                 >
                   <option value="MEDIUM">Medium Urgency</option>
                   <option value="HIGH">High Urgency</option>
@@ -773,13 +773,13 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
               </div>
 
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Escalation Context & Justification</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Escalation Context & Justification</label>
                 <textarea
                   rows={3}
                   value={escalationReason}
                   onChange={(e) => setEscalationReason(e.target.value)}
                   placeholder="Detail the prerequisite failure, SLA breach, or institutional blocker requiring supervisory review..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                   required
                 />
               </div>
@@ -806,23 +806,23 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
       {/* MODAL 3: Record Outcome */}
       {isOutcomeModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-              <h3 className="text-sm font-bold text-slate-900">Record Journey Lifecycle Outcome</h3>
+          <div className="bg-white dark:bg-[#162638] rounded-lg max-w-md w-full p-6 shadow-xl space-y-4 border border-slate-200 dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5]">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#33485D] pb-3">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-[#E8EEF5]">Record Journey Lifecycle Outcome</h3>
               <button
                 onClick={() => setIsOutcomeModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 font-bold"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-[#E8EEF5] font-bold cursor-pointer"
               >
                 ×
               </button>
             </div>
             <form onSubmit={handleRecordOutcome} className="space-y-4 text-xs">
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Outcome Status</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Outcome Status</label>
                 <select
                   value={outcomeType}
                   onChange={(e) => setOutcomeType(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                 >
                   <option value="GOAL_MET">Goal Fully Met (Success)</option>
                   <option value="PARTIALLY_MET">Partially Met</option>
@@ -833,13 +833,13 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
               </div>
 
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Outcome Summary Notes</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Outcome Summary Notes</label>
                 <textarea
                   rows={3}
                   value={outcomeNotes}
                   onChange={(e) => setOutcomeNotes(e.target.value)}
                   placeholder="Record definitive business outcome, conversion notes, or reasons for closure..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                   required
                 />
               </div>
@@ -866,28 +866,28 @@ export const CustomerJourneyWorkspace: React.FC<CustomerJourneyWorkspaceProps> =
       {/* MODAL 4: Step Blocker Dialog */}
       {isBlockModalOpen && selectedStep && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-              <h3 className="text-sm font-bold text-rose-900 flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 text-rose-600" />
+          <div className="bg-white dark:bg-[#162638] rounded-lg max-w-md w-full p-6 shadow-xl space-y-4 border border-slate-200 dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5]">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#33485D] pb-3">
+              <h3 className="text-sm font-bold text-rose-900 dark:text-rose-300 flex items-center gap-1.5">
+                <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                 Block Step: {selectedStep.name}
               </h3>
               <button
                 onClick={() => setIsBlockModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 font-bold"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-[#E8EEF5] font-bold cursor-pointer"
               >
                 ×
               </button>
             </div>
             <div className="space-y-4 text-xs">
               <div>
-                <label className="block font-medium text-slate-700 mb-1">Blocker Reason (Required)</label>
+                <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Blocker Reason (Required)</label>
                 <textarea
                   rows={3}
                   value={blockerReason}
                   onChange={(e) => setBlockerReason(e.target.value)}
                   placeholder="Specify why this step is blocked (e.g. Missing Aadhaar OTP, Pending FIU-IND sanction check)..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                   required
                 />
               </div>

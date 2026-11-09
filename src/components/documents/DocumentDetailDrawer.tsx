@@ -203,25 +203,25 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-slate-950/60 backdrop-blur-xs flex justify-end">
-      <div className="w-full max-w-2xl bg-white h-full shadow-2xl flex flex-col border-l border-slate-200">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-slate-950/60 dark:bg-black/80 backdrop-blur-xs flex justify-end">
+      <div className="w-full max-w-2xl bg-white dark:bg-[#162638] h-full shadow-2xl flex flex-col border-l border-slate-200 dark:border-[#33485D]">
         {/* Drawer Header */}
-        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/90 flex items-center justify-between shrink-0">
+        <div className="px-6 py-4 border-b border-slate-200 dark:border-[#33485D] bg-slate-50/90 dark:bg-[#101C2A] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-md bg-slate-900 text-white flex items-center justify-center">
-              <FileText className="w-5 h-5 text-amber-400" />
+            <div className="w-9 h-9 rounded-md bg-slate-900 dark:bg-cyan-600 text-white flex items-center justify-center">
+              <FileText className="w-5 h-5 text-amber-400 dark:text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-slate-700">{doc?.documentCode || 'Loading...'}</span>
+                <span className="text-xs font-mono font-bold text-slate-700 dark:text-[#A9BACB]">{doc?.documentCode || 'Loading...'}</span>
                 {doc && getStatusBadge(doc.status)}
                 {doc && (
-                  <span className="text-[11px] px-2 py-0.5 font-mono font-medium rounded bg-slate-200 text-slate-800">
+                  <span className="text-[11px] px-2 py-0.5 font-mono font-medium rounded bg-slate-200 dark:bg-[#101C2A] text-slate-800 dark:text-[#E8EEF5] border dark:border-[#33485D]">
                     v{doc.currentVersion}.0
                   </span>
                 )}
               </div>
-              <h2 className="text-sm font-semibold text-slate-900 truncate max-w-md">
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-[#E8EEF5] truncate max-w-md">
                 {doc?.title || 'Document Record'}
               </h2>
             </div>
@@ -231,7 +231,7 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
               <a
                 href={`/api/documents/${doc.id}/download`}
                 download
-                className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 rounded-md transition-colors"
+                className="p-1.5 text-slate-600 dark:text-[#A9BACB] hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-[#101C2A] rounded-md transition-colors cursor-pointer"
                 title="Download Synthetic Artifact"
               >
                 <Download className="w-4 h-4" />
@@ -239,7 +239,7 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
             )}
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200/70 rounded-md transition-colors"
+              className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/70 dark:hover:bg-[#101C2A] rounded-md transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -247,13 +247,13 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
         </div>
 
         {/* Drawer Tabs */}
-        <div className="flex border-b border-slate-200 px-6 bg-white shrink-0">
+        <div className="flex border-b border-slate-200 dark:border-[#33485D] px-6 bg-white dark:bg-[#162638] shrink-0">
           <button
             onClick={() => setActiveTab('OVERVIEW')}
-            className={`py-2.5 px-3 text-xs font-medium border-b-2 transition-colors ${
+            className={`py-2.5 px-3 text-xs font-medium border-b-2 transition-colors cursor-pointer ${
               activeTab === 'OVERVIEW'
-                ? 'border-slate-900 text-slate-900 font-semibold'
-                : 'border-transparent text-slate-500 hover:text-slate-700'
+                ? 'border-slate-900 dark:border-cyan-400 text-slate-900 dark:text-[#E8EEF5] font-semibold'
+                : 'border-transparent text-slate-500 dark:text-[#A9BACB] hover:text-slate-700 dark:hover:text-white'
             }`}
           >
             Overview & Metadata
@@ -333,28 +333,28 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
                   </div>
 
                   {/* Customer and Association Details */}
-                  <div className="p-4 border border-slate-200 rounded-md bg-white space-y-3">
-                    <div className="text-xs font-semibold text-slate-900 uppercase tracking-wider">
+                  <div className="p-4 border border-slate-200 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] space-y-3">
+                    <div className="text-xs font-semibold text-slate-900 dark:text-[#E8EEF5] uppercase tracking-wider">
                       Associated Entity
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                       <div>
-                        <span className="text-slate-500 block">Customer Name:</span>
-                        <span className="font-semibold text-slate-900">{doc.customer?.name || 'N/A'}</span>
+                        <span className="text-slate-500 dark:text-[#A9BACB] block">Customer Name:</span>
+                        <span className="font-semibold text-slate-900 dark:text-[#E8EEF5]">{doc.customer?.name || 'N/A'}</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block">Customer Code / CIF:</span>
-                        <span className="font-mono text-slate-800">{doc.customer?.customerCode || 'N/A'}</span>
+                        <span className="text-slate-500 dark:text-[#A9BACB] block">Customer Code / CIF:</span>
+                        <span className="font-mono text-slate-800 dark:text-[#E8EEF5]">{doc.customer?.customerCode || 'N/A'}</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block">Linked Relationship:</span>
-                        <span className="font-medium text-slate-800">
+                        <span className="text-slate-500 dark:text-[#A9BACB] block">Linked Relationship:</span>
+                        <span className="font-medium text-slate-800 dark:text-[#E8EEF5]">
                           {doc.relatedEntityType || 'CUSTOMER'} {doc.relatedEntityId ? `(${doc.relatedEntityId})` : ''}
                         </span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block">Issuing Authority:</span>
-                        <span className="text-slate-800">{doc.issuingAuthority || 'Not Specified'}</span>
+                        <span className="text-slate-500 dark:text-[#A9BACB] block">Issuing Authority:</span>
+                        <span className="text-slate-800 dark:text-[#E8EEF5]">{doc.issuingAuthority || 'Not Specified'}</span>
                       </div>
                     </div>
                   </div>
@@ -401,37 +401,37 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
                   )}
 
                   {/* Actions Bar */}
-                  <div className="p-4 border border-slate-200 rounded-md bg-white space-y-3">
-                    <div className="text-xs font-semibold text-slate-900 uppercase tracking-wider">
+                  <div className="p-4 border border-slate-200 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] space-y-3">
+                    <div className="text-xs font-semibold text-slate-900 dark:text-[#E8EEF5] uppercase tracking-wider">
                       Maker-Checker Review Actions
                     </div>
                     <div className="flex flex-wrap gap-2.5">
                       <button
                         onClick={() => setReviewAction('VERIFY')}
-                        className="px-3 py-2 text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-800 rounded-md shadow-xs flex items-center gap-1.5"
+                        className="px-3 py-2 text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-800 rounded-md shadow-xs flex items-center gap-1.5 cursor-pointer"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>Verify & Approve</span>
                       </button>
                       <button
                         onClick={() => setReviewAction('REJECT')}
-                        className="px-3 py-2 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-300 hover:bg-rose-100 rounded-md flex items-center gap-1.5"
+                        className="px-3 py-2 text-xs font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-900/50 hover:bg-rose-100 dark:hover:bg-rose-900/50 rounded-md flex items-center gap-1.5 cursor-pointer"
                       >
                         <XCircle className="w-3.5 h-3.5" />
                         <span>Reject Document</span>
                       </button>
                       <button
                         onClick={() => setReviewAction('REPLACE')}
-                        className="px-3 py-2 text-xs font-semibold text-amber-900 bg-amber-50 border border-amber-300 hover:bg-amber-100 rounded-md flex items-center gap-1.5"
+                        className="px-3 py-2 text-xs font-semibold text-amber-900 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-900/50 hover:bg-amber-100 dark:hover:bg-amber-900/50 rounded-md flex items-center gap-1.5 cursor-pointer"
                       >
                         <AlertTriangle className="w-3.5 h-3.5" />
                         <span>Request Replacement</span>
                       </button>
                       <button
                         onClick={() => setIsReplacingVersion(true)}
-                        className="px-3 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-md flex items-center gap-1.5 ml-auto"
+                        className="px-3 py-2 text-xs font-medium text-slate-700 dark:text-[#A9BACB] bg-white dark:bg-[#162638] border border-slate-300 dark:border-[#33485D] hover:bg-slate-50 dark:hover:bg-[#192B3D] rounded-md flex items-center gap-1.5 ml-auto cursor-pointer"
                       >
-                        <Layers className="w-3.5 h-3.5 text-slate-500" />
+                        <Layers className="w-3.5 h-3.5 text-slate-500 dark:text-[#A9BACB]" />
                         <span>Upload New Version</span>
                       </button>
                     </div>
@@ -443,10 +443,10 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
               {activeTab === 'VERSIONS' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">
+                    <h3 className="text-xs font-semibold text-slate-900 dark:text-[#E8EEF5] uppercase tracking-wider">
                       Version Audit Trail
                     </h3>
-                    <span className="text-xs text-slate-500">Current Active: v{doc.currentVersion}.0</span>
+                    <span className="text-xs text-slate-500 dark:text-[#A9BACB]">Current Active: v{doc.currentVersion}.0</span>
                   </div>
 
                   <div className="space-y-3">
@@ -455,23 +455,23 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
                         key={v.id}
                         className={`p-3.5 border rounded-md transition-all ${
                           v.versionNumber === doc.currentVersion
-                            ? 'border-slate-900 bg-slate-50/60 shadow-xs'
-                            : 'border-slate-200 bg-white'
+                            ? 'border-slate-900 dark:border-cyan-400 bg-slate-50/60 dark:bg-[#101C2A] shadow-xs'
+                            : 'border-slate-200 dark:border-[#33485D] bg-white dark:bg-[#101C2A]'
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold text-slate-900">
+                            <span className="font-mono text-xs font-bold text-slate-900 dark:text-[#E8EEF5]">
                               v{v.versionNumber}.0
                             </span>
                             {v.versionNumber === doc.currentVersion && (
-                              <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-slate-900 text-white uppercase">
+                              <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-slate-900 dark:bg-cyan-600 text-white uppercase">
                                 Active
                               </span>
                             )}
-                            <span className="text-xs text-slate-500 font-mono">{v.fileName}</span>
+                            <span className="text-xs text-slate-500 dark:text-[#A9BACB] font-mono">{v.fileName}</span>
                           </div>
-                          <span className="text-[11px] text-slate-400">
+                          <span className="text-[11px] text-slate-400 dark:text-slate-500">
                             {new Date(v.createdAt).toLocaleDateString('en-IN', {
                               day: '2-digit',
                               month: 'short',
@@ -483,12 +483,12 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
                         </div>
 
                         {v.changeReason && (
-                          <div className="text-xs text-slate-600 mt-2 bg-white p-2 rounded border border-slate-200">
-                            <span className="font-semibold text-slate-700">Change Reason:</span> {v.changeReason}
+                          <div className="text-xs text-slate-600 dark:text-[#A9BACB] mt-2 bg-white dark:bg-[#162638] p-2 rounded border border-slate-200 dark:border-[#33485D]">
+                            <span className="font-semibold text-slate-700 dark:text-[#E8EEF5]">Change Reason:</span> {v.changeReason}
                           </div>
                         )}
 
-                        <div className="mt-2 text-[11px] text-slate-500 font-mono truncate">
+                        <div className="mt-2 text-[11px] text-slate-500 dark:text-[#A9BACB] font-mono truncate">
                           SHA: {v.fileHash}
                         </div>
                       </div>
@@ -501,24 +501,24 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
               {activeTab === 'REVIEW' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">
+                    <h3 className="text-xs font-semibold text-slate-900 dark:text-[#E8EEF5] uppercase tracking-wider">
                       Compliance Review History
                     </h3>
                   </div>
 
                   {doc.reviews?.length === 0 ? (
-                    <div className="p-8 text-center border border-dashed border-slate-200 rounded-md text-xs text-slate-400">
+                    <div className="p-8 text-center border border-dashed border-slate-200 dark:border-[#33485D] rounded-md text-xs text-slate-400 dark:text-[#A9BACB]">
                       No formal review logs recorded yet. Use the review actions in Overview to verify or reject.
                     </div>
                   ) : (
                     <div className="space-y-3">
                       {doc.reviews?.map((r: any) => (
-                        <div key={r.id} className="p-3.5 border border-slate-200 rounded-md bg-white space-y-1.5">
+                        <div key={r.id} className="p-3.5 border border-slate-200 dark:border-[#33485D] rounded-md bg-white dark:bg-[#101C2A] space-y-1.5">
                           <div className="flex items-center justify-between text-xs">
-                            <span className="font-semibold text-slate-900">
+                            <span className="font-semibold text-slate-900 dark:text-[#E8EEF5]">
                               {r.decision} by {r.reviewer?.name || 'Officer'} ({r.reviewerRole})
                             </span>
-                            <span className="text-[11px] text-slate-400">
+                            <span className="text-[11px] text-slate-400 dark:text-slate-500">
                               {new Date(r.reviewedAt).toLocaleDateString('en-IN', {
                                 day: '2-digit',
                                 month: 'short',
@@ -649,26 +649,26 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
 
         {/* Action Dialog Modal Overlays */}
         {reviewAction && (
-          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-950/70">
-            <div className="w-full max-w-md bg-white rounded-lg shadow-2xl border border-slate-200 p-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-                <h3 className="text-sm font-semibold text-slate-900">
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-950/70 dark:bg-black/80 backdrop-blur-xs">
+            <div className="w-full max-w-md bg-white dark:bg-[#162638] rounded-lg shadow-2xl border border-slate-200 dark:border-[#33485D] p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#33485D] pb-3">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-[#E8EEF5]">
                   {reviewAction === 'VERIFY' && 'Verify & Approve Document'}
                   {reviewAction === 'REJECT' && 'Reject Document with Deficiency Notice'}
                   {reviewAction === 'REPLACE' && 'Request Document Replacement'}
                 </h3>
-                <button onClick={() => setReviewAction(null)} className="text-slate-400 hover:text-slate-600">
+                <button onClick={() => setReviewAction(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {reviewAction === 'REJECT' && (
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-700">Rejection Classification</label>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB]">Rejection Classification</label>
                   <select
                     value={rejectionReason}
                     onChange={(e) => setRejectionReason(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-md text-xs bg-white text-slate-900"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                   >
                     <option value="UNREADABLE_IMAGE">Blurry, cropped, or illegible image</option>
                     <option value="EXPIRED_DOCUMENT">Document has expired past statutory threshold</option>
@@ -681,18 +681,18 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
 
               {reviewAction === 'REPLACE' && (
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-700">Replacement Due Date</label>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB]">Replacement Due Date</label>
                   <input
                     type="date"
                     value={replacementDueDate}
                     onChange={(e) => setReplacementDueDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-md text-xs bg-white text-slate-900"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                   />
                 </div>
               )}
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-700">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB]">
                   {reviewAction === 'VERIFY' ? 'Review Comments (Optional)' : 'Remarks & Guidance for RM / Customer *'}
                 </label>
                 <textarea
@@ -704,15 +704,15 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
                       ? 'Verified against statutory parameters...'
                       : 'Provide explicit reasons and remediation guidance...'
                   }
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md text-xs bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                   required={reviewAction !== 'VERIFY'}
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-200">
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-[#33485D]">
                 <button
                   onClick={() => setReviewAction(null)}
-                  className="px-3 py-1.5 text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-50"
+                  className="px-3 py-1.5 text-xs text-slate-600 dark:text-[#A9BACB] bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded-md hover:bg-slate-50 dark:hover:bg-[#192B3D] cursor-pointer"
                   disabled={isProcessingAction}
                 >
                   Cancel
@@ -724,7 +724,7 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
                     else if (reviewAction === 'REPLACE') handleRequestReplacement();
                   }}
                   disabled={isProcessingAction}
-                  className={`px-3 py-1.5 text-xs font-semibold text-white rounded-md shadow-xs ${
+                  className={`px-3 py-1.5 text-xs font-semibold text-white rounded-md shadow-xs cursor-pointer ${
                     reviewAction === 'VERIFY'
                       ? 'bg-emerald-700 hover:bg-emerald-800'
                       : reviewAction === 'REJECT'
@@ -741,36 +741,36 @@ export const DocumentDetailDrawer: React.FC<DocumentDetailDrawerProps> = ({
 
         {/* Upload New Version Overlay */}
         {isReplacingVersion && (
-          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-950/70">
-            <form onSubmit={handleReplaceVersion} className="w-full max-w-md bg-white rounded-lg shadow-2xl border border-slate-200 p-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-                <h3 className="text-sm font-semibold text-slate-900">Upload New Version (v{doc.currentVersion + 1}.0)</h3>
-                <button type="button" onClick={() => setIsReplacingVersion(false)} className="text-slate-400 hover:text-slate-600">
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-950/70 dark:bg-black/80 backdrop-blur-xs">
+            <form onSubmit={handleReplaceVersion} className="w-full max-w-md bg-white dark:bg-[#162638] rounded-lg shadow-2xl border border-slate-200 dark:border-[#33485D] p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#33485D] pb-3">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-[#E8EEF5]">Upload New Version (v{doc.currentVersion + 1}.0)</h3>
+                <button type="button" onClick={() => setIsReplacingVersion(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="p-3 bg-amber-50 border border-amber-200 rounded-md text-xs text-amber-900">
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 rounded-md text-xs text-amber-900 dark:text-amber-300">
                 A new version will be archived. Prior version v{doc.currentVersion}.0 remains permanently accessible in the historical audit chain.
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-700">Reason for Version Update *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB]">Reason for Version Update *</label>
                 <input
                   type="text"
                   value={replaceReason}
                   onChange={(e) => setReplaceReason(e.target.value)}
                   placeholder="e.g. Updated annual filing received from customer"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md text-xs bg-white text-slate-900"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-[#33485D] rounded-md text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5]"
                   required
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-200">
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-[#33485D]">
                 <button
                   type="button"
                   onClick={() => setIsReplacingVersion(false)}
-                  className="px-3 py-1.5 text-xs text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-50"
+                  className="px-3 py-1.5 text-xs text-slate-600 dark:text-[#A9BACB] bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] rounded-md hover:bg-slate-50 dark:hover:bg-[#192B3D] cursor-pointer"
                   disabled={isProcessingAction}
                 >
                   Cancel

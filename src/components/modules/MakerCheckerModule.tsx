@@ -235,14 +235,14 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-200 rounded">
-        <div className="p-3.5 border-b border-slate-200 flex items-center justify-between">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded text-[#273444] dark:text-[#E8EEF5]">
+        <div className="p-3.5 border-b border-slate-200 dark:border-[#33485D] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CheckCheck className="w-4 h-4 text-slate-700" />
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-800">
+            <CheckCheck className="w-4 h-4 text-slate-700 dark:text-[#E8EEF5]" />
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-800 dark:text-[#E8EEF5]">
               Active Authorization Queue
             </h2>
-            <span className="font-mono text-xs px-1.5 py-0.2 bg-slate-100 text-slate-600 rounded">
+            <span className="font-mono text-xs px-1.5 py-0.2 bg-slate-100 dark:bg-[#101C2A] text-slate-600 dark:text-[#A9BACB] rounded border border-transparent dark:border-[#33485D]">
               {pendingAuthorizations.length} items
             </span>
           </div>
@@ -355,17 +355,17 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
             </div>
 
             {/* Maker Identification */}
-            <div className="border border-slate-200 rounded p-3 bg-white space-y-1.5">
-              <div className="font-semibold text-slate-900 text-[11px] uppercase tracking-wide border-b border-slate-100 pb-1">
+            <div className="border border-slate-200 dark:border-[#33485D] rounded p-3 bg-white dark:bg-[#162638] space-y-1.5 text-xs text-[#273444] dark:text-[#E8EEF5]">
+              <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] text-[11px] uppercase tracking-wide border-b border-slate-100 dark:border-[#33485D] pb-1">
                 Initiating Maker Credentials
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Maker Officer:</span>
-                <span className="font-medium text-slate-900">{activeItem.makerUserName}</span>
+                <span className="text-slate-500 dark:text-[#8194A8]">Maker Officer:</span>
+                <span className="font-medium text-slate-900 dark:text-[#E8EEF5]">{activeItem.makerUserName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Employee ID / Role:</span>
-                <span className="font-mono text-slate-700">{activeItem.makerUserId} ({activeItem.makerRole})</span>
+                <span className="text-slate-500 dark:text-[#8194A8]">Employee ID / Role:</span>
+                <span className="font-mono text-slate-700 dark:text-[#A9BACB]">{activeItem.makerUserId} ({activeItem.makerRole})</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Timestamp:</span>
@@ -426,14 +426,14 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
 
             {/* Parameter Details */}
             {activeItem.details && (
-              <div className="border border-slate-200 rounded p-3 bg-white space-y-1.5">
-                <div className="font-semibold text-slate-900 text-[11px] uppercase tracking-wide border-b border-slate-100 pb-1">
+              <div className="border border-slate-200 dark:border-[#33485D] rounded p-3 bg-white dark:bg-[#162638] space-y-1.5 text-xs text-[#273444] dark:text-[#E8EEF5]">
+                <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] text-[11px] uppercase tracking-wide border-b border-slate-100 dark:border-[#33485D] pb-1">
                   Voucher Parameter Specifications
                 </div>
                 {Object.entries(activeItem.details).map(([k, v]) => (
                   <div key={k} className="flex justify-between">
-                    <span className="text-slate-500 capitalize">{k.replace(/([A-Z])/g, ' $1')}:</span>
-                    <span className="font-mono font-medium text-slate-900">{String(v)}</span>
+                    <span className="text-slate-500 dark:text-[#8194A8] capitalize">{k.replace(/([A-Z])/g, ' $1')}:</span>
+                    <span className="font-mono font-medium text-slate-900 dark:text-[#E8EEF5]">{String(v)}</span>
                   </div>
                 ))}
               </div>
@@ -442,7 +442,7 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
             {/* Mandatory Checker Remarks Input */}
             {canAuthorize && !isOwnVoucher ? (
               <div className="space-y-1.5">
-                <label className="block font-semibold text-slate-900 text-[11px] uppercase tracking-wide">
+                <label className="block font-semibold text-slate-900 dark:text-[#E8EEF5] text-[11px] uppercase tracking-wide">
                   Mandatory Checker Verification Remark <span className="text-rose-600">*</span>
                 </label>
                 <textarea
@@ -453,8 +453,8 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
                     setCheckerRemark(e.target.value);
                     if (remarkError) setRemarkError(false);
                   }}
-                  className={`w-full p-2 text-xs bg-slate-50 border rounded focus:bg-white focus:outline-none focus:ring-1 ${
-                    remarkError ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-300 focus:ring-slate-400'
+                  className={`w-full p-2 text-xs bg-slate-50 dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border rounded focus:bg-white dark:focus:bg-[#101C2A] focus:outline-none focus:ring-1 ${
+                    remarkError ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-300 dark:border-[#33485D] focus:ring-slate-400'
                   }`}
                 />
                 {remarkError && (

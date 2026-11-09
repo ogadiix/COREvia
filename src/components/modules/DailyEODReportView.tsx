@@ -383,7 +383,7 @@ export const DailyEODReportView: React.FC<DailyEODReportViewProps> = ({
           <Button
             size="sm"
             variant="outline"
-            className="bg-white text-slate-900 hover:bg-slate-100 font-medium"
+            className="bg-white dark:bg-[#162638] text-slate-900 dark:text-[#E8EEF5] hover:bg-slate-100 dark:hover:bg-[#1C3045] border border-slate-200 dark:border-[#33485D] font-medium"
             onClick={handleRunDiagnostic}
             icon={<RefreshCw className="w-3.5 h-3.5" />}
           >
@@ -472,7 +472,7 @@ export const DailyEODReportView: React.FC<DailyEODReportViewProps> = ({
       </div>
 
       {/* SECTION 1: END-OF-DAY BALANCES SUMMARY & TRIAL BALANCE */}
-      <div className="bg-white border border-slate-200 rounded p-4 space-y-4">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 space-y-4 text-[#273444] dark:text-[#E8EEF5]">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
           <div className="flex items-center gap-2">
             <Building className="w-4 h-4 text-slate-700" />
@@ -570,7 +570,7 @@ export const DailyEODReportView: React.FC<DailyEODReportViewProps> = ({
       </div>
 
       {/* SECTION 2: TRANSACTION TOTALS BY TYPE & SETTLEMENT RAIL */}
-      <div className="bg-white border border-slate-200 rounded p-4 space-y-4">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 space-y-4 text-[#273444] dark:text-[#E8EEF5]">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
           <div className="flex items-center gap-2">
             <ArrowDownUp className="w-4 h-4 text-slate-700" />
@@ -658,7 +658,7 @@ export const DailyEODReportView: React.FC<DailyEODReportViewProps> = ({
       </div>
 
       {/* SECTION 3: REGULATORY FLAGS OBSERVED DURING THE BUSINESS DAY */}
-      <div className="bg-white border border-slate-200 rounded p-4 space-y-3">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 space-y-3 text-[#273444] dark:text-[#E8EEF5]">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-4 h-4 text-slate-700" />
@@ -683,7 +683,7 @@ export const DailyEODReportView: React.FC<DailyEODReportViewProps> = ({
       </div>
 
       {/* SECTION 4: DAY-END SUPERVISORY CLOSING SCROLL & DIGITAL SIGN-OFF */}
-      <div className="bg-white border border-slate-200 rounded p-4 space-y-4">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded p-4 space-y-4 text-[#273444] dark:text-[#E8EEF5]">
         <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
           <div className="flex items-center gap-2">
             <Landmark className="w-4 h-4 text-slate-700" />

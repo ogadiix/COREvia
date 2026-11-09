@@ -129,7 +129,7 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
   return (
     <div className="space-y-5">
       {/* Top Banner */}
-      <div className="bg-white border border-[#DCE3EA] dark:border-[#33485D] rounded p-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded p-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-[#142C45] dark:text-[#E8EEF5]" />
@@ -231,7 +231,7 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
 
       {/* Tab 1: Audit Logs */}
       {activeTab === 'audit-logs' && (
-        <div className="bg-white border border-[#DCE3EA] dark:border-[#33485D] rounded">
+        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded">
           <div className="p-3 border-b border-[#DCE3EA] dark:border-[#33485D] flex justify-between items-center text-xs">
             <span className="font-medium text-[#2D3F54] dark:text-[#CBD5E1]">
               Sequential Ledger & Security Audit Journal (Host: CBS-PROD-01)
@@ -248,7 +248,7 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
 
       {/* Tab 2: RBI Form A */}
       {activeTab === 'rbi-form-a' && (
-        <div className="bg-white border border-[#DCE3EA] dark:border-[#33485D] rounded p-5 space-y-4 text-xs">
+        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded p-5 space-y-4 text-xs">
           <div className="flex justify-between items-start pb-3 border-b border-[#DCE3EA] dark:border-[#33485D]">
             <div>
               <h3 className="font-bold text-[#142C45] dark:text-[#E8EEF5] text-sm">
@@ -310,7 +310,7 @@ export const AuditRegulatoryModule: React.FC<AuditRegulatoryModuleProps> = ({
 
       {/* Tab 3: FIU-IND Reports */}
       {activeTab === 'fiu-reports' && (
-        <div className="bg-white border border-[#DCE3EA] dark:border-[#33485D] rounded p-5 space-y-4 text-xs">
+        <div className="bg-white dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded p-5 space-y-4 text-xs">
           <div className="flex justify-between items-start pb-3 border-b border-[#DCE3EA] dark:border-[#33485D]">
             <div>
               <h3 className="font-bold text-[#142C45] dark:text-[#E8EEF5] text-sm">

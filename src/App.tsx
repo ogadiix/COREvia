@@ -800,17 +800,17 @@ function BankingWorkplace() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#f1f5f9] flex flex-col items-center justify-center p-6 text-slate-800 font-sans">
-        <div className="bg-white border border-slate-300 rounded-lg p-8 max-w-sm w-full shadow-sm text-center space-y-4">
-          <div className="w-12 h-12 rounded bg-[#0b1626] flex items-center justify-center text-amber-400 mx-auto shadow-2xs">
+      <div className="min-h-screen bg-[#F4F6F8] dark:bg-[#080F19] flex flex-col items-center justify-center p-6 text-slate-800 dark:text-[#E8EEF5] font-sans">
+        <div className="bg-white dark:bg-[#162638] border border-slate-300 dark:border-[#33485D] rounded-lg p-8 max-w-sm w-full shadow-sm text-center space-y-4">
+          <div className="w-12 h-12 rounded bg-[#0b1626] dark:bg-[#101C2A] flex items-center justify-center text-amber-400 mx-auto shadow-2xs border border-transparent dark:border-[#33485D]">
             <ShieldCheck className="w-7 h-7" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-slate-900">COREvia Terminal Gateway</h2>
-            <p className="text-xs text-slate-500 mt-1">Verifying encrypted security session & TLS connection...</p>
+            <h2 className="text-base font-bold text-slate-900 dark:text-[#E8EEF5]">COREvia Terminal Gateway</h2>
+            <p className="text-xs text-slate-500 dark:text-[#8194A8] mt-1">Verifying encrypted security session & TLS connection...</p>
           </div>
-          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div className="bg-[#0b1626] h-1.5 rounded-full animate-pulse w-2/3 mx-auto" />
+          <div className="w-full bg-slate-100 dark:bg-[#101C2A] rounded-full h-1.5 overflow-hidden">
+            <div className="bg-[#0b1626] dark:bg-[#168C83] h-1.5 rounded-full animate-pulse w-2/3 mx-auto" />
           </div>
         </div>
       </div>

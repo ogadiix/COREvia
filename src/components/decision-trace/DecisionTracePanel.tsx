@@ -154,9 +154,9 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
 
       {/* Slide-over Sheet / Panel */}
       <div className="absolute inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10 w-full sm:w-auto">
-        <div className="w-full sm:w-[500px] md:w-[580px] max-w-full bg-white border-l border-slate-200 shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
+        <div className="w-full sm:w-[500px] md:w-[580px] max-w-full bg-white dark:bg-[#162638] border-l border-slate-200 dark:border-[#33485D] shadow-2xl flex flex-col animate-in slide-in-from-right duration-200 text-[#273444] dark:text-[#E8EEF5]">
           {/* Header */}
-          <div className="px-5 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
+          <div className="px-5 py-4 bg-slate-900 dark:bg-[#101C2A] text-white flex items-center justify-between shrink-0 border-b border-transparent dark:border-[#33485D]">
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 rounded bg-indigo-500/20 border border-indigo-400 text-indigo-300 flex items-center justify-center font-bold text-xs">
                 DT
@@ -165,7 +165,7 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-bold text-white tracking-tight">AI Decision Trace</h3>
                   {trace && (
-                    <span className="font-mono text-[10px] px-1.5 py-0.2 bg-slate-800 text-slate-300 rounded border border-slate-700">
+                    <span className="font-mono text-[10px] px-1.5 py-0.2 bg-slate-800 dark:bg-[#1C3045] text-slate-300 rounded border border-slate-700 dark:border-[#33485D]">
                       {trace.decisionId}
                     </span>
                   )}
@@ -178,7 +178,7 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+              className="p-1.5 rounded text-slate-400 hover:text-white hover:bg-slate-800 dark:hover:bg-[#1C3045] transition cursor-pointer"
               title="Close panel"
             >
               <X className="w-5 h-5" />
@@ -186,7 +186,7 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex items-center px-5 bg-slate-100/80 border-b border-slate-200 text-xs shrink-0">
+          <div className="flex items-center px-5 bg-slate-100/80 dark:bg-[#101C2A] border-b border-slate-200 dark:border-[#33485D] text-xs shrink-0">
             {[
               { id: 'OVERVIEW', label: 'Overview' },
               { id: 'EVIDENCE', label: `Evidence (${trace?.evidence?.length || 0})` },
@@ -198,8 +198,8 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`py-2.5 px-3 font-medium border-b-2 transition-colors cursor-pointer ${
                   activeTab === tab.id
-                    ? 'border-indigo-600 text-indigo-700 font-bold'
-                    : 'border-transparent text-slate-600 hover:text-slate-900'
+                    ? 'border-indigo-600 dark:border-indigo-400 text-indigo-700 dark:text-indigo-300 font-bold'
+                    : 'border-transparent text-slate-600 dark:text-[#8194A8] hover:text-slate-900 dark:hover:text-[#E8EEF5]'
                 }`}
               >
                 {tab.label}
@@ -210,25 +210,25 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
           {/* Panel Content Body */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
             {loading && (
-              <div className="py-16 text-center text-slate-500">
+              <div className="py-16 text-center text-slate-500 dark:text-[#8194A8]">
                 <div className="w-7 h-7 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
                 <span className="font-medium">Retrieving verified decision trace & evidence...</span>
               </div>
             )}
 
             {error && (
-              <div className="p-4 bg-rose-50 border border-rose-200 rounded-lg text-rose-800 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600" />
+              <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-lg text-rose-800 dark:text-rose-300 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
                 <span>{error}</span>
               </div>
             )}
 
             {actionFeedback && (
-              <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-lg text-indigo-900 flex items-center justify-between">
+              <div className="p-3 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/60 rounded-lg text-indigo-900 dark:text-indigo-200 flex items-center justify-between">
                 <span>{actionFeedback}</span>
                 <button
                   onClick={() => setActionFeedback(null)}
-                  className="text-xs text-indigo-600 hover:underline"
+                  className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
                 >
                   Dismiss
                 </button>
@@ -241,54 +241,54 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                 {activeTab === 'OVERVIEW' && (
                   <div className="space-y-4">
                     {/* Recommendation Card */}
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <div className="p-4 bg-slate-50 dark:bg-[#101C2A] rounded-xl border border-slate-200 dark:border-[#33485D] space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-indigo-700 uppercase tracking-wider font-mono">
+                        <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider font-mono">
                           {trace.sourceEngine.replace(/_/g, ' ')} • {trace.decisionType.replace(/_/g, ' ')}
                         </span>
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase ${
                             trace.decisionStatus === 'EXECUTED'
-                              ? 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                               : trace.decisionStatus === 'CONFIRMED'
-                              ? 'bg-sky-100 text-sky-800'
+                              ? 'bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-800'
                               : trace.decisionStatus === 'REJECTED'
-                              ? 'bg-rose-100 text-rose-800'
-                              : 'bg-amber-100 text-amber-800'
+                              ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
+                              : 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                           }`}
                         >
                           {trace.decisionStatus}
                         </span>
                       </div>
 
-                      <h2 className="text-sm font-bold text-slate-900 leading-snug">
+                      <h2 className="text-sm font-bold text-slate-900 dark:text-[#E8EEF5] leading-snug">
                         {trace.recommendationTitle}
                       </h2>
 
-                      <p className="text-slate-700 leading-relaxed bg-white p-3 rounded-lg border border-slate-200/80">
+                      <p className="text-slate-700 dark:text-[#E8EEF5] leading-relaxed bg-white dark:bg-[#162638] p-3 rounded-lg border border-slate-200/80 dark:border-[#33485D]">
                         {trace.recommendationSummary}
                       </p>
 
                       {/* Decision Basis & Confidence */}
-                      <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200 text-[11px]">
+                      <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200 dark:border-[#33485D] text-[11px]">
                         <div>
-                          <span className="text-slate-500 block">Decision Basis:</span>
-                          <span className="font-semibold text-slate-800">
+                          <span className="text-slate-500 dark:text-[#8194A8] block">Decision Basis:</span>
+                          <span className="font-semibold text-slate-800 dark:text-[#E8EEF5]">
                             {trace.confidenceBasis} ({trace.decisionMode})
                           </span>
                         </div>
                         <div>
-                          <span className="text-slate-500 block">Engine Confidence:</span>
-                          <span className="font-mono text-slate-800 font-semibold">
+                          <span className="text-slate-500 dark:text-[#8194A8] block">Engine Confidence:</span>
+                          <span className="font-mono text-slate-800 dark:text-[#E8EEF5] font-semibold">
                             {trace.confidence ? trace.confidence : 'Not provided by source engine'}
                           </span>
                         </div>
                       </div>
 
                       {trace.customerName && (
-                        <div className="flex items-center justify-between pt-1 border-t border-slate-200 text-[11px]">
-                          <span className="text-slate-500">Customer:</span>
-                          <span className="font-semibold text-indigo-900 font-mono">
+                        <div className="flex items-center justify-between pt-1 border-t border-slate-200 dark:border-[#33485D] text-[11px]">
+                          <span className="text-slate-500 dark:text-[#8194A8]">Customer:</span>
+                          <span className="font-semibold text-indigo-900 dark:text-indigo-300 font-mono">
                             {trace.customerName} ({trace.customerCif})
                           </span>
                         </div>
@@ -297,25 +297,25 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
 
                     {/* Data Freshness Breakdown */}
                     <div>
-                      <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-slate-500" />
+                      <h4 className="text-xs font-bold text-slate-800 dark:text-[#E8EEF5] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-slate-500 dark:text-[#8194A8]" />
                         Contributing System Freshness
                       </h4>
-                      <div className="p-3 bg-white border border-slate-200 rounded-lg space-y-2">
-                        <div className="flex justify-between text-[11px] pb-1 border-b border-slate-100 text-slate-500">
+                      <div className="p-3 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg space-y-2">
+                        <div className="flex justify-between text-[11px] pb-1 border-b border-slate-100 dark:border-[#33485D] text-slate-500 dark:text-[#8194A8]">
                           <span>Decision Generated:</span>
-                          <span className="font-mono font-medium text-slate-800">
+                          <span className="font-mono font-medium text-slate-800 dark:text-[#E8EEF5]">
                             {new Date(trace.generatedAt).toLocaleString()}
                           </span>
                         </div>
                         <div className="grid grid-cols-2 gap-2 pt-1">
                           {trace.freshnessBreakdown && trace.freshnessBreakdown.length > 0 ? (
                             trace.freshnessBreakdown.map((f, i) => (
-                              <div key={i} className="p-2 bg-slate-50 rounded border border-slate-200/70">
-                                <span className="text-[10px] text-slate-500 block font-bold">
+                              <div key={i} className="p-2 bg-slate-50 dark:bg-[#101C2A] rounded border border-slate-200/70 dark:border-[#33485D]">
+                                <span className="text-[10px] text-slate-500 dark:text-[#8194A8] block font-bold">
                                   {f.engine.replace(/_/g, ' ')}
                                 </span>
-                                <span className="font-mono font-bold text-slate-800 text-[11px]">
+                                <span className="font-mono font-bold text-slate-800 dark:text-[#E8EEF5] text-[11px]">
                                   {f.freshnessLabel}
                                 </span>
                               </div>
@@ -329,20 +329,20 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
 
                     {/* Contextual Limitations & Regulatory Boundaries */}
                     <div>
-                      <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <h4 className="text-xs font-bold text-slate-800 dark:text-[#E8EEF5] uppercase tracking-wider mb-2 flex items-center gap-1.5">
                         <Info className="w-3.5 h-3.5 text-amber-600" />
                         Contextual Limitations
                       </h4>
-                      <div className="p-3 bg-amber-50/60 border border-amber-200 rounded-lg space-y-1.5">
+                      <div className="p-3 bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-lg space-y-1.5">
                         {trace.limitations && trace.limitations.length > 0 ? (
                           trace.limitations.map((lim, idx) => (
-                            <div key={idx} className="flex items-start gap-1.5 text-amber-950 text-[11px]">
+                            <div key={idx} className="flex items-start gap-1.5 text-amber-950 dark:text-amber-200 text-[11px]">
                               <span className="text-amber-600 font-bold">•</span>
                               <span>{lim}</span>
                             </div>
                           ))
                         ) : (
-                          <div className="text-amber-800 text-[11px]">
+                          <div className="text-amber-800 dark:text-amber-300 text-[11px]">
                             Standard institutional CRM limitations apply. Human verification required.
                           </div>
                         )}
@@ -350,29 +350,29 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                     </div>
 
                     {/* Proposed Action & Human Governance */}
-                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+                    <div className="p-4 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded-xl space-y-3">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                        <h4 className="text-xs font-bold text-slate-800 dark:text-[#E8EEF5] uppercase tracking-wider">
                           Proposed Action & Governance
                         </h4>
                         {trace.confirmedByName && (
-                          <span className="text-[10px] text-slate-500 font-mono">
+                          <span className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono">
                             Confirmed by {trace.confirmedByName}
                           </span>
                         )}
                       </div>
 
                       {trace.actionTitle ? (
-                        <div className="p-3 bg-white border border-slate-200 rounded-lg">
-                          <div className="font-bold text-slate-900 text-xs">{trace.actionTitle}</div>
+                        <div className="p-3 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg">
+                          <div className="font-bold text-slate-900 dark:text-[#E8EEF5] text-xs">{trace.actionTitle}</div>
                           {trace.outcome && (
-                            <div className="mt-2 pt-2 border-t border-slate-100 text-[11px] text-emerald-800 font-medium">
+                            <div className="mt-2 pt-2 border-t border-slate-100 dark:border-[#33485D] text-[11px] text-emerald-800 dark:text-emerald-300 font-medium">
                               Outcome: {trace.outcome}
                             </div>
                           )}
                         </div>
                       ) : (
-                        <div className="text-[11px] text-slate-500 italic">No automated action linked.</div>
+                        <div className="text-[11px] text-slate-500 dark:text-[#8194A8] italic">No automated action linked.</div>
                       )}
 
                       {/* Controls based on status */}
@@ -382,7 +382,7 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                             <button
                               onClick={handleConfirmAction}
                               disabled={actionInProgress}
-                              className="flex-1 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-300 text-white font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs"
+                              className="flex-1 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-300 dark:disabled:bg-slate-800 text-white font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>Confirm Recommendation</span>
@@ -390,7 +390,7 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                             <button
                               onClick={handleRejectAction}
                               disabled={actionInProgress}
-                              className="py-2 px-3 bg-white border border-slate-300 hover:bg-rose-50 text-slate-700 hover:text-rose-700 font-medium rounded-lg text-xs transition cursor-pointer"
+                              className="py-2 px-3 bg-white dark:bg-[#162638] border border-slate-300 dark:border-[#33485D] hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-700 dark:text-[#E8EEF5] hover:text-rose-700 dark:hover:text-rose-300 font-medium rounded-lg text-xs transition cursor-pointer"
                             >
                               Dismiss
                             </button>
@@ -401,7 +401,7 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                           <button
                             onClick={handleExecuteAction}
                             disabled={actionInProgress}
-                            className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-300 text-white font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs"
+                            className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-300 dark:disabled:bg-slate-800 text-white font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs"
                           >
                             <Zap className="w-3.5 h-3.5" />
                             <span>Execute Action in Core Banking</span>
@@ -409,7 +409,7 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                         )}
 
                         {trace.decisionStatus === 'EXECUTED' && (
-                          <div className="w-full py-2 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5">
+                          <div className="w-full py-2 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5">
                             <CheckCheck className="w-4 h-4 text-emerald-600" />
                             <span>Action Executed & Verified in Audit Trail</span>
                           </div>
@@ -417,12 +417,12 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                       </div>
 
                       {trace.customerId && (
-                        <div className="pt-2 border-t border-slate-200/80">
+                        <div className="pt-2 border-t border-slate-200/80 dark:border-[#33485D]">
                           <button
                             onClick={() => {
                               window.location.href = `/strategy-simulator?customerId=${trace.customerId}`;
                             }}
-                            className="w-full py-2 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 transition cursor-pointer border border-indigo-200"
+                            className="w-full py-2 px-3 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 transition cursor-pointer border border-indigo-200 dark:border-indigo-800/60"
                             title="Open Strategy Simulator for this customer"
                           >
                             <Compass className="w-3.5 h-3.5 text-indigo-600" />
@@ -438,7 +438,7 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                 {activeTab === 'EVIDENCE' && (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between pb-1">
-                      <span className="text-[11px] text-slate-500 font-medium">
+                      <span className="text-[11px] text-slate-500 dark:text-[#8194A8] font-medium">
                         Granular factors observed by COREvia intelligence engines
                       </span>
                     </div>
@@ -447,41 +447,41 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                       trace.evidence.map((e) => (
                         <div
                           key={e.id}
-                          className="p-3 bg-white border border-slate-200 rounded-xl space-y-2 hover:border-slate-300 transition"
+                          className="p-3 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-xl space-y-2 hover:border-slate-300 dark:hover:border-slate-600 transition"
                         >
                           <div className="flex items-center justify-between text-[10px]">
-                            <span className="font-bold text-indigo-700 uppercase font-mono tracking-wider">
+                            <span className="font-bold text-indigo-700 dark:text-indigo-400 uppercase font-mono tracking-wider">
                               {e.sourceEngine} • {e.evidenceType}
                             </span>
                             <span
                               className={`px-1.5 py-0.5 rounded font-mono font-bold ${
                                 e.contributionType === 'PRIMARY'
-                                  ? 'bg-indigo-100 text-indigo-800'
+                                  ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300'
                                   : e.contributionType === 'NEGATIVE_SIGNAL'
-                                  ? 'bg-rose-100 text-rose-800'
-                                  : 'bg-slate-100 text-slate-700'
+                                  ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300'
+                                  : 'bg-slate-100 dark:bg-[#101C2A] text-slate-700 dark:text-[#A9BACB]'
                               }`}
                             >
                               {e.contributionType}
                             </span>
                           </div>
 
-                          <div className="font-semibold text-slate-900 text-xs">{e.description}</div>
+                          <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] text-xs">{e.description}</div>
 
-                          <div className="grid grid-cols-2 gap-2 p-2 bg-slate-50 rounded border border-slate-100 font-mono text-[11px]">
+                          <div className="grid grid-cols-2 gap-2 p-2 bg-slate-50 dark:bg-[#101C2A] rounded border border-slate-100 dark:border-[#33485D] font-mono text-[11px]">
                             <div>
-                              <span className="text-slate-400 block text-[10px]">Observed Value:</span>
-                              <span className="font-bold text-slate-900">{e.observedValue}</span>
+                              <span className="text-slate-400 dark:text-[#8194A8] block text-[10px]">Observed Value:</span>
+                              <span className="font-bold text-slate-900 dark:text-[#E8EEF5]">{e.observedValue}</span>
                             </div>
                             {e.previousValue && (
                               <div>
-                                <span className="text-slate-400 block text-[10px]">Previous Value:</span>
-                                <span className="text-slate-600">{e.previousValue}</span>
+                                <span className="text-slate-400 dark:text-[#8194A8] block text-[10px]">Previous Value:</span>
+                                <span className="text-slate-600 dark:text-[#A9BACB]">{e.previousValue}</span>
                               </div>
                             )}
                           </div>
 
-                          <div className="flex justify-between items-center text-[10px] text-slate-500 pt-1 border-t border-slate-100">
+                          <div className="flex justify-between items-center text-[10px] text-slate-500 dark:text-[#8194A8] pt-1 border-t border-slate-100 dark:border-[#33485D]">
                             <span>Entity: {e.sourceEntityType} ({e.sourceEntityId})</span>
                             <span>As of: {new Date(e.dataAsOf).toLocaleTimeString()}</span>
                           </div>
@@ -496,28 +496,28 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                 {/* TAB 3: SOURCES */}
                 {activeTab === 'SOURCES' && (
                   <div className="space-y-4">
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-slate-500 dark:text-[#8194A8]">
                       Step-by-step origin provenance chain tracking data flow through core banking modules.
                     </p>
 
-                    <div className="relative pl-6 space-y-4 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                    <div className="relative pl-6 space-y-4 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-[#33485D]">
                       {trace.sourceChain && trace.sourceChain.length > 0 ? (
                         trace.sourceChain.map((node, i) => (
                           <div key={node.id} className="relative">
-                            <div className="absolute -left-6 top-1 w-5 h-5 rounded-full bg-white border-2 border-indigo-600 flex items-center justify-center text-[10px] font-mono font-bold text-indigo-700 shadow-xs">
+                            <div className="absolute -left-6 top-1 w-5 h-5 rounded-full bg-white dark:bg-[#162638] border-2 border-indigo-600 dark:border-indigo-400 flex items-center justify-center text-[10px] font-mono font-bold text-indigo-700 dark:text-indigo-300 shadow-xs">
                               {i + 1}
                             </div>
-                            <div className="p-3 bg-white border border-slate-200 rounded-lg space-y-1">
+                            <div className="p-3 bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg space-y-1">
                               <div className="flex items-center justify-between text-[10px]">
-                                <span className="font-bold text-slate-900 uppercase font-mono">
+                                <span className="font-bold text-slate-900 dark:text-[#E8EEF5] uppercase font-mono">
                                   {node.sourceType} • {node.sourceId}
                                 </span>
-                                <span className="text-slate-400 font-mono">
+                                <span className="text-slate-400 dark:text-[#8194A8] font-mono">
                                   {node.freshnessLabel || 'Fresh'}
                                 </span>
                               </div>
-                              <p className="text-slate-700 text-xs">{node.description}</p>
-                              <div className="text-[10px] text-indigo-700 font-mono font-semibold pt-1">
+                              <p className="text-slate-700 dark:text-[#E8EEF5] text-xs">{node.description}</p>
+                              <div className="text-[10px] text-indigo-700 dark:text-indigo-400 font-mono font-semibold pt-1">
                                 Engine: {node.sourceEngine} (Scope: {node.authorizationScope})
                               </div>
                             </div>
@@ -534,7 +534,7 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                 {activeTab === 'HISTORY' && (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between pb-1">
-                      <span className="text-[11px] text-slate-500 font-medium">
+                      <span className="text-[11px] text-slate-500 dark:text-[#8194A8] font-medium">
                         Chronological decisions generated for this customer
                       </span>
                     </div>
@@ -546,38 +546,40 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
                     {historyItems.map((h) => (
                       <div
                         key={h.id}
-                        className={`p-3 bg-white border rounded-xl space-y-2 transition ${
-                          h.id === trace.id ? 'border-indigo-500 ring-1 ring-indigo-500/20' : 'border-slate-200'
+                        className={`p-3 bg-white dark:bg-[#162638] border rounded-xl space-y-2 transition ${
+                          h.id === trace.id
+                            ? 'border-indigo-500 ring-1 ring-indigo-500/20'
+                            : 'border-slate-200 dark:border-[#33485D]'
                         }`}
                       >
                         <div className="flex items-center justify-between text-[10px]">
-                          <span className="font-mono text-slate-500">
+                          <span className="font-mono text-slate-500 dark:text-[#8194A8]">
                             {h.decisionId} • {h.freshnessLabel}
                           </span>
                           <span
                             className={`px-1.5 py-0.2 rounded font-mono font-bold uppercase text-[9px] ${
                               h.decisionStatus === 'EXECUTED'
-                                ? 'bg-emerald-100 text-emerald-800'
+                                ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
                                 : h.decisionStatus === 'CONFIRMED'
-                                ? 'bg-sky-100 text-sky-800'
-                                : 'bg-slate-100 text-slate-700'
+                                ? 'bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300'
+                                : 'bg-slate-100 dark:bg-[#101C2A] text-slate-700 dark:text-[#A9BACB]'
                             }`}
                           >
                             {h.decisionStatus}
                           </span>
                         </div>
 
-                        <div className="font-semibold text-slate-900 text-xs">{h.recommendationTitle}</div>
+                        <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] text-xs">{h.recommendationTitle}</div>
 
-                        <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-[11px]">
-                          <span className="text-slate-400 font-mono">{h.sourceEngine}</span>
+                        <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-[#33485D] text-[11px]">
+                          <span className="text-slate-400 dark:text-[#8194A8] font-mono">{h.sourceEngine}</span>
                           {h.id !== trace.id && (
                             <button
                               onClick={() => {
                                 setCompareTargetId(h.decisionId);
                                 setIsCompareOpen(true);
                               }}
-                              className="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1 cursor-pointer"
+                              className="text-[11px] text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-semibold flex items-center gap-1 cursor-pointer"
                             >
                               <GitCompare className="w-3 h-3" />
                               <span>Compare with this</span>
@@ -593,13 +595,13 @@ export const DecisionTracePanel: React.FC<DecisionTracePanelProps> = ({
           </div>
 
           {/* Footer */}
-          <div className="p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs shrink-0">
-            <span className="text-[11px] text-slate-500 font-mono">
+          <div className="p-3 bg-slate-50 dark:bg-[#101C2A] border-t border-slate-200 dark:border-[#33485D] flex items-center justify-between text-xs shrink-0">
+            <span className="text-[11px] text-slate-500 dark:text-[#8194A8] font-mono">
               Audit Stamped &bull; Dual-Control Governed
             </span>
             <button
               onClick={onClose}
-              className="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium rounded-lg transition cursor-pointer"
+              className="px-4 py-1.5 bg-slate-200 dark:bg-[#1C3045] hover:bg-slate-300 dark:hover:bg-[#26394C] text-slate-800 dark:text-[#E8EEF5] font-medium rounded-lg transition cursor-pointer"
             >
               Close
             </button>

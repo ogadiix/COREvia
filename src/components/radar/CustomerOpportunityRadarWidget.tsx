@@ -93,18 +93,18 @@ export const CustomerOpportunityRadarWidget: React.FC<CustomerOpportunityRadarWi
   return (
     <div className="space-y-4">
       {/* Header bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-gray-200">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#162638] p-4 rounded-xl border border-gray-200 dark:border-[#33485D]">
         <div>
           <div className="flex items-center gap-2">
-            <Radar className="w-5 h-5 text-brand-600" />
-            <h3 className="text-base font-bold text-gray-900">
+            <Radar className="w-5 h-5 text-brand-600 dark:text-[#2dd4c7]" />
+            <h3 className="text-base font-bold text-gray-900 dark:text-[#E8EEF5]">
               Customer Opportunity Radar
             </h3>
-            <span className="px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 text-xs font-bold border border-brand-200">
+            <span className="px-2 py-0.5 rounded-full bg-brand-50 dark:bg-[#1C3045] text-brand-700 dark:text-[#2dd4c7] text-xs font-bold border border-brand-200 dark:border-[#33485D]">
               {activeSignals.length} Active Signal{activeSignals.length === 1 ? '' : 's'}
             </span>
           </div>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-gray-500 dark:text-[#8194A8] mt-0.5">
             Deterministic signals detecting product coverage gaps and expansion potential from existing customer data.
           </p>
         </div>
@@ -116,31 +116,31 @@ export const CustomerOpportunityRadarWidget: React.FC<CustomerOpportunityRadarWi
           disabled={recalculating}
           className="flex items-center gap-1.5 text-xs font-medium"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${recalculating ? 'animate-spin text-brand-600' : ''}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${recalculating ? 'animate-spin text-brand-600 dark:text-[#2dd4c7]' : ''}`} />
           <span>{recalculating ? 'Evaluating...' : 'Recalculate Radar'}</span>
         </Button>
       </div>
 
       {statusMessage && (
-        <div className="p-3 bg-brand-50 border border-brand-200 text-xs text-brand-800 rounded-lg flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-brand-600 shrink-0" />
+        <div className="p-3 bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-900/60 text-xs text-brand-800 dark:text-brand-300 rounded-lg flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400 shrink-0" />
           <span>{statusMessage}</span>
         </div>
       )}
 
       {/* Content */}
       {loading ? (
-        <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
-          <RefreshCw className="w-6 h-6 animate-spin mx-auto text-brand-600 mb-2" />
-          <p className="text-xs text-gray-500">Scanning customer records & product coverage...</p>
+        <div className="text-center py-12 bg-white dark:bg-[#162638] rounded-xl border border-gray-200 dark:border-[#33485D]">
+          <RefreshCw className="w-6 h-6 animate-spin mx-auto text-brand-600 dark:text-[#2dd4c7] mb-2" />
+          <p className="text-xs text-gray-500 dark:text-[#8194A8]">Scanning customer records & product coverage...</p>
         </div>
       ) : activeSignals.length === 0 ? (
-        <div className="text-center py-10 bg-white rounded-xl border border-dashed border-gray-300 p-6">
-          <Radar className="w-10 h-10 mx-auto text-gray-300 mb-3" />
-          <h4 className="text-sm font-semibold text-gray-900 mb-1">
+        <div className="text-center py-10 bg-white dark:bg-[#162638] rounded-xl border border-dashed border-gray-300 dark:border-[#33485D] p-6">
+          <Radar className="w-10 h-10 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
+          <h4 className="text-sm font-semibold text-gray-900 dark:text-[#E8EEF5] mb-1">
             No Active Opportunity Gaps Detected
           </h4>
-          <p className="text-xs text-gray-500 max-w-md mx-auto mb-4">
+          <p className="text-xs text-gray-500 dark:text-[#8194A8] max-w-md mx-auto mb-4">
             Customer product coverage and relationship cadence are aligned with current profile metrics.
           </p>
           <Button

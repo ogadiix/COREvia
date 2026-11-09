@@ -56,21 +56,21 @@ export const RaiseExceptionModal: React.FC<RaiseExceptionModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-2xs flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden">
-        <div className="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 dark:bg-black/80 backdrop-blur-2xs flex items-center justify-center p-4">
+      <div className="w-full max-w-lg bg-white dark:bg-[#162638] rounded-lg shadow-xl border border-slate-200 dark:border-[#33485D] overflow-hidden">
+        <div className="px-5 py-4 bg-slate-50 dark:bg-[#101C2A] border-b border-slate-200 dark:border-[#33485D] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded bg-red-100 text-red-700 flex items-center justify-center">
+            <div className="w-7 h-7 rounded bg-red-100 dark:bg-rose-950/60 text-red-700 dark:text-rose-400 flex items-center justify-center">
               <AlertTriangle className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Raise Onboarding Exception</h3>
-              <p className="text-xs text-slate-500 font-mono">{application.applicationNumber}</p>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-[#E8EEF5]">Raise Onboarding Exception</h3>
+              <p className="text-xs text-slate-500 dark:text-[#A9BACB] font-mono">{application.applicationNumber}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-slate-700 rounded-md hover:bg-slate-100"
+            className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-md hover:bg-slate-100 dark:hover:bg-[#192B3D] cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -78,18 +78,18 @@ export const RaiseExceptionModal: React.FC<RaiseExceptionModalProps> = ({
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs">
           {error && (
-            <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 rounded font-medium">
+            <div className="p-2.5 bg-red-50 dark:bg-rose-950/40 border border-red-200 dark:border-rose-900/50 text-red-700 dark:text-rose-300 rounded font-medium">
               {error}
             </div>
           )}
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-medium text-slate-700 mb-1">Exception Category</label>
+              <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Exception Category</label>
               <select
                 value={exceptionType}
                 onChange={(e) => setExceptionType(e.target.value)}
-                className="w-full p-2 bg-slate-50 border border-slate-200 rounded text-xs focus:bg-white focus:ring-1 focus:ring-red-600"
+                className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] text-slate-900 dark:text-[#E8EEF5] rounded text-xs focus:bg-white dark:focus:bg-[#101C2A] focus:ring-1 focus:ring-red-600 focus:outline-hidden"
               >
                 <option value="DOCUMENT_EXPIRED">Document Expired (Passport/Lease)</option>
                 <option value="NAME_MISMATCH">Name Mismatch with NSDL / UIDAI</option>
@@ -102,11 +102,11 @@ export const RaiseExceptionModal: React.FC<RaiseExceptionModalProps> = ({
             </div>
 
             <div>
-              <label className="block font-medium text-slate-700 mb-1">Severity Tier</label>
+              <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Severity Tier</label>
               <select
                 value={severity}
                 onChange={(e) => setSeverity(e.target.value as any)}
-                className="w-full p-2 bg-slate-50 border border-slate-200 rounded text-xs focus:bg-white focus:ring-1 focus:ring-red-600"
+                className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] text-slate-900 dark:text-[#E8EEF5] rounded text-xs focus:bg-white dark:focus:bg-[#101C2A] focus:ring-1 focus:ring-red-600 focus:outline-hidden"
               >
                 <option value="LOW">Low (Informational Deficiency)</option>
                 <option value="MEDIUM">Medium (Secondary Documentation)</option>
@@ -117,38 +117,38 @@ export const RaiseExceptionModal: React.FC<RaiseExceptionModalProps> = ({
           </div>
 
           <div>
-            <label className="block font-medium text-slate-700 mb-1">Exception Headline *</label>
+            <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Exception Headline *</label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Passport validity expired on 12-Nov-2025"
-              className="w-full p-2 bg-slate-50 border border-slate-200 rounded text-xs focus:bg-white focus:ring-1 focus:ring-red-600"
+              className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] text-slate-900 dark:text-[#E8EEF5] rounded text-xs focus:bg-white dark:focus:bg-[#101C2A] focus:ring-1 focus:ring-red-600 focus:outline-hidden"
             />
           </div>
 
           <div>
-            <label className="block font-medium text-slate-700 mb-1">Detailed Observation &amp; Impact *</label>
+            <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Detailed Observation &amp; Impact *</label>
             <textarea
               required
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Detail specific observations and required remediation from the client or relationship manager..."
-              className="w-full p-2 bg-slate-50 border border-slate-200 rounded text-xs focus:bg-white focus:ring-1 focus:ring-red-600"
+              className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] text-slate-900 dark:text-[#E8EEF5] rounded text-xs focus:bg-white dark:focus:bg-[#101C2A] focus:ring-1 focus:ring-red-600 focus:outline-hidden"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3 items-center">
             <div>
-              <label className="block font-medium text-slate-700 mb-1">Remediation Due Date</label>
+              <label className="block font-medium text-slate-700 dark:text-[#A9BACB] mb-1">Remediation Due Date</label>
               <input
                 type="date"
                 required
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full p-2 bg-slate-50 border border-slate-200 rounded text-xs focus:bg-white focus:ring-1 focus:ring-red-600"
+                className="w-full p-2 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] text-slate-900 dark:text-[#E8EEF5] rounded text-xs focus:bg-white dark:focus:bg-[#101C2A] focus:ring-1 focus:ring-red-600 focus:outline-hidden"
               />
             </div>
 
@@ -160,16 +160,16 @@ export const RaiseExceptionModal: React.FC<RaiseExceptionModalProps> = ({
                   onChange={(e) => setCreateTask(e.target.checked)}
                   className="rounded text-red-600 focus:ring-red-500"
                 />
-                <span className="text-slate-700 font-medium">Auto-assign Task to RM</span>
+                <span className="text-slate-700 dark:text-[#A9BACB] font-medium">Auto-assign Task to RM</span>
               </label>
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-200 flex justify-end gap-2">
+          <div className="pt-3 border-t border-slate-200 dark:border-[#33485D] flex justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-1.5 bg-white border border-slate-300 text-slate-700 rounded text-xs font-medium hover:bg-slate-50 cursor-pointer"
+              className="px-3.5 py-1.5 bg-white dark:bg-[#101C2A] border border-slate-300 dark:border-[#33485D] text-slate-700 dark:text-[#A9BACB] rounded text-xs font-medium hover:bg-slate-50 dark:hover:bg-[#192B3D] cursor-pointer"
             >
               Cancel
             </button>

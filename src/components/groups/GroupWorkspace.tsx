@@ -304,20 +304,20 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
 
   if (loading && !group) {
     return (
-      <div className="p-12 text-center bg-white border border-slate-200 rounded-lg">
-        <RefreshCw className="w-6 h-6 animate-spin mx-auto text-cyan-600 mb-2" />
-        <div className="text-sm font-semibold text-slate-800">Loading Group 360 Workspace...</div>
-        <div className="text-xs text-slate-500">Retrieving authorized entities and relationships</div>
+      <div className="p-12 text-center bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg">
+        <RefreshCw className="w-6 h-6 animate-spin mx-auto text-cyan-600 dark:text-cyan-400 mb-2" />
+        <div className="text-sm font-semibold text-slate-800 dark:text-[#E8EEF5]">Loading Group 360 Workspace...</div>
+        <div className="text-xs text-slate-500 dark:text-[#A9BACB]">Retrieving authorized entities and relationships</div>
       </div>
     );
   }
 
   if (error || !group) {
     return (
-      <div className="p-8 text-center bg-white border border-slate-200 rounded-lg space-y-3">
+      <div className="p-8 text-center bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg space-y-3">
         <ShieldAlert className="w-8 h-8 mx-auto text-rose-500" />
-        <div className="text-base font-bold text-slate-900">Access Denied or Group Not Found</div>
-        <p className="text-xs text-slate-600 max-w-md mx-auto">{error || 'Unable to locate group record.'}</p>
+        <div className="text-base font-bold text-slate-900 dark:text-[#E8EEF5]">Access Denied or Group Not Found</div>
+        <p className="text-xs text-slate-600 dark:text-[#A9BACB] max-w-md mx-auto">{error || 'Unable to locate group record.'}</p>
         <Button variant="outline" size="sm" onClick={onBack}>
           Back to Portfolio
         </Button>
@@ -330,19 +330,19 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
   return (
     <div className="space-y-4">
       {/* Top Breadcrumb & Actions Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-[#33485D] pb-3">
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="sm"
             onClick={onBack}
-            className="flex items-center gap-1 text-xs text-slate-600 px-2 hover:bg-slate-100"
+            className="flex items-center gap-1 text-xs text-slate-600 dark:text-[#A9BACB] px-2 hover:bg-slate-100 dark:hover:bg-[#162638]"
           >
             <ChevronLeft className="w-4 h-4" />
             Groups Portfolio
           </Button>
-          <span className="text-slate-300">/</span>
-          <span className="text-xs font-mono font-semibold text-slate-500">{group.groupId}</span>
+          <span className="text-slate-300 dark:text-slate-600">/</span>
+          <span className="text-xs font-mono font-semibold text-slate-500 dark:text-[#A9BACB]">{group.groupId}</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-1.5">
@@ -350,9 +350,9 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
             variant="outline"
             size="sm"
             onClick={() => setIsDecisionTraceOpen(true)}
-            className="flex items-center gap-1.5 text-xs text-slate-700 bg-white hover:bg-slate-50 border-slate-300"
+            className="flex items-center gap-1.5 text-xs text-slate-700 dark:text-[#A9BACB] bg-white dark:bg-[#162638] hover:bg-slate-50 dark:hover:bg-[#192B3D] border-slate-300 dark:border-[#33485D]"
           >
-            <HelpCircle className="w-3.5 h-3.5 text-indigo-600" />
+            <HelpCircle className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
             Decision Trace
           </Button>
 
@@ -363,9 +363,9 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
               handleRunSimulation('RESOLVE_SERVICE_ISSUES');
               setIsSimulatorOpen(true);
             }}
-            className="flex items-center gap-1.5 text-xs text-slate-700 bg-white hover:bg-slate-50 border-slate-300"
+            className="flex items-center gap-1.5 text-xs text-slate-700 dark:text-[#A9BACB] bg-white dark:bg-[#162638] hover:bg-slate-50 dark:hover:bg-[#192B3D] border-slate-300 dark:border-[#33485D]"
           >
-            <Compass className="w-3.5 h-3.5 text-amber-600" />
+            <Compass className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
             Strategy Simulator
           </Button>
 
@@ -373,9 +373,9 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
             variant="outline"
             size="sm"
             onClick={handleProposeAgentPlan}
-            className="flex items-center gap-1.5 text-xs text-slate-700 bg-white hover:bg-slate-50 border-slate-300"
+            className="flex items-center gap-1.5 text-xs text-slate-700 dark:text-[#A9BACB] bg-white dark:bg-[#162638] hover:bg-slate-50 dark:hover:bg-[#192B3D] border-slate-300 dark:border-[#33485D]"
           >
-            <Cpu className="w-3.5 h-3.5 text-purple-600" />
+            <Cpu className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
             Agent Recovery Plan
           </Button>
 
@@ -404,48 +404,48 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
       </div>
 
       {/* Main Group Header Banner */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-2xs">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] rounded-lg p-5 shadow-2xs">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
               <span
                 className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded flex items-center gap-1 ${
                   isHousehold
-                    ? 'bg-purple-100 text-purple-900 border border-purple-200'
-                    : 'bg-cyan-100 text-cyan-900 border border-cyan-200'
+                    ? 'bg-purple-100 text-purple-900 border border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800'
+                    : 'bg-cyan-100 text-cyan-900 border border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
                 }`}
               >
                 {isHousehold ? <Home className="w-3 h-3" /> : <Building2 className="w-3 h-3" />}
                 {group.groupType}
               </span>
 
-              <span className="text-xs font-mono font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
+              <span className="text-xs font-mono font-bold text-slate-600 dark:text-[#A9BACB] bg-slate-100 dark:bg-[#101C2A] px-2 py-0.5 rounded border dark:border-[#33485D]">
                 {group.groupId}
               </span>
 
               <span
                 className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                   group.status === 'ACTIVE'
-                    ? 'bg-emerald-100 text-emerald-800'
+                    ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
                     : group.status === 'UNDER_REVIEW'
-                    ? 'bg-amber-100 text-amber-800'
-                    : 'bg-slate-100 text-slate-700'
+                    ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
+                    : 'bg-slate-100 dark:bg-[#101C2A] text-slate-700 dark:text-[#A9BACB]'
                 }`}
               >
                 {group.status}
               </span>
             </div>
 
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-extrabold text-slate-900 dark:text-[#E8EEF5] tracking-tight">
               {group.displayName.toUpperCase()}
             </h1>
-            <p className="text-xs text-slate-500 max-w-2xl">
+            <p className="text-xs text-slate-500 dark:text-[#A9BACB] max-w-2xl">
               {group.description || group.name}
             </p>
           </div>
 
           {/* Key RM & Member Contacts */}
-          <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-lg border border-slate-200 shrink-0">
+          <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 dark:bg-[#101C2A] p-3 rounded-lg border border-slate-200 dark:border-[#33485D] shrink-0">
             <div>
               <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Relationship Manager
@@ -557,7 +557,7 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
       </div>
 
       {/* Workspace Navigation Tabs */}
-      <div className="border-b border-slate-200 bg-white rounded-t-lg px-2 pt-2 flex flex-wrap gap-1">
+      <div className="border-b border-slate-200 dark:border-[#33485D] bg-white dark:bg-[#162638] rounded-t-lg px-2 pt-2 flex flex-wrap gap-1">
         {[
           { id: 'overview', label: 'Overview' },
           { id: 'members', label: `Members (${members.length})` },
@@ -574,10 +574,10 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id as TabType)}
-            className={`px-3 py-2 text-xs font-semibold border-b-2 transition-colors ${
+            className={`px-3 py-2 text-xs font-semibold border-b-2 transition-colors cursor-pointer ${
               activeTab === t.id
-                ? 'border-cyan-700 text-cyan-800'
-                : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                ? 'border-cyan-700 dark:border-cyan-400 text-cyan-800 dark:text-cyan-300'
+                : 'border-transparent text-slate-600 dark:text-[#A9BACB] hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-[#33485D]'
             }`}
           >
             {t.label}
@@ -586,7 +586,7 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
       </div>
 
       {/* TAB CONTENTS */}
-      <div className="bg-white border border-slate-200 border-t-0 rounded-b-lg p-5">
+      <div className="bg-white dark:bg-[#162638] border border-slate-200 dark:border-[#33485D] border-t-0 rounded-b-lg p-5">
         {/* 1. OVERVIEW TAB */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
@@ -748,15 +748,15 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                   ) : (
                     <div className="space-y-2">
                       {signals.slice(0, 4).map((s: any, idx: number) => (
-                        <div key={idx} className="p-2.5 bg-white border border-slate-200 rounded text-xs space-y-1">
+                        <div key={idx} className="p-2.5 bg-white dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded text-xs space-y-1">
                           <div className="flex items-center justify-between">
-                            <span className="font-bold text-slate-900">{s.title || s.type}</span>
-                            <span className="text-[10px] font-semibold text-rose-700 bg-rose-50 px-1 rounded">
+                            <span className="font-bold text-slate-900 dark:text-[#E8EEF5]">{s.title || s.type}</span>
+                            <span className="text-[10px] font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/50 px-1 rounded border dark:border-rose-900/50">
                               {s.severity || 'ALERT'}
                             </span>
                           </div>
-                          <p className="text-[11px] text-slate-600">{s.headline || s.summary || s.description}</p>
-                          <div className="text-[10px] text-slate-400">
+                          <p className="text-[11px] text-slate-600 dark:text-[#A9BACB]">{s.headline || s.summary || s.description}</p>
+                          <div className="text-[10px] text-slate-400 dark:text-slate-500">
                             Source: {s.sourceEngine || 'SignalCenter'} • {s.entityName || 'Member'}
                           </div>
                         </div>
@@ -952,18 +952,18 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                   {group.displayName} ({group.groupId})
                 </div>
 
-                <div className="pl-6 border-l-2 border-slate-300 space-y-3">
+                <div className="pl-6 border-l-2 border-slate-300 dark:border-[#33485D] space-y-3">
                   {members.map((m) => (
-                    <div key={m.id} className="bg-white p-3 rounded border border-slate-200 text-xs space-y-2">
-                      <div className="font-bold text-slate-900 flex items-center justify-between">
+                    <div key={m.id} className="bg-white dark:bg-[#101C2A] p-3 rounded border border-slate-200 dark:border-[#33485D] text-xs space-y-2">
+                      <div className="font-bold text-slate-900 dark:text-[#E8EEF5] flex items-center justify-between">
                         <span>
                           {m.name} ({m.entityType}:{m.entityId})
                         </span>
-                        <span className="text-[10px] text-slate-500">{m.role}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-[#A9BACB]">{m.role}</span>
                       </div>
 
                       {/* Nested resources under this member */}
-                      <div className="pl-4 border-l border-slate-200 space-y-1 text-[11px] text-slate-600">
+                      <div className="pl-4 border-l border-slate-200 dark:border-[#33485D] space-y-1 text-[11px] text-slate-600 dark:text-[#A9BACB]">
                         <div>• Accounts: Prime Savings & Current Accounts (Authorized)</div>
                         <div>• Products: Tax-Saver Fixed Deposit, prime Lending</div>
                         <div>• Lifecycle Journeys: Active ({journeys.length})</div>
@@ -1305,19 +1305,19 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                 </div>
               ) : (
                 timeline.map((t) => (
-                  <div key={t.id} className="p-3 bg-slate-50 rounded border border-slate-200 flex items-start gap-3">
-                    <div className="p-2 bg-white rounded border border-slate-200 text-cyan-700 shrink-0">
+                  <div key={t.id} className="p-3 bg-slate-50 dark:bg-[#101C2A] rounded border border-slate-200 dark:border-[#33485D] flex items-start gap-3">
+                    <div className="p-2 bg-white dark:bg-[#162638] rounded border border-slate-200 dark:border-[#33485D] text-cyan-700 dark:text-cyan-400 shrink-0">
                       <Calendar className="w-4 h-4" />
                     </div>
                     <div className="flex-1 text-xs">
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-slate-900">{t.title}</span>
-                        <span className="text-[11px] text-slate-500">
+                        <span className="font-bold text-slate-900 dark:text-[#E8EEF5]">{t.title}</span>
+                        <span className="text-[11px] text-slate-500 dark:text-[#A9BACB]">
                           {new Date(t.timestamp).toLocaleDateString()} • {t.channel}
                         </span>
                       </div>
-                      <div className="text-[11px] text-slate-600 mt-1">
-                        Entity: <span className="font-semibold text-slate-800">{t.entityName || t.entityId}</span> ({t.entityType})
+                      <div className="text-[11px] text-slate-600 dark:text-[#A9BACB] mt-1">
+                        Entity: <span className="font-semibold text-slate-800 dark:text-[#E8EEF5]">{t.entityName || t.entityId}</span> ({t.entityType})
                       </div>
                       {t.summary && <p className="text-[11px] text-slate-500 mt-0.5">{t.summary}</p>}
                     </div>
@@ -1395,25 +1395,25 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
 
       {/* STRATEGY SIMULATOR MODAL */}
       {isSimulatorOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-xl w-full border border-slate-200 overflow-hidden">
-            <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#162638] rounded-lg shadow-xl max-w-xl w-full border border-slate-200 dark:border-[#33485D] overflow-hidden">
+            <div className="p-4 border-b border-slate-200 dark:border-[#33485D] flex items-center justify-between bg-slate-50 dark:bg-[#101C2A]">
               <div className="flex items-center gap-2">
-                <Compass className="w-4 h-4 text-amber-600" />
-                <h3 className="font-bold text-sm text-slate-900">
+                <Compass className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <h3 className="font-bold text-sm text-slate-900 dark:text-[#E8EEF5]">
                   Group Strategy Simulator: {group.displayName}
                 </h3>
               </div>
               <button
                 onClick={() => setIsSimulatorOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
             <div className="p-5 space-y-4">
-              <div className="text-xs text-slate-600">
+              <div className="text-xs text-slate-600 dark:text-[#A9BACB]">
                 Simulate potential group-level strategic interventions on an isolated in-memory snapshot.
                 Live records are never mutated.
               </div>
@@ -1427,10 +1427,10 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                   <button
                     key={s.id}
                     onClick={() => handleRunSimulation(s.id)}
-                    className={`px-2.5 py-1.5 text-xs font-semibold rounded border transition-colors ${
+                    className={`px-2.5 py-1.5 text-xs font-semibold rounded border transition-colors cursor-pointer ${
                       simulatedScenario === s.id
-                        ? 'bg-amber-50 border-amber-400 text-amber-900'
-                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-400 dark:border-amber-800 text-amber-900 dark:text-amber-300'
+                        : 'bg-white dark:bg-[#101C2A] border-slate-200 dark:border-[#33485D] text-slate-700 dark:text-[#A9BACB] hover:bg-slate-50 dark:hover:bg-[#192B3D]'
                     }`}
                   >
                     {s.label}
@@ -1439,27 +1439,27 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
               </div>
 
               {simulatedProfile && (
-                <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg space-y-3 text-xs">
-                  <div className="font-bold text-slate-900">{simulatedProfile.scenarioName}</div>
-                  <p className="text-slate-600 text-[11px]">{simulatedProfile.impactSummary}</p>
+                <div className="p-3.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded-lg space-y-3 text-xs">
+                  <div className="font-bold text-slate-900 dark:text-[#E8EEF5]">{simulatedProfile.scenarioName}</div>
+                  <p className="text-slate-600 dark:text-[#A9BACB] text-[11px]">{simulatedProfile.impactSummary}</p>
 
-                  <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+                  <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-200 dark:border-[#33485D]">
                     <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-bold">CURRENT GROUP PROFILE</div>
-                      <div className="font-bold text-slate-700 mt-1">
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold">CURRENT GROUP PROFILE</div>
+                      <div className="font-bold text-slate-700 dark:text-[#E8EEF5] mt-1">
                         Avg CORE: {simulatedProfile.baseCoreAvg}
                       </div>
-                      <div className="text-[11px] text-slate-500">
+                      <div className="text-[11px] text-slate-500 dark:text-[#A9BACB]">
                         Service Index: {simulatedProfile.baseServiceScore} / 100
                       </div>
                     </div>
 
                     <div>
-                      <div className="text-[10px] text-emerald-600 uppercase font-bold">SIMULATED GROUP PROFILE</div>
-                      <div className="font-bold text-emerald-700 mt-1">
+                      <div className="text-[10px] text-emerald-600 dark:text-emerald-400 uppercase font-bold">SIMULATED GROUP PROFILE</div>
+                      <div className="font-bold text-emerald-700 dark:text-emerald-400 mt-1">
                         Avg CORE: {simulatedProfile.simulatedCoreAvg} (+{simulatedProfile.simulatedCoreAvg - simulatedProfile.baseCoreAvg})
                       </div>
-                      <div className="text-[11px] text-emerald-600">
+                      <div className="text-[11px] text-emerald-600 dark:text-emerald-400">
                         Service Index: {simulatedProfile.simulatedServiceScore} / 100
                       </div>
                     </div>
@@ -1479,18 +1479,18 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
 
       {/* CONTROLLED AGENT PLAN MODAL */}
       {isAgentPlanOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-xl w-full border border-slate-200 overflow-hidden">
-            <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#162638] rounded-lg shadow-xl max-w-xl w-full border border-slate-200 dark:border-[#33485D] overflow-hidden">
+            <div className="p-4 border-b border-slate-200 dark:border-[#33485D] flex items-center justify-between bg-slate-50 dark:bg-[#101C2A]">
               <div className="flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-purple-600" />
-                <h3 className="font-bold text-sm text-slate-900">
+                <Cpu className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                <h3 className="font-bold text-sm text-slate-900 dark:text-[#E8EEF5]">
                   Controlled Agent: Multi-Entity Recovery Plan
                 </h3>
               </div>
               <button
                 onClick={() => setIsAgentPlanOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm cursor-pointer"
               >
                 ✕
               </button>
@@ -1498,36 +1498,36 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
 
             <div className="p-5 space-y-4">
               {agentPlanLoading ? (
-                <div className="text-center py-8 text-xs text-slate-500">
-                  <RefreshCw className="w-5 h-5 animate-spin mx-auto text-purple-600 mb-2" />
+                <div className="text-center py-8 text-xs text-slate-500 dark:text-[#A9BACB]">
+                  <RefreshCw className="w-5 h-5 animate-spin mx-auto text-purple-600 dark:text-purple-400 mb-2" />
                   Generating governed multi-entity recovery plan...
                 </div>
               ) : proposedAgentPlan ? (
                 <div className="space-y-3">
-                  <div className="p-3 bg-purple-50 border border-purple-200 rounded text-xs space-y-1">
-                    <div className="font-bold text-purple-900">{proposedAgentPlan.title}</div>
-                    <div className="text-[11px] text-purple-800">{proposedAgentPlan.objective}</div>
-                    <div className="text-[10px] text-purple-600 font-mono">
+                  <div className="p-3 bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900/50 rounded text-xs space-y-1">
+                    <div className="font-bold text-purple-900 dark:text-purple-300">{proposedAgentPlan.title}</div>
+                    <div className="text-[11px] text-purple-800 dark:text-purple-400">{proposedAgentPlan.objective}</div>
+                    <div className="text-[10px] text-purple-600 dark:text-purple-400 font-mono">
                       Status: <span className="font-bold">{proposedAgentPlan.status}</span> (Human-in-the-loop approval required)
                     </div>
                   </div>
 
                   <div className="space-y-2 text-xs">
-                    <div className="font-bold uppercase tracking-wider text-slate-600 text-[10px]">
+                    <div className="font-bold uppercase tracking-wider text-slate-600 dark:text-[#A9BACB] text-[10px]">
                       Governed Plan Steps
                     </div>
                     {proposedAgentPlan.steps.map((st: any) => (
-                      <div key={st.stepNumber} className="p-2.5 bg-slate-50 border border-slate-200 rounded">
+                      <div key={st.stepNumber} className="p-2.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded">
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-slate-900">
+                          <span className="font-semibold text-slate-900 dark:text-[#E8EEF5]">
                             {st.stepNumber}. {st.title}
                           </span>
-                          <span className="text-[10px] font-mono bg-slate-200 text-slate-700 px-1 rounded">
+                          <span className="text-[10px] font-mono bg-slate-200 dark:bg-[#162638] text-slate-700 dark:text-[#E8EEF5] border dark:border-[#33485D] px-1 rounded">
                             {st.actionType}
                           </span>
                         </div>
-                        <div className="text-[11px] text-slate-500 mt-0.5">Target: {st.targetEntity}</div>
-                        <p className="text-[11px] text-slate-600 mt-1 italic">Rationale: {st.rationale}</p>
+                        <div className="text-[11px] text-slate-500 dark:text-[#A9BACB] mt-0.5">Target: {st.targetEntity}</div>
+                        <p className="text-[11px] text-slate-600 dark:text-[#A9BACB] mt-1 italic">Rationale: {st.rationale}</p>
                       </div>
                     ))}
                   </div>
@@ -1543,7 +1543,7 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                         toast.success('Plan submitted for human approval to Branch Operations Head.');
                         setIsAgentPlanOpen(false);
                       }}
-                      className="bg-purple-700 hover:bg-purple-800 text-white"
+                      className="bg-purple-700 hover:bg-purple-800 text-white cursor-pointer"
                     >
                       Authorize Plan
                     </Button>
@@ -1557,44 +1557,44 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
 
       {/* DECISION TRACE DRAWER */}
       {isDecisionTraceOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex justify-end">
-          <div className="bg-white max-w-md w-full h-full shadow-2xl p-5 overflow-y-auto space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs flex justify-end">
+          <div className="bg-white dark:bg-[#162638] max-w-md w-full h-full shadow-2xl p-5 overflow-y-auto space-y-4 border-l border-slate-200 dark:border-[#33485D]">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#33485D] pb-3">
               <div className="flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-indigo-600" />
-                <h3 className="font-bold text-sm text-slate-900">Decision Trace DT-10482</h3>
+                <HelpCircle className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                <h3 className="font-bold text-sm text-slate-900 dark:text-[#E8EEF5]">Decision Trace DT-10482</h3>
               </div>
               <button
                 onClick={() => setIsDecisionTraceOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
             <div className="text-xs space-y-3">
-              <div className="p-3 bg-indigo-50 border border-indigo-200 rounded text-indigo-900 font-semibold">
+              <div className="p-3 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/50 rounded text-indigo-900 dark:text-indigo-300 font-semibold">
                 Why is this group prioritized?
               </div>
 
               <div className="space-y-2">
-                <div className="font-bold text-slate-700 text-[11px]">Underlying Evidence & Signals:</div>
-                <div className="p-2.5 bg-slate-50 border border-slate-200 rounded space-y-1">
-                  <div className="font-semibold text-slate-900">1. Member Score Trend (Rahul Sharma)</div>
-                  <div className="text-slate-600">CORE score decreased 3 points due to delayed deposit renewal.</div>
-                  <div className="text-[10px] text-slate-400 font-mono">Source: CORE Score Engine</div>
+                <div className="font-bold text-slate-700 dark:text-[#A9BACB] text-[11px]">Underlying Evidence & Signals:</div>
+                <div className="p-2.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded space-y-1">
+                  <div className="font-semibold text-slate-900 dark:text-[#E8EEF5]">1. Member Score Trend (Rahul Sharma)</div>
+                  <div className="text-slate-600 dark:text-[#A9BACB]">CORE score decreased 3 points due to delayed deposit renewal.</div>
+                  <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">Source: CORE Score Engine</div>
                 </div>
 
-                <div className="p-2.5 bg-slate-50 border border-slate-200 rounded space-y-1">
-                  <div className="font-semibold text-slate-900">2. Business Affiliation (Sharma Bio-Agro)</div>
-                  <div className="text-slate-600">Working capital limit enhancement opportunity stalled for 12 days.</div>
-                  <div className="text-[10px] text-slate-400 font-mono">Source: Opportunity Radar</div>
+                <div className="p-2.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded space-y-1">
+                  <div className="font-semibold text-slate-900 dark:text-[#E8EEF5]">2. Business Affiliation (Sharma Bio-Agro)</div>
+                  <div className="text-slate-600 dark:text-[#A9BACB]">Working capital limit enhancement opportunity stalled for 12 days.</div>
+                  <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">Source: Opportunity Radar</div>
                 </div>
 
-                <div className="p-2.5 bg-slate-50 border border-slate-200 rounded space-y-1">
-                  <div className="font-semibold text-slate-900">3. Household Service Grievance</div>
-                  <div className="text-slate-600">High-priority service desk ticket unresolved near SLA threshold.</div>
-                  <div className="text-[10px] text-slate-400 font-mono">Source: Service Desk</div>
+                <div className="p-2.5 bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#33485D] rounded space-y-1">
+                  <div className="font-semibold text-slate-900 dark:text-[#E8EEF5]">3. Household Service Grievance</div>
+                  <div className="text-slate-600 dark:text-[#A9BACB]">High-priority service desk ticket unresolved near SLA threshold.</div>
+                  <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">Source: Service Desk</div>
                 </div>
               </div>
             </div>
@@ -1604,13 +1604,13 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
 
       {/* CHANGE OWNER MODAL */}
       {isHandoffModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full border border-slate-200 overflow-hidden">
-            <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-              <h3 className="font-bold text-sm text-slate-900">Reassign Relationship Manager</h3>
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#162638] rounded-lg shadow-xl max-w-sm w-full border border-slate-200 dark:border-[#33485D] overflow-hidden">
+            <div className="p-4 border-b border-slate-200 dark:border-[#33485D] flex items-center justify-between bg-slate-50 dark:bg-[#101C2A]">
+              <h3 className="font-bold text-sm text-slate-900 dark:text-[#E8EEF5]">Reassign Relationship Manager</h3>
               <button
                 onClick={() => setIsHandoffModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm cursor-pointer"
               >
                 ✕
               </button>
@@ -1618,7 +1618,7 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
 
             <form onSubmit={handleHandoffSubmit} className="p-4 space-y-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">
                   New Relationship Manager ID *
                 </label>
                 <input
@@ -1627,12 +1627,12 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                   placeholder="e.g. 2"
                   value={handoffNewOwnerId}
                   onChange={(e) => setHandoffNewOwnerId(e.target.value)}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">
                   Reassignment Reason & Audit Justification *
                 </label>
                 <textarea
@@ -1641,7 +1641,7 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                   placeholder="Portfolio rebalancing, officer rotation, or coverage expansion..."
                   value={handoffReason}
                   onChange={(e) => setHandoffReason(e.target.value)}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 />
               </div>
 
@@ -1654,7 +1654,7 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                   variant="primary"
                   size="sm"
                   disabled={handoffSubmitting}
-                  className="bg-cyan-700 hover:bg-cyan-800 text-white"
+                  className="bg-cyan-700 hover:bg-cyan-800 text-white cursor-pointer"
                 >
                   {handoffSubmitting ? 'Transferring...' : 'Confirm Transfer'}
                 </Button>
@@ -1666,13 +1666,13 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
 
       {/* ADD MEMBER MODAL */}
       {isAddMemberModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full border border-slate-200 overflow-hidden">
-            <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-              <h3 className="font-bold text-sm text-slate-900">Add Member to Group</h3>
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#162638] rounded-lg shadow-xl max-w-sm w-full border border-slate-200 dark:border-[#33485D] overflow-hidden">
+            <div className="p-4 border-b border-slate-200 dark:border-[#33485D] flex items-center justify-between bg-slate-50 dark:bg-[#101C2A]">
+              <h3 className="font-bold text-sm text-slate-900 dark:text-[#E8EEF5]">Add Member to Group</h3>
               <button
                 onClick={() => setIsAddMemberModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm cursor-pointer"
               >
                 ✕
               </button>
@@ -1680,11 +1680,11 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
 
             <form onSubmit={handleAddMemberSubmit} className="p-4 space-y-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Entity Type *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">Entity Type *</label>
                 <select
                   value={newMemberForm.entityType}
                   onChange={(e) => setNewMemberForm({ ...newMemberForm, entityType: e.target.value })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 >
                   <option value="CUSTOMER">CUSTOMER</option>
                   <option value="BUSINESS">BUSINESS</option>
@@ -1692,35 +1692,35 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Entity ID / Customer Code *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">Entity ID / Customer Code *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. CUS-10821 or 1"
                   value={newMemberForm.entityId}
                   onChange={(e) => setNewMemberForm({ ...newMemberForm, entityId: e.target.value })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Member Role *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">Member Role *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Spouse / Family Member or Director"
                   value={newMemberForm.role}
                   onChange={(e) => setNewMemberForm({ ...newMemberForm, role: e.target.value })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Relationship Type *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">Relationship Type *</label>
                 <select
                   value={newMemberForm.relationshipType}
                   onChange={(e) => setNewMemberForm({ ...newMemberForm, relationshipType: e.target.value })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 >
                   <option value="HOUSEHOLD_MEMBER">HOUSEHOLD_MEMBER</option>
                   <option value="SPOUSE">SPOUSE</option>
@@ -1732,13 +1732,13 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Ownership % (Optional)</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-[#A9BACB] mb-1">Ownership % (Optional)</label>
                 <input
                   type="number"
                   placeholder="e.g. 62"
                   value={newMemberForm.ownershipPercentage}
                   onChange={(e) => setNewMemberForm({ ...newMemberForm, ownershipPercentage: e.target.value })}
-                  className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
+                  className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#101C2A] text-slate-900 dark:text-[#E8EEF5] border border-slate-300 dark:border-[#33485D] rounded focus:ring-1 focus:ring-cyan-600 focus:outline-hidden"
                 />
               </div>
 
@@ -1746,7 +1746,7 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                 <Button type="button" variant="outline" size="sm" onClick={() => setIsAddMemberModalOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" variant="primary" size="sm" className="bg-cyan-700 hover:bg-cyan-800 text-white">
+                <Button type="submit" variant="primary" size="sm" className="bg-cyan-700 hover:bg-cyan-800 text-white cursor-pointer">
                   Add Member
                 </Button>
               </div>
