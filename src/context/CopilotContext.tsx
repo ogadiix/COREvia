@@ -45,6 +45,7 @@ export interface CopilotMessage {
   } | null;
   context?: CopilotContextEntity;
   model?: string;
+  toolCallsExecuted?: string[];
 }
 
 interface CopilotContextValue {
@@ -202,6 +203,7 @@ export const CopilotProvider: React.FC<{ children: ReactNode }> = ({ children })
         pendingConfirmation: data.pending_confirmation || null,
         context: data.context || activeCtx,
         model: data.model,
+        toolCallsExecuted: data.tool_calls_executed || [],
       };
 
       setMessages((prev) => [...prev, assistantMsg]);

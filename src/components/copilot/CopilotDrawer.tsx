@@ -75,7 +75,7 @@ export const CopilotDrawer: React.FC<CopilotDrawerProps> = ({ onNavigate }) => {
       <div
         onClick={closeDrawer}
         aria-hidden="true"
-        className="fixed inset-0 bg-slate-950/40 backdrop-blur-[1px] motion-fade-in"
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs motion-fade-in"
       />
 
       {/* Slide-over panel */}
@@ -85,7 +85,7 @@ export const CopilotDrawer: React.FC<CopilotDrawerProps> = ({ onNavigate }) => {
           role="dialog"
           aria-modal="true"
           aria-label="COREvia Banking Copilot"
-          className="w-full sm:w-[500px] md:w-[560px] max-w-full bg-[#F4F6F8] dark:bg-[#162638] border-l border-[#DCE3EA] dark:border-[#33485D] shadow-2xl flex flex-col h-full overflow-hidden motion-drawer-right"
+          className="w-full sm:w-[540px] md:w-[620px] max-w-full bg-[#F4F6F8] dark:bg-[#0A121E] border-l border-[#DCE3EA] dark:border-[#33485D] shadow-2xl flex flex-col h-full overflow-hidden motion-drawer-right"
         >
           <CopilotWorkspace
             isDrawer={true}
