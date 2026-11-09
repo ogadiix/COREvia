@@ -110,18 +110,18 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
   return (
     <div className="space-y-5 p-6 max-w-7xl mx-auto">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#FFFFFF] dark:bg-[#162638] p-5 rounded-xl border border-[#DCE3EA] dark:border-[#33485D] shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <div className="p-2 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700">
+            <div className="p-2 rounded-lg bg-[#168C83]/10 dark:bg-[#168C83]/20 border border-[#168C83]/30 text-[#168C83] dark:text-[#46C3B2]">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">Next Best Action Engine</h1>
-            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+            <h1 className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] tracking-tight">Next Best Action Engine</h1>
+            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-[#EDF1F5] dark:bg-[#1E3247] text-[#2D3F54] dark:text-[#CBD5E1] border border-[#DCE3EA] dark:border-[#33485D]">
               Phase 11
             </span>
           </div>
-          <p className="text-xs text-slate-500 max-w-2xl">
+          <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] max-w-2xl">
             Deterministic, rule-based recommendation engine prioritizing relationship-preserving service resolutions
             ahead of opportunistic cross-selling. Every recommendation carries immutable evidence.
           </p>
@@ -145,19 +145,19 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
       <div className="bg-[#FFFFFF] dark:bg-[#162638] p-4 rounded-xl border border-[#DCE3EA] dark:border-[#33485D] shadow-xs space-y-3">
         <form onSubmit={handleSearch} className="flex gap-2">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#8194A8] dark:text-[#64748B] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by customer name, CIF, action title, or keywords..."
-              className="w-full text-xs pl-9 pr-8 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs pl-9 pr-8 py-2 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] text-[#142C45] dark:text-[#E8EEF5] border border-[#DCE3EA] dark:border-[#33485D] focus:outline-none focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2]"
             />
             {searchTerm && (
               <button
                 type="button"
                 onClick={() => setSearchTerm('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8194A8] hover:text-[#142C45] dark:hover:text-[#E8EEF5] focus:outline-none"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -168,16 +168,16 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           </Button>
         </form>
 
-        <div className="flex items-center gap-2 flex-wrap text-xs pt-1 border-t border-slate-100">
-          <span className="text-slate-500 font-semibold flex items-center gap-1 mr-1">
-            <Filter className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-2 flex-wrap text-xs pt-1 border-t border-[#DCE3EA] dark:border-[#33485D]">
+          <span className="text-[#5D6B7B] dark:text-[#A9BACB] font-semibold flex items-center gap-1 mr-1">
+            <Filter className="w-3.5 h-3.5 text-[#168C83] dark:text-[#46C3B2]" />
             Filters:
           </span>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-xs p-1.5 rounded-md border border-slate-200 bg-[#F4F6F8] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] border border-[#DCE3EA] dark:border-[#33485D] font-medium"
+            className="text-xs p-1.5 rounded-md border border-[#DCE3EA] dark:border-[#33485D] bg-[#F8FAFC] dark:bg-[#101C2A] text-[#142C45] dark:text-[#E8EEF5] font-medium"
           >
             <option value="ACTIVE">Status: Active</option>
             <option value="ACCEPTED">Status: Accepted</option>
@@ -188,7 +188,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="text-xs p-1.5 rounded-md border border-slate-200 bg-[#F4F6F8] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] border border-[#DCE3EA] dark:border-[#33485D] font-medium"
+            className="text-xs p-1.5 rounded-md border border-[#DCE3EA] dark:border-[#33485D] bg-[#F8FAFC] dark:bg-[#101C2A] text-[#142C45] dark:text-[#E8EEF5] font-medium"
           >
             <option value="ALL">Type: All Types</option>
             <option value="SERVICE">Service (SLA / Grievance)</option>
@@ -201,7 +201,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="text-xs p-1.5 rounded-md border border-slate-200 bg-[#F4F6F8] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] border border-[#DCE3EA] dark:border-[#33485D] font-medium"
+            className="text-xs p-1.5 rounded-md border border-[#DCE3EA] dark:border-[#33485D] bg-[#F8FAFC] dark:bg-[#101C2A] text-[#142C45] dark:text-[#E8EEF5] font-medium"
           >
             <option value="ALL">Priority: All</option>
             <option value="CRITICAL">Critical</option>
@@ -213,7 +213,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
           <select
             value={urgencyFilter}
             onChange={(e) => setUrgencyFilter(e.target.value)}
-            className="text-xs p-1.5 rounded-md border border-slate-200 bg-[#F4F6F8] dark:bg-[#101C2A] text-[#273444] dark:text-[#E8EEF5] border border-[#DCE3EA] dark:border-[#33485D] font-medium"
+            className="text-xs p-1.5 rounded-md border border-[#DCE3EA] dark:border-[#33485D] bg-[#F8FAFC] dark:bg-[#101C2A] text-[#142C45] dark:text-[#E8EEF5] font-medium"
           >
             <option value="ALL">Urgency: All</option>
             <option value="IMMEDIATE">Immediate</option>
@@ -235,7 +235,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
                 setUrgencyFilter('ALL');
                 setSearchTerm('');
               }}
-              className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold ml-auto"
+              className="text-xs text-[#168C83] dark:text-[#46C3B2] hover:underline font-semibold ml-auto"
             >
               Reset Filters
             </button>
@@ -245,8 +245,8 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
 
       {/* Actions List */}
       {loading ? (
-        <div className="py-12 text-center text-xs text-slate-500 bg-[#FFFFFF] dark:bg-[#162638] rounded-xl border border-[#DCE3EA] dark:border-[#33485D] flex items-center justify-center gap-2">
-          <RefreshCw className="w-4 h-4 animate-spin text-indigo-600" />
+        <div className="py-12 text-center text-xs text-[#5D6B7B] dark:text-[#A9BACB] bg-[#FFFFFF] dark:bg-[#162638] rounded-xl border border-[#DCE3EA] dark:border-[#33485D] flex items-center justify-center gap-2">
+          <RefreshCw className="w-4 h-4 animate-spin text-[#168C83] dark:text-[#46C3B2]" />
           Loading prioritized recommendations...
         </div>
       ) : actions.length === 0 ? (
@@ -260,7 +260,7 @@ export const NextBestActionModule: React.FC<NextBestActionModuleProps> = ({
         />
       ) : (
         <div className="motion-fade-in space-y-4">
-          <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+          <div className="flex items-center justify-between text-xs text-[#5D6B7B] dark:text-[#A9BACB] px-1">
             <span>Showing {actions.length} prioritized recommendations</span>
             <span className="font-mono text-[11px]">Sorted by Rank Score (Desc)</span>
           </div>

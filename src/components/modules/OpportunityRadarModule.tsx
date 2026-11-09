@@ -450,7 +450,7 @@ export const OpportunityRadarModule: React.FC<OpportunityRadarModuleProps> = ({
                 setSortOrder(so as any);
                 setPage(1);
               }}
-              className="w-full px-2.5 py-1.5 border border-gray-300 rounded-lg outline-none bg-white text-gray-800"
+              className="w-full px-2.5 py-1.5 border border-[#DCE3EA] dark:border-[#33485D] rounded-lg outline-none bg-[#F4F6F8] dark:bg-[#101C2A] text-[#142C45] dark:text-[#E8EEF5]"
             >
               <option value="relevance-desc">Highest Relevance</option>
               <option value="priority-asc">Highest Priority</option>
@@ -464,9 +464,9 @@ export const OpportunityRadarModule: React.FC<OpportunityRadarModuleProps> = ({
       {/* Signals Grid & Results */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <div className="text-xs text-gray-500">
-            Showing <strong className="text-gray-900">{signals.length}</strong> of{' '}
-            <strong className="text-gray-900">{totalCount}</strong> relationship signals
+          <div className="text-xs text-[#5D6B7B] dark:text-[#8194A8]">
+            Showing <strong className="text-[#142C45] dark:text-[#E8EEF5]">{signals.length}</strong> of{' '}
+            <strong className="text-[#142C45] dark:text-[#E8EEF5]">{totalCount}</strong> relationship signals
           </div>
 
           {totalPages > 1 && (
@@ -480,7 +480,7 @@ export const OpportunityRadarModule: React.FC<OpportunityRadarModuleProps> = ({
               >
                 Previous
               </Button>
-              <span className="text-xs font-semibold text-gray-700">
+              <span className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">
                 Page {page} of {totalPages}
               </span>
               <Button
@@ -497,19 +497,19 @@ export const OpportunityRadarModule: React.FC<OpportunityRadarModuleProps> = ({
         </div>
 
         {loading ? (
-          <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-            <RefreshCw className="w-8 h-8 animate-spin mx-auto text-brand-600 mb-3" />
-            <p className="text-sm font-semibold text-gray-800">Analyzing customer portfolios & radar rules...</p>
-            <p className="text-xs text-gray-400 mt-1">Cross-referencing deposit liquidity, credit lines, and CORE scores</p>
+          <div className="text-center py-16 bg-[#FFFFFF] dark:bg-[#162638] rounded-xl border border-[#DCE3EA] dark:border-[#33485D]">
+            <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#168C83] dark:text-[#46C3B2] mb-3" />
+            <p className="text-sm font-semibold text-[#142C45] dark:text-[#E8EEF5]">Analyzing customer portfolios & radar rules...</p>
+            <p className="text-xs text-[#5D6B7B] dark:text-[#8194A8] mt-1">Cross-referencing deposit liquidity, credit lines, and CORE scores</p>
           </div>
         ) : signals.length === 0 ? (
           <EmptyState
-            icon={<Radar className="w-12 h-12 text-slate-300" />}
+            icon={<Radar className="w-12 h-12 text-[#8194A8] dark:text-[#64748B]" />}
             title="No Opportunity Signals Match Current Filters"
             description="Try adjusting your category, priority, or status filters, or run a fresh recalculation across all customer profiles."
             actionLabel="Recalculate All Radar Signals"
             onAction={handleRecalculateAll}
-            className="bg-white rounded-xl border border-gray-200 p-12 shadow-xs"
+            className="bg-[#FFFFFF] dark:bg-[#162638] rounded-xl border border-[#DCE3EA] dark:border-[#33485D] p-12 shadow-xs"
           />
         ) : (
           <div className="motion-fade-in grid grid-cols-1 md:grid-cols-2 gap-4">

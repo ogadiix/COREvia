@@ -225,7 +225,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
       )}
 
       {isDismissed && (
-        <div className="mb-3 p-1.5 rounded bg-slate-100 text-xs text-slate-600 italic">
+        <div className="mb-3 p-1.5 rounded bg-[#EDF1F5] dark:bg-[#1E3247] text-xs text-[#5D6B7B] dark:text-[#A9BACB] italic">
           Dismissed: "{action.dismissedReason}"
         </div>
       )}
@@ -294,7 +294,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
             )}
           </div>
         ) : (
-          <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+          <span className="text-xs font-semibold px-2 py-0.5 rounded bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB]">
             Status: {action.status}
           </span>
         )}

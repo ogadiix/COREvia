@@ -274,46 +274,46 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
   return (
     <div className="space-y-5 pb-16">
       {/* 1. ENTERPRISE CONTEXT HEADER */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-5 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2.5">
-              <div className="p-2 rounded-lg bg-blue-600/10 border border-blue-500/20 text-blue-400">
+              <div className="p-2 rounded-lg bg-[#168C83]/10 dark:bg-[#168C83]/20 border border-[#168C83]/30 text-[#168C83] dark:text-[#46C3B2]">
                 <PieChart className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center space-x-2">
-                  <h1 className="text-xl font-bold text-slate-100 tracking-tight">Portfolio Intelligence</h1>
+                  <h1 className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] tracking-tight">Portfolio Intelligence</h1>
                   <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
                     Phase 37
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] mt-0.5">
                   Explainable, non-predictive portfolio analytics across authorized relationships
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-3 border-t border-slate-800/80 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-3 border-t border-[#DCE3EA] dark:border-[#33485D] text-xs">
               <div>
-                <span className="text-slate-500 block text-[11px]">Authorized Portfolio</span>
-                <span className="font-semibold text-slate-200">
+                <span className="text-[#6B7C93] dark:text-[#8194A8] block text-[11px]">Authorized Portfolio</span>
+                <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">
                   {user?.name || 'Deepak Nambiar'} ({user?.role?.replace('_', ' ') || 'RM'})
                 </span>
               </div>
               <div>
-                <span className="text-slate-500 block text-[11px]">Time Period</span>
-                <span className="font-semibold text-slate-200 font-mono">
+                <span className="text-[#6B7C93] dark:text-[#8194A8] block text-[11px]">Time Period</span>
+                <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] font-mono">
                   {filters.period === '30D' ? 'Last 30 Days' : filters.period === '60D' ? 'Last 60 Days' : filters.period === '90D' ? 'Last 90 Days' : 'Year to Date'}
                 </span>
               </div>
               <div>
-                <span className="text-slate-500 block text-[11px]">As Of</span>
-                <span className="font-semibold text-slate-200 font-mono text-[11px]">{asOfTimestamp}</span>
+                <span className="text-[#6B7C93] dark:text-[#8194A8] block text-[11px]">As Of</span>
+                <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] font-mono text-[11px]">{asOfTimestamp}</span>
               </div>
               <div>
-                <span className="text-slate-500 block text-[11px]">Scope & RBAC</span>
-                <span className="font-semibold text-blue-400">Strict Authorized Boundary</span>
+                <span className="text-[#6B7C93] dark:text-[#8194A8] block text-[11px]">Scope & RBAC</span>
+                <span className="font-semibold text-[#168C83] dark:text-[#46C3B2]">Strict Authorized Boundary</span>
               </div>
             </div>
           </div>
@@ -325,7 +325,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 loadCustomerDrillDown(customerPage);
               }}
               disabled={isLoading}
-              className="px-3 py-2 text-xs rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center space-x-1.5 transition-colors disabled:opacity-50"
+              className="px-3 py-2 text-xs rounded-lg bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#E2E8F0] dark:hover:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] border border-[#CBD5E1] dark:border-[#33485D] flex items-center space-x-1.5 transition-colors disabled:opacity-50"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
@@ -333,7 +333,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             <button
               onClick={handleExportCSV}
               disabled={isExporting}
-              className="px-3.5 py-2 text-xs rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium flex items-center space-x-1.5 shadow-sm transition-colors disabled:opacity-50"
+              className="px-3.5 py-2 text-xs rounded-lg bg-[#168C83] hover:bg-[#127069] text-white font-medium flex items-center space-x-1.5 shadow-sm transition-colors disabled:opacity-50"
             >
               <Download className="w-3.5 h-3.5" />
               <span>{isExporting ? 'Exporting...' : 'Export CSV'}</span>
@@ -343,22 +343,22 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
       </div>
 
       {/* 2. SERVER-SIDE FILTER BAR */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm text-xs">
-        <div className="flex items-center justify-between mb-3 text-slate-400">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 shadow-sm text-xs">
+        <div className="flex items-center justify-between mb-3 text-[#5D6B7B] dark:text-[#A9BACB]">
           <div className="flex items-center space-x-1.5">
-            <Filter className="w-3.5 h-3.5 text-blue-400" />
-            <span className="font-medium text-slate-300">Server-Side Portfolio Filters</span>
+            <Filter className="w-3.5 h-3.5 text-[#168C83] dark:text-[#46C3B2]" />
+            <span className="font-medium text-[#2D3F54] dark:text-[#CBD5E1]">Server-Side Portfolio Filters</span>
           </div>
-          <span className="text-[11px] text-slate-500">Query evaluated on server; no whole-database browser download</span>
+          <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">Query evaluated on server; no whole-database browser download</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Period</label>
+            <label className="block text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mb-1">Period</label>
             <select
               value={filters.period || '30D'}
               onChange={(e) => setFilters((prev) => ({ ...prev, period: e.target.value as any }))}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 text-xs focus:outline-hidden focus:border-blue-500"
+              className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg px-2.5 py-1.5 text-[#142C45] dark:text-[#E8EEF5] text-xs focus:outline-hidden focus:border-[#168C83] dark:border-[#46C3B2]"
             >
               <option value="30D">Last 30 Days</option>
               <option value="60D">Last 60 Days</option>
@@ -368,11 +368,11 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           </div>
 
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Entity Type</label>
+            <label className="block text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mb-1">Entity Type</label>
             <select
               value={filters.entityType || 'ALL'}
               onChange={(e) => setFilters((prev) => ({ ...prev, entityType: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 text-xs focus:outline-hidden focus:border-blue-500"
+              className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg px-2.5 py-1.5 text-[#142C45] dark:text-[#E8EEF5] text-xs focus:outline-hidden focus:border-[#168C83] dark:border-[#46C3B2]"
             >
               <option value="ALL">All Entity Types</option>
               <option value="INDIVIDUAL">Individual</option>
@@ -384,11 +384,11 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           </div>
 
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Risk Segment</label>
+            <label className="block text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mb-1">Risk Segment</label>
             <select
               value={filters.segment || 'ALL'}
               onChange={(e) => setFilters((prev) => ({ ...prev, segment: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 text-xs focus:outline-hidden focus:border-blue-500"
+              className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg px-2.5 py-1.5 text-[#142C45] dark:text-[#E8EEF5] text-xs focus:outline-hidden focus:border-[#168C83] dark:border-[#46C3B2]"
             >
               <option value="ALL">All Risk Segments</option>
               <option value="LOW">Low Risk</option>
@@ -398,11 +398,11 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           </div>
 
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">CORE Score Band</label>
+            <label className="block text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mb-1">CORE Score Band</label>
             <select
               value={filters.coreScoreBand || 'ALL'}
               onChange={(e) => setFilters((prev) => ({ ...prev, coreScoreBand: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 text-xs focus:outline-hidden focus:border-blue-500"
+              className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg px-2.5 py-1.5 text-[#142C45] dark:text-[#E8EEF5] text-xs focus:outline-hidden focus:border-[#168C83] dark:border-[#46C3B2]"
             >
               <option value="ALL">All Score Bands</option>
               <option value="EXCELLENT">Excellent (800+)</option>
@@ -413,11 +413,11 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           </div>
 
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Momentum</label>
+            <label className="block text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mb-1">Momentum</label>
             <select
               value={filters.momentum || 'ALL'}
               onChange={(e) => setFilters((prev) => ({ ...prev, momentum: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 text-xs focus:outline-hidden focus:border-blue-500"
+              className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg px-2.5 py-1.5 text-[#142C45] dark:text-[#E8EEF5] text-xs focus:outline-hidden focus:border-[#168C83] dark:border-[#46C3B2]"
             >
               <option value="ALL">All Momentum</option>
               <option value="POSITIVE">Positive</option>
@@ -427,16 +427,16 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           </div>
 
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Customer Search</label>
+            <label className="block text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mb-1">Customer Search</label>
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search name/CIF..."
                 value={filters.search || ''}
                 onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-2.5 py-1.5 text-slate-200 text-xs focus:outline-hidden focus:border-blue-500"
+                className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] rounded-lg pl-8 pr-2.5 py-1.5 text-[#142C45] dark:text-[#E8EEF5] text-xs focus:outline-hidden focus:border-[#168C83] dark:border-[#46C3B2]"
               />
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" />
+              <Search className="w-3.5 h-3.5 text-[#5D6B7B] dark:text-[#A9BACB] absolute left-2.5 top-2" />
             </div>
           </div>
         </div>
@@ -444,37 +444,37 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
       {/* 3. PORTFOLIO OVERVIEW: 13 CONCISE KPIS */}
       {overview && (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm">
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3 text-xs">
-            <span className="font-semibold text-slate-200">Portfolio Overview Metrics</span>
-            <span className="text-slate-500 text-[11px]">Click ⓘ on any card to view deterministic source and calculation</span>
+            <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">Portfolio Overview Metrics</span>
+            <span className="text-[#6B7C93] dark:text-[#8194A8] text-[11px]">Click ⓘ on any card to view deterministic source and calculation</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2.5 text-xs">
             {/* KPI 1: Authorized Customers */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Authorized Customers</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['authorizedCustomers'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                   title="Definition & Calculation"
                 >
                   <Info className="w-3 h-3" />
                 </button>
               </div>
-              <div className="text-lg font-bold text-slate-100 font-mono mt-1">
+              <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono mt-1">
                 {overview.authorizedCustomers}
               </div>
             </div>
 
             {/* KPI 2: Total Relationship Value */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Total Value</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['totalRelationshipValue'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -485,60 +485,60 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             </div>
 
             {/* KPI 3: Avg Relationship Value */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Avg Value</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['averageRelationshipValue'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
               </div>
-              <div className="text-lg font-bold text-slate-200 font-mono mt-1">
+              <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono mt-1">
                 ₹{(overview.averageRelationshipValue / 100000).toFixed(1)} L
               </div>
             </div>
 
             {/* KPI 4: Active Products */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Active Products</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['activeProducts'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
               </div>
-              <div className="text-lg font-bold text-slate-100 font-mono mt-1">
+              <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono mt-1">
                 {overview.activeProducts}
               </div>
             </div>
 
             {/* KPI 5: Avg CORE Score */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Avg CORE Score</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['averageCoreScore'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
               </div>
-              <div className="text-lg font-bold text-indigo-300 font-mono mt-1">
+              <div className="text-lg font-bold text-[#168C83] dark:text-[#46C3B2] font-mono mt-1">
                 {overview.averageCoreScore}
               </div>
             </div>
 
             {/* KPI 6: Positive Momentum */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Positive Momentum</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['customersWithPositiveMomentum'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -550,12 +550,12 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             </div>
 
             {/* KPI 7: Negative Momentum */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Negative Momentum</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['customersWithNegativeMomentum'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -567,28 +567,28 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             </div>
 
             {/* KPI 8: Open Opportunities */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Open Deals</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['openOpportunities'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
               </div>
-              <div className="text-lg font-bold text-slate-100 font-mono mt-1">
+              <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono mt-1">
                 {overview.openOpportunities}
               </div>
             </div>
 
             {/* KPI 9: Pipeline Value */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Pipeline Value</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['opportunityPipelineValue'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -599,12 +599,12 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             </div>
 
             {/* KPI 10: Open Service Cases */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Open Cases</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['openServiceCases'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -615,12 +615,12 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             </div>
 
             {/* KPI 11: SLA Risk Count */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>SLA Risk</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['slaRiskCount'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -631,12 +631,12 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             </div>
 
             {/* KPI 12: Active Signals */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Active Signals</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['activeSignals'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -647,17 +647,17 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             </div>
 
             {/* KPI 13: Outstanding Actions */}
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 relative group">
-              <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <div className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] relative group">
+              <div className="flex items-center justify-between text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">
                 <span>Pending Actions</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['outstandingActions'])}
-                  className="text-slate-500 hover:text-blue-400"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
               </div>
-              <div className="text-lg font-bold text-blue-400 font-mono mt-1">
+              <div className="text-lg font-bold text-[#168C83] dark:text-[#46C3B2] font-mono mt-1">
                 {overview.outstandingActions}
               </div>
             </div>
@@ -666,13 +666,13 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
       )}
 
       {/* 4. WORKSPACE TABS */}
-      <div className="border-b border-slate-800 flex items-center space-x-1 overflow-x-auto text-xs font-medium text-slate-400">
+      <div className="border-b border-[#DCE3EA] dark:border-[#33485D] flex items-center space-x-1 overflow-x-auto text-xs font-medium text-[#5D6B7B] dark:text-[#A9BACB]">
         <button
           onClick={() => setActiveTab('overview')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'overview'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           Summary Dashboard
@@ -681,8 +681,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           onClick={() => setActiveTab('health-score')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'health-score'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           Health & CORE Score
@@ -691,8 +691,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           onClick={() => setActiveTab('value-concentration')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'value-concentration'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           Value & Concentration
@@ -701,8 +701,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           onClick={() => setActiveTab('products-penetration')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'products-penetration'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           Product Penetration
@@ -711,8 +711,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           onClick={() => setActiveTab('engagement-service')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'engagement-service'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           Engagement & Service
@@ -721,8 +721,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           onClick={() => setActiveTab('opportunities-signals')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'opportunities-signals'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           Pipeline, Signals & NBAs
@@ -731,8 +731,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           onClick={() => setActiveTab('what-changed')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'what-changed'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           What Changed & Changelog
@@ -741,8 +741,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           onClick={() => setActiveTab('matrix-focus')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'matrix-focus'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           Health Matrix & Focus Areas
@@ -751,8 +751,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           onClick={() => setActiveTab('comparison')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'comparison'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           Period Comparison
@@ -761,8 +761,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           onClick={() => setActiveTab('customers')}
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'customers'
-              ? 'border-blue-500 text-blue-400 font-semibold'
-              : 'border-transparent hover:text-slate-200'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
+              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
           }`}
         >
           Authorized Customers ({overview?.authorizedCustomers || 0})
@@ -771,7 +771,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
       {/* 5. TAB CONTENTS */}
       {isLoading ? (
-        <div className="flex items-center justify-center py-24 text-slate-500">
+        <div className="flex items-center justify-center py-24 text-[#6B7C93] dark:text-[#8194A8]">
           <Clock className="w-6 h-6 animate-spin mr-2" />
           <span>Aggregating authorized relationship portfolio intelligence...</span>
         </div>
@@ -785,29 +785,29 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           {activeTab === 'overview' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Health Distribution Panel */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <Activity className="w-4 h-4 text-emerald-400" />
-                    <h3 className="text-xs font-semibold text-slate-200">Relationship Health Distribution</h3>
+                    <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Relationship Health Distribution</h3>
                   </div>
-                  <span className="text-[11px] text-slate-500">Derived from CORE Score & Momentum</span>
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">Derived from CORE Score & Momentum</span>
                 </div>
                 <div className="space-y-2">
                   {healthDist.map((b) => (
                     <div
                       key={b.state || (b as any).bucketKey || b.label}
                       onClick={() => setActiveTab('customers')}
-                      className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer transition-colors"
+                      className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] hover:border-[#CBD5E1] dark:border-[#33485D] cursor-pointer transition-colors"
                     >
                       <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-200">{b.label}</span>
+                        <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{b.label}</span>
                         <div className="flex items-center space-x-2">
-                          <span className="font-bold text-slate-100 font-mono">{b.count ?? (b as any).customerCount ?? 0}</span>
-                          <span className="text-slate-400 font-mono">({b.percentage}%)</span>
+                          <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono">{b.count ?? (b as any).customerCount ?? 0}</span>
+                          <span className="text-[#5D6B7B] dark:text-[#A9BACB] font-mono">({b.percentage}%)</span>
                         </div>
                       </div>
-                      <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+                      <div className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] h-1.5 rounded-full mt-2 overflow-hidden">
                         <div
                           className={`h-full rounded-full ${
                             (b.state || (b as any).bucketKey) === 'HEALTHY'
@@ -823,7 +823,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                           style={{ width: `${Math.min(100, b.percentage)}%` }}
                         />
                       </div>
-                      <p className="text-[11px] text-slate-400 mt-1.5">{b.description}</p>
+                      <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mt-1.5">{b.description}</p>
                     </div>
                   ))}
                 </div>
@@ -831,58 +831,58 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
               {/* CORE Score Distribution Panel */}
               {coreScore && (
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <Sparkles className="w-4 h-4 text-indigo-400" />
-                      <h3 className="text-xs font-semibold text-slate-200">CORE Score Engine Distribution</h3>
+                      <Sparkles className="w-4 h-4 text-[#168C83] dark:text-[#46C3B2]" />
+                      <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">CORE Score Engine Distribution</h3>
                     </div>
-                    <div className="text-[11px] font-mono text-indigo-300">
+                    <div className="text-[11px] font-mono text-[#168C83] dark:text-[#46C3B2]">
                       Avg: {coreScore.averageScore} | Median: {coreScore.medianScore}
                     </div>
                   </div>
                   <div className="grid grid-cols-4 gap-2 text-center text-xs">
                     {coreScore.distribution.map((d) => (
-                      <div key={d.band} className="p-2.5 rounded-lg bg-slate-950/40 border border-slate-800">
-                        <span className="text-[10px] text-slate-400 block">{d.label}</span>
-                        <span className="text-sm font-bold text-slate-100 font-mono mt-1 block">
+                      <div key={d.band} className="p-2.5 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+                        <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">{d.label}</span>
+                        <span className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono mt-1 block">
                           {d.customerCount}
                         </span>
-                        <span className="text-[10px] text-slate-500 font-mono">{d.percentage}%</span>
+                        <span className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] font-mono">{d.percentage}%</span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-800">
-                    <h4 className="text-xs font-semibold text-slate-300 mb-2">Component Score Averages</h4>
+                  <div className="mt-4 pt-3 border-t border-[#DCE3EA] dark:border-[#33485D]">
+                    <h4 className="text-xs font-semibold text-[#2D3F54] dark:text-[#CBD5E1] mb-2">Component Score Averages</h4>
                     <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
-                      <div className="p-2 rounded bg-slate-950/60 border border-slate-800">
-                        <span className="text-[10px] text-slate-400 block">Value</span>
-                        <span className="font-bold text-slate-200 font-mono">
+                      <div className="p-2 rounded bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+                        <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">Value</span>
+                        <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono">
                           {coreScore.componentAverages.relationshipValueAvg}
                         </span>
                       </div>
-                      <div className="p-2 rounded bg-slate-950/60 border border-slate-800">
-                        <span className="text-[10px] text-slate-400 block">Depth</span>
-                        <span className="font-bold text-slate-200 font-mono">
+                      <div className="p-2 rounded bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+                        <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">Depth</span>
+                        <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono">
                           {coreScore.componentAverages.productDepthAvg}
                         </span>
                       </div>
-                      <div className="p-2 rounded bg-slate-950/60 border border-slate-800">
-                        <span className="text-[10px] text-slate-400 block">Engagement</span>
-                        <span className="font-bold text-slate-200 font-mono">
+                      <div className="p-2 rounded bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+                        <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">Engagement</span>
+                        <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono">
                           {coreScore.componentAverages.engagementAvg}
                         </span>
                       </div>
-                      <div className="p-2 rounded bg-slate-950/60 border border-slate-800">
-                        <span className="text-[10px] text-slate-400 block">Service</span>
-                        <span className="font-bold text-slate-200 font-mono">
+                      <div className="p-2 rounded bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+                        <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">Service</span>
+                        <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono">
                           {coreScore.componentAverages.serviceHealthAvg}
                         </span>
                       </div>
-                      <div className="p-2 rounded bg-slate-950/60 border border-slate-800">
-                        <span className="text-[10px] text-slate-400 block">Activity</span>
-                        <span className="font-bold text-slate-200 font-mono">
+                      <div className="p-2 rounded bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+                        <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">Activity</span>
+                        <span className="font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono">
                           {coreScore.componentAverages.activityMomentumAvg}
                         </span>
                       </div>
@@ -898,18 +898,18 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             <div className="space-y-4">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Health Buckets */}
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
-                  <h3 className="text-xs font-semibold text-slate-200">Authorized Relationship Health State</h3>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
+                  <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Authorized Relationship Health State</h3>
                   <div className="space-y-2.5">
                     {healthDist.map((b) => (
-                      <div key={b.state || (b as any).bucketKey || b.label} className="p-3 rounded-lg bg-slate-950/50 border border-slate-800">
+                      <div key={b.state || (b as any).bucketKey || b.label} className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
                         <div className="flex items-center justify-between text-xs">
-                          <span className="font-semibold text-slate-100">{b.label}</span>
-                          <span className="font-mono text-slate-300">
+                          <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{b.label}</span>
+                          <span className="font-mono text-[#2D3F54] dark:text-[#CBD5E1]">
                             {b.count ?? (b as any).customerCount ?? 0} customers ({b.percentage}%)
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-400 mt-1">{b.description}</p>
+                        <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mt-1">{b.description}</p>
                       </div>
                     ))}
                   </div>
@@ -917,13 +917,13 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
                 {/* Meaningful Score Movements */}
                 {coreScore && (
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                  <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-semibold text-slate-200">Meaningful Score Movements (&gt;15 Pts)</h3>
-                      <span className="text-[11px] text-slate-500 font-mono">{coreScore.scoreChanges.length} changes detected</span>
+                      <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Meaningful Score Movements (&gt;15 Pts)</h3>
+                      <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-mono">{coreScore.scoreChanges.length} changes detected</span>
                     </div>
                     {coreScore.scoreChanges.length === 0 ? (
-                      <p className="text-xs text-slate-500 italic py-6 text-center">
+                      <p className="text-xs text-[#6B7C93] dark:text-[#8194A8] italic py-6 text-center">
                         No material score movements observed over the active comparison period.
                       </p>
                     ) : (
@@ -932,14 +932,14 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                           <div
                             key={`${sc.customerId}-${idx}`}
                             onClick={() => handleSelectCustomer(sc.customerId)}
-                            className="p-2.5 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer text-xs space-y-1"
+                            className="p-2.5 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] hover:border-[#CBD5E1] dark:border-[#33485D] cursor-pointer text-xs space-y-1"
                           >
                             <div className="flex items-center justify-between">
-                              <span className="font-medium text-slate-200">{sc.customerName}</span>
+                              <span className="font-medium text-[#142C45] dark:text-[#E8EEF5]">{sc.customerName}</span>
                               <div className="flex items-center space-x-2 font-mono">
-                                <span className="text-slate-400">{sc.previousScore}</span>
-                                <ArrowRight className="w-3 h-3 text-slate-500" />
-                                <span className="font-bold text-slate-100">{sc.currentScore}</span>
+                                <span className="text-[#5D6B7B] dark:text-[#A9BACB]">{sc.previousScore}</span>
+                                <ArrowRight className="w-3 h-3 text-[#6B7C93] dark:text-[#8194A8]" />
+                                <span className="font-bold text-[#142C45] dark:text-[#E8EEF5]">{sc.currentScore}</span>
                                 <span
                                   className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
                                     sc.direction === 'IMPROVED'
@@ -951,7 +951,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                                 </span>
                               </div>
                             </div>
-                            <p className="text-[11px] text-slate-400">{sc.evidence}</p>
+                            <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">{sc.evidence}</p>
                           </div>
                         ))}
                       </div>
@@ -966,47 +966,47 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           {activeTab === 'value-concentration' && valueAnalysis && (
             <div className="space-y-4">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-2">
-                  <span className="text-slate-400 text-[11px]">Total Relationship Value</span>
+                <div className="p-4 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-xs space-y-2">
+                  <span className="text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">Total Relationship Value</span>
                   <div className="text-2xl font-bold text-emerald-400 font-mono">
                     ₹{(valueAnalysis.totalValue / 10000000).toFixed(2)} Cr
                   </div>
-                  <div className="text-[11px] text-slate-500">
+                  <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">
                     Average: ₹{(valueAnalysis.averageValue / 100000).toFixed(2)} L | Median: ₹{(valueAnalysis.medianValue / 100000).toFixed(2)} L
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-2">
-                  <span className="text-slate-400 text-[11px]">Top 5 Customer Concentration</span>
-                  <div className="text-2xl font-bold text-blue-400 font-mono">
+                <div className="p-4 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-xs space-y-2">
+                  <span className="text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">Top 5 Customer Concentration</span>
+                  <div className="text-2xl font-bold text-[#168C83] dark:text-[#46C3B2] font-mono">
                     {valueAnalysis.top5ConcentrationPct}%
                   </div>
-                  <div className="text-[11px] text-slate-500">
+                  <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">
                     Calculated over active authorized portfolio
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-2">
-                  <span className="text-slate-400 text-[11px]">Top 10 Customer Concentration</span>
+                <div className="p-4 rounded-xl bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] text-xs space-y-2">
+                  <span className="text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">Top 10 Customer Concentration</span>
                   <div className="text-2xl font-bold text-purple-400 font-mono">
                     {valueAnalysis.top10ConcentrationPct}%
                   </div>
-                  <div className="text-[11px] text-slate-500">
+                  <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">
                     Neutral descriptive concentration metric
                   </div>
                 </div>
               </div>
 
               {/* Top Customer Concentration Table */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-semibold text-slate-200">High Concentration Accounts</h3>
-                  <span className="text-[11px] text-slate-500">Sorted by relationship value</span>
+                  <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">High Concentration Accounts</h3>
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">Sorted by relationship value</span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-slate-800 text-slate-400 font-medium text-[11px]">
+                      <tr className="border-b border-[#DCE3EA] dark:border-[#33485D] text-[#5D6B7B] dark:text-[#A9BACB] font-medium text-[11px]">
                         <th className="pb-2">Customer</th>
                         <th className="pb-2">Customer Code</th>
                         <th className="pb-2 text-right">Relationship Value</th>
@@ -1014,21 +1014,21 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                         <th className="pb-2 text-center">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {valueAnalysis.topConcentration.map((c) => (
-                        <tr key={c.customerId} className="hover:bg-slate-850/50 transition-colors">
-                          <td className="py-2.5 font-medium text-slate-200">{c.customerName}</td>
-                          <td className="py-2.5 font-mono text-slate-400 text-[11px]">{c.customerCode}</td>
+                        <tr key={c.customerId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]/50 transition-colors">
+                          <td className="py-2.5 font-medium text-[#142C45] dark:text-[#E8EEF5]">{c.customerName}</td>
+                          <td className="py-2.5 font-mono text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">{c.customerCode}</td>
                           <td className="py-2.5 font-mono text-right text-emerald-400 font-semibold">
                             ₹{(c.relationshipValue / 100000).toFixed(2)} L
                           </td>
-                          <td className="py-2.5 font-mono text-right text-blue-400 font-semibold">
+                          <td className="py-2.5 font-mono text-right text-[#168C83] dark:text-[#46C3B2] font-semibold">
                             {c.portfolioSharePercentage}%
                           </td>
                           <td className="py-2.5 text-center">
                             <button
                               onClick={() => handleSelectCustomer(c.customerId)}
-                              className="text-[11px] text-blue-400 hover:underline"
+                              className="text-[11px] text-[#168C83] dark:text-[#46C3B2] hover:underline"
                             >
                               View Profile
                             </button>
@@ -1046,22 +1046,22 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           {activeTab === 'products-penetration' && productPen && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Product Adoption List */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
-                <h3 className="text-xs font-semibold text-slate-200">Product Penetration & Adoption</h3>
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
+                <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Product Penetration & Adoption</h3>
                 <div className="space-y-2">
                   {productPen.products.map((p) => (
-                    <div key={p.productCode} className="p-3 rounded-lg bg-slate-950/40 border border-slate-800">
+                    <div key={p.productCode} className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
                       <div className="flex items-center justify-between text-xs">
                         <div>
-                          <span className="font-semibold text-slate-200">{p.productName}</span>
-                          <span className="text-[10px] text-slate-500 ml-2 font-mono">({p.productCode})</span>
+                          <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{p.productName}</span>
+                          <span className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] ml-2 font-mono">({p.productCode})</span>
                         </div>
                         <div className="flex items-center space-x-2 font-mono">
-                          <span className="text-slate-300 font-bold">{p.customerCount} custs</span>
-                          <span className="text-blue-400 font-semibold">({p.penetrationPercentage}%)</span>
+                          <span className="text-[#2D3F54] dark:text-[#CBD5E1] font-bold">{p.customerCount} custs</span>
+                          <span className="text-[#168C83] dark:text-[#46C3B2] font-semibold">({p.penetrationPercentage}%)</span>
                         </div>
                       </div>
-                      <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+                      <div className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] h-1.5 rounded-full mt-2 overflow-hidden">
                         <div
                           className="h-full bg-blue-500 rounded-full"
                           style={{ width: `${Math.min(100, p.penetrationPercentage)}%` }}
@@ -1073,25 +1073,25 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
               </div>
 
               {/* Shallow Depth Accounts */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-semibold text-slate-200">Shallow Product Depth Accounts (Single Product)</h3>
-                  <span className="text-[11px] text-slate-500">{productPen.shallowDepthCustomers.length} accounts</span>
+                  <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Shallow Product Depth Accounts (Single Product)</h3>
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">{productPen.shallowDepthCustomers.length} accounts</span>
                 </div>
                 <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
                   {productPen.shallowDepthCustomers.map((c) => (
                     <div
                       key={c.customerId}
                       onClick={() => handleSelectCustomer(c.customerId)}
-                      className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer text-xs"
+                      className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] hover:border-[#CBD5E1] dark:border-[#33485D] cursor-pointer text-xs"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-medium text-slate-200">{c.customerName}</span>
+                        <span className="font-medium text-[#142C45] dark:text-[#E8EEF5]">{c.customerName}</span>
                         <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
                           {c.productCount} Product
                         </span>
                       </div>
-                      <div className="text-[11px] text-slate-400 mt-1">
+                      <div className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mt-1">
                         Holding: {c.productsHeld.join(', ')}
                       </div>
                     </div>
@@ -1106,31 +1106,31 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Engagement Intelligence */}
               {engagement && (
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-semibold text-slate-200">Interaction Volume & Inactive Accounts</h3>
-                    <span className="text-[11px] font-mono text-slate-400">
+                    <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Interaction Volume & Inactive Accounts</h3>
+                    <span className="text-[11px] font-mono text-[#5D6B7B] dark:text-[#A9BACB]">
                       Total: {engagement.totalInteractions} interactions
                     </span>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="text-[11px] font-semibold text-slate-400">Inactive Accounts (&gt;45 Days Rule)</h4>
+                    <h4 className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#A9BACB]">Inactive Accounts (&gt;45 Days Rule)</h4>
                     {engagement.inactiveCustomers.length === 0 ? (
-                      <p className="text-xs text-slate-500 italic py-2">All customers have recent recorded interactions.</p>
+                      <p className="text-xs text-[#6B7C93] dark:text-[#8194A8] italic py-2">All customers have recent recorded interactions.</p>
                     ) : (
                       engagement.inactiveCustomers.map((ic) => (
                         <div
                           key={ic.customerId}
                           onClick={() => handleSelectCustomer(ic.customerId)}
-                          className="p-2.5 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer text-xs"
+                          className="p-2.5 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] hover:border-[#CBD5E1] dark:border-[#33485D] cursor-pointer text-xs"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="font-medium text-slate-200">{ic.customerName}</span>
+                            <span className="font-medium text-[#142C45] dark:text-[#E8EEF5]">{ic.customerName}</span>
                             <span className="text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded">
                               {ic.daysSinceLastInteraction} days inactive
                             </span>
                           </div>
-                          <p className="text-[10px] text-slate-500 mt-1">{ic.rule}</p>
+                          <p className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] mt-1">{ic.rule}</p>
                         </div>
                       ))
                     )}
@@ -1140,39 +1140,39 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
               {/* Service Quality */}
               {serviceQuality && (
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-semibold text-slate-200">Service Desk & SLA Compliance</h3>
-                    <span className="text-[11px] text-slate-400 font-mono">
+                    <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Service Desk & SLA Compliance</h3>
+                    <span className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] font-mono">
                       Resolution Rate: {serviceQuality.resolutionRate}%
                     </span>
                   </div>
 
                   <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                    <div className="p-2.5 rounded-lg bg-slate-950/40 border border-slate-800">
-                      <span className="text-[10px] text-slate-400 block">Open Cases</span>
+                    <div className="p-2.5 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+                      <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">Open Cases</span>
                       <span className="text-base font-bold text-amber-400 font-mono">{serviceQuality.openCases}</span>
                     </div>
-                    <div className="p-2.5 rounded-lg bg-slate-950/40 border border-slate-800">
-                      <span className="text-[10px] text-slate-400 block">SLA at Risk</span>
+                    <div className="p-2.5 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+                      <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">SLA at Risk</span>
                       <span className="text-base font-bold text-orange-400 font-mono">{serviceQuality.slaAtRiskCount}</span>
                     </div>
-                    <div className="p-2.5 rounded-lg bg-slate-950/40 border border-slate-800">
-                      <span className="text-[10px] text-slate-400 block">SLA Breached</span>
+                    <div className="p-2.5 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D]">
+                      <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">SLA Breached</span>
                       <span className="text-base font-bold text-rose-400 font-mono">{serviceQuality.slaBreachedCount}</span>
                     </div>
                   </div>
 
                   <div className="mt-3">
-                    <h4 className="text-[11px] font-semibold text-slate-400 mb-2">Service Concentration</h4>
+                    <h4 className="text-[11px] font-semibold text-[#5D6B7B] dark:text-[#A9BACB] mb-2">Service Concentration</h4>
                     <div className="space-y-1.5">
                       {serviceQuality.customerConcentration.map((sc) => (
                         <div
                           key={sc.customerId}
                           onClick={() => handleSelectCustomer(sc.customerId)}
-                          className="p-2.5 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer flex items-center justify-between text-xs"
+                          className="p-2.5 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] hover:border-[#CBD5E1] dark:border-[#33485D] cursor-pointer flex items-center justify-between text-xs"
                         >
-                          <span className="font-medium text-slate-200">{sc.customerName}</span>
+                          <span className="font-medium text-[#142C45] dark:text-[#E8EEF5]">{sc.customerName}</span>
                           <div className="flex items-center space-x-2 text-[11px] font-mono">
                             <span className="text-amber-400 font-semibold">{sc.openCaseCount} Open</span>
                             {sc.slaAtRiskCount > 0 && (
@@ -1196,18 +1196,18 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {/* Pipeline */}
                 {opportunityData && (
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
-                    <h3 className="text-xs font-semibold text-slate-200">Pipeline by Stage</h3>
+                  <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
+                    <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Pipeline by Stage</h3>
                     <div className="space-y-2">
                       {opportunityData.stageBreakdown.map((s) => (
-                        <div key={s.stage} className="p-2.5 rounded-lg bg-slate-950/40 border border-slate-800 text-xs">
+                        <div key={s.stage} className="p-2.5 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-xs">
                           <div className="flex items-center justify-between">
-                            <span className="font-medium text-slate-300">{s.stage}</span>
+                            <span className="font-medium text-[#2D3F54] dark:text-[#CBD5E1]">{s.stage}</span>
                             <span className="font-mono text-purple-400 font-semibold">
                               ₹{(s.totalValue / 100000).toFixed(1)} L
                             </span>
                           </div>
-                          <div className="text-[10px] text-slate-500 mt-1">
+                          <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] mt-1">
                             {s.count} deals | Weighted: ₹{(s.weightedValue / 100000).toFixed(1)} L
                           </div>
                         </div>
@@ -1218,8 +1218,8 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
                 {/* Signals */}
                 {signalData && (
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
-                    <h3 className="text-xs font-semibold text-slate-200">Active Signals</h3>
+                  <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
+                    <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Active Signals</h3>
                     <div className="grid grid-cols-4 gap-1 text-center text-xs">
                       <div className="p-2 rounded bg-rose-950/40 border border-rose-800 text-rose-300">
                         <span className="text-[10px] block">Critical</span>
@@ -1233,16 +1233,16 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                         <span className="text-[10px] block">Medium</span>
                         <span className="font-bold">{signalData.severityBreakdown.medium}</span>
                       </div>
-                      <div className="p-2 rounded bg-slate-800 border border-slate-700 text-slate-300">
+                      <div className="p-2 rounded bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] text-[#2D3F54] dark:text-[#CBD5E1]">
                         <span className="text-[10px] block">Low</span>
                         <span className="font-bold">{signalData.severityBreakdown.low}</span>
                       </div>
                     </div>
                     <div className="space-y-1.5 max-h-[300px] overflow-y-auto">
                       {signalData.recentSignals.map((sig, idx) => (
-                        <div key={`${sig.id}-${idx}`} className="p-2 rounded bg-slate-950/50 border border-slate-800 text-xs">
-                          <span className="font-semibold text-slate-200 block truncate">{sig.headline}</span>
-                          <span className="text-[10px] text-slate-400">{sig.customerName}</span>
+                        <div key={`${sig.id}-${idx}`} className="p-2 rounded bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-xs">
+                          <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] block truncate">{sig.headline}</span>
+                          <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB]">{sig.customerName}</span>
                         </div>
                       ))}
                     </div>
@@ -1251,32 +1251,32 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
                 {/* Action Outcomes */}
                 {actionOutcomes && (
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
-                    <h3 className="text-xs font-semibold text-slate-200">Action Outcomes Trace</h3>
+                  <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
+                    <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Action Outcomes Trace</h3>
                     <div className="grid grid-cols-3 gap-1.5 text-center text-xs">
-                      <div className="p-2 rounded bg-slate-950 border border-slate-800">
-                        <span className="text-[10px] text-slate-400 block">Proposed</span>
-                        <span className="font-bold text-slate-200">{actionOutcomes.totalProposed}</span>
+                      <div className="p-2 rounded bg-[#F8FAFC] dark:bg-[#0A121E] border border-[#DCE3EA] dark:border-[#33485D]">
+                        <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">Proposed</span>
+                        <span className="font-bold text-[#142C45] dark:text-[#E8EEF5]">{actionOutcomes.totalProposed}</span>
                       </div>
-                      <div className="p-2 rounded bg-slate-950 border border-slate-800">
-                        <span className="text-[10px] text-slate-400 block">Executed</span>
-                        <span className="font-bold text-blue-400">{actionOutcomes.totalExecuted}</span>
+                      <div className="p-2 rounded bg-[#F8FAFC] dark:bg-[#0A121E] border border-[#DCE3EA] dark:border-[#33485D]">
+                        <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">Executed</span>
+                        <span className="font-bold text-[#168C83] dark:text-[#46C3B2]">{actionOutcomes.totalExecuted}</span>
                       </div>
-                      <div className="p-2 rounded bg-slate-950 border border-slate-800">
-                        <span className="text-[10px] text-slate-400 block">Success</span>
+                      <div className="p-2 rounded bg-[#F8FAFC] dark:bg-[#0A121E] border border-[#DCE3EA] dark:border-[#33485D]">
+                        <span className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] block">Success</span>
                         <span className="font-bold text-emerald-400">{actionOutcomes.totalSuccessful}</span>
                       </div>
                     </div>
                     <div className="space-y-1.5">
                       {actionOutcomes.recentTraces.slice(0, 5).map((t, idx) => (
-                        <div key={`${t.id}-${idx}`} className="p-2 rounded bg-slate-950/40 border border-slate-800 text-xs">
+                        <div key={`${t.id}-${idx}`} className="p-2 rounded bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-xs">
                           <div className="flex items-center justify-between">
-                            <span className="font-medium text-slate-300 truncate">{t.actionTitle}</span>
-                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400">
+                            <span className="font-medium text-[#2D3F54] dark:text-[#CBD5E1] truncate">{t.actionTitle}</span>
+                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB]">
                               {t.status}
                             </span>
                           </div>
-                          <span className="text-[10px] text-slate-500">{t.customerName}</span>
+                          <span className="text-[10px] text-[#6B7C93] dark:text-[#8194A8]">{t.customerName}</span>
                         </div>
                       ))}
                     </div>
@@ -1290,13 +1290,13 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           {activeTab === 'what-changed' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* What Changed Differential Telemetry */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-semibold text-slate-200">What Changed (Telemetry Differentials)</h3>
-                  <span className="text-[11px] text-slate-500 font-mono">{whatChanged.length} events</span>
+                  <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">What Changed (Telemetry Differentials)</h3>
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-mono">{whatChanged.length} events</span>
                 </div>
                 {whatChanged.length === 0 ? (
-                  <p className="text-xs text-slate-500 italic py-6 text-center">
+                  <p className="text-xs text-[#6B7C93] dark:text-[#8194A8] italic py-6 text-center">
                     No material differentials recorded for this comparison window.
                   </p>
                 ) : (
@@ -1305,20 +1305,20 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                       <div
                         key={`${chg.id}-${idx}`}
                         onClick={() => handleSelectCustomer(chg.customerId)}
-                        className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer text-xs space-y-1"
+                        className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] hover:border-[#CBD5E1] dark:border-[#33485D] cursor-pointer text-xs space-y-1"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-slate-200">{chg.customerName}</span>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                          <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{chg.customerName}</span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-[#168C83] dark:text-[#46C3B2] border border-[#168C83]/30">
                             {chg.changeType}
                           </span>
                         </div>
                         <div className="flex items-center space-x-2 font-mono text-[11px]">
-                          <span className="text-slate-400">{String(chg.previousValue)}</span>
-                          <ArrowRight className="w-3 h-3 text-slate-500" />
-                          <span className="text-slate-100 font-semibold">{String(chg.currentValue)}</span>
+                          <span className="text-[#5D6B7B] dark:text-[#A9BACB]">{String(chg.previousValue)}</span>
+                          <ArrowRight className="w-3 h-3 text-[#6B7C93] dark:text-[#8194A8]" />
+                          <span className="text-[#142C45] dark:text-[#E8EEF5] font-semibold">{String(chg.currentValue)}</span>
                         </div>
-                        <p className="text-[11px] text-slate-400">{chg.evidence}</p>
+                        <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">{chg.evidence}</p>
                       </div>
                     ))}
                   </div>
@@ -1326,22 +1326,22 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
               </div>
 
               {/* Portfolio Chronological Changelog */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-semibold text-slate-200">Portfolio Chronological Changelog</h3>
-                  <span className="text-[11px] text-slate-500">Live Relationship Event Stream</span>
+                  <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Portfolio Chronological Changelog</h3>
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">Live Relationship Event Stream</span>
                 </div>
                 <div className="space-y-2 max-h-[460px] overflow-y-auto pr-1">
                   {changelog.map((ev, idx) => (
-                    <div key={`${ev.id}-${idx}`} className="p-3 rounded-lg bg-slate-950/40 border border-slate-800 text-xs space-y-1">
+                    <div key={`${ev.id}-${idx}`} className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-xs space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-slate-200">{ev.title}</span>
-                        <span className="text-[10px] text-slate-500 font-mono">
+                        <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{ev.title}</span>
+                        <span className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] font-mono">
                           {new Date(ev.timestamp).toLocaleDateString()}
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-400">{ev.description}</p>
-                      <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-800/60">
+                      <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">{ev.description}</p>
+                      <div className="flex items-center justify-between text-[10px] text-[#6B7C93] dark:text-[#8194A8] pt-1 border-t border-[#DCE3EA] dark:border-[#33485D]">
                         <span>{ev.customerName}</span>
                         <span className="font-mono">{ev.category}</span>
                       </div>
@@ -1356,25 +1356,25 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           {activeTab === 'matrix-focus' && (
             <div className="space-y-5">
               {/* Explainable 2x2 Matrix */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-semibold text-slate-200">Portfolio Health Matrix (CORE Score × Momentum)</h3>
-                  <span className="text-[11px] text-slate-500">Descriptive categorization only; non-predictive</span>
+                  <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Portfolio Health Matrix (CORE Score × Momentum)</h3>
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">Descriptive categorization only; non-predictive</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {healthMatrix.map((q) => (
                     <div
                       key={q.quadrantKey}
-                      className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2 hover:border-slate-700 transition-colors"
+                      className="p-4 rounded-xl bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] space-y-2 hover:border-[#CBD5E1] dark:border-[#33485D] transition-colors"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-xs text-slate-200">{q.title}</span>
-                        <span className="text-base font-bold text-slate-100 font-mono">
+                        <span className="font-semibold text-xs text-[#142C45] dark:text-[#E8EEF5]">{q.title}</span>
+                        <span className="text-base font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono">
                           {q.customerCount} customers ({q.percentage}%)
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-400">{q.description}</p>
-                      <div className="text-[10px] text-slate-500 font-mono">
+                      <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">{q.description}</p>
+                      <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] font-mono">
                         Rule: {q.coreScoreBand} CORE Score & {q.momentumState} Momentum
                       </div>
                     </div>
@@ -1383,20 +1383,20 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
               </div>
 
               {/* Deterministic Focus Areas */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-semibold text-slate-200">Manager Deterministic Focus Areas</h3>
-                  <span className="text-[11px] text-slate-500">Rules-based operational attention areas</span>
+                  <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Manager Deterministic Focus Areas</h3>
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">Rules-based operational attention areas</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {focusAreas.map((fa, idx) => (
                     <div
                       key={fa.focusKey || fa.id || fa.title || `fa-${idx}`}
-                      className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2 flex flex-col justify-between"
+                      className="p-3.5 rounded-xl bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] space-y-2 flex flex-col justify-between"
                     >
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-xs text-slate-200">{fa.title}</span>
+                          <span className="font-semibold text-xs text-[#142C45] dark:text-[#E8EEF5]">{fa.title}</span>
                           <span
                             className={`text-[10px] px-2 py-0.5 rounded font-mono font-bold ${
                               fa.priority === 'HIGH'
@@ -1407,10 +1407,10 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                             {fa.customerCount} Accounts
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-400 mt-1">{fa.description}</p>
+                        <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] mt-1">{fa.description}</p>
                       </div>
-                      <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-500">
-                        <span className="font-semibold text-slate-400">Evidence Rule:</span> {fa.ruleEvidence}
+                      <div className="pt-2 border-t border-[#DCE3EA] dark:border-[#33485D] text-[10px] text-[#6B7C93] dark:text-[#8194A8]">
+                        <span className="font-semibold text-[#5D6B7B] dark:text-[#A9BACB]">Evidence Rule:</span> {fa.ruleEvidence}
                       </div>
                     </div>
                   ))}
@@ -1421,15 +1421,15 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
           {/* TAB: PERIOD COMPARISON */}
           {activeTab === 'comparison' && (
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+            <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-200">Period-Over-Period Comparison</h3>
-                  <p className="text-xs text-slate-400">
+                  <h3 className="text-sm font-semibold text-[#142C45] dark:text-[#E8EEF5]">Period-Over-Period Comparison</h3>
+                  <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                     Comparing 30 Days Ago vs Current Authorized Portfolio State
                   </p>
                 </div>
-                <span className="text-xs font-mono text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-1 rounded">
+                <span className="text-xs font-mono text-[#168C83] dark:text-[#46C3B2] bg-blue-500/10 border border-[#168C83]/30 px-2 py-1 rounded">
                   Population: Authorized Portfolio
                 </span>
               </div>
@@ -1438,27 +1438,27 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-slate-800 text-slate-400 font-medium text-[11px]">
+                      <tr className="border-b border-[#DCE3EA] dark:border-[#33485D] text-[#5D6B7B] dark:text-[#A9BACB] font-medium text-[11px]">
                         <th className="pb-2.5">Portfolio Metric</th>
                         <th className="pb-2.5 text-right">30 Days Ago</th>
                         <th className="pb-2.5 text-right">Current Period</th>
                         <th className="pb-2.5 text-right">Net Change</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60 font-mono">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D] font-mono">
                       <tr>
-                        <td className="py-3 font-sans text-slate-300 font-medium">Customer Count</td>
-                        <td className="py-3 text-right text-slate-400">{comparison.period1.customerCount}</td>
-                        <td className="py-3 text-right text-slate-200 font-bold">{comparison.period2.customerCount}</td>
-                        <td className="py-3 text-right text-slate-300">
+                        <td className="py-3 font-sans text-[#2D3F54] dark:text-[#CBD5E1] font-medium">Customer Count</td>
+                        <td className="py-3 text-right text-[#5D6B7B] dark:text-[#A9BACB]">{comparison.period1.customerCount}</td>
+                        <td className="py-3 text-right text-[#142C45] dark:text-[#E8EEF5] font-bold">{comparison.period2.customerCount}</td>
+                        <td className="py-3 text-right text-[#2D3F54] dark:text-[#CBD5E1]">
                           {comparison.deltas.customerCountChange > 0
                             ? `+${comparison.deltas.customerCountChange}`
                             : comparison.deltas.customerCountChange}
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-3 font-sans text-slate-300 font-medium">Total Relationship Value</td>
-                        <td className="py-3 text-right text-slate-400">
+                        <td className="py-3 font-sans text-[#2D3F54] dark:text-[#CBD5E1] font-medium">Total Relationship Value</td>
+                        <td className="py-3 text-right text-[#5D6B7B] dark:text-[#A9BACB]">
                           ₹{(comparison.period1.totalRelationshipValue / 10000000).toFixed(2)} Cr
                         </td>
                         <td className="py-3 text-right text-emerald-400 font-bold">
@@ -1470,33 +1470,33 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-3 font-sans text-slate-300 font-medium">Average CORE Score</td>
-                        <td className="py-3 text-right text-slate-400">{comparison.period1.averageCoreScore}</td>
-                        <td className="py-3 text-right text-indigo-300 font-bold">{comparison.period2.averageCoreScore}</td>
-                        <td className="py-3 text-right text-slate-300">
+                        <td className="py-3 font-sans text-[#2D3F54] dark:text-[#CBD5E1] font-medium">Average CORE Score</td>
+                        <td className="py-3 text-right text-[#5D6B7B] dark:text-[#A9BACB]">{comparison.period1.averageCoreScore}</td>
+                        <td className="py-3 text-right text-[#168C83] dark:text-[#46C3B2] font-bold">{comparison.period2.averageCoreScore}</td>
+                        <td className="py-3 text-right text-[#2D3F54] dark:text-[#CBD5E1]">
                           {comparison.deltas.coreScoreDelta > 0
                             ? `+${comparison.deltas.coreScoreDelta}`
                             : comparison.deltas.coreScoreDelta}
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-3 font-sans text-slate-300 font-medium">Open Pipeline Value</td>
-                        <td className="py-3 text-right text-slate-400">
+                        <td className="py-3 font-sans text-[#2D3F54] dark:text-[#CBD5E1] font-medium">Open Pipeline Value</td>
+                        <td className="py-3 text-right text-[#5D6B7B] dark:text-[#A9BACB]">
                           ₹{(comparison.period1.opportunityPipelineValue / 10000000).toFixed(2)} Cr
                         </td>
                         <td className="py-3 text-right text-purple-400 font-bold">
                           ₹{(comparison.period2.opportunityPipelineValue / 10000000).toFixed(2)} Cr
                         </td>
-                        <td className="py-3 text-right text-slate-300">
+                        <td className="py-3 text-right text-[#2D3F54] dark:text-[#CBD5E1]">
                           {comparison.deltas.pipelineValueChange > 0 ? '+' : ''}₹
                           {(comparison.deltas.pipelineValueChange / 100000).toFixed(1)} L
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-3 font-sans text-slate-300 font-medium">Open Service Cases</td>
-                        <td className="py-3 text-right text-slate-400">{comparison.period1.openCases}</td>
+                        <td className="py-3 font-sans text-[#2D3F54] dark:text-[#CBD5E1] font-medium">Open Service Cases</td>
+                        <td className="py-3 text-right text-[#5D6B7B] dark:text-[#A9BACB]">{comparison.period1.openCases}</td>
                         <td className="py-3 text-right text-amber-400 font-bold">{comparison.period2.openCases}</td>
-                        <td className="py-3 text-right text-slate-300">
+                        <td className="py-3 text-right text-[#2D3F54] dark:text-[#CBD5E1]">
                           {comparison.deltas.openCasesDelta > 0
                             ? `+${comparison.deltas.openCasesDelta}`
                             : comparison.deltas.openCasesDelta}
@@ -1506,7 +1506,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                   </table>
                 </div>
               ) : (
-                <div className="py-12 text-center text-slate-500 text-xs">
+                <div className="py-12 text-center text-[#6B7C93] dark:text-[#8194A8] text-xs">
                   Loading comparison calculation...
                 </div>
               )}
@@ -1515,18 +1515,18 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
           {/* TAB: AUTHORIZED CUSTOMERS (PAGINATED DRILL-DOWN TABLE) */}
           {activeTab === 'customers' && (
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-4">
+            <div className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded-xl p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-semibold text-slate-200">Authorized Customer Drill-Down</h3>
-                  <span className="text-[11px] text-slate-400">
+                  <h3 className="text-xs font-semibold text-[#142C45] dark:text-[#E8EEF5]">Authorized Customer Drill-Down</h3>
+                  <span className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">
                     Showing {customerData.customers.length} of {customerData.total} authorized accounts
                   </span>
                 </div>
                 <button
                   onClick={handleExportCSV}
                   disabled={isExporting}
-                  className="px-3 py-1.5 text-xs rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center space-x-1.5 transition-colors"
+                  className="px-3 py-1.5 text-xs rounded-lg bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#E2E8F0] dark:hover:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] border border-[#CBD5E1] dark:border-[#33485D] flex items-center space-x-1.5 transition-colors"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Export Customer List</span>
@@ -1534,14 +1534,14 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
               </div>
 
               {isCustomerLoading ? (
-                <div className="py-16 text-center text-slate-500 text-xs">
+                <div className="py-16 text-center text-[#6B7C93] dark:text-[#8194A8] text-xs">
                   <Clock className="w-5 h-5 animate-spin mx-auto mb-2" />
                   Loading customer records...
                 </div>
               ) : customerData.customers.length === 0 ? (
-                <div className="py-12 bg-slate-950/40 rounded-xl border border-slate-800">
+                <div className="py-12 bg-[#F8FAFC] dark:bg-[#101C2A] rounded-xl border border-[#DCE3EA] dark:border-[#33485D]">
                   <EmptyState
-                    icon={<Users className="w-5 h-5 text-slate-400" />}
+                    icon={<Users className="w-5 h-5 text-[#5D6B7B] dark:text-[#A9BACB]" />}
                     title="No matching customers found"
                     description="No authorized customers match the active filters, score bands, or CIF query."
                   />
@@ -1550,7 +1550,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-slate-800 text-slate-400 font-medium text-[11px]">
+                      <tr className="border-b border-[#DCE3EA] dark:border-[#33485D] text-[#5D6B7B] dark:text-[#A9BACB] font-medium text-[11px]">
                         <th className="pb-2.5">Customer</th>
                         <th className="pb-2.5">Entity / Risk</th>
                         <th className="pb-2.5 text-right">Relationship Value</th>
@@ -1564,25 +1564,25 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                         <th className="pb-2.5 text-center">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {customerData.customers.map((c) => (
                         <tr
                           key={c.id}
-                          className="hover:bg-slate-850/50 cursor-pointer transition-colors"
+                          className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]/50 cursor-pointer transition-colors"
                           onClick={() => handleSelectCustomer(c.id)}
                         >
                           <td className="py-2.5">
-                            <span className="font-semibold text-slate-200 block">{c.name}</span>
-                            <span className="text-[10px] text-slate-500 font-mono">{c.customerCode}</span>
+                            <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] block">{c.name}</span>
+                            <span className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] font-mono">{c.customerCode}</span>
                           </td>
-                          <td className="py-2.5 text-[11px] text-slate-400">
+                          <td className="py-2.5 text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">
                             <div>{c.entityType}</div>
-                            <span className="text-[10px] text-slate-500">Risk: {c.riskCategory}</span>
+                            <span className="text-[10px] text-[#6B7C93] dark:text-[#8194A8]">Risk: {c.riskCategory}</span>
                           </td>
                           <td className="py-2.5 text-right font-mono font-semibold text-emerald-400">
                             ₹{(c.relationshipValue / 100000).toFixed(2)} L
                           </td>
-                          <td className="py-2.5 text-center font-mono font-bold text-indigo-300">
+                          <td className="py-2.5 text-center font-mono font-bold text-[#168C83] dark:text-[#46C3B2]">
                             {c.coreScore}
                           </td>
                           <td className="py-2.5 text-center">
@@ -1592,19 +1592,19 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                                   ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                                   : c.momentum === 'NEGATIVE'
                                   ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                                  : 'bg-slate-800 text-slate-300 border border-slate-700'
+                                  : 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#2D3F54] dark:text-[#CBD5E1] border border-[#CBD5E1] dark:border-[#33485D]'
                               }`}
                             >
                               <span>{c.momentum}</span>
                             </span>
                           </td>
-                          <td className="py-2.5 text-center font-mono text-slate-300">{c.productCount}</td>
+                          <td className="py-2.5 text-center font-mono text-[#2D3F54] dark:text-[#CBD5E1]">{c.productCount}</td>
                           <td className="py-2.5 text-center font-mono text-amber-400 font-semibold">
                             {c.openCasesCount}
                           </td>
                           <td className="py-2.5 text-center font-mono text-purple-400">{c.openOpportunitiesCount}</td>
                           <td className="py-2.5 text-center font-mono text-rose-400">{c.activeSignalsCount}</td>
-                          <td className="py-2.5 text-right font-mono text-[11px] text-slate-400">
+                          <td className="py-2.5 text-right font-mono text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">
                             {c.lastInteractionDate || 'Never'}
                           </td>
                           <td className="py-2.5 text-center">
@@ -1613,7 +1613,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                                 e.stopPropagation();
                                 handleSelectCustomer(c.id);
                               }}
-                              className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] transition-colors"
+                              className="px-2 py-1 rounded bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#E2E8F0] dark:hover:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1] text-[11px] transition-colors"
                             >
                               Profile
                             </button>
@@ -1627,7 +1627,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
 
               {/* Pagination Bar */}
               {customerData.totalPages > 1 && (
-                <div className="flex items-center justify-between pt-3 border-t border-slate-800 text-xs text-slate-400">
+                <div className="flex items-center justify-between pt-3 border-t border-[#DCE3EA] dark:border-[#33485D] text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                   <span>
                     Page {customerData.page} of {customerData.totalPages}
                   </span>
@@ -1635,14 +1635,14 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                     <button
                       onClick={() => loadCustomerDrillDown(Math.max(1, customerPage - 1))}
                       disabled={customerPage <= 1 || isCustomerLoading}
-                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 transition-colors"
+                      className="p-1.5 rounded-lg bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#E2E8F0] dark:hover:bg-[#26394C] disabled:opacity-40 text-[#2D3F54] dark:text-[#CBD5E1] transition-colors"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => loadCustomerDrillDown(Math.min(customerData.totalPages, customerPage + 1))}
                       disabled={customerPage >= customerData.totalPages || isCustomerLoading}
-                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 transition-colors"
+                      className="p-1.5 rounded-lg bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#E2E8F0] dark:hover:bg-[#26394C] disabled:opacity-40 text-[#2D3F54] dark:text-[#CBD5E1] transition-colors"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>

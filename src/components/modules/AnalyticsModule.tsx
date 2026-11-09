@@ -280,18 +280,18 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
   return (
     <div className="space-y-5">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#DCE3EA] dark:border-[#33485D]">
         <div>
           <div className="flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-cyan-700" />
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+            <BarChart3 className="w-5 h-5 text-[#168C83] dark:text-[#46C3B2]" />
+            <h1 className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] tracking-tight">
               Advanced Analytics & Management Intelligence
             </h1>
-            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200 font-mono">
+            <span className="text-xs bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB] px-2 py-0.5 rounded border border-[#DCE3EA] dark:border-[#33485D] font-mono">
               Phase 16 Engine
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#6B7C93] dark:text-[#8194A8] mt-1">
             Server-aggregated portfolio health, relationship depth, operational throughput, and deterministic trends.
           </p>
         </div>
@@ -309,54 +309,54 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               variant="outline"
               size="sm"
               disabled={isExporting}
-              className="text-xs flex items-center gap-1.5 h-8 border-slate-300"
+              className="text-xs flex items-center gap-1.5 h-8 border-[#CBD5E1] dark:border-[#33485D]"
             >
-              <Download className="w-3.5 h-3.5 text-slate-600" />
+              <Download className="w-3.5 h-3.5 text-[#5D6B7B] dark:text-[#A9BACB]" />
               <span>{isExporting ? 'Exporting...' : 'Export CSV'}</span>
-              <ChevronDown className="w-3 h-3 text-slate-400" />
+              <ChevronDown className="w-3 h-3 text-[#8194A8] dark:text-[#64748B]" />
             </Button>
-            <div className="absolute right-0 top-full mt-1 w-52 bg-white rounded-md shadow-lg border border-slate-200 py-1 hidden group-hover:block z-30">
+            <div className="absolute right-0 top-full mt-1 w-52 bg-[#FFFFFF] dark:bg-[#162638] rounded-md shadow-lg border border-[#DCE3EA] dark:border-[#33485D] py-1 hidden group-hover:block z-30">
               <button
                 onClick={() => handleExport('portfolio')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Portfolio Analytics</span>
-                <span className="text-[10px] text-slate-400">CSV</span>
+                <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('health')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Customer Health & Scores</span>
-                <span className="text-[10px] text-slate-400">CSV</span>
+                <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('opportunities')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Opportunity Pipeline</span>
-                <span className="text-[10px] text-slate-400">CSV</span>
+                <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('service_cases')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Service Desk & SLA</span>
-                <span className="text-[10px] text-slate-400">CSV</span>
+                <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('rm_productivity')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>RM Productivity</span>
-                <span className="text-[10px] text-slate-400">CSV</span>
+                <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('products')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Product Penetration</span>
-                <span className="text-[10px] text-slate-400">CSV</span>
+                <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
             </div>
           </div>
@@ -365,7 +365,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             variant="outline"
             size="sm"
             onClick={loadData}
-            className="text-xs h-8 px-2.5 border-slate-300"
+            className="text-xs h-8 px-2.5 border-[#CBD5E1] dark:border-[#33485D]"
             title="Reload analytical data"
           >
             <RotateCcw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
@@ -374,17 +374,17 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
       </div>
 
       {/* Global Server-Side Filter Bar */}
-      <div className="bg-white rounded-lg border border-slate-200 p-3.5 shadow-2xs space-y-3">
+      <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3.5 shadow-2xs space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Period Selector */}
-            <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
-              <Calendar className="w-3.5 h-3.5 text-slate-500" />
+            <div className="flex items-center gap-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-medium">
+              <Calendar className="w-3.5 h-3.5 text-[#6B7C93] dark:text-[#8194A8]" />
               <span>Period:</span>
               <select
                 value={period}
                 onChange={(e) => setPeriod(e.target.value)}
-                className="bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs text-slate-800 focus:outline-hidden focus:ring-1 focus:ring-cyan-600 font-normal"
+                className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2.5 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5] focus:outline-hidden focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2] font-normal"
               >
                 <option value="last_30_days">Last 30 Days (Standard)</option>
                 <option value="today">Today</option>
@@ -397,13 +397,13 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             </div>
 
             {/* Branch Selector */}
-            <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
-              <Building2 className="w-3.5 h-3.5 text-slate-500" />
+            <div className="flex items-center gap-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-medium">
+              <Building2 className="w-3.5 h-3.5 text-[#6B7C93] dark:text-[#8194A8]" />
               <span>Branch:</span>
               <select
                 value={branch}
                 onChange={(e) => setBranch(e.target.value)}
-                className="bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs text-slate-800 focus:outline-hidden focus:ring-1 focus:ring-cyan-600 font-normal"
+                className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2.5 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5] focus:outline-hidden focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2] font-normal"
               >
                 <option value="ALL">All Branches</option>
                 <option value="0104">0104 - Mumbai Fort Branch</option>
@@ -411,13 +411,13 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             </div>
 
             {/* Segment Selector */}
-            <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
-              <Briefcase className="w-3.5 h-3.5 text-slate-500" />
+            <div className="flex items-center gap-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-medium">
+              <Briefcase className="w-3.5 h-3.5 text-[#6B7C93] dark:text-[#8194A8]" />
               <span>Segment:</span>
               <select
                 value={segment}
                 onChange={(e) => setSegment(e.target.value)}
-                className="bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs text-slate-800 focus:outline-hidden focus:ring-1 focus:ring-cyan-600 font-normal"
+                className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2.5 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5] focus:outline-hidden focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2] font-normal"
               >
                 <option value="ALL">All Segments</option>
                 <option value="INDIVIDUAL">Individual (Retail)</option>
@@ -428,12 +428,12 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             </div>
 
             {/* Customer Status */}
-            <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
+            <div className="flex items-center gap-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] font-medium">
               <span>Status:</span>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs text-slate-800 focus:outline-hidden focus:ring-1 focus:ring-cyan-600 font-normal"
+                className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2.5 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5] focus:outline-hidden focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2] font-normal"
               >
                 <option value="ALL">All Statuses</option>
                 <option value="ACTIVE">Active</option>
@@ -444,12 +444,12 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
             <button
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-              className="text-xs text-cyan-700 hover:text-cyan-800 font-medium flex items-center gap-1 ml-1 cursor-pointer"
+              className="text-xs text-[#168C83] dark:text-[#46C3B2] hover:text-[#168C83] dark:text-[#46C3B2] font-medium flex items-center gap-1 ml-1 cursor-pointer"
             >
               <Filter className="w-3 h-3" />
               <span>{showAdvancedFilters ? 'Fewer Filters' : 'More Filters'}</span>
               {activeFilterCount > 0 && (
-                <span className="bg-cyan-100 text-cyan-800 rounded-full px-1.5 py-0.2 text-[10px] font-bold">
+                <span className="bg-cyan-100 text-[#168C83] dark:text-[#46C3B2] rounded-full px-1.5 py-0.2 text-[10px] font-bold">
                   {activeFilterCount}
                 </span>
               )}
@@ -460,7 +460,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             {activeFilterCount > 0 && (
               <button
                 onClick={resetFilters}
-                className="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer"
+                className="text-xs text-[#6B7C93] dark:text-[#8194A8] hover:text-[#142C45] dark:text-[#E8EEF5] flex items-center gap-1 cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Reset Filters</span>
@@ -471,33 +471,33 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
         {/* Custom Date Range Row */}
         {period === 'custom' && (
-          <div className="flex items-center gap-3 pt-2 border-t border-slate-100 text-xs">
-            <span className="text-slate-500 font-medium">Custom Range:</span>
+          <div className="flex items-center gap-3 pt-2 border-t border-[#EDF1F5] dark:border-[#26394C] text-xs">
+            <span className="text-[#6B7C93] dark:text-[#8194A8] font-medium">Custom Range:</span>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="bg-slate-50 border border-slate-300 rounded px-2 py-0.5 text-xs text-slate-800"
+              className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2 py-0.5 text-xs text-[#142C45] dark:text-[#E8EEF5]"
             />
-            <span className="text-slate-400">to</span>
+            <span className="text-[#8194A8] dark:text-[#64748B]">to</span>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="bg-slate-50 border border-slate-300 rounded px-2 py-0.5 text-xs text-slate-800"
+              className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2 py-0.5 text-xs text-[#142C45] dark:text-[#E8EEF5]"
             />
           </div>
         )}
 
         {/* Secondary Filters Tray */}
         {showAdvancedFilters && (
-          <div className="pt-3 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+          <div className="pt-3 border-t border-[#EDF1F5] dark:border-[#26394C] grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
             <div>
-              <label className="block text-[11px] text-slate-500 font-medium mb-1">CORE Score Band</label>
+              <label className="block text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium mb-1">CORE Score Band</label>
               <select
                 value={scoreBand}
                 onChange={(e) => setScoreBand(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800"
+                className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5]"
               >
                 <option value="ALL">All Bands</option>
                 <option value="90-100">90–100 (Prime Sovereign)</option>
@@ -509,11 +509,11 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] text-slate-500 font-medium mb-1">Momentum</label>
+              <label className="block text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium mb-1">Momentum</label>
               <select
                 value={momentum}
                 onChange={(e) => setMomentum(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800"
+                className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5]"
               >
                 <option value="ALL">All Momentum</option>
                 <option value="UP">UP (Improving)</option>
@@ -523,11 +523,11 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] text-slate-500 font-medium mb-1">Product Depth</label>
+              <label className="block text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium mb-1">Product Depth</label>
               <select
                 value={productCount}
                 onChange={(e) => setProductCount(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800"
+                className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5]"
               >
                 <option value="ALL">All Depths</option>
                 <option value="1">1 Product</option>
@@ -538,11 +538,11 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] text-slate-500 font-medium mb-1">Opportunity Stage</label>
+              <label className="block text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium mb-1">Opportunity Stage</label>
               <select
                 value={oppStage}
                 onChange={(e) => setOppStage(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800"
+                className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5]"
               >
                 <option value="ALL">All Stages</option>
                 <option value="IDENTIFIED">Identified</option>
@@ -555,11 +555,11 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] text-slate-500 font-medium mb-1">Case Status</label>
+              <label className="block text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium mb-1">Case Status</label>
               <select
                 value={caseStatus}
                 onChange={(e) => setCaseStatus(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800"
+                className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#CBD5E1] dark:border-[#33485D] rounded px-2 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5]"
               >
                 <option value="ALL">All Statuses</option>
                 <option value="OPEN">Open</option>
@@ -574,13 +574,13 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
       </div>
 
       {/* Primary Analytics Navigation Tabs */}
-      <div className="flex border-b border-slate-200 overflow-x-auto no-scrollbar gap-1 text-xs font-medium">
+      <div className="flex border-b border-[#DCE3EA] dark:border-[#33485D] overflow-x-auto no-scrollbar gap-1 text-xs font-medium">
         <button
           onClick={() => setActiveTab('overview')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'overview'
-              ? 'border-cyan-700 text-cyan-800 font-bold'
-              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
           }`}
         >
           Executive Overview
@@ -590,8 +590,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           onClick={() => setActiveTab('portfolio')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'portfolio'
-              ? 'border-cyan-700 text-cyan-800 font-bold'
-              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
           }`}
         >
           Relationship Portfolio
@@ -601,8 +601,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           onClick={() => setActiveTab('relationship_value')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
             activeTab === 'relationship_value'
-              ? 'border-cyan-700 text-cyan-800 font-bold'
-              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
           }`}
         >
           <span>Relationship Value Intelligence</span>
@@ -615,8 +615,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           onClick={() => setActiveTab('health')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'health'
-              ? 'border-cyan-700 text-cyan-800 font-bold'
-              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
           }`}
         >
           Customer Health
@@ -626,8 +626,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           onClick={() => setActiveTab('opportunities')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'opportunities'
-              ? 'border-cyan-700 text-cyan-800 font-bold'
-              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
           }`}
         >
           Opportunity Performance
@@ -637,8 +637,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           onClick={() => setActiveTab('service')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'service'
-              ? 'border-cyan-700 text-cyan-800 font-bold'
-              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
           }`}
         >
           Service Performance & SLA
@@ -648,8 +648,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           onClick={() => setActiveTab('rm')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'rm'
-              ? 'border-cyan-700 text-cyan-800 font-bold'
-              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
           }`}
         >
           RM Productivity
@@ -659,8 +659,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           onClick={() => setActiveTab('products')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'products'
-              ? 'border-cyan-700 text-cyan-800 font-bold'
-              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
           }`}
         >
           Product Penetration
@@ -670,8 +670,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           onClick={() => setActiveTab('trends')}
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'trends'
-              ? 'border-cyan-700 text-cyan-800 font-bold'
-              : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+              ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
           }`}
         >
           Trends & "What Changed?"
@@ -680,8 +680,8 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
       {/* Main Tab Content */}
       {loading ? (
-        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center text-slate-500">
-          <RotateCcw className="w-6 h-6 animate-spin mx-auto text-cyan-700 mb-2" />
+        <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-12 text-center text-[#6B7C93] dark:text-[#8194A8]">
+          <RotateCcw className="w-6 h-6 animate-spin mx-auto text-[#168C83] dark:text-[#46C3B2] mb-2" />
           <p className="text-xs font-medium">Aggregating PostgreSQL analytical telemetry...</p>
         </div>
       ) : (
@@ -697,22 +697,22 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                   return (
                     <div
                       key={kpi.id}
-                      className="bg-white rounded-lg border border-slate-200 p-3.5 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition-colors"
+                      className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3.5 shadow-2xs flex flex-col justify-between hover:border-[#CBD5E1] dark:border-[#33485D] transition-colors"
                     >
                       <div>
-                        <div className="flex items-center justify-between gap-1 text-slate-500 text-[11px] font-medium mb-1">
+                        <div className="flex items-center justify-between gap-1 text-[#6B7C93] dark:text-[#8194A8] text-[11px] font-medium mb-1">
                           <span className="truncate">{kpi.label}</span>
                           {isPositive && <TrendingUp className="w-3.5 h-3.5 text-emerald-600 shrink-0" />}
                           {isNegative && <TrendingDown className="w-3.5 h-3.5 text-amber-600 shrink-0" />}
-                          {!isPositive && !isNegative && <Minus className="w-3.5 h-3.5 text-slate-400 shrink-0" />}
+                          {!isPositive && !isNegative && <Minus className="w-3.5 h-3.5 text-[#8194A8] dark:text-[#64748B] shrink-0" />}
                         </div>
-                        <div className="text-xl font-bold text-slate-900 tracking-tight">
+                        <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] tracking-tight">
                           {kpi.formattedValue || kpi.value.toLocaleString()}
                         </div>
                       </div>
 
-                      <div className="mt-2.5 pt-2 border-t border-slate-100">
-                        <div className="text-[10px] text-slate-500 leading-tight">
+                      <div className="mt-2.5 pt-2 border-t border-[#EDF1F5] dark:border-[#26394C]">
+                        <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] leading-tight">
                           {kpi.comparison}
                         </div>
                       </div>
@@ -723,25 +723,25 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
               {/* What Changed Summary Card */}
               {whatChangedData && (
-                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                <div className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-cyan-700" />
-                      <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                      <Activity className="w-4 h-4 text-[#168C83] dark:text-[#46C3B2]" />
+                      <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">
                         "What Changed?" Engine — {whatChangedData.currentPeriod} vs {whatChangedData.comparisonPeriod}
                       </h3>
                     </div>
-                    <span className="text-[11px] text-slate-500 font-mono">
+                    <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-mono">
                       Deterministic Variance Analysis
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                     {whatChangedData.changes.map((ch: any, idx: number) => (
-                      <div key={idx} className="bg-white border border-slate-200 rounded p-2.5 text-xs shadow-2xs">
-                        <div className="text-[11px] font-semibold text-slate-700 mb-0.5">{ch.metric}</div>
-                        <div className="text-sm font-bold text-slate-900 mb-1">{ch.current}</div>
-                        <div className="text-[10px] text-slate-500">{ch.summary}</div>
+                      <div key={idx} className="bg-[#FFFFFF] dark:bg-[#162638] border border-[#DCE3EA] dark:border-[#33485D] rounded p-2.5 text-xs shadow-2xs">
+                        <div className="text-[11px] font-semibold text-[#2D3F54] dark:text-[#CBD5E1] mb-0.5">{ch.metric}</div>
+                        <div className="text-sm font-bold text-[#142C45] dark:text-[#E8EEF5] mb-1">{ch.current}</div>
+                        <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8]">{ch.summary}</div>
                       </div>
                     ))}
                   </div>
@@ -750,62 +750,62 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
               {/* Actionable Insights Section */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="bg-white rounded-lg border border-slate-200 p-4">
-                  <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
-                    <span className="text-xs font-bold text-slate-900">Portfolio Action Highlights</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
+                  <div className="flex items-center justify-between pb-2 mb-3 border-b border-[#EDF1F5] dark:border-[#26394C]">
+                    <span className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5]">Portfolio Action Highlights</span>
                     <Badge variant="warning" className="text-[10px]">Attention Needed</Badge>
                   </div>
-                  <ul className="space-y-2 text-xs text-slate-600">
+                  <ul className="space-y-2 text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                     <li className="flex items-start gap-2">
                       <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-semibold text-slate-800">Sunil Varma (CUS-48201)</span>
-                        <p className="text-[11px] text-slate-500">CORE score declined to 76/100 due to 14-day seasonal cash flow overdue.</p>
+                        <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">Sunil Varma (CUS-48201)</span>
+                        <p className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">CORE score declined to 76/100 due to 14-day seasonal cash flow overdue.</p>
                       </div>
                     </li>
                     <li className="flex items-start gap-2">
                       <Clock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-semibold text-slate-800">Service SLA Warning</span>
-                        <p className="text-[11px] text-slate-500">1 grievance approaching the 24-hour compliance deadline.</p>
+                        <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">Service SLA Warning</span>
+                        <p className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">1 grievance approaching the 24-hour compliance deadline.</p>
                       </div>
                     </li>
                   </ul>
                 </div>
 
-                <div className="bg-white rounded-lg border border-slate-200 p-4">
-                  <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
-                    <span className="text-xs font-bold text-slate-900">Growth & Opportunities</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
+                  <div className="flex items-center justify-between pb-2 mb-3 border-b border-[#EDF1F5] dark:border-[#26394C]">
+                    <span className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5]">Growth & Opportunities</span>
                     <Badge variant="success" className="text-[10px]">Expansion</Badge>
                   </div>
-                  <ul className="space-y-2 text-xs text-slate-600">
+                  <ul className="space-y-2 text-xs text-[#5D6B7B] dark:text-[#A9BACB]">
                     <li className="flex items-start gap-2">
                       <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-semibold text-slate-800">Rahul Sharma (CUS-10482)</span>
-                        <p className="text-[11px] text-slate-500">CORE score upgraded to 88/100 following ₹8.4L term deposit maturity roll-over.</p>
+                        <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">Rahul Sharma (CUS-10482)</span>
+                        <p className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">CORE score upgraded to 88/100 following ₹8.4L term deposit maturity roll-over.</p>
                       </div>
                     </li>
                     <li className="flex items-start gap-2">
                       <Briefcase className="w-4 h-4 text-cyan-600 shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-semibold text-slate-800">Kalyan Steel Works (CUS-91042)</span>
-                        <p className="text-[11px] text-slate-500">Maintain sovereign score 92/100 with zero defaults and 2.4x debt service coverage.</p>
+                        <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">Kalyan Steel Works (CUS-91042)</span>
+                        <p className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">Maintain sovereign score 92/100 with zero defaults and 2.4x debt service coverage.</p>
                       </div>
                     </li>
                   </ul>
                 </div>
 
-                <div className="bg-white rounded-lg border border-slate-200 p-4">
-                  <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
-                    <span className="text-xs font-bold text-slate-900">Governance & Assurance</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
+                  <div className="flex items-center justify-between pb-2 mb-3 border-b border-[#EDF1F5] dark:border-[#26394C]">
+                    <span className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5]">Governance & Assurance</span>
                     <Badge variant="neutral" className="text-[10px]">Verified</Badge>
                   </div>
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                  <p className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed">
                     All analytics metrics represent verified database aggregations from active customer accounts, loan ledgers, and trade facilities. Metrics adhere strictly to RBAC boundaries.
                   </p>
-                  <div className="mt-3 text-[11px] text-slate-500 flex items-center gap-1.5">
-                    <ShieldAlert className="w-3.5 h-3.5 text-slate-400" />
+                  <div className="mt-3 text-[11px] text-[#6B7C93] dark:text-[#8194A8] flex items-center gap-1.5">
+                    <ShieldAlert className="w-3.5 h-3.5 text-[#8194A8] dark:text-[#64748B]" />
                     <span>Audit trail logged: ANALYTICS_VIEWED</span>
                   </div>
                 </div>
@@ -818,53 +818,53 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             <div className="space-y-5">
               {/* Summary Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Total Customers</span>
-                  <div className="text-lg font-bold text-slate-900">{portfolioData.summary.totalCustomers}</div>
-                  <span className="text-[10px] text-slate-400">{portfolioData.summary.activeCount} active</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Total Customers</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{portfolioData.summary.totalCustomers}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">{portfolioData.summary.activeCount} active</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Total TRV</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Total TRV</span>
                   <div className="text-lg font-bold text-cyan-900">{portfolioData.summary.formattedTotalValue}</div>
-                  <span className="text-[10px] text-slate-400">CASA + Term + Loans</span>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CASA + Term + Loans</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Average TRV</span>
-                  <div className="text-lg font-bold text-slate-900">{portfolioData.summary.formattedAvgValue}</div>
-                  <span className="text-[10px] text-slate-400">per relationship</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Average TRV</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{portfolioData.summary.formattedAvgValue}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">per relationship</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Median TRV</span>
-                  <div className="text-lg font-bold text-slate-900">{portfolioData.summary.formattedMedianValue}</div>
-                  <span className="text-[10px] text-slate-400">middle distribution</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Median TRV</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{portfolioData.summary.formattedMedianValue}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">middle distribution</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Product Depth</span>
-                  <div className="text-lg font-bold text-slate-900">{portfolioData.summary.averageProductsPerCustomer}</div>
-                  <span className="text-[10px] text-slate-400">products/customer</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Product Depth</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{portfolioData.summary.averageProductsPerCustomer}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">products/customer</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Total Enrollments</span>
-                  <div className="text-lg font-bold text-slate-900">{portfolioData.summary.totalActiveProducts}</div>
-                  <span className="text-[10px] text-slate-400">active contracts</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Total Enrollments</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{portfolioData.summary.totalActiveProducts}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">active contracts</span>
                 </div>
               </div>
 
               {/* Breakdowns Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Segment Breakdown */}
-                <div className="bg-white rounded-lg border border-slate-200 p-4">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
+                  <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider mb-3">
                     Portfolio by Customer Segment
                   </h3>
                   <div className="space-y-2.5">
                     {portfolioData.breakdowns.bySegment.map((seg: any) => (
                       <div key={seg.segment} className="space-y-1">
                         <div className="flex justify-between text-xs">
-                          <span className="font-medium text-slate-700">{seg.segment}</span>
-                          <span className="text-slate-500">{seg.customerCount} clients ({seg.formattedValue})</span>
+                          <span className="font-medium text-[#2D3F54] dark:text-[#CBD5E1]">{seg.segment}</span>
+                          <span className="text-[#6B7C93] dark:text-[#8194A8]">{seg.customerCount} clients ({seg.formattedValue})</span>
                         </div>
-                        <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                        <div className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] rounded-full h-1.5 overflow-hidden">
                           <div
                             className="bg-cyan-700 h-1.5 rounded-full"
                             style={{ width: `${seg.percentage}%` }}
@@ -876,23 +876,23 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 </div>
 
                 {/* Score Band Breakdown */}
-                <div className="bg-white rounded-lg border border-slate-200 p-4">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
+                  <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider mb-3">
                     CORE Score Distribution Bands
                   </h3>
                   <div className="space-y-2.5">
                     {portfolioData.breakdowns.byScoreBand.map((b: any) => (
                       <div key={b.band} className="space-y-1">
                         <div className="flex justify-between text-xs">
-                          <span className="font-medium text-slate-700">{b.label}</span>
-                          <span className="text-slate-500">{b.customerCount} clients ({b.formattedValue})</span>
+                          <span className="font-medium text-[#2D3F54] dark:text-[#CBD5E1]">{b.label}</span>
+                          <span className="text-[#6B7C93] dark:text-[#8194A8]">{b.customerCount} clients ({b.formattedValue})</span>
                         </div>
-                        <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                        <div className="w-full bg-[#EDF1F5] dark:bg-[#1E3247] rounded-full h-1.5 overflow-hidden">
                           <div
                             className={`h-1.5 rounded-full ${
                               b.band === '90-100' ? 'bg-emerald-600' :
                               b.band === '75-89' ? 'bg-cyan-600' :
-                              b.band === '60-74' ? 'bg-slate-400' :
+                              b.band === '60-74' ? 'bg-[#8194A8]' :
                               b.band === '40-59' ? 'bg-amber-500' : 'bg-red-500'
                             }`}
                             style={{ width: `${b.percentage}%` }}
@@ -905,28 +905,28 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               </div>
 
               {/* Customer Portfolio Table */}
-              <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="p-3 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] overflow-hidden">
+                <div className="p-3 border-b border-[#DCE3EA] dark:border-[#33485D] flex flex-col sm:flex-row items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-cyan-700" />
-                    <span className="text-xs font-bold text-slate-900">Customer Portfolio Records</span>
-                    <span className="text-[11px] text-slate-500 font-mono">({filteredPortfolioCustomers.length})</span>
+                    <Users className="w-4 h-4 text-[#168C83] dark:text-[#46C3B2]" />
+                    <span className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5]">Customer Portfolio Records</span>
+                    <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-mono">({filteredPortfolioCustomers.length})</span>
                   </div>
                   <div className="relative w-full sm:w-64">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
+                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#8194A8] dark:text-[#64748B]" />
                     <input
                       type="text"
                       placeholder="Filter portfolio by customer or RM..."
                       value={portfolioSearch}
                       onChange={(e) => setPortfolioSearch(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded pl-8 pr-3 py-1 text-xs text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-cyan-600"
+                      className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded pl-8 pr-3 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5] placeholder-[#8194A8] dark:placeholder-[#64748B] focus:outline-hidden focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2]"
                     />
                   </div>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs text-left">
-                    <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#6B7C93] dark:text-[#8194A8] font-medium border-b border-[#DCE3EA] dark:border-[#33485D]">
                       <tr>
                         <th className="px-3 py-2">Customer Code</th>
                         <th className="px-3 py-2">Customer Name</th>
@@ -940,7 +940,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         <th className="px-3 py-2 text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {filteredPortfolioCustomers.length === 0 ? (
                         <tr>
                           <td colSpan={10} className="py-8 text-center">
@@ -953,27 +953,27 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         </tr>
                       ) : (
                         filteredPortfolioCustomers.map((c: any) => (
-                        <tr key={c.id} className="hover:bg-slate-50 transition-colors">
+                        <tr key={c.id} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] font-semibold text-cyan-900">
                             {c.customerCode}
                           </td>
-                          <td className="px-3 py-2 font-medium text-slate-900">{c.name}</td>
-                          <td className="px-3 py-2 text-slate-600">{c.entityType}</td>
+                          <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{c.name}</td>
+                          <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{c.entityType}</td>
                           <td className="px-3 py-2">
                             <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
                               c.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
-                              'bg-slate-100 text-slate-600 border border-slate-200'
+                              'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB] border border-[#DCE3EA] dark:border-[#33485D]'
                             }`}>
                               {c.status}
                             </span>
                           </td>
-                          <td className="px-3 py-2 text-right font-mono font-medium text-slate-900">
+                          <td className="px-3 py-2 text-right font-mono font-medium text-[#142C45] dark:text-[#E8EEF5]">
                             {c.formattedValue}
                           </td>
                           <td className="px-3 py-2 text-center">
                             <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
                               c.coreScore >= 85 ? 'bg-emerald-50 text-emerald-700' :
-                              c.coreScore >= 70 ? 'bg-cyan-50 text-cyan-700' :
+                              c.coreScore >= 70 ? 'bg-cyan-50 text-[#168C83] dark:text-[#46C3B2]' :
                               c.coreScore >= 50 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'
                             }`}>
                               {c.coreScore}
@@ -982,19 +982,19 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                           <td className="px-3 py-2 text-center">
                             <span className={`text-[10px] font-bold ${
                               c.momentum === 'UP' ? 'text-emerald-600' :
-                              c.momentum === 'DOWN' ? 'text-amber-600' : 'text-slate-500'
+                              c.momentum === 'DOWN' ? 'text-amber-600' : 'text-[#6B7C93] dark:text-[#8194A8]'
                             }`}>
                               {c.momentum}
                             </span>
                           </td>
-                          <td className="px-3 py-2 text-center font-semibold text-slate-700">
+                          <td className="px-3 py-2 text-center font-semibold text-[#2D3F54] dark:text-[#CBD5E1]">
                             {c.activeProductCount}
                           </td>
-                          <td className="px-3 py-2 text-slate-600">{c.rmName}</td>
+                          <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{c.rmName}</td>
                           <td className="px-3 py-2 text-right">
                             <button
                               onClick={() => onNavigateToCustomer && onNavigateToCustomer(c.id)}
-                              className="text-xs text-cyan-700 hover:text-cyan-900 font-medium inline-flex items-center gap-1 cursor-pointer"
+                              className="text-xs text-[#168C83] dark:text-[#46C3B2] hover:text-cyan-900 font-medium inline-flex items-center gap-1 cursor-pointer"
                             >
                               <span>Customer 360</span>
                               <ExternalLink className="w-3 h-3" />
@@ -1015,33 +1015,33 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             <div className="space-y-5">
               {/* Metrics Header */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Average CORE Score</span>
-                  <div className="text-xl font-bold text-slate-900">{healthData.metrics.averageCoreScore} / 100</div>
-                  <span className="text-[10px] text-slate-400">portfolio index</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Average CORE Score</span>
+                  <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5]">{healthData.metrics.averageCoreScore} / 100</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">portfolio index</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Relationships Evaluated</span>
-                  <div className="text-xl font-bold text-slate-900">{healthData.metrics.totalEvaluated}</div>
-                  <span className="text-[10px] text-slate-400">100% evaluated</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Relationships Evaluated</span>
+                  <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5]">{healthData.metrics.totalEvaluated}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">100% evaluated</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Score Improved</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Score Improved</span>
                   <div className="text-xl font-bold text-emerald-600">{healthData.metrics.improvedCount}</div>
                   <span className="text-[10px] text-emerald-700">positive trajectory</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Score Stable</span>
-                  <div className="text-xl font-bold text-slate-700">{healthData.metrics.stableCount}</div>
-                  <span className="text-[10px] text-slate-400">consistent standing</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Score Stable</span>
+                  <div className="text-xl font-bold text-[#2D3F54] dark:text-[#CBD5E1]">{healthData.metrics.stableCount}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">consistent standing</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Score Declined</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Score Declined</span>
                   <div className="text-xl font-bold text-amber-600">{healthData.metrics.declinedCount}</div>
                   <span className="text-[10px] text-amber-700">review suggested</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Needs Attention</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Needs Attention</span>
                   <div className="text-xl font-bold text-red-600">{healthData.metrics.needsAttentionCount}</div>
                   <span className="text-[10px] text-red-700">score &lt; 60 / high risk</span>
                 </div>
@@ -1056,14 +1056,14 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {healthData.needsAttention.map((c: any) => (
-                      <div key={c.id} className="bg-white rounded p-2.5 border border-amber-200 text-xs flex justify-between items-center">
+                      <div key={c.id} className="bg-[#FFFFFF] dark:bg-[#162638] rounded p-2.5 border border-amber-200 text-xs flex justify-between items-center">
                         <div>
-                          <div className="font-semibold text-slate-900">{c.name} ({c.customerCode})</div>
+                          <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{c.name} ({c.customerCode})</div>
                           <div className="text-[11px] text-amber-700 mt-0.5">{c.reason}</div>
                         </div>
                         <button
                           onClick={() => onNavigateToCustomer && onNavigateToCustomer(c.id)}
-                          className="text-cyan-700 hover:text-cyan-900 text-xs font-medium inline-flex items-center gap-1 cursor-pointer"
+                          className="text-[#168C83] dark:text-[#46C3B2] hover:text-cyan-900 text-xs font-medium inline-flex items-center gap-1 cursor-pointer"
                         >
                           Review 360 <ExternalLink className="w-3 h-3" />
                         </button>
@@ -1074,27 +1074,27 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               )}
 
               {/* Detailed Customer Health Table */}
-              <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="p-3 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] overflow-hidden">
+                <div className="p-3 border-b border-[#DCE3EA] dark:border-[#33485D] flex flex-col sm:flex-row items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-cyan-700" />
-                    <span className="text-xs font-bold text-slate-900">Relationship Health Trajectory</span>
+                    <Activity className="w-4 h-4 text-[#168C83] dark:text-[#46C3B2]" />
+                    <span className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5]">Relationship Health Trajectory</span>
                   </div>
                   <div className="relative w-full sm:w-64">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
+                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#8194A8] dark:text-[#64748B]" />
                     <input
                       type="text"
                       placeholder="Search health records..."
                       value={healthSearch}
                       onChange={(e) => setHealthSearch(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded pl-8 pr-3 py-1 text-xs text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-cyan-600"
+                      className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded pl-8 pr-3 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5] placeholder-[#8194A8] dark:placeholder-[#64748B] focus:outline-hidden focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2]"
                     />
                   </div>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs text-left">
-                    <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#6B7C93] dark:text-[#8194A8] font-medium border-b border-[#DCE3EA] dark:border-[#33485D]">
                       <tr>
                         <th className="px-3 py-2">Customer Code</th>
                         <th className="px-3 py-2">Customer Name</th>
@@ -1109,7 +1109,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         <th className="px-3 py-2 text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {filteredHealthChanges.length === 0 ? (
                         <tr>
                           <td colSpan={11} className="py-8 text-center">
@@ -1122,17 +1122,17 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         </tr>
                       ) : (
                         filteredHealthChanges.map((c: any) => (
-                        <tr key={c.id} className="hover:bg-slate-50 transition-colors">
+                        <tr key={c.id} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] font-semibold text-cyan-900">
                             {c.customerCode}
                           </td>
-                          <td className="px-3 py-2 font-medium text-slate-900">{c.name}</td>
-                          <td className="px-3 py-2 text-center text-slate-500 font-mono">{c.previousScore}</td>
-                          <td className="px-3 py-2 text-center font-bold text-slate-900 font-mono">{c.currentScore}</td>
+                          <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{c.name}</td>
+                          <td className="px-3 py-2 text-center text-[#6B7C93] dark:text-[#8194A8] font-mono">{c.previousScore}</td>
+                          <td className="px-3 py-2 text-center font-bold text-[#142C45] dark:text-[#E8EEF5] font-mono">{c.currentScore}</td>
                           <td className="px-3 py-2 text-center">
                             <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
                               c.delta > 0 ? 'bg-emerald-50 text-emerald-700' :
-                              c.delta < 0 ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-600'
+                              c.delta < 0 ? 'bg-amber-50 text-amber-700' : 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB]'
                             }`}>
                               {c.delta > 0 ? `+${c.delta}` : c.delta}
                             </span>
@@ -1140,7 +1140,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                           <td className="px-3 py-2 text-center">
                             <span className={`text-[10px] font-bold ${
                               c.momentum === 'UP' ? 'text-emerald-600' :
-                              c.momentum === 'DOWN' ? 'text-amber-600' : 'text-slate-500'
+                              c.momentum === 'DOWN' ? 'text-amber-600' : 'text-[#6B7C93] dark:text-[#8194A8]'
                             }`}>
                               {c.momentum}
                             </span>
@@ -1148,11 +1148,11 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                           <td className="px-3 py-2 text-center font-mono">{c.financialHealth}</td>
                           <td className="px-3 py-2 text-center font-mono">{c.creditRisk}</td>
                           <td className="px-3 py-2 text-center font-mono">{c.engagement}</td>
-                          <td className="px-3 py-2 text-slate-600">{c.rmName}</td>
+                          <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{c.rmName}</td>
                           <td className="px-3 py-2 text-right">
                             <button
                               onClick={() => onNavigateToCustomer && onNavigateToCustomer(c.id)}
-                              className="text-xs text-cyan-700 hover:text-cyan-900 font-medium cursor-pointer"
+                              className="text-xs text-[#168C83] dark:text-[#46C3B2] hover:text-cyan-900 font-medium cursor-pointer"
                             >
                               Customer 360
                             </button>
@@ -1172,94 +1172,94 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             <div className="space-y-5">
               {/* Summary Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Active Deals</span>
-                  <div className="text-lg font-bold text-slate-900">{opportunityData.summary.activeOpportunities}</div>
-                  <span className="text-[10px] text-slate-400">in pipeline</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Active Deals</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{opportunityData.summary.activeOpportunities}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">in pipeline</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Pipeline Value</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Pipeline Value</span>
                   <div className="text-lg font-bold text-cyan-900">{opportunityData.summary.formattedTotalPipelineValue}</div>
-                  <span className="text-[10px] text-slate-400">unweighted</span>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">unweighted</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Weighted Pipeline</span>
-                  <div className="text-lg font-bold text-slate-900">{opportunityData.summary.formattedWeightedPipelineValue}</div>
-                  <span className="text-[10px] text-slate-400">prob-adjusted</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Weighted Pipeline</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{opportunityData.summary.formattedWeightedPipelineValue}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">prob-adjusted</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Avg Deal Value</span>
-                  <div className="text-lg font-bold text-slate-900">{opportunityData.summary.formattedAvgValue}</div>
-                  <span className="text-[10px] text-slate-400">ticket size</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Avg Deal Value</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{opportunityData.summary.formattedAvgValue}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">ticket size</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Closing Soon</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Closing Soon</span>
                   <div className="text-lg font-bold text-amber-600">{opportunityData.summary.closingSoonCount}</div>
                   <span className="text-[10px] text-amber-700">within 14 days</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Stalled Deals</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Stalled Deals</span>
                   <div className="text-lg font-bold text-red-600">{opportunityData.summary.stalledCount}</div>
                   <span className="text-[10px] text-red-700">&gt; 30 days no move</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Won Deals</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Won Deals</span>
                   <div className="text-lg font-bold text-emerald-600">{opportunityData.summary.wonCount}</div>
                   <span className="text-[10px] text-emerald-700">converted</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Lost Deals</span>
-                  <div className="text-lg font-bold text-slate-500">{opportunityData.summary.lostCount}</div>
-                  <span className="text-[10px] text-slate-400">archived</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Lost Deals</span>
+                  <div className="text-lg font-bold text-[#6B7C93] dark:text-[#8194A8]">{opportunityData.summary.lostCount}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">archived</span>
                 </div>
               </div>
 
               {/* Pipeline Funnel Visualizer */}
-              <div className="bg-white rounded-lg border border-slate-200 p-4">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                  <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">
                     Pipeline Funnel & Velocity Metrics
                   </h3>
-                  <span className="text-[11px] text-slate-500 font-mono">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-mono">
                     Stage Count & Weighted Value
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
                   {opportunityData.funnel.map((fn: any) => (
-                    <div key={fn.stage} className="bg-slate-50 border border-slate-200 rounded p-3 text-center">
-                      <div className="text-[11px] font-bold text-slate-700 mb-1">{fn.stage}</div>
-                      <div className="text-xl font-bold text-slate-900">{fn.opportunityCount}</div>
-                      <div className="text-[11px] text-cyan-800 font-mono font-medium mt-1">{fn.formattedValue}</div>
-                      <div className="text-[10px] text-slate-400 mt-0.5">Avg {fn.averageDaysInStage}d in stage</div>
+                    <div key={fn.stage} className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded p-3 text-center">
+                      <div className="text-[11px] font-bold text-[#2D3F54] dark:text-[#CBD5E1] mb-1">{fn.stage}</div>
+                      <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5]">{fn.opportunityCount}</div>
+                      <div className="text-[11px] text-[#168C83] dark:text-[#46C3B2] font-mono font-medium mt-1">{fn.formattedValue}</div>
+                      <div className="text-[10px] text-[#8194A8] dark:text-[#64748B] mt-0.5">Avg {fn.averageDaysInStage}d in stage</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Opportunities Table */}
-              <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="p-3 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] overflow-hidden">
+                <div className="p-3 border-b border-[#DCE3EA] dark:border-[#33485D] flex flex-col sm:flex-row items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-cyan-700" />
-                    <span className="text-xs font-bold text-slate-900">Opportunities Roster</span>
-                    <span className="text-[11px] text-slate-500 font-mono">({filteredOpps.length})</span>
+                    <TrendingUp className="w-4 h-4 text-[#168C83] dark:text-[#46C3B2]" />
+                    <span className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5]">Opportunities Roster</span>
+                    <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-mono">({filteredOpps.length})</span>
                   </div>
                   <div className="relative w-full sm:w-64">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
+                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#8194A8] dark:text-[#64748B]" />
                     <input
                       type="text"
                       placeholder="Search opportunities..."
                       value={oppSearch}
                       onChange={(e) => setOppSearch(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded pl-8 pr-3 py-1 text-xs text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-cyan-600"
+                      className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded pl-8 pr-3 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5] placeholder-[#8194A8] dark:placeholder-[#64748B] focus:outline-hidden focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2]"
                     />
                   </div>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs text-left">
-                    <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#6B7C93] dark:text-[#8194A8] font-medium border-b border-[#DCE3EA] dark:border-[#33485D]">
                       <tr>
                         <th className="px-3 py-2">Code</th>
                         <th className="px-3 py-2">Deal Title</th>
@@ -1274,7 +1274,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         <th className="px-3 py-2 text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {filteredOpps.length === 0 ? (
                         <tr>
                           <td colSpan={11} className="py-8 text-center">
@@ -1287,25 +1287,25 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         </tr>
                       ) : (
                         filteredOpps.map((o: any) => (
-                        <tr key={o.id} className="hover:bg-slate-50 transition-colors">
-                          <td className="px-3 py-2 font-mono text-[11px] text-slate-600">{o.opportunityCode}</td>
-                          <td className="px-3 py-2 font-medium text-slate-900">{o.title}</td>
-                          <td className="px-3 py-2 text-slate-700">{o.customerName}</td>
-                          <td className="px-3 py-2 text-slate-600">{o.productName}</td>
+                        <tr key={o.id} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
+                          <td className="px-3 py-2 font-mono text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">{o.opportunityCode}</td>
+                          <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{o.title}</td>
+                          <td className="px-3 py-2 text-[#2D3F54] dark:text-[#CBD5E1]">{o.customerName}</td>
+                          <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{o.productName}</td>
                           <td className="px-3 py-2">
-                            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#EDF1F5] dark:bg-[#1E3247] text-[#2D3F54] dark:text-[#CBD5E1] border border-[#DCE3EA] dark:border-[#33485D]">
                               {o.stage}
                             </span>
                           </td>
-                          <td className="px-3 py-2 text-right font-mono font-medium text-slate-900">{o.formattedValue}</td>
+                          <td className="px-3 py-2 text-right font-mono font-medium text-[#142C45] dark:text-[#E8EEF5]">{o.formattedValue}</td>
                           <td className="px-3 py-2 text-center font-mono">{o.probability}%</td>
                           <td className="px-3 py-2 text-right font-mono text-cyan-900 font-medium">{o.formattedWeightedValue}</td>
-                          <td className="px-3 py-2 text-center font-mono text-slate-600">{o.daysInStage}d</td>
-                          <td className="px-3 py-2 text-slate-600">{o.assignedToName}</td>
+                          <td className="px-3 py-2 text-center font-mono text-[#5D6B7B] dark:text-[#A9BACB]">{o.daysInStage}d</td>
+                          <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{o.assignedToName}</td>
                           <td className="px-3 py-2 text-right">
                             <button
                               onClick={() => onNavigateToModule && onNavigateToModule('opportunities')}
-                              className="text-xs text-cyan-700 hover:text-cyan-900 font-medium cursor-pointer"
+                              className="text-xs text-[#168C83] dark:text-[#46C3B2] hover:text-cyan-900 font-medium cursor-pointer"
                             >
                               Manage Deal
                             </button>
@@ -1325,71 +1325,71 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             <div className="space-y-5">
               {/* Service KPIs */}
               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Total Cases</span>
-                  <div className="text-lg font-bold text-slate-900">{serviceData.metrics.casesOpened}</div>
-                  <span className="text-[10px] text-slate-400">on record</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Total Cases</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{serviceData.metrics.casesOpened}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">on record</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Resolved</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Resolved</span>
                   <div className="text-lg font-bold text-emerald-600">{serviceData.metrics.casesResolved}</div>
                   <span className="text-[10px] text-emerald-700">finalized</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Open / Pending</span>
-                  <div className="text-lg font-bold text-slate-900">{serviceData.metrics.openCases + serviceData.metrics.pendingCases}</div>
-                  <span className="text-[10px] text-slate-400">in resolution</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Open / Pending</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{serviceData.metrics.openCases + serviceData.metrics.pendingCases}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">in resolution</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Escalated</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Escalated</span>
                   <div className="text-lg font-bold text-red-600">{serviceData.metrics.escalatedCases}</div>
                   <span className="text-[10px] text-red-700">supervisor tier</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">SLA Compliance</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">SLA Compliance</span>
                   <div className="text-lg font-bold text-cyan-900">{serviceData.metrics.slaCompliancePercentage}%</div>
-                  <span className="text-[10px] text-slate-400">within SLA window</span>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">within SLA window</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">SLA At Risk</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">SLA At Risk</span>
                   <div className="text-lg font-bold text-amber-600">{serviceData.metrics.slaAtRisk}</div>
                   <span className="text-[10px] text-amber-700">&lt; 24h remaining</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Avg Resolution</span>
-                  <div className="text-lg font-bold text-slate-900">{serviceData.metrics.averageResolutionTimeHours}h</div>
-                  <span className="text-[10px] text-slate-400">resolved cases</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Avg Resolution</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{serviceData.metrics.averageResolutionTimeHours}h</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">resolved cases</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Median Resolution</span>
-                  <div className="text-lg font-bold text-slate-900">{serviceData.metrics.medianResolutionTimeHours}h</div>
-                  <span className="text-[10px] text-slate-400">midpoint duration</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Median Resolution</span>
+                  <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5]">{serviceData.metrics.medianResolutionTimeHours}h</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">midpoint duration</span>
                 </div>
               </div>
 
               {/* Service Cases Table */}
-              <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="p-3 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] overflow-hidden">
+                <div className="p-3 border-b border-[#DCE3EA] dark:border-[#33485D] flex flex-col sm:flex-row items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <ShieldAlert className="w-4 h-4 text-cyan-700" />
-                    <span className="text-xs font-bold text-slate-900">Service Tickets & SLA Adherence</span>
-                    <span className="text-[11px] text-slate-500 font-mono">({filteredCases.length})</span>
+                    <ShieldAlert className="w-4 h-4 text-[#168C83] dark:text-[#46C3B2]" />
+                    <span className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5]">Service Tickets & SLA Adherence</span>
+                    <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-mono">({filteredCases.length})</span>
                   </div>
                   <div className="relative w-full sm:w-64">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
+                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#8194A8] dark:text-[#64748B]" />
                     <input
                       type="text"
                       placeholder="Search service cases..."
                       value={caseSearch}
                       onChange={(e) => setCaseSearch(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded pl-8 pr-3 py-1 text-xs text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-cyan-600"
+                      className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded pl-8 pr-3 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5] placeholder-[#8194A8] dark:placeholder-[#64748B] focus:outline-hidden focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2]"
                     />
                   </div>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs text-left">
-                    <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#6B7C93] dark:text-[#8194A8] font-medium border-b border-[#DCE3EA] dark:border-[#33485D]">
                       <tr>
                         <th className="px-3 py-2">Case #</th>
                         <th className="px-3 py-2">Title</th>
@@ -1402,7 +1402,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         <th className="px-3 py-2 text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {filteredCases.length === 0 ? (
                         <tr>
                           <td colSpan={9} className="py-8 text-center">
@@ -1415,19 +1415,19 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         </tr>
                       ) : (
                         filteredCases.map((sc: any) => (
-                        <tr key={sc.id} className="hover:bg-slate-50 transition-colors">
+                        <tr key={sc.id} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] font-semibold text-cyan-900">{sc.caseNumber}</td>
-                          <td className="px-3 py-2 font-medium text-slate-900">{sc.title}</td>
-                          <td className="px-3 py-2 text-slate-600">{sc.category}</td>
+                          <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{sc.title}</td>
+                          <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{sc.category}</td>
                           <td className="px-3 py-2">
                             <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
                               sc.priority === 'CRITICAL' ? 'bg-red-50 text-red-700' :
-                              sc.priority === 'HIGH' ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-600'
+                              sc.priority === 'HIGH' ? 'bg-amber-50 text-amber-700' : 'bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB]'
                             }`}>
                               {sc.priority}
                             </span>
                           </td>
-                          <td className="px-3 py-2 text-slate-700">{sc.status}</td>
+                          <td className="px-3 py-2 text-[#2D3F54] dark:text-[#CBD5E1]">{sc.status}</td>
                           <td className="px-3 py-2 text-center">
                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                               sc.slaState === 'WITHIN_SLA' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
@@ -1437,14 +1437,14 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                               {sc.slaState}
                             </span>
                           </td>
-                          <td className="px-3 py-2 text-slate-600">{sc.assignedToName}</td>
-                          <td className="px-3 py-2 text-center font-mono text-slate-600">
+                          <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{sc.assignedToName}</td>
+                          <td className="px-3 py-2 text-center font-mono text-[#5D6B7B] dark:text-[#A9BACB]">
                             {sc.resolutionHours ? `${sc.resolutionHours}h` : '—'}
                           </td>
                           <td className="px-3 py-2 text-right">
                             <button
                               onClick={() => onNavigateToModule && onNavigateToModule('cases')}
-                              className="text-xs text-cyan-700 hover:text-cyan-900 font-medium cursor-pointer"
+                              className="text-xs text-[#168C83] dark:text-[#46C3B2] hover:text-cyan-900 font-medium cursor-pointer"
                             >
                               Service Desk
                             </button>
@@ -1462,13 +1462,13 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           {/* TAB 6: RM PRODUCTIVITY */}
           {activeTab === 'rm' && rmData && (
             <div className="space-y-5">
-              <div className="bg-white rounded-lg border border-slate-200 p-4">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                    <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">
                       Relationship Manager Operational Workload
                     </h3>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">
                       Objective throughput and active capacity across assigned portfolios, tasks, and deals.
                     </p>
                   </div>
@@ -1477,7 +1477,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs text-left">
-                    <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#6B7C93] dark:text-[#8194A8] font-medium border-b border-[#DCE3EA] dark:border-[#33485D]">
                       <tr>
                         <th className="px-3 py-2">Emp ID</th>
                         <th className="px-3 py-2">Officer Name</th>
@@ -1492,14 +1492,14 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         <th className="px-3 py-2 text-center">Avg Client CORE</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {rmData.officers.map((off: any) => (
-                        <tr key={off.rmId} className="hover:bg-slate-50 transition-colors">
-                          <td className="px-3 py-2 font-mono text-[11px] text-slate-500">{off.employeeId}</td>
-                          <td className="px-3 py-2 font-medium text-slate-900">{off.rmName}</td>
-                          <td className="px-3 py-2 text-slate-600">{off.department}</td>
-                          <td className="px-3 py-2 text-center font-bold text-slate-900">{off.assignedCustomersCount}</td>
-                          <td className="px-3 py-2 text-center text-slate-700">{off.openTasks}</td>
+                        <tr key={off.rmId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
+                          <td className="px-3 py-2 font-mono text-[11px] text-[#6B7C93] dark:text-[#8194A8]">{off.employeeId}</td>
+                          <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{off.rmName}</td>
+                          <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{off.department}</td>
+                          <td className="px-3 py-2 text-center font-bold text-[#142C45] dark:text-[#E8EEF5]">{off.assignedCustomersCount}</td>
+                          <td className="px-3 py-2 text-center text-[#2D3F54] dark:text-[#CBD5E1]">{off.openTasks}</td>
                           <td className="px-3 py-2 text-center">
                             {off.overdueTasks > 0 ? (
                               <span className="text-amber-700 font-bold bg-amber-50 px-1.5 py-0.5 rounded text-[10px]">
@@ -1510,10 +1510,10 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                             )}
                           </td>
                           <td className="px-3 py-2 text-center font-mono font-medium">{off.completionRate}%</td>
-                          <td className="px-3 py-2 text-center font-semibold text-slate-800">{off.activeOpportunitiesCount}</td>
+                          <td className="px-3 py-2 text-center font-semibold text-[#142C45] dark:text-[#E8EEF5]">{off.activeOpportunitiesCount}</td>
                           <td className="px-3 py-2 text-right font-mono font-medium text-cyan-900">{off.formattedPipelineValue}</td>
                           <td className="px-3 py-2 text-center font-mono">{off.interactionsLogged}</td>
-                          <td className="px-3 py-2 text-center font-bold text-slate-800">{off.averageCustomerCoreScore}</td>
+                          <td className="px-3 py-2 text-center font-bold text-[#142C45] dark:text-[#E8EEF5]">{off.averageCustomerCoreScore}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1528,47 +1528,47 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             <div className="space-y-5">
               {/* Summary Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Products in Catalog</span>
-                  <div className="text-xl font-bold text-slate-900">{productData.summary.totalProductsInCatalog}</div>
-                  <span className="text-[10px] text-slate-400">across CASA, Credit & Trade</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Products in Catalog</span>
+                  <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5]">{productData.summary.totalProductsInCatalog}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">across CASA, Credit & Trade</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Total Active Enrollments</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Total Active Enrollments</span>
                   <div className="text-xl font-bold text-cyan-900">{productData.summary.totalActiveEnrollments}</div>
-                  <span className="text-[10px] text-slate-400">customer holdings</span>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">customer holdings</span>
                 </div>
-                <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                  <span className="text-[11px] text-slate-500 font-medium">Average Products/Client</span>
-                  <div className="text-xl font-bold text-slate-900">{productData.summary.averageProductsPerCustomer}</div>
-                  <span className="text-[10px] text-slate-400">relationship cross-sell depth</span>
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-3 shadow-2xs">
+                  <span className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] font-medium">Average Products/Client</span>
+                  <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5]">{productData.summary.averageProductsPerCustomer}</div>
+                  <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">relationship cross-sell depth</span>
                 </div>
               </div>
 
               {/* Relationship Depth Buckets */}
-              <div className="bg-white rounded-lg border border-slate-200 p-4">
-                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
+                <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider mb-3">
                   Relationship Depth Buckets (Cross-Sell Tiers)
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                   {productData.depthAnalysis.map((b: any) => (
-                    <div key={b.depth} className="bg-slate-50 border border-slate-200 rounded p-3 text-center">
-                      <div className="text-xs font-bold text-slate-700">{b.depth}</div>
-                      <div className="text-2xl font-bold text-slate-900 my-1">{b.customerCount}</div>
-                      <div className="text-[10px] text-slate-500">{b.percentage}% of portfolio</div>
+                    <div key={b.depth} className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded p-3 text-center">
+                      <div className="text-xs font-bold text-[#2D3F54] dark:text-[#CBD5E1]">{b.depth}</div>
+                      <div className="text-2xl font-bold text-[#142C45] dark:text-[#E8EEF5] my-1">{b.customerCount}</div>
+                      <div className="text-[10px] text-[#6B7C93] dark:text-[#8194A8]">{b.percentage}% of portfolio</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Products Table */}
-              <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="p-3 border-b border-slate-200">
-                  <span className="text-xs font-bold text-slate-900">Catalog Product Penetration</span>
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] overflow-hidden">
+                <div className="p-3 border-b border-[#DCE3EA] dark:border-[#33485D]">
+                  <span className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5]">Catalog Product Penetration</span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs text-left">
-                    <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#6B7C93] dark:text-[#8194A8] font-medium border-b border-[#DCE3EA] dark:border-[#33485D]">
                       <tr>
                         <th className="px-3 py-2">Product Code</th>
                         <th className="px-3 py-2">Product Name</th>
@@ -1578,13 +1578,13 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         <th className="px-3 py-2 text-right">Held Relationship Value</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {productData.products.map((p: any) => (
-                        <tr key={p.productId} className="hover:bg-slate-50 transition-colors">
-                          <td className="px-3 py-2 font-mono text-[11px] text-slate-600">{p.productCode}</td>
-                          <td className="px-3 py-2 font-medium text-slate-900">{p.productName}</td>
-                          <td className="px-3 py-2 text-slate-600">{p.category}</td>
-                          <td className="px-3 py-2 text-center font-bold text-slate-800">{p.enrolledCustomers}</td>
+                        <tr key={p.productId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
+                          <td className="px-3 py-2 font-mono text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">{p.productCode}</td>
+                          <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{p.productName}</td>
+                          <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{p.category}</td>
+                          <td className="px-3 py-2 text-center font-bold text-[#142C45] dark:text-[#E8EEF5]">{p.enrolledCustomers}</td>
                           <td className="px-3 py-2 text-center font-mono">{p.penetrationPercentage}%</td>
                           <td className="px-3 py-2 text-right font-mono font-medium text-cyan-900">{p.formattedValue}</td>
                         </tr>
@@ -1600,27 +1600,27 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           {activeTab === 'trends' && trendsData && (
             <div className="space-y-5">
               {/* Methodology Box */}
-              <div className="bg-cyan-50/50 border border-cyan-200 rounded-lg p-3.5 text-xs text-slate-700 space-y-1">
+              <div className="bg-cyan-50/50 border border-cyan-200 rounded-lg p-3.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] space-y-1">
                 <div className="flex items-center gap-1.5 font-bold text-cyan-950">
-                  <Info className="w-4 h-4 text-cyan-700" />
+                  <Info className="w-4 h-4 text-[#168C83] dark:text-[#46C3B2]" />
                   <span>CORE Score Methodology & Governance</span>
                 </div>
-                <p className="text-[11px] text-slate-600 leading-relaxed">
+                <p className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] leading-relaxed">
                   {trendsData.methodologyInfo}
                 </p>
-                <p className="text-[10px] text-slate-500 italic">
+                <p className="text-[10px] text-[#6B7C93] dark:text-[#8194A8] italic">
                   {trendsData.disclaimer}
                 </p>
               </div>
 
               {/* Deterministic Recharts Trend Chart */}
-              <div className="bg-white rounded-lg border border-slate-200 p-4">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                    <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">
                       Deterministic CORE Score Trajectory (Historical Snapshots)
                     </h3>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">
                       Plotted directly from persisted PostgreSQL historical score records ({trendsData.totalHistoricalSnapshots} total snapshots).
                     </p>
                   </div>
@@ -1676,16 +1676,16 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
 
               {/* "What Changed?" Engine Deep Dive */}
               {whatChangedData && (
-                <div className="bg-white rounded-lg border border-slate-200 p-4">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4">
+                  <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider mb-3">
                     Period-over-Period Variance Analysis Engine
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                     {whatChangedData.changes.map((ch: any, idx: number) => (
-                      <div key={idx} className="bg-slate-50 border border-slate-200 rounded p-3 text-xs">
-                        <div className="text-[11px] font-semibold text-slate-700">{ch.metric}</div>
-                        <div className="text-lg font-bold text-slate-900 my-1">{ch.current}</div>
-                        <div className="text-[11px] text-slate-500 leading-snug">{ch.summary}</div>
+                      <div key={idx} className="bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded p-3 text-xs">
+                        <div className="text-[11px] font-semibold text-[#2D3F54] dark:text-[#CBD5E1]">{ch.metric}</div>
+                        <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5] my-1">{ch.current}</div>
+                        <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] leading-snug">{ch.summary}</div>
                       </div>
                     ))}
                   </div>
@@ -1699,82 +1699,82 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             <div className="space-y-6">
               {/* Executive Summary Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-[#8194A8] dark:text-[#64748B] tracking-wider">
                     Total Portfolio TRV
                   </div>
-                  <div className="text-xl font-bold text-slate-900 mt-1">
+                  <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] mt-1">
                     {relationshipValueData.totalPortfolioValueFormatted}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] mt-0.5">
                     Across {relationshipValueData.totalCustomers} governed relationships
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-[#8194A8] dark:text-[#64748B] tracking-wider">
                     Portfolio CORE Score
                   </div>
-                  <div className="text-xl font-bold text-slate-900 mt-1 flex items-center gap-1.5">
+                  <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] mt-1 flex items-center gap-1.5">
                     <span>{relationshipValueData.overallAverages.avgCoreScore}</span>
-                    <span className="text-xs text-slate-400 font-normal">/ 100</span>
+                    <span className="text-xs text-[#8194A8] dark:text-[#64748B] font-normal">/ 100</span>
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] mt-0.5">
                     Deterministic bank health composite
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-[#8194A8] dark:text-[#64748B] tracking-wider">
                     Product Depth
                   </div>
-                  <div className="text-xl font-bold text-slate-900 mt-1">
+                  <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] mt-1">
                     {relationshipValueData.overallAverages.avgProductDepth}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] mt-0.5">
                     Active banking facilities / client
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-[#8194A8] dark:text-[#64748B] tracking-wider">
                     Engagement Index
                   </div>
-                  <div className="text-xl font-bold text-slate-900 mt-1">
+                  <div className="text-xl font-bold text-[#142C45] dark:text-[#E8EEF5] mt-1">
                     {relationshipValueData.overallAverages.avgEngagement}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] mt-0.5">
                     Touchpoint & interaction recency
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 shadow-2xs">
+                  <div className="text-[10px] uppercase font-bold text-[#8194A8] dark:text-[#64748B] tracking-wider">
                     Service Health
                   </div>
-                  <div className="text-base font-bold text-slate-900 mt-1 flex items-center gap-1.5">
+                  <div className="text-base font-bold text-[#142C45] dark:text-[#E8EEF5] mt-1 flex items-center gap-1.5">
                     <span className="text-emerald-600">{relationshipValueData.serviceHealthDistribution.good + relationshipValueData.serviceHealthDistribution.excellent} Good</span>
-                    <span className="text-slate-300">|</span>
+                    <span className="text-[#DCE3EA] dark:text-[#33485D]">|</span>
                     <span className="text-amber-600">{relationshipValueData.serviceHealthDistribution.fair} Fair</span>
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-[#6B7C93] dark:text-[#8194A8] mt-0.5">
                     SLA risk: {relationshipValueData.serviceHealthDistribution.critical} critical
                   </div>
                 </div>
               </div>
 
               {/* Relationship Value Distribution Buckets */}
-              <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 shadow-2xs space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                    <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">
                       Relationship Value Distribution Tiers
                     </h3>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">
                       Empirical segmentation based on existing Total Relationship Value (TRV). Zero fabricated monetary projections.
                     </p>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
+                  <span className="text-[10px] font-mono px-2 py-0.5 bg-[#EDF1F5] dark:bg-[#1E3247] text-[#5D6B7B] dark:text-[#A9BACB] rounded">
                     Server-Side Aggregation
                   </span>
                 </div>
@@ -1788,22 +1788,22 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                           ? 'bg-emerald-50/40 border-emerald-200'
                           : tier.tier === 'MEDIUM'
                           ? 'bg-blue-50/40 border-blue-200'
-                          : 'bg-slate-50 border-slate-200'
+                          : 'bg-[#F8FAFC] dark:bg-[#101C2A] border-[#DCE3EA] dark:border-[#33485D]'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-slate-900">{tier.label}</span>
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 bg-white rounded border border-slate-200 font-semibold">
+                        <span className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5]">{tier.label}</span>
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 bg-[#FFFFFF] dark:bg-[#162638] rounded border border-[#DCE3EA] dark:border-[#33485D] font-semibold">
                           {tier.rangeLabel}
                         </span>
                       </div>
-                      <div className="text-lg font-bold text-slate-900 mt-2">
+                      <div className="text-lg font-bold text-[#142C45] dark:text-[#E8EEF5] mt-2">
                         {tier.totalValueFormatted}
                       </div>
-                      <div className="text-xs text-slate-600 mt-0.5">
+                      <div className="text-xs text-[#5D6B7B] dark:text-[#A9BACB] mt-0.5">
                         {tier.customerCount} Customers ({relationshipValueData.totalCustomers > 0 ? Math.round((tier.customerCount / relationshipValueData.totalCustomers) * 100) : 0}%)
                       </div>
-                      <div className="mt-2.5 pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px] text-slate-600">
+                      <div className="mt-2.5 pt-2 border-t border-[#DCE3EA] dark:border-[#33485D]/80 flex items-center justify-between text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">
                         <span>Avg CORE: <strong>{tier.avgCoreScore}</strong></span>
                         <span>Products: <strong>{tier.avgProductDepth}</strong></span>
                         <span>Engage: <strong>{tier.avgEngagement}</strong></span>
@@ -1814,19 +1814,19 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               </div>
 
               {/* Portfolio Segment Comparison (Requirement 19) */}
-              <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 shadow-2xs space-y-3">
                 <div>
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                  <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">
                     Portfolio Segment Comparison
                   </h3>
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">
                     Descriptive aggregate intelligence across customer categories. Purely descriptive metrics without subjective employee rankings.
                   </p>
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs border border-slate-200 rounded">
-                    <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider border-b border-slate-200 text-[11px]">
+                  <table className="w-full text-left text-xs border border-[#DCE3EA] dark:border-[#33485D] rounded">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider border-b border-[#DCE3EA] dark:border-[#33485D] text-[11px]">
                       <tr>
                         <th className="px-3 py-2 font-semibold">Segment</th>
                         <th className="px-3 py-2 font-semibold text-center">Customers</th>
@@ -1838,28 +1838,28 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         <th className="px-3 py-2 font-semibold">Dominant Health</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {relationshipValueData.segments.map((seg, idx) => (
-                        <tr key={idx} className="hover:bg-slate-50 transition">
-                          <td className="px-3 py-2.5 font-bold text-slate-900">
+                        <tr key={idx} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition">
+                          <td className="px-3 py-2.5 font-bold text-[#142C45] dark:text-[#E8EEF5]">
                             {seg.segmentLabel}
                           </td>
-                          <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                          <td className="px-3 py-2.5 text-center font-mono text-[#2D3F54] dark:text-[#CBD5E1]">
                             {seg.customerCount}
                           </td>
-                          <td className="px-3 py-2.5 font-mono font-bold text-slate-900">
+                          <td className="px-3 py-2.5 font-mono font-bold text-[#142C45] dark:text-[#E8EEF5]">
                             {seg.totalValueFormatted}
                           </td>
                           <td className="px-3 py-2.5 text-center font-mono font-semibold text-indigo-700">
                             {seg.avgCoreScore}
                           </td>
-                          <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                          <td className="px-3 py-2.5 text-center font-mono text-[#2D3F54] dark:text-[#CBD5E1]">
                             {seg.avgProductDepth}
                           </td>
-                          <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                          <td className="px-3 py-2.5 text-center font-mono text-[#2D3F54] dark:text-[#CBD5E1]">
                             {seg.avgEngagement}
                           </td>
-                          <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                          <td className="px-3 py-2.5 text-center font-mono text-[#2D3F54] dark:text-[#CBD5E1]">
                             {seg.avgOpportunityCoverage}%
                           </td>
                           <td className="px-3 py-2.5">
@@ -1879,31 +1879,31 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
               </div>
 
               {/* Customer Drilldown Table (Requirement 18) */}
-              <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs space-y-3">
+              <div className="bg-[#FFFFFF] dark:bg-[#162638] rounded-lg border border-[#DCE3EA] dark:border-[#33485D] p-4 shadow-2xs space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                    <h3 className="text-xs font-bold text-[#142C45] dark:text-[#E8EEF5] uppercase tracking-wider">
                       Customer Relationship Value Drilldown
                     </h3>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-[#6B7C93] dark:text-[#8194A8]">
                       Examine individual client profiles and launch what-if strategy simulations.
                     </p>
                   </div>
                   <div className="relative w-64">
-                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+                    <Search className="w-3.5 h-3.5 text-[#8194A8] dark:text-[#64748B] absolute left-2.5 top-2.5" />
                     <input
                       type="text"
                       placeholder="Search client, code, or RM..."
                       value={rvSearch}
                       onChange={(e) => setRvSearch(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded pl-8 pr-3 py-1 text-xs text-slate-800 focus:outline-hidden focus:ring-1 focus:ring-cyan-600"
+                      className="w-full bg-[#F8FAFC] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded pl-8 pr-3 py-1 text-xs text-[#142C45] dark:text-[#E8EEF5] focus:outline-hidden focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2]"
                     />
                   </div>
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs border border-slate-200 rounded">
-                    <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider border-b border-slate-200 text-[11px]">
+                  <table className="w-full text-left text-xs border border-[#DCE3EA] dark:border-[#33485D] rounded">
+                    <thead className="bg-[#F8FAFC] dark:bg-[#101C2A] text-[#6B7C93] dark:text-[#8194A8] uppercase tracking-wider border-b border-[#DCE3EA] dark:border-[#33485D] text-[11px]">
                       <tr>
                         <th className="px-3 py-2 font-semibold">Customer</th>
                         <th className="px-3 py-2 font-semibold">Segment</th>
@@ -1917,7 +1917,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         <th className="px-3 py-2 font-semibold text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {relationshipValueData.drilldownList
                         .filter((c) => {
                           if (!rvSearch) return true;
@@ -1930,27 +1930,27 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                           );
                         })
                         .map((cust, idx) => (
-                          <tr key={idx} className="hover:bg-slate-50 transition">
+                          <tr key={idx} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition">
                             <td className="px-3 py-2.5">
-                              <div className="font-bold text-slate-900">{cust.customerName}</div>
-                              <div className="text-[10px] text-slate-400 font-mono">{cust.customerCode}</div>
+                              <div className="font-bold text-[#142C45] dark:text-[#E8EEF5]">{cust.customerName}</div>
+                              <div className="text-[10px] text-[#8194A8] dark:text-[#64748B] font-mono">{cust.customerCode}</div>
                             </td>
-                            <td className="px-3 py-2.5 text-slate-600">
+                            <td className="px-3 py-2.5 text-[#5D6B7B] dark:text-[#A9BACB]">
                               {cust.segment.replace(/_/g, ' ')}
                             </td>
-                            <td className="px-3 py-2.5 text-slate-600">
+                            <td className="px-3 py-2.5 text-[#5D6B7B] dark:text-[#A9BACB]">
                               {cust.rmName}
                             </td>
-                            <td className="px-3 py-2.5 font-bold font-mono text-slate-900">
+                            <td className="px-3 py-2.5 font-bold font-mono text-[#142C45] dark:text-[#E8EEF5]">
                               {cust.relationshipValueFormatted}
                             </td>
                             <td className="px-3 py-2.5 text-center font-bold text-indigo-700">
                               {cust.coreScore}
                             </td>
-                            <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                            <td className="px-3 py-2.5 text-center font-mono text-[#2D3F54] dark:text-[#CBD5E1]">
                               {cust.productDepth}
                             </td>
-                            <td className="px-3 py-2.5 text-center font-mono text-slate-700">
+                            <td className="px-3 py-2.5 text-center font-mono text-[#2D3F54] dark:text-[#CBD5E1]">
                               {cust.engagement}
                             </td>
                             <td className="px-3 py-2.5 text-center">
@@ -1963,7 +1963,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                               </span>
                             </td>
                             <td className="px-3 py-2.5 text-center">
-                              <span className="text-[11px] font-medium text-slate-700">
+                              <span className="text-[11px] font-medium text-[#2D3F54] dark:text-[#CBD5E1]">
                                 {cust.momentum}
                               </span>
                             </td>
