@@ -1,10 +1,32 @@
+# Dependency cache & build outputs
 node_modules
 dist
+dist-ssr
+*.local
+
+# Environment & credentials (Strict Zero Secrets in Images)
 .env
 .env.*
 !.env.example
-npm-debug.log
-yarn-error.log
-drizzle
-*.sqlite
+!.env.docker.example
+
+# Version control & workspace metadata
 .git
+.gitignore
+.gitattributes
+.gemini
+.vscode
+.idea
+.DS_Store
+
+# Test reports, coverage, transcripts & artifacts
+coverage
+artifacts
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Documentation & non-runtime assets
+*.md
+!README.md

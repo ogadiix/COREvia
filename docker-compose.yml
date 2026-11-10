@@ -1,25 +1,59 @@
-version: '3.8'
+# ============================================================================
+# COREvia Core Banking & CRM Platform — Docker Compose Orchestration
+# Services:
+#   1. postgres: Relational Core Banking Database (PostgreSQL 16 Alpine)
+#   2. app: Enterprise Node.js / Express / React Full-Stack Core Platform
+# ============================================================================
 
 services:
   postgres:
-    image: postgres:15-alpine
-    container_name: corevia_postgres_dev
+    image: postgres:16-alpine
+    container_name: corevia-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: corevia_dev
-      POSTGRES_USER: dev_user
-      POSTGRES_PASSWORD: dev_password
+      POSTGRES_USER: ${POSTGRES_USER:-corevia}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-corevia_secure_password_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-corevia_db}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - corevia_pgdata:/var/lib/postgresql/data
+    networks:
+      - corevia-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dev_user -d corevia_dev"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-corevia} -d ${POSTGRES_DB:-corevia_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
-  # The application is intended to run locally via `npm run dev` 
-  # outside of docker to support rapid hot-module reloading and TSX execution.
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: corevia-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      SESSION_SECRET: ${SESSION_SECRET:-corevia_institutional_session_secret_key_prod_2026_xyz}
+      DATABASE_URL: postgres://${POSTGRES_USER:-corevia}:${POSTGRES_PASSWORD:-corevia_secure_password_2026}@postgres:5432/${POSTGRES_DB:-corevia_db}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    networks:
+      - corevia-network
 
 volumes:
-  pgdata:
+  corevia_pgdata:
+    driver: local
+
+networks:
+  corevia-network:
+    driver: bridge
