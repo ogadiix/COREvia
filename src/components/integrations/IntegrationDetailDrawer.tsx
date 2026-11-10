@@ -123,7 +123,7 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-[#8194A8] dark:text-[#64748B] hover:text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#DCE3EA] dark:bg-[#26394C] rounded-lg transition-colors cursor-pointer"
+            className="p-2 text-[#8194A8] dark:text-[#64748B] hover:text-[#2D3F54] dark:hover:text-[#CBD5E1] hover:bg-[#DCE3EA] dark:hover:bg-[#26394C] rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -148,7 +148,7 @@ export const IntegrationDetailDrawer: React.FC<IntegrationDetailDrawerProps> = (
               className={`py-3 px-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTab === tab
                   ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-[#6B7C93] dark:text-[#8194A8] hover:text-[#142C45] dark:text-[#E8EEF5]'
+                  : 'border-transparent text-[#6B7C93] dark:text-[#8194A8] hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
               }`}
             >
               {tab}

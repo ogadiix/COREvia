@@ -5,8 +5,8 @@
  */
 
 import React, { useEffect } from 'react';
-import { X, ShieldAlert, AlertTriangle, Clock, Server, CheckCircle2, Copy } from 'lucide-react';
-import { SecurityEventDTO } from '../../types/admin.types.ts';
+import { X, ShieldAlert, AlertTriangle } from 'lucide-react';
+import { SecurityEventDTO } from '../../types/admin.types';
 
 interface SecurityEventDetailDrawerProps {
   event: SecurityEventDTO | null;
@@ -81,7 +81,7 @@ export const SecurityEventDetailDrawer: React.FC<SecurityEventDetailDrawerProps>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:bg-[#1E3247] transition"
+            className="p-1.5 rounded-lg text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#1E3247] transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -154,7 +154,7 @@ export const SecurityEventDetailDrawer: React.FC<SecurityEventDetailDrawerProps>
         <div className="p-4 border-t border-[#DCE3EA] dark:border-[#33485D] bg-[#F8FAFC] dark:bg-[#101C2A] flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#DCE3EA] dark:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] font-medium text-xs rounded-lg transition"
+            className="px-4 py-2 bg-[#EDF1F5] dark:bg-[#101C2A] hover:bg-[#DCE3EA] dark:hover:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] font-medium text-xs rounded-lg transition"
           >
             Close Detail
           </button>

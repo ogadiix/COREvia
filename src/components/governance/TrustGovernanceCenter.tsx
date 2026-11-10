@@ -245,7 +245,7 @@ export const TrustGovernanceCenter: React.FC = () => {
           <button
             onClick={loadData}
             disabled={loading}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#CBD5E1] dark:border-[#33485D] text-xs font-medium text-[#142C45] dark:text-[#E8EEF5] transition-colors"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] border border-[#CBD5E1] dark:border-[#33485D] text-xs font-medium text-[#142C45] dark:text-[#E8EEF5] transition-colors"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
@@ -267,7 +267,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                   className={`flex items-center space-x-2 px-3.5 py-2 text-xs font-medium rounded-t-md transition-all border-b-2 ${
                     isActive
                       ? 'bg-[#FFFFFF] dark:bg-[#162638] text-emerald-400 border-emerald-500 font-semibold'
-                      : 'text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:bg-[#F8FAFC] dark:bg-[#101C2A] border-transparent'
+                      : 'text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] border-transparent'
                   }`}
                 >
                   {tab.icon}
@@ -532,7 +532,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                     const isExpanded = expandedAuditId === ev.id;
                     return (
                       <React.Fragment key={ev.id}>
-                        <tr className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition-colors">
+                        <tr className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition-colors">
                           <td className="py-2.5 px-3 text-[#5D6B7B] dark:text-[#A9BACB] whitespace-nowrap">
                             {new Date(ev.timestamp).toLocaleTimeString()}
                           </td>
@@ -697,7 +697,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                     {aiGov.aiFallbacks.map((fb, idx) => (
-                      <tr key={idx} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
+                      <tr key={idx} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247]/50">
                         <td className="p-2.5 text-[#5D6B7B] dark:text-[#A9BACB]">{new Date(fb.timestamp).toLocaleTimeString()}</td>
                         <td className="p-2.5 font-bold text-white">{fb.module}</td>
                         <td className="p-2.5 text-[#2D3F54] dark:text-[#CBD5E1] font-sans">{fb.reason}</td>
@@ -764,7 +764,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                     {agentGov.recentPlans.map((plan) => (
-                      <tr key={plan.planId} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
+                      <tr key={plan.planId} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247]/50">
                         <td className="p-2.5 font-bold text-emerald-400 whitespace-nowrap">{plan.planId}</td>
                         <td className="p-2.5 font-sans">
                           <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{plan.title}</div>
@@ -839,7 +839,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                     {accessGov.recentAccessEvents.map((ae) => (
-                      <tr key={ae.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
+                      <tr key={ae.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247]/50">
                         <td className="p-2.5 text-[#5D6B7B] dark:text-[#A9BACB]">{new Date(ae.timestamp).toLocaleTimeString()}</td>
                         <td className="p-2.5 font-sans font-medium text-white">{ae.actorName}</td>
                         <td className="p-2.5 text-[#2D3F54] dark:text-[#CBD5E1] truncate max-w-xs">{ae.resourceId}</td>
@@ -1099,7 +1099,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                   {exportsData.recentExports.map((exp) => (
-                    <tr key={exp.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
+                    <tr key={exp.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247]/50">
                       <td className="p-2.5 text-emerald-400 font-bold">{exp.id}</td>
                       <td className="p-2.5 font-sans">
                         <div className="font-medium text-white">{exp.actorName}</div>
@@ -1207,7 +1207,7 @@ export const TrustGovernanceCenter: React.FC = () => {
                     </tr>
                   ) : (
                     exceptions.items.map((ex) => (
-                    <tr key={ex.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247]/50">
+                    <tr key={ex.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247]/50">
                       <td className="p-2.5 font-bold text-emerald-400 whitespace-nowrap">{ex.exceptionId}</td>
                       <td className="p-2.5 text-[#2D3F54] dark:text-[#CBD5E1]">{ex.category}</td>
                       <td className="p-2.5">

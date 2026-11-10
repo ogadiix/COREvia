@@ -318,42 +318,42 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             <div className="absolute right-0 top-full mt-1 w-52 bg-[#FFFFFF] dark:bg-[#162638] rounded-md shadow-lg border border-[#DCE3EA] dark:border-[#33485D] py-1 hidden group-hover:block z-30">
               <button
                 onClick={() => handleExport('portfolio')}
-                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Portfolio Analytics</span>
                 <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('health')}
-                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Customer Health & Scores</span>
                 <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('opportunities')}
-                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Opportunity Pipeline</span>
                 <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('service_cases')}
-                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Service Desk & SLA</span>
                 <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('rm_productivity')}
-                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>RM Productivity</span>
                 <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
               </button>
               <button
                 onClick={() => handleExport('products')}
-                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:bg-[#101C2A] flex items-center justify-between"
+                className="w-full text-left px-3 py-1.5 text-xs text-[#2D3F54] dark:text-[#CBD5E1] hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] flex items-center justify-between"
               >
                 <span>Product Penetration</span>
                 <span className="text-[10px] text-[#8194A8] dark:text-[#64748B]">CSV</span>
@@ -460,7 +460,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
             {activeFilterCount > 0 && (
               <button
                 onClick={resetFilters}
-                className="text-xs text-[#6B7C93] dark:text-[#8194A8] hover:text-[#142C45] dark:text-[#E8EEF5] flex items-center gap-1 cursor-pointer"
+                className="text-xs text-[#6B7C93] dark:text-[#8194A8] hover:text-[#142C45] dark:hover:text-[#E8EEF5] flex items-center gap-1 cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Reset Filters</span>
@@ -586,7 +586,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'overview'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
-              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:border-[#CBD5E1] dark:hover:border-[#33485D]'
           }`}
         >
           Executive Overview
@@ -599,7 +599,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'portfolio'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
-              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:border-[#CBD5E1] dark:hover:border-[#33485D]'
           }`}
         >
           Relationship Portfolio
@@ -612,7 +612,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
             activeTab === 'relationship_value'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
-              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:border-[#CBD5E1] dark:hover:border-[#33485D]'
           }`}
         >
           <span>Relationship Value Intelligence</span>
@@ -628,7 +628,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'health'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
-              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:border-[#CBD5E1] dark:hover:border-[#33485D]'
           }`}
         >
           Customer Health
@@ -641,7 +641,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'opportunities'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
-              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:border-[#CBD5E1] dark:hover:border-[#33485D]'
           }`}
         >
           Opportunity Performance
@@ -654,7 +654,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'service'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
-              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:border-[#CBD5E1] dark:hover:border-[#33485D]'
           }`}
         >
           Service Performance & SLA
@@ -667,7 +667,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'rm'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
-              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:border-[#CBD5E1] dark:hover:border-[#33485D]'
           }`}
         >
           RM Productivity
@@ -680,7 +680,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'products'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
-              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:border-[#CBD5E1] dark:hover:border-[#33485D]'
           }`}
         >
           Product Penetration
@@ -693,7 +693,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
           className={`px-3 py-2 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === 'trends'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-bold'
-              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:border-[#CBD5E1] dark:border-[#33485D]'
+              : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:border-[#CBD5E1] dark:hover:border-[#33485D]'
           }`}
         >
           Trends & "What Changed?"
@@ -975,7 +975,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         </tr>
                       ) : (
                         filteredPortfolioCustomers.map((c: any) => (
-                        <tr key={c.id} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
+                        <tr key={c.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] font-semibold text-cyan-900">
                             {c.customerCode}
                           </td>
@@ -1144,7 +1144,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         </tr>
                       ) : (
                         filteredHealthChanges.map((c: any) => (
-                        <tr key={c.id} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
+                        <tr key={c.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] font-semibold text-cyan-900">
                             {c.customerCode}
                           </td>
@@ -1309,7 +1309,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         </tr>
                       ) : (
                         filteredOpps.map((o: any) => (
-                        <tr key={o.id} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
+                        <tr key={o.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">{o.opportunityCode}</td>
                           <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{o.title}</td>
                           <td className="px-3 py-2 text-[#2D3F54] dark:text-[#CBD5E1]">{o.customerName}</td>
@@ -1437,7 +1437,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                         </tr>
                       ) : (
                         filteredCases.map((sc: any) => (
-                        <tr key={sc.id} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
+                        <tr key={sc.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] font-semibold text-cyan-900">{sc.caseNumber}</td>
                           <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{sc.title}</td>
                           <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{sc.category}</td>
@@ -1516,7 +1516,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                     </thead>
                     <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {rmData.officers.map((off: any) => (
-                        <tr key={off.rmId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
+                        <tr key={off.rmId} className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] text-[#6B7C93] dark:text-[#8194A8]">{off.employeeId}</td>
                           <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{off.rmName}</td>
                           <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{off.department}</td>
@@ -1602,7 +1602,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                     </thead>
                     <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {productData.products.map((p: any) => (
-                        <tr key={p.productId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition-colors">
+                        <tr key={p.productId} className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] transition-colors">
                           <td className="px-3 py-2 font-mono text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">{p.productCode}</td>
                           <td className="px-3 py-2 font-medium text-[#142C45] dark:text-[#E8EEF5]">{p.productName}</td>
                           <td className="px-3 py-2 text-[#5D6B7B] dark:text-[#A9BACB]">{p.category}</td>
@@ -1862,7 +1862,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                     </thead>
                     <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {relationshipValueData.segments.map((seg, idx) => (
-                        <tr key={idx} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition">
+                        <tr key={idx} className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] transition">
                           <td className="px-3 py-2.5 font-bold text-[#142C45] dark:text-[#E8EEF5]">
                             {seg.segmentLabel}
                           </td>
@@ -1952,7 +1952,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                           );
                         })
                         .map((cust, idx) => (
-                          <tr key={idx} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A] transition">
+                          <tr key={idx} className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A] transition">
                             <td className="px-3 py-2.5">
                               <div className="font-bold text-[#142C45] dark:text-[#E8EEF5]">{cust.customerName}</div>
                               <div className="text-[10px] text-[#8194A8] dark:text-[#64748B] font-mono">{cust.customerCode}</div>

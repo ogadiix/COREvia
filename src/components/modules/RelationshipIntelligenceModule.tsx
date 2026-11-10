@@ -414,7 +414,7 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                 className={`px-3 py-1.5 rounded font-medium transition-colors ${
                   selectedStatus === status
                     ? 'bg-[#FFFFFF] dark:bg-[#162638] text-[#142C45] dark:text-[#E8EEF5] shadow-xs'
-                    : 'text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5]'
+                    : 'text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
                 }`}
               >
                 {status === 'ACTIVE'
@@ -437,13 +437,13 @@ export const RelationshipIntelligenceModule: React.FC<RelationshipIntelligenceMo
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search customer, CIF, signal..."
-                className="w-full pl-8 pr-8 py-1.5 text-xs bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded focus:bg-[#FFFFFF] dark:bg-[#162638] focus:outline-none focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2] font-sans"
+                className="w-full pl-8 pr-8 py-1.5 text-xs bg-[#F4F6F8] dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] rounded focus:bg-[#FFFFFF] dark:focus:bg-[#162638] focus:outline-none focus:ring-1 focus:ring-[#168C83] dark:focus:ring-[#46C3B2] font-sans"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8194A8] dark:text-[#64748B] hover:text-[#5D6B7B] dark:text-[#A9BACB]"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8194A8] dark:text-[#64748B] hover:text-[#5D6B7B] dark:hover:text-[#A9BACB]"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>

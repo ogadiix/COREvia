@@ -315,7 +315,7 @@ export const IntegrationsWorkspace: React.FC = () => {
                 className={`py-3.5 px-4 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-colors cursor-pointer shrink-0 ${
                   isActive
                     ? 'border-indigo-600 text-indigo-600 bg-[#FFFFFF] dark:bg-[#162638]'
-                    : 'border-transparent text-[#6B7C93] dark:text-[#8194A8] hover:text-[#142C45] dark:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:bg-[#1E3247]'
+                    : 'border-transparent text-[#6B7C93] dark:text-[#8194A8] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#1E3247]'
                 }`}
               >
                 <Icon className={`w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-[#8194A8] dark:text-[#64748B]'}`} />

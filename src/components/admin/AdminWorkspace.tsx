@@ -55,8 +55,8 @@ import {
   Sparkles,
   Laptop,
 } from 'lucide-react';
-import { api } from '../../lib/api.ts';
-import { useAuth } from '../../context/AuthContext.tsx';
+import { api } from '../../lib/api';
+import { useAuth } from '../../context/AuthContext';
 import {
   AdminOverviewDTO,
   AdminUserDTO,
@@ -76,10 +76,10 @@ import {
   BackgroundJobDTO,
   MaintenanceModeConfigDTO,
   AuditTrailItemDTO,
-} from '../../types/admin.types.ts';
-import { UserDetailDrawer } from './UserDetailDrawer.tsx';
-import { SecurityEventDetailDrawer } from './SecurityEventDetailDrawer.tsx';
-import { AdminConfirmModal } from './AdminConfirmModal.tsx';
+} from '../../types/admin.types';
+import { UserDetailDrawer } from './UserDetailDrawer';
+import { SecurityEventDetailDrawer } from './SecurityEventDetailDrawer';
+import { AdminConfirmModal } from './AdminConfirmModal';
 import { EmptyState } from '../common/EmptyState';
 import { useToast } from '../common/Toast';
 import { ThemeSwitcher } from '../common/ThemeSwitcher';
@@ -514,7 +514,7 @@ export const AdminWorkspace: React.FC = () => {
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="px-3 py-1.5 rounded-lg bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] border border-[#CBD5E1] dark:border-[#33485D] text-xs font-medium flex items-center gap-1.5 transition"
+            className="px-3 py-1.5 rounded-lg bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] border border-[#CBD5E1] dark:border-[#33485D] text-xs font-medium flex items-center gap-1.5 transition"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
             Refresh Control Plane
@@ -550,7 +550,7 @@ export const AdminWorkspace: React.FC = () => {
               className={`px-3 py-2 rounded-lg font-medium flex items-center gap-1.5 whitespace-nowrap transition ${
                 isActive
                   ? 'bg-[#168C83] text-white shadow-sm'
-                  : 'text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:bg-[#F8FAFC] dark:bg-[#1E3247]'
+                  : 'text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247]'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -655,28 +655,28 @@ export const AdminWorkspace: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
               <button
                 onClick={() => setActiveTab('users')}
-                className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#DCE3EA] dark:border-[#33485D] text-left transition"
+                className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] border border-[#DCE3EA] dark:border-[#33485D] text-left transition"
               >
                 <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] block mb-0.5">User Management</span>
                 <span className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">Personnel, status, and credentials</span>
               </button>
               <button
                 onClick={() => setActiveTab('roles')}
-                className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#DCE3EA] dark:border-[#33485D] text-left transition"
+                className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] border border-[#DCE3EA] dark:border-[#33485D] text-left transition"
               >
                 <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] block mb-0.5">RBAC & Permissions</span>
                 <span className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">15 enterprise domain matrices</span>
               </button>
               <button
                 onClick={() => setActiveTab('security')}
-                className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#DCE3EA] dark:border-[#33485D] text-left transition"
+                className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] border border-[#DCE3EA] dark:border-[#33485D] text-left transition"
               >
                 <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] block mb-0.5">Security Events</span>
                 <span className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">IDOR, CSRF, and secret access traces</span>
               </button>
               <button
                 onClick={() => setActiveTab('flags')}
-                className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#1E3247] border border-[#DCE3EA] dark:border-[#33485D] text-left transition"
+                className="p-3 rounded-lg bg-[#F8FAFC] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] border border-[#DCE3EA] dark:border-[#33485D] text-left transition"
               >
                 <span className="font-semibold text-[#142C45] dark:text-[#E8EEF5] block mb-0.5">Feature Flags</span>
                 <span className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB]">Governed environment switches</span>
@@ -748,7 +748,7 @@ export const AdminWorkspace: React.FC = () => {
                   </tr>
                 ) : (
                   filteredUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition">
+                  <tr key={u.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition">
                     <td className="py-3 px-4">
                       <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{u.name}</div>
                       <div className="text-[11px] text-[#5D6B7B] dark:text-[#A9BACB] font-mono">{u.email}</div>
@@ -780,14 +780,14 @@ export const AdminWorkspace: React.FC = () => {
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => handleOpenUserDetail(u.id)}
-                          className="px-2.5 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] rounded font-medium text-[11px] transition flex items-center gap-1"
+                          className="px-2.5 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] rounded font-medium text-[11px] transition flex items-center gap-1"
                         >
                           <Eye className="w-3 h-3" /> View
                         </button>
                         {u.status === 'ACTIVE' ? (
                           <button
                             onClick={() => promptStatusChange(u, 'INACTIVE')}
-                            className="px-2 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#26394C] text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] rounded text-[11px] transition"
+                            className="px-2 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] rounded text-[11px] transition"
                             title="Deactivate account"
                           >
                             Deactivate
@@ -803,7 +803,7 @@ export const AdminWorkspace: React.FC = () => {
                         )}
                         <button
                           onClick={() => promptResetAccess(u)}
-                          className="px-2 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#26394C] text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] rounded text-[11px] transition"
+                          className="px-2 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] rounded text-[11px] transition"
                           title="Reset access"
                         >
                           Reset
@@ -873,7 +873,7 @@ export const AdminWorkspace: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]/60">
                   {permissions.map((p) => (
-                    <tr key={p.code} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition">
+                    <tr key={p.code} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition">
                       <td className="py-3 px-4 font-mono font-semibold text-[#142C45] dark:text-[#E8EEF5]">{p.code}</td>
                       <td className="py-3 px-4 font-mono text-[10px] text-[#168C83] dark:text-[#46C3B2] font-semibold">{p.domain}</td>
                       <td className="py-3 px-4 text-[#2D3F54] dark:text-[#CBD5E1]">{p.description}</td>
@@ -988,7 +988,7 @@ export const AdminWorkspace: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]/60">
                 {sessions.map((s) => (
-                  <tr key={s.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition">
+                  <tr key={s.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition">
                     <td className="py-3 px-4 font-mono font-bold text-[#142C45] dark:text-[#E8EEF5]">{s.sessionId}</td>
                     <td className="py-3 px-4">
                       <div className="font-medium text-[#142C45] dark:text-[#E8EEF5]">{s.userName}</div>
@@ -1067,7 +1067,7 @@ export const AdminWorkspace: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]/60">
                 {filteredSecEvents.map((e) => (
-                  <tr key={e.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition">
+                  <tr key={e.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition">
                     <td className="py-3 px-4 font-mono font-bold text-[#142C45] dark:text-[#E8EEF5]">{e.eventId}</td>
                     <td className="py-3 px-4 font-semibold text-[#2D3F54] dark:text-[#CBD5E1]">{e.type}</td>
                     <td className="py-3 px-4">
@@ -1103,7 +1103,7 @@ export const AdminWorkspace: React.FC = () => {
                     <td className="py-3 px-4 text-right">
                       <button
                         onClick={() => setSelectedSecurityEvent(e)}
-                        className="px-2.5 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] rounded font-medium text-[11px] transition"
+                        className="px-2.5 py-1 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] rounded font-medium text-[11px] transition"
                       >
                         Inspect
                       </button>
@@ -1236,7 +1236,7 @@ export const AdminWorkspace: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]/60">
                 {integrationsSummary.map((i) => (
-                  <tr key={i.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition">
+                  <tr key={i.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition">
                     <td className="py-3 px-4">
                       <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{i.name}</div>
                       <div className="text-[10px] text-[#5D6B7B] dark:text-[#A9BACB] font-mono">{i.integrationId}</div>
@@ -1315,7 +1315,7 @@ export const AdminWorkspace: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]/60">
                 {slaPolicies.map((sp) => (
-                  <tr key={sp.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition">
+                  <tr key={sp.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition">
                     <td className="py-3 px-4 font-mono font-bold text-[#168C83] dark:text-[#46C3B2]">{sp.domain}</td>
                     <td className="py-3 px-4 font-semibold text-[#142C45] dark:text-[#E8EEF5]">{sp.name}</td>
                     <td className="py-3 px-4 font-mono text-[#2D3F54] dark:text-[#CBD5E1]">{sp.thresholdMinutes} minutes</td>
@@ -1366,7 +1366,7 @@ export const AdminWorkspace: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]/60">
                 {featureFlags.map((f) => (
-                  <tr key={f.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition">
+                  <tr key={f.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition">
                     <td className="py-3 px-4 font-mono font-bold text-[#142C45] dark:text-[#E8EEF5]">{f.flagKey}</td>
                     <td className="py-3 px-4 max-w-sm">
                       <div className="font-semibold text-[#142C45] dark:text-[#E8EEF5]">{f.name}</div>
@@ -1381,7 +1381,7 @@ export const AdminWorkspace: React.FC = () => {
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                           f.enabled
                             ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                            : 'bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#26394C] text-[#5D6B7B] dark:text-[#A9BACB]'
+                            : 'bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] text-[#5D6B7B] dark:text-[#A9BACB]'
                         }`}
                       >
                         {f.enabled ? 'ENABLED' : 'DISABLED'}
@@ -1475,7 +1475,7 @@ export const AdminWorkspace: React.FC = () => {
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                   maintenanceMode?.active
                     ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5]'
+                    : 'bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#EDF1F5] dark:hover:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5]'
                 }`}
               >
                 {maintenanceMode?.active ? 'Disable Maintenance' : 'Enable Maintenance'}
@@ -1516,7 +1516,7 @@ export const AdminWorkspace: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]/60">
                 {backgroundJobs.map((j) => (
-                  <tr key={j.jobId} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition">
+                  <tr key={j.jobId} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition">
                     <td className="py-3 px-4 font-mono font-bold text-[#142C45] dark:text-[#E8EEF5]">{j.jobId}</td>
                     <td className="py-3 px-4 font-semibold text-[#2D3F54] dark:text-[#CBD5E1]">{j.type}</td>
                     <td className="py-3 px-4">
@@ -1591,7 +1591,7 @@ export const AdminWorkspace: React.FC = () => {
                   </tr>
                 ) : (
                   filteredAuditLogs.map((a) => (
-                  <tr key={a.id} className="hover:bg-[#F8FAFC] dark:bg-[#1E3247] transition">
+                  <tr key={a.id} className="hover:bg-[#F8FAFC] dark:hover:bg-[#1E3247] transition">
                     <td className="py-3 px-4 text-[#5D6B7B] dark:text-[#A9BACB] font-mono text-[11px]">
                       {new Date(a.timestamp).toLocaleString()}
                     </td>

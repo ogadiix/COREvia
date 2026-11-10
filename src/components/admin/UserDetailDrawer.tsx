@@ -8,17 +8,11 @@ import {
   X,
   User,
   Shield,
-  Key,
-  Globe,
-  Clock,
-  History,
-  AlertTriangle,
   CheckCircle2,
   Lock,
   Layers,
-  Terminal,
 } from 'lucide-react';
-import { AdminUserDetailDTO } from '../../types/admin.types.ts';
+import { AdminUserDetailDTO } from '../../types/admin.types';
 
 interface UserDetailDrawerProps {
   detail: AdminUserDetailDTO | null;
@@ -51,7 +45,7 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({
 
   if (!detail) return null;
 
-  const { identity, employment, roles, effectivePermissions, resourceScope, sessions, loginActivity, securityEvents, auditHistory } = detail;
+  const { identity, employment, roles, effectivePermissions, resourceScope, sessions, auditHistory } = detail;
 
   const statusBadge = (status: string) => {
     switch (status) {
@@ -91,7 +85,7 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:bg-[#1E3247] transition"
+            className="p-1.5 rounded-lg text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5] hover:bg-[#EDF1F5] dark:hover:bg-[#1E3247] transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -125,7 +119,7 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({
             )}
             <button
               onClick={onResetAccessClick}
-              className="px-2.5 py-1 text-[11px] font-medium rounded bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#DCE3EA] dark:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1] border border-[#CBD5E1] dark:border-[#33485D] transition"
+              className="px-2.5 py-1 text-[11px] font-medium rounded bg-[#EDF1F5] dark:bg-[#101C2A] hover:bg-[#DCE3EA] dark:hover:bg-[#26394C] text-[#2D3F54] dark:text-[#CBD5E1] border border-[#CBD5E1] dark:border-[#33485D] transition"
             >
               Reset Access
             </button>
@@ -155,7 +149,7 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({
               className={`py-3 px-3 border-b-2 font-medium transition whitespace-nowrap shrink-0 ${
                 activeTab === tab.id
                   ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2]'
-                  : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:text-[#E8EEF5]'
+                  : 'border-transparent text-[#5D6B7B] dark:text-[#A9BACB] hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
               }`}
             >
               {tab.label}
@@ -393,7 +387,7 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({
         <div className="p-4 border-t border-[#DCE3EA] dark:border-[#33485D] bg-[#F8FAFC] dark:bg-[#101C2A] flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-[#EDF1F5] dark:bg-[#1E3247] hover:bg-[#DCE3EA] dark:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] font-medium text-xs rounded-lg transition"
+            className="px-4 py-2 bg-[#EDF1F5] dark:bg-[#101C2A] hover:bg-[#DCE3EA] dark:hover:bg-[#26394C] text-[#142C45] dark:text-[#E8EEF5] font-medium text-xs rounded-lg transition"
           >
             Close Detail
           </button>

@@ -457,7 +457,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Authorized Customers</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['authorizedCustomers'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                   title="Definition & Calculation"
                 >
                   <Info className="w-3 h-3" />
@@ -474,7 +474,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Total Value</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['totalRelationshipValue'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -490,7 +490,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Avg Value</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['averageRelationshipValue'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -506,7 +506,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Active Products</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['activeProducts'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -522,7 +522,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Avg CORE Score</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['averageCoreScore'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -538,7 +538,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Positive Momentum</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['customersWithPositiveMomentum'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -555,7 +555,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Negative Momentum</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['customersWithNegativeMomentum'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -572,7 +572,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Open Deals</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['openOpportunities'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -588,7 +588,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Pipeline Value</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['opportunityPipelineValue'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -604,7 +604,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Open Cases</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['openServiceCases'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -620,7 +620,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>SLA Risk</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['slaRiskCount'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -636,7 +636,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Active Signals</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['activeSignals'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -652,7 +652,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                 <span>Pending Actions</span>
                 <button
                   onClick={() => setSelectedMetric(overview.definitions['outstandingActions'])}
-                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:text-[#46C3B2]"
+                  className="text-[#6B7C93] dark:text-[#8194A8] hover:text-[#168C83] dark:hover:text-[#46C3B2]"
                 >
                   <Info className="w-3 h-3" />
                 </button>
@@ -672,7 +672,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'overview'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           Summary Dashboard
@@ -682,7 +682,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'health-score'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           Health & CORE Score
@@ -692,7 +692,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'value-concentration'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           Value & Concentration
@@ -702,7 +702,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'products-penetration'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           Product Penetration
@@ -712,7 +712,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'engagement-service'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           Engagement & Service
@@ -722,7 +722,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'opportunities-signals'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           Pipeline, Signals & NBAs
@@ -732,7 +732,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'what-changed'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           What Changed & Changelog
@@ -742,7 +742,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'matrix-focus'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           Health Matrix & Focus Areas
@@ -752,7 +752,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'comparison'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           Period Comparison
@@ -762,7 +762,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
           className={`px-3.5 py-2.5 border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'customers'
               ? 'border-[#168C83] dark:border-[#46C3B2] text-[#168C83] dark:text-[#46C3B2] font-semibold'
-              : 'border-transparent hover:text-[#142C45] dark:text-[#E8EEF5]'
+              : 'border-transparent hover:text-[#142C45] dark:hover:text-[#E8EEF5]'
           }`}
         >
           Authorized Customers ({overview?.authorizedCustomers || 0})
@@ -1016,7 +1016,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                     </thead>
                     <tbody className="divide-y divide-[#DCE3EA] dark:divide-[#33485D]">
                       {valueAnalysis.topConcentration.map((c) => (
-                        <tr key={c.customerId} className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]/50 transition-colors">
+                        <tr key={c.customerId} className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A]/50 transition-colors">
                           <td className="py-2.5 font-medium text-[#142C45] dark:text-[#E8EEF5]">{c.customerName}</td>
                           <td className="py-2.5 font-mono text-[#5D6B7B] dark:text-[#A9BACB] text-[11px]">{c.customerCode}</td>
                           <td className="py-2.5 font-mono text-right text-emerald-400 font-semibold">
@@ -1568,7 +1568,7 @@ export const PortfolioIntelligenceWorkspace: React.FC<PortfolioIntelligenceWorks
                       {customerData.customers.map((c) => (
                         <tr
                           key={c.id}
-                          className="hover:bg-[#F8FAFC] dark:bg-[#101C2A]/50 cursor-pointer transition-colors"
+                          className="hover:bg-[#F8FAFC] dark:hover:bg-[#101C2A]/50 cursor-pointer transition-colors"
                           onClick={() => handleSelectCustomer(c.id)}
                         >
                           <td className="py-2.5">
