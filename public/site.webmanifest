@@ -1,0 +1,18 @@
+{
+  "name": "COREvia Core Banking · Institutional CRM",
+  "short_name": "COREvia",
+  "description": "Institutional enterprise banking platform with Indian banking regulatory compliance, document intelligence & vault, digital onboarding & KYC/KYB workspace, cKYC verification, customer 360, opportunity radar, and maker-checker governance.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#142C45",
+  "theme_color": "#142C45",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

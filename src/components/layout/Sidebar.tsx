@@ -366,10 +366,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           isCollapsedMode ? 'justify-center p-2.5 h-10' : 'justify-between px-3 py-2 min-h-9'
         } text-xs rounded-sm group cursor-pointer transition-all duration-150 motion-interactive ${
           isActive
-            ? 'bg-[#0c1c2e] dark:bg-[#162638] text-white font-semibold border-l-3 border-[#168C83] dark:border-[#2dd4bf] shadow-xs'
+            ? 'bg-[#0c1c2e] dark:bg-[#162638] text-white font-semibold border-l-[3px] border-[#168C83] dark:border-[#2dd4bf] shadow-xs'
             : isPermitted
-            ? 'text-slate-300 dark:text-[#A9BACB] hover:bg-[#0c1c2e]/60 dark:hover:bg-[#162638]/70 hover:text-white border-l-3 border-transparent'
-            : 'text-slate-500 dark:text-slate-600 opacity-60 cursor-not-allowed border-l-3 border-transparent'
+            ? 'text-slate-300 dark:text-[#A9BACB] hover:bg-[#0c1c2e]/60 dark:hover:bg-[#162638]/70 hover:text-white border-l-[3px] border-transparent'
+            : 'text-slate-500 dark:text-slate-600 opacity-60 cursor-not-allowed border-l-[3px] border-transparent'
         }`}
       >
         <div className={`flex items-center ${isCollapsedMode ? 'justify-center' : 'gap-2.5 min-w-0'}`}>

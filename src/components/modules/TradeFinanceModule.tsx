@@ -125,8 +125,8 @@ export const TradeFinanceModule: React.FC<TradeFinanceModuleProps> = ({
       header: 'Applicant → Beneficiary',
       render: (t) => (
         <div className="max-w-[240px]">
-          <div className="font-semibold text-slate-900 truncate">{t.applicantName}</div>
-          <div className="text-[11px] text-slate-500 truncate">
+          <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] truncate">{t.applicantName}</div>
+          <div className="text-[11px] text-slate-500 dark:text-[#8194A8] truncate">
             to: {t.beneficiaryName}
           </div>
         </div>
@@ -141,18 +141,18 @@ export const TradeFinanceModule: React.FC<TradeFinanceModuleProps> = ({
         const { inrAmount, rate } = getInrValue(t.amount, t.currency);
         return (
           <div>
-            <div className="font-mono font-bold text-slate-900">
+            <div className="font-mono font-bold text-slate-900 dark:text-[#E8EEF5]">
               {t.currency} {t.amount.toLocaleString()}
             </div>
             {t.currency !== 'INR' && (
-              <div className="text-[11px] text-emerald-700 font-mono font-medium">
+              <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-mono font-medium">
                 ≈ {formatINR(inrAmount)}
-                <span className="text-[10px] text-slate-400 font-normal ml-1">
+                <span className="text-[10px] text-slate-400 dark:text-[#8194A8] font-normal ml-1">
                   (@ ₹{(Number(rate) || 83.94).toFixed(2)})
                 </span>
               </div>
             )}
-            <div className="text-[10px] text-slate-500 font-mono">
+            <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono">
               Margin: {t.cashMarginPercentage}% Lien
             </div>
           </div>
@@ -166,8 +166,8 @@ export const TradeFinanceModule: React.FC<TradeFinanceModuleProps> = ({
       mono: true,
       render: (t) => (
         <div className="text-right">
-          <span className="font-mono text-slate-900">{t.expiryDate}</span>
-          <div className="text-[10px] text-slate-400">Issued: {t.issueDate}</div>
+          <span className="font-mono text-slate-900 dark:text-[#E8EEF5]">{t.expiryDate}</span>
+          <div className="text-[10px] text-slate-400 dark:text-[#8194A8]">Issued: {t.issueDate}</div>
         </div>
       ),
     },
@@ -561,29 +561,29 @@ export const TradeFinanceModule: React.FC<TradeFinanceModuleProps> = ({
               const { inrAmount, rate } = getInrValue(activeItem.amount, activeItem.currency);
               const marginAmount = (inrAmount * activeItem.cashMarginPercentage) / 100;
               return (
-                <div className="bg-slate-50 border border-slate-200 rounded p-3">
+                <div className="bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#26394C] rounded p-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-500 uppercase tracking-wide text-[10px]">
+                    <span className="text-slate-500 dark:text-[#8194A8] uppercase tracking-wide text-[10px]">
                       Instrument Face Value & Live Revaluation
                     </span>
                     <Badge variant="success" size="sm">{activeItem.status}</Badge>
                   </div>
-                  <div className="font-mono text-xl font-bold text-slate-900 mt-1 flex items-baseline gap-2">
+                  <div className="font-mono text-xl font-bold text-slate-900 dark:text-[#E8EEF5] mt-1 flex items-baseline gap-2">
                     <span>
                       {activeItem.currency} {activeItem.amount.toLocaleString()}
                     </span>
                     {activeItem.currency !== 'INR' && (
-                      <span className="text-sm font-semibold text-emerald-700">
+                      <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
                         (≈ {formatINR(inrAmount)})
                       </span>
                     )}
                   </div>
-                  <div className="text-slate-500 font-mono text-[11px] mt-1 flex justify-between">
+                  <div className="text-slate-500 dark:text-[#8194A8] font-mono text-[11px] mt-1 flex justify-between">
                     <span>
                       Cash Margin Lien: {activeItem.cashMarginPercentage}% (≈ {formatINR(marginAmount)} marked against CASA/FD)
                     </span>
                     {activeItem.currency !== 'INR' && (
-                      <span className="text-slate-600">Spot Rate: ₹{(Number(rate) || 83.94).toFixed(4)}</span>
+                      <span className="text-slate-600 dark:text-[#A9BACB]">Spot Rate: ₹{(Number(rate) || 83.94).toFixed(4)}</span>
                     )}
                   </div>
                 </div>
@@ -609,9 +609,9 @@ export const TradeFinanceModule: React.FC<TradeFinanceModuleProps> = ({
                   {activeItem.underlyingGoods}
                 </span>
               </div>
-              <div className="flex justify-between pt-1 border-t border-slate-100">
-                <span className="text-slate-500">FEMA Compliance:</span>
-                <span className="text-emerald-700 font-medium flex items-center gap-1">
+              <div className="flex justify-between pt-1 border-t border-slate-100 dark:border-[#26394C]">
+                <span className="text-slate-500 dark:text-[#8194A8]">FEMA Compliance:</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-medium flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   Verified & Lodged with RBI EDPMS / IDPMS
                 </span>

@@ -312,7 +312,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                   value={customerId}
                   onChange={(e) => setCustomerId(Number(e.target.value))}
                   disabled={loadingCustomers}
-                  className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900 focus:border-slate-900"
+                  className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
                 >
                   <option value="">Select customer...</option>
                   {customersList.map((c) => (
@@ -333,7 +333,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 type="datetime-local"
                 value={timestamp}
                 onChange={(e) => setTimestamp(e.target.value)}
-                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
               />
             </div>
           </div>
@@ -348,7 +348,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-interaction-channel"
                 value={channel}
                 onChange={(e) => setChannel(e.target.value as InteractionChannel)}
-                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
               >
                 <option value="PHONE">Phone / Telephonic Call</option>
                 <option value="IN_PERSON">In-Person Meeting (Client Site)</option>
@@ -371,7 +371,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-interaction-type"
                 value={interactionType}
                 onChange={(e) => setInteractionType(e.target.value as InteractionType)}
-                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
               >
                 <option value="CALL">Routine Call</option>
                 <option value="MEETING">Strategic Meeting</option>
@@ -398,7 +398,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 max="480"
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
-                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
               />
             </div>
           </div>
@@ -414,7 +414,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
               placeholder="e.g., Working Capital Limit Review & FX Hedging Term Sheet"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900 font-medium"
+              className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83] font-medium"
             />
           </div>
 
@@ -429,7 +429,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
               placeholder="Provide clear structured notes on discussion items, customer queries, decisions, and officer observations..."
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              className="w-full p-2.5 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
+              className="w-full p-2.5 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
             />
           </div>
 
@@ -443,7 +443,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-interaction-outcome"
                 value={outcome}
                 onChange={(e) => setOutcome(e.target.value as InteractionOutcome)}
-                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
               >
                 <option value="FOLLOW_UP_REQUIRED">Follow-up Required</option>
                 <option value="OPPORTUNITY_IDENTIFIED">New Opportunity Identified</option>
@@ -466,7 +466,7 @@ export const RecordInteractionModal: React.FC<RecordInteractionModalProps> = ({
                 id="select-interaction-sentiment"
                 value={sentiment}
                 onChange={(e) => setSentiment(e.target.value as InteractionSentiment)}
-                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:ring-1 focus:ring-slate-900"
+                className="w-full p-2 bg-white dark:bg-[#101C2A] border border-[#DCE3EA] dark:border-[#33485D] text-[#273444] dark:text-[#E8EEF5] rounded focus:outline-none focus:ring-1 focus:ring-[#168C83] focus:border-[#168C83]"
               >
                 <option value="POSITIVE">Positive / Highly Satisfied</option>
                 <option value="NEUTRAL">Neutral / Routine</option>

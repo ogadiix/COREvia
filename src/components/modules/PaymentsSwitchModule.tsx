@@ -77,8 +77,8 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
       mono: true,
       render: (p) => (
         <div>
-          <span className="font-mono font-semibold text-slate-900">{p.utrNumber}</span>
-          <div className="text-[10px] text-slate-500 font-mono">
+          <span className="font-mono font-semibold text-slate-900 dark:text-[#E8EEF5]">{p.utrNumber}</span>
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono">
             {p.transactionId} • {p.timestamp}
           </div>
         </div>
@@ -89,11 +89,11 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
       header: 'Rail & Clearing Hub',
       render: (p) => {
         const railStyles: Record<PaymentRail, { label: string; badge: string }> = {
-          RTGS: { label: 'RTGS (Gross)', badge: 'bg-indigo-50 text-indigo-800 border-indigo-200' },
-          NEFT: { label: 'NEFT (Batch)', badge: 'bg-blue-50 text-blue-800 border-blue-200' },
-          IMPS: { label: 'IMPS (Instant)', badge: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
-          UPI: { label: 'UPI Switch', badge: 'bg-sky-50 text-sky-800 border-sky-200' },
-          CTS_CHEQUE: { label: 'CTS-2010 Cheque', badge: 'bg-amber-50 text-amber-800 border-amber-200' },
+          RTGS: { label: 'RTGS (Gross)', badge: 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800' },
+          NEFT: { label: 'NEFT (Batch)', badge: 'bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800' },
+          IMPS: { label: 'IMPS (Instant)', badge: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' },
+          UPI: { label: 'UPI Switch', badge: 'bg-sky-50 dark:bg-sky-950/40 text-sky-800 dark:text-sky-300 border-sky-200 dark:border-sky-800' },
+          CTS_CHEQUE: { label: 'CTS-2010 Cheque', badge: 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800' },
         };
         const config = railStyles[p.rail];
         return (
@@ -108,10 +108,10 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
       header: 'Remitter → Beneficiary',
       render: (p) => (
         <div className="max-w-[240px]">
-          <div className="font-medium text-slate-900 truncate">
-            {p.sourceName} <span className="text-slate-400 font-normal text-[10px]">({p.sourceBankIfsc})</span>
+          <div className="font-medium text-slate-900 dark:text-[#E8EEF5] truncate">
+            {p.sourceName} <span className="text-slate-400 dark:text-[#8194A8] font-normal text-[10px]">({p.sourceBankIfsc})</span>
           </div>
-          <div className="text-[11px] text-slate-500 truncate">
+          <div className="text-[11px] text-slate-500 dark:text-[#8194A8] truncate">
             → {p.destName} <span className="font-mono text-[10px]">({p.destBankIfsc})</span>
           </div>
         </div>
@@ -123,7 +123,7 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
       align: 'right',
       mono: true,
       render: (p) => (
-        <span className="font-mono font-bold text-slate-900">
+        <span className="font-mono font-bold text-slate-900 dark:text-[#E8EEF5]">
           {formatINR(p.amount)}
         </span>
       ),
@@ -359,11 +359,11 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
         >
           <div className="space-y-4 text-xs">
             {/* Header Amount Banner */}
-            <div className="bg-slate-50 border border-slate-200 rounded p-3 text-center">
-              <span className="text-slate-500 uppercase tracking-wide text-[10px]">
+            <div className="bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#26394C] rounded p-3 text-center">
+              <span className="text-slate-500 dark:text-[#8194A8] uppercase tracking-wide text-[10px]">
                 Transacted Principal Amount
               </span>
-              <div className="font-mono text-xl font-bold text-slate-900 mt-0.5">
+              <div className="font-mono text-xl font-bold text-slate-900 dark:text-[#E8EEF5] mt-0.5">
                 {formatINR(activePayment.amount)}
               </div>
               <div className="mt-1 flex items-center justify-center gap-2">
@@ -379,7 +379,7 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
                 >
                   {activePayment.status.replace(/_/g, ' ')}
                 </Badge>
-                <span className="text-slate-500 font-mono text-[11px]">{activePayment.timestamp}</span>
+                <span className="text-slate-500 dark:text-[#8194A8] font-mono text-[11px]">{activePayment.timestamp}</span>
               </div>
             </div>
 
@@ -407,26 +407,26 @@ export const PaymentsSwitchModule: React.FC<PaymentsSwitchModuleProps> = ({
             {/* Narration & Technical IDs */}
             <div className="border border-slate-200 dark:border-[#33485D] rounded p-3 bg-white dark:bg-[#162638] space-y-2 text-xs text-[#273444] dark:text-[#E8EEF5]">
               <div className="flex justify-between">
-                <span className="text-slate-500">Narration / Purpose:</span>
-                <span className="font-medium text-slate-900 text-right max-w-[280px]">
+                <span className="text-slate-500 dark:text-[#8194A8]">Narration / Purpose:</span>
+                <span className="font-medium text-slate-900 dark:text-[#E8EEF5] text-right max-w-[280px]">
                   {activePayment.narration}
                 </span>
               </div>
               {activePayment.batchNumber && (
                 <div className="flex justify-between">
-                  <span className="text-slate-500">NEFT Batch Number:</span>
-                  <span className="font-mono text-slate-800">{activePayment.batchNumber}</span>
+                  <span className="text-slate-500 dark:text-[#8194A8]">NEFT Batch Number:</span>
+                  <span className="font-mono text-slate-800 dark:text-[#A9BACB]">{activePayment.batchNumber}</span>
                 </div>
               )}
               {activePayment.chequeNumber && (
                 <div className="flex justify-between">
-                  <span className="text-slate-500">CTS Cheque Serial:</span>
-                  <span className="font-mono text-slate-800">{activePayment.chequeNumber}</span>
+                  <span className="text-slate-500 dark:text-[#8194A8]">CTS Cheque Serial:</span>
+                  <span className="font-mono text-slate-800 dark:text-[#A9BACB]">{activePayment.chequeNumber}</span>
                 </div>
               )}
               <div className="flex justify-between">
-                <span className="text-slate-500">Host Terminal:</span>
-                <span className="font-mono text-slate-700">TER-MUM-0104-A</span>
+                <span className="text-slate-500 dark:text-[#8194A8]">Host Terminal:</span>
+                <span className="font-mono text-slate-700 dark:text-[#A9BACB]">TER-MUM-0104-A</span>
               </div>
             </div>
           </div>

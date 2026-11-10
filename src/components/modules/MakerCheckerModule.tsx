@@ -82,8 +82,8 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
       mono: true,
       render: (item) => (
         <div>
-          <span className="font-mono font-semibold text-slate-900">{item.voucherNumber}</span>
-          <div className="text-[10px] text-slate-500 font-mono">{item.timestamp}</div>
+          <span className="font-mono font-semibold text-slate-900 dark:text-[#E8EEF5]">{item.voucherNumber}</span>
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono">{item.timestamp}</div>
         </div>
       ),
     },
@@ -92,8 +92,8 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
       header: 'Operational Request',
       render: (item) => (
         <div className="max-w-[260px]">
-          <div className="font-semibold text-slate-900 truncate">{item.description}</div>
-          <div className="text-[11px] text-slate-500 truncate">
+          <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] truncate">{item.description}</div>
+          <div className="text-[11px] text-slate-500 dark:text-[#8194A8] truncate">
             {item.auditReason}
           </div>
         </div>
@@ -104,8 +104,8 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
       header: 'Initiating Maker',
       render: (item) => (
         <div>
-          <div className="font-medium text-slate-800">{item.makerUserName}</div>
-          <div className="text-[10px] text-slate-500 font-mono">ID: {item.makerUserId} • {item.makerRole}</div>
+          <div className="font-medium text-slate-800 dark:text-[#E8EEF5]">{item.makerUserName}</div>
+          <div className="text-[10px] text-slate-500 dark:text-[#8194A8] font-mono">ID: {item.makerUserId} • {item.makerRole}</div>
         </div>
       ),
     },
@@ -115,7 +115,7 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
       align: 'right',
       mono: true,
       render: (item) => (
-        <span className="font-mono font-bold text-slate-900">
+        <span className="font-mono font-bold text-slate-900 dark:text-[#E8EEF5]">
           {item.amount ? formatINR(item.amount) : '—'}
         </span>
       ),
@@ -178,23 +178,25 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
     <div className="space-y-5">
       {/* Top Banner explaining Four Eyes Mandate */}
       <div className={`border rounded p-3.5 flex items-start gap-3 ${
-        canAuthorize ? 'bg-amber-50/70 border-amber-300' : 'bg-slate-100 border-slate-300'
+        canAuthorize
+          ? 'bg-amber-50/70 dark:bg-amber-950/30 border-amber-300 dark:border-amber-800'
+          : 'bg-slate-100 dark:bg-[#101C2A] border-slate-300 dark:border-[#26394C]'
       }`}>
-        <ShieldAlert className={`w-5 h-5 shrink-0 mt-0.5 ${canAuthorize ? 'text-amber-700' : 'text-slate-600'}`} />
+        <ShieldAlert className={`w-5 h-5 shrink-0 mt-0.5 ${canAuthorize ? 'text-amber-700 dark:text-amber-400' : 'text-slate-600 dark:text-[#A9BACB]'}`} />
         <div className="text-xs">
-          <div className="font-semibold text-slate-900 flex items-center gap-2">
+          <div className="font-semibold text-slate-900 dark:text-[#E8EEF5] flex items-center gap-2">
             <span>Four-Eyes Principle Verification Mandate (RBI Circular RBI/2024-25/112)</span>
             {!canAuthorize && (
-              <span className="font-mono text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded">
+              <span className="font-mono text-[10px] bg-slate-200 dark:bg-[#192B3D] text-slate-700 dark:text-[#A9BACB] px-1.5 py-0.5 rounded">
                 READ-ONLY QUEUE ACCESS
               </span>
             )}
           </div>
-          <p className="text-slate-700 mt-0.5 leading-relaxed">
+          <p className="text-slate-700 dark:text-[#A9BACB] mt-0.5 leading-relaxed">
             All debits exceeding ₹1.00 Crore, physical cash movements, lien modifications, and KYC reclassifications require dual-authorization by a designated Level-3 Checker before core ledger commitment.
           </p>
           {!canAuthorize && (
-            <p className="text-amber-800 font-medium mt-1">
+            <p className="text-amber-800 dark:text-amber-300 font-medium mt-1">
               Active profile: <strong>{user?.name}</strong> ({user?.roleName || user?.role}). Only Level-2/3 Checkers (Branch Manager, Admin) hold sign-off authority.
             </p>
           )}
@@ -217,9 +219,9 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
 
         <StatCard
           label="Active Checker Authority"
-          value="Aditya Raj"
-          code="EMP-782194"
-          subtext="Level-3 Operations Head (Fort 0104)"
+          value={user?.name || 'Vikramaditya Rao'}
+          code={user?.employeeId || 'EMP-ADM001'}
+          subtext={`${user?.roleName || user?.role || 'Administrator'} • ${user?.department || 'Operations'}`}
         />
 
         <StatCard
@@ -314,13 +316,13 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
           <div className="space-y-4 text-xs">
             {/* Segregation of Duties or Insufficient Entitlements Warning */}
             {isOwnVoucher && (
-              <div className="bg-rose-50 border border-rose-300 rounded p-3 flex items-start gap-2.5 text-rose-900">
-                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+              <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-900/60 rounded p-3 flex items-start gap-2.5 text-rose-900 dark:text-rose-200">
+                <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
                   <div className="font-bold text-[11px] uppercase tracking-wide">
                     Segregation of Duties Conflict
                   </div>
-                  <p className="text-[11px] leading-relaxed text-rose-800">
+                  <p className="text-[11px] leading-relaxed text-rose-800 dark:text-rose-300">
                     You initiated this operational request (Maker: <strong>{activeItem.makerUserName}</strong>, {activeItem.makerUserId}). Under RBI dual-control mandates, the same officer is prohibited from acting as both Maker and Checker. Another designated supervisory checker must review and sign off.
                   </p>
                 </div>
@@ -328,13 +330,13 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
             )}
 
             {!canAuthorize && !isOwnVoucher && (
-              <div className="bg-slate-100 border border-slate-300 rounded p-3 flex items-start gap-2.5 text-slate-800">
-                <Lock className="w-4 h-4 text-slate-600 shrink-0 mt-0.5" />
+              <div className="bg-slate-100 dark:bg-[#101C2A] border border-slate-300 dark:border-[#26394C] rounded p-3 flex items-start gap-2.5 text-slate-800 dark:text-[#E8EEF5]">
+                <Lock className="w-4 h-4 text-slate-600 dark:text-[#8194A8] shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
                   <div className="font-bold text-[11px] uppercase tracking-wide">
                     Supervisory Sign-Off Entitlement Required
                   </div>
-                  <p className="text-[11px] leading-relaxed text-slate-600">
+                  <p className="text-[11px] leading-relaxed text-slate-600 dark:text-[#A9BACB]">
                     Your authenticated profile (<strong>{user?.name}</strong>, {user?.roleName || user?.role}) does not hold Level-2/3 Checker sign-off permissions. You may inspect the voucher parameters in read-only mode.
                   </p>
                 </div>
@@ -342,16 +344,16 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
             )}
 
             {/* Amount / Action Headline */}
-            <div className="bg-slate-50 border border-slate-200 rounded p-3 text-center">
-              <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
+            <div className="bg-slate-50 dark:bg-[#101C2A] border border-slate-200 dark:border-[#26394C] rounded p-3 text-center">
+              <div className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-[#8194A8] font-semibold">
                 {activeItem.actionType.replace(/_/g, ' ')}
               </div>
               {activeItem.amount && (
-                <div className="font-mono text-2xl font-bold text-slate-900 mt-1">
+                <div className="font-mono text-2xl font-bold text-slate-900 dark:text-[#E8EEF5] mt-1">
                   {formatINR(activeItem.amount)}
                 </div>
               )}
-              <div className="text-[11px] text-slate-600 mt-1">{activeItem.auditReason}</div>
+              <div className="text-[11px] text-slate-600 dark:text-[#A9BACB] mt-1">{activeItem.auditReason}</div>
             </div>
 
             {/* Maker Identification */}
@@ -368,17 +370,17 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
                 <span className="font-mono text-slate-700 dark:text-[#A9BACB]">{activeItem.makerUserId} ({activeItem.makerRole})</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Timestamp:</span>
-                <span className="font-mono text-slate-700">{activeItem.timestamp}</span>
+                <span className="text-slate-500 dark:text-[#8194A8]">Timestamp:</span>
+                <span className="font-mono text-slate-700 dark:text-[#A9BACB]">{activeItem.timestamp}</span>
               </div>
             </div>
 
             {/* Officer Biometric Step-Up Certificate (If high-value authenticated) */}
             {activeItem.biometricVerification?.verified && (
-              <div className="border border-emerald-300 rounded p-3 bg-emerald-50/50 space-y-2 text-emerald-950">
-                <div className="flex items-center justify-between border-b border-emerald-200 pb-1.5">
-                  <div className="flex items-center gap-1.5 font-semibold text-xs text-emerald-900">
-                    <Fingerprint className="w-4 h-4 text-emerald-700" />
+              <div className="border border-emerald-300 dark:border-emerald-800 rounded p-3 bg-emerald-50/50 dark:bg-emerald-950/30 space-y-2 text-emerald-950 dark:text-emerald-200">
+                <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-800 pb-1.5">
+                  <div className="flex items-center gap-1.5 font-semibold text-xs text-emerald-900 dark:text-emerald-300">
+                    <Fingerprint className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
                     <span>Maker Biometric Signature Certificate (FIDO2 / STQC L1)</span>
                   </div>
                   <Badge variant="success" size="sm">
@@ -464,7 +466,7 @@ export const MakerCheckerModule: React.FC<MakerCheckerModuleProps> = ({
                 )}
               </div>
             ) : (
-              <div className="p-2.5 bg-slate-50 rounded border border-slate-200 text-[11px] text-slate-500 italic">
+              <div className="p-2.5 bg-slate-50 dark:bg-[#101C2A] rounded border border-slate-200 dark:border-[#26394C] text-[11px] text-slate-500 dark:text-[#8194A8] italic">
                 {isOwnVoucher
                   ? 'Verification remarks input disabled: Maker cannot enter Checker remarks on self-initiated vouchers.'
                   : 'Verification remarks input disabled: Level-2/3 Checker authority required.'}

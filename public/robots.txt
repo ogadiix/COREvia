@@ -1,0 +1,5 @@
+# COREvia Core Banking & CRM Platform
+# Institutional Private Banking Environment - Crawling Disallowed
+User-agent: *
+Disallow: /
+
