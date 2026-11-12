@@ -11,6 +11,7 @@
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "tsx src/tests/runAllTests.ts",
+    "test:audit": "tsx src/tests/runAcceptanceAudit.ts",
     "seed": "tsx src/db/seed.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit push",
